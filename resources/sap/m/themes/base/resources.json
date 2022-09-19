@@ -80,7 +80,7 @@
 		},
 		{
 			"name": "Carousel.less",
-			"size": 12987,
+			"size": 12883,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -176,7 +176,7 @@
 		},
 		{
 			"name": "DisplayListItem.less",
-			"size": 1342,
+			"size": 1329,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -254,7 +254,7 @@
 		},
 		{
 			"name": "GenericTile.less",
-			"size": 43726,
+			"size": 43618,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -1839,23 +1839,22 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 638025,
+			"size": 637834,
 			"theme": "base"
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/m/themes/base/library-parameters.json",
 			"size": 19324,
 			"theme": "base"
 		},
 		{
 			"name": "library.css",
-			"size": 638034,
+			"size": 637843,
 			"theme": "base"
 		},
 		{
 			"name": "library.less",
-			"size": 713759,
+			"size": 713534,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -1867,12 +1866,12 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 675112,
+			"size": 674859,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 675121,
+			"size": 674868,
 			"theme": "base"
 		},
 		{
@@ -1892,10 +1891,6 @@
 			"size": 923,
 			"designtime": true,
 			"theme": "base"
-		},
-		{
-			"name": "resources.json",
-			"size": 35382
 		},
 		{
 			"name": "shared.less",

@@ -31,7 +31,7 @@ sap.ui.define([
 	 *
 	 * <h3>CSS Shadow Parts</h3>
 	 *
-	 * {@link https://developer.mozilla.org/en-US/docs/Web/CSS/::part CSS Shadow Parts} allow developers to style elements inside the Shadow DOM. <br>
+	 * <ui5-link target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/::part">CSS Shadow Parts</ui5-link> allow developers to style elements inside the Shadow DOM. <br>
 	 * The <code>sap.ui.webc.main.ResponsivePopover</code> exposes the following CSS Shadow Parts:
 	 * <ul>
 	 *     <li>header - Used to style the header of the component</li>
@@ -40,7 +40,7 @@ sap.ui.define([
 	 * </ul>
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public

@@ -90,7 +90,7 @@ sap.ui.define([
 	 *     the data model and binding being used.
 	 * </p>
 	 * @extends sap.ui.core.Control
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -569,8 +569,7 @@ sap.ui.define([
 			/**
 			 * fired when a column of the table has been selected
 			 */
-			columnSelect : {
-				allowPreventDefault : true,
+			columnSelect : {allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -583,8 +582,7 @@ sap.ui.define([
 			/**
 			 * fired when a table column is resized.
 			 */
-			columnResize : {
-				allowPreventDefault : true,
+			columnResize : {allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -602,8 +600,7 @@ sap.ui.define([
 			/**
 			 * fired when a table column is moved.
 			 */
-			columnMove : {
-				allowPreventDefault : true,
+			columnMove : {allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -619,16 +616,9 @@ sap.ui.define([
 			},
 
 			/**
-			 * This event is fired before a sort order is
-			 * applied to a column, if the table is sorted
-			 * via {@link sap.ui.table.Table#sort} call or
-			 * user interaction with the column header.
-			 *
-			 * Sorters that are directly applied to the table
-			 * binding will not fire this event.
+			 * fired when the table is sorted.
 			 */
-			sort : {
-				allowPreventDefault : true,
+			sort : {allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -649,16 +639,9 @@ sap.ui.define([
 			},
 
 			/**
-			 * This event is fired before a filter is applied
-			 * to a column, if the table is filtered via
-			 * {@link sap.ui.table.Table#filter} call or user
-			 * interaction with the column header.
-			 *
-			 * Filters that are directly applied to the table
-			 * binding will not fire this event.
+			 * fired when the table is filtered.
 			 */
-			filter : {
-				allowPreventDefault : true,
+			filter : {allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -676,8 +659,7 @@ sap.ui.define([
 			/**
 			 * fired when the table is grouped (experimental!).
 			 */
-			group : {
-				allowPreventDefault : true,
+			group : {allowPreventDefault : true,
 				parameters : {
 					/**
 					 * grouped column.
@@ -689,8 +671,7 @@ sap.ui.define([
 			/**
 			 * fired when the visibility of a table column is changed.
 			 */
-			columnVisibility : {
-				allowPreventDefault : true,
+			columnVisibility : {allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -709,8 +690,7 @@ sap.ui.define([
 			 * fired when the user clicks a cell of the table (experimental!).
 			 * @since 1.21.0
 			 */
-			cellClick : {
-				allowPreventDefault : true,
+			cellClick : {allowPreventDefault : true,
 				parameters : {
 					/**
 					 * The control of the cell.
@@ -750,8 +730,7 @@ sap.ui.define([
 			 * @since 1.21.0
 			 * @deprecated As of 1.54, replaced by <code>beforeOpenContextMenu</code>.
 			 */
-			cellContextmenu : {
-				allowPreventDefault : true,
+			cellContextmenu : {allowPreventDefault : true,
 				parameters : {
 					/**
 					 * The control of the cell.
@@ -816,8 +795,7 @@ sap.ui.define([
 			 * fired when a column of the table should be freezed
 			 * @since 1.21.0
 			 */
-			columnFreeze : {
-				allowPreventDefault : true,
+			columnFreeze : {allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -3056,14 +3034,6 @@ sap.ui.define([
 		}
 		if (this._aSortedColumns.indexOf(oColumn) === -1) {
 			this._aSortedColumns.push(oColumn);
-		}
-	};
-
-	Table.prototype._removeSortedColumn = function(oColumn) {
-		var iIndex = this._aSortedColumns.indexOf(oColumn);
-
-		if (iIndex > -1) {
-			this._aSortedColumns.splice(iIndex, 1);
 		}
 	};
 

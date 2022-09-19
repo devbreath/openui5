@@ -42,7 +42,7 @@ sap.ui.define([
 		 * @mixes sap.ui.model.odata.v4.ODataBinding
 		 * @public
 		 * @since 1.37.0
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 * @borrows sap.ui.model.odata.v4.ODataBinding#getGroupId as #getGroupId
 		 * @borrows sap.ui.model.odata.v4.ODataBinding#getRootBinding as #getRootBinding
 		 * @borrows sap.ui.model.odata.v4.ODataBinding#getUpdateGroupId as #getUpdateGroupId
@@ -228,9 +228,6 @@ sap.ui.define([
 	 *   The change reason for the change event
 	 * @param {string} [sGroupId=getGroupId()]
 	 *   The group ID to be used for the read.
-	 * @param {boolean} [bPreventBubbling]
-	 *   Whether the dataRequested and dataReceived events related to the refresh must not be
-	 *   bubbled up to the model
 	 * @param {any} [vValue]
 	 *   The new value obtained from the cache, see {@link #onChange}
 	 * @returns {sap.ui.base.SyncPromise}
@@ -244,7 +241,7 @@ sap.ui.define([
 	 */
 	// @override sap.ui.model.odata.v4.ODataBinding#checkUpdateInternal
 	ODataPropertyBinding.prototype.checkUpdateInternal = function (bForceUpdate, sChangeReason,
-			sGroupId, bPreventBubbling, vValue) {
+			sGroupId, vValue) {
 		var bDataRequested = false,
 			iHashHash = this.sPath.indexOf("##"),
 			bIsMeta = iHashHash >= 0,
@@ -281,7 +278,7 @@ sap.ui.define([
 					return oCache.fetchValue(that.lockGroup(sGroupId || that.getGroupId()),
 							/*sPath*/undefined, function () {
 								bDataRequested = true;
-								that.fireDataRequested(bPreventBubbling);
+								that.fireDataRequested();
 							}, that)
 						.then(function (vResult) {
 							that.assertSameCache(oCache);
@@ -355,7 +352,7 @@ sap.ui.define([
 				that.checkDataState();
 			}
 			if (bDataRequested) {
-				that.fireDataReceived(mParametersForDataReceived, bPreventBubbling);
+				that.fireDataReceived(mParametersForDataReceived);
 			}
 			if (mParametersForDataReceived.error) {
 				throw mParametersForDataReceived.error;
@@ -496,13 +493,11 @@ sap.ui.define([
 	 *
 	 * @param {any} vValue
 	 *   The new value
-	 * @param {boolean} [bForceUpdate]
-	 *   Update the bound control even if no data have been changed.
 	 *
 	 * @private
 	 */
-	ODataPropertyBinding.prototype.onChange = function (vValue, bForceUpdate) {
-		this.checkUpdateInternal(bForceUpdate, undefined, undefined, false, vValue)
+	ODataPropertyBinding.prototype.onChange = function (vValue) {
+		this.checkUpdateInternal(undefined, undefined, undefined, vValue)
 			.catch(this.oModel.getReporter());
 	};
 
@@ -534,8 +529,7 @@ sap.ui.define([
 			}
 
 			if (bCheckUpdate) {
-				return that.checkUpdateInternal(undefined, ChangeReason.Refresh, sGroupId,
-					/*bPreventBubbling*/bKeepCacheOnError);
+				return that.checkUpdateInternal(undefined, ChangeReason.Refresh, sGroupId);
 			}
 		});
 	};
@@ -543,7 +537,7 @@ sap.ui.define([
 	/**
 	 * Requests the value of the property binding.
 	 *
-	 * @returns {Promise<any|undefined>}
+	 * @returns {Promise}
 	 *   A promise resolving with the resulting value or <code>undefined</code> if it could not be
 	 *   determined, or rejecting in case of an error
 	 *

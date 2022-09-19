@@ -619,10 +619,6 @@ sap.ui.define([
 		return this._oVM.getTitle();
 	};
 
-	VariantManagement.prototype.refreshTitle = function() {
-		this._oVM.refreshTitle();
-	};
-
 	VariantManagement.prototype.setPopoverTitle = function(sTitle) {
 		this._oVM.setPopoverTitle(sTitle);
 		return this;
@@ -703,7 +699,7 @@ sap.ui.define([
 	/**
 	 * Gets the currently selected variant key.
 	 * @public
-	 * @returns {string|null} Key of the currently selected variant. In case the model is not yet set <code>null</code> will be returned.
+	 * @returns {string} Key of the currently selected variant. In case the model is not yet set <code>null</code> will be returned.
 	 */
 	VariantManagement.prototype.getCurrentVariantKey = function() {
 		return this._oVM.getSelectedKey();

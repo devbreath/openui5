@@ -117,7 +117,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.apply._internal.flexState.compVariants.CompVariantMerger
 	 * @since 1.86
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @private
 	 * @ui5-restricted sap.ui.fl
 	 */
@@ -156,10 +156,10 @@ sap.ui.define([
 				mChanges[oStandardVariant.getVariantId()] = mChanges[oStandardVariant.getVariantId()] || [];
 				mChanges[oStandardVariant.getVariantId()].push(oStandardVariantChange);
 				mChanges[oStandardVariant.getVariantId()].sort(function (a, b) {
-					if (a.getCreation() < b.getCreation()) {
+					if (a.getDefinition().creation < b.getDefinition().creation) {
 						return -1;
 					}
-					if (a.getCreation() > b.getCreation()) {
+					if (a.getDefinition().creation > b.getDefinition().creation) {
 						return 1;
 					}
 					return 0;
@@ -182,7 +182,7 @@ sap.ui.define([
 		 *
 		 * @function
 		 * @since 1.89
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 * @private
 		 * @ui5-restricted sap.ui.fl
 		 *

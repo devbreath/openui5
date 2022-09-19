@@ -95,11 +95,11 @@ sap.ui.define([
 	 *
 	 * <h3>Additional Information</h3>
 	 *
-	 * Check out the {@link sap.m.LightBoxItem API Reference}.
+	 * Check out the <a href="/#docs/api/symbols/sap.m.LightBox.html" >API Reference</a>.
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public

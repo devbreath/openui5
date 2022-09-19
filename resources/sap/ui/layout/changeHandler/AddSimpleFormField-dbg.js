@@ -91,7 +91,7 @@ sap.ui.define([
 	 *
 	 * @author SAP SE
 	 *
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @experimental Since 1.49.0 This class is experimental and provides only limited functionality. Also the API might be
 	 *               changed in future.
@@ -108,10 +108,9 @@ sap.ui.define([
 			var aContentClone;
 
 			var oChange = mPropertyBag.change;
-			// as the label is stored independent of the field and will not be destroyed by destroying the field, it needs to be remembered
+			// as the label is stored independent of the field and will not be destroyed by destroying the field, is needs to be remembered
 			var oRevertData = oChange.getRevertData();
 			oRevertData.labelSelector = oModifier.getSelector(mInnerControls.label, oAppComponent);
-			oChange.setRevertData(oRevertData);
 
 			return Promise.resolve()
 				.then(oModifier.getAggregation.bind(oModifier, oSimpleForm, "content"))
@@ -176,8 +175,7 @@ sap.ui.define([
 		var oRevertData = oChange.getRevertData();
 		if (oRevertData && oRevertData.labelSelector) {
 			return {
-				affectedControls: [JsControlTreeModifier.bySelector(oRevertData.labelSelector, oAppComponent).getId()],
-				hasParentWithUnstableId: true
+				affectedControls: [JsControlTreeModifier.bySelector(oRevertData.labelSelector, oAppComponent).getParent().getId()]
 			};
 		}
 		return {

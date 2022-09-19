@@ -7,13 +7,12 @@
 // sap.ui.core.util.ResponsivePaddingsEnabler
 sap.ui.define([
 	"sap/base/Log",
-	"sap/ui/core/Element",
 	'sap/ui/core/ResizeHandler',
 	"sap/ui/thirdparty/jquery",
+	"sap/ui/dom/jquery/control", // jQuery Plugin "control"
 	"sap/ui/core/library" // ensures loading of CSS
 ], function (
 	Log,
-	Element,
 	ResizeHandler,
 	jQuery
 ) {
@@ -177,7 +176,7 @@ sap.ui.define([
 			});
 
 			$elemCollection.each(function (index, elem) {
-				var oControl = Element.closestTo(elem);
+				var oControl = jQuery(elem).control(0);
 				if (elem === oControl.getDomRef()) {
 					aClassNames.forEach(oControl.removeStyleClass.bind(oControl));
 				} else {
@@ -213,7 +212,7 @@ sap.ui.define([
 			}
 
 			$elemCollection.each(function (index, elem) {
-				var oControl = Element.closestTo(elem);
+				var oControl = jQuery(elem).control(0);
 				if (elem === oControl.getDomRef()) {
 					oControl.addStyleClass(MEDIA[sKey]);
 				} else {

@@ -47,12 +47,11 @@ sap.ui.define([
 	 * @property {object} [typeConfig]
 	 *   Object which contains type-specific information about the property, especially the type instance (for example, for model filter creation in
 	 *   Table <code>rebind</code>).
-	 * @property {string} [group]
-	 *   Key of the group the property is inside. Used to visually group properties in personalization dialogs.
-	 * @property {string} [groupLabel]
-	 *   Translatable text of the group.
-	 * @property {boolean} [caseSensitive=true]
-	 *   Whether filtering by this property is case-sensitive.
+	 * @property {object} [extension]
+	 *   Reserved attribute. Must not be provided by the delegate directly as part of the <code>PropertyInfo</code>, but separately in
+	 *   the <code>fetchPropertyExtensions</code> method of the delegate. The <code>PropertyInfoExtension</code> is a key-value map where the key is
+	 *   the property name and the value is the additional information. The structure of the additional information depends on the delegate.
+	 *   Used to add model-specific information. For example, for analytics in OData, see sap.ui.mdc.odata.v4.TableDelegate.
 	 *
 	 * @private
 	 * @experimental
@@ -79,60 +78,46 @@ sap.ui.define([
 	 *               }
 	 * - mandatory (optional, default=false, only for top-level attribute)
 	 *     Whether this attribute must be provided.
-	 * - default (optional, type: Object)
-	 *     Specifies the default value
+	 * - allowedForComplexProperty (optional, default=false)
+	 *	   Whether it is allowed to provide this attribute for a complex property.
+	 * - valueForComplexProperty (optional):
+	 *     For a complex property, this defines the value of an attribute that is not allowed for complex properties.
+	 * - default: { (optional, type: Object) - specifies the default value property of the attribute
 	 * 	   - value
 	 * 	   	   This can either be a value, or a reference to another attribute in the form "attribute:x", with x being the name of the other
 	 *     	   attribute. The default value of this attribute is then the value of the other attribute. This works only one level deep.
 	 *     	   Examples: "attribute:name", "attribute:attributeName.subAttributeName"
-	 *     - ignoreIfNull (optional, default=false)
+	 *     - ignoreIfNull (default=false)
 	 *     	   Prevents setting the default value for this attribute if set to <code>true</code>.
 	 * 	       Defines the entire attribute as <code>null</code> if the attribute value itself is from type <code>null</code>.
-	 * - forComplexProperty (optional, type: Object}
-	 *     Settings that take effect if the property is complex.
-	 *     - allowed (optional, default=false)
-	 *         Whether it is allowed to provide this attribute.
-	 *     - valueIfNotAllowed (optional)
-	 *         An attribute that is not allowed will get this value.
-	 *     - propagateAllowance (optional, default=true)
-	 *         Whether the value of 'allowed' is propagated to all sub-attributes.
+	 * 	}
 	 */
-	var mAttributeMetadata = { // TODO: reserve reference attributes, e.g. unit -> unitProperty
+	var mAttributeMetadata = { // TODO: "allowedForComplexProperty" propagation to children + reserved reference attribute, e.g. unit -> unitProperty
 		// Common
 		name: { // Unique key
 			type: "string", // TODO: sap.ui.core.ID cannot be used currently, because some OPA tests fail
 			mandatory: true,
-			forComplexProperty: {
-				allowed: true
-			}
+			allowedForComplexProperty: true
 		},
 		label: { // Translatable text describing the property.
 			type: "string",
 			mandatory: true,
-			forComplexProperty: {
-				allowed: true
-			}
+			allowedForComplexProperty: true
 		},
 		tooltip: { // Translatable text describing additional information in the property to be displayed in a tooltip.
 			type: "string",
-			forComplexProperty: {
-				allowed: true
-			}
+			allowedForComplexProperty: true
 		},
 		visible: { // Whether the property is visible in the "Items" personalization.
 			type: "boolean",
 			"default": {
 				value: true
 			},
-			forComplexProperty: {
-				allowed: true
-			}
+			allowedForComplexProperty: true
 		},
 		path: { // The technical path for a data source property.
 			type: "string",
-			forComplexProperty: {
-				valueIfNotAllowed: null // TODO: Can be removed once warnings are replaced with errors.
-			}
+			valueForComplexProperty: null
 		},
 		// TODO: Is it possible to reduce the required information by integrating/using TypeUtil (obtained from delegate) here?
 		typeConfig: {
@@ -148,9 +133,7 @@ sap.ui.define([
 				}
 			},
 			//defaultValue: ?? TODO: Is there a default value (e.g. type string), or is it even mandatory?
-			forComplexProperty: {
-				valueIfNotAllowed: null // TODO: Can be removed once warnings are replaced with errors.
-			}
+			valueForComplexProperty: null
 		},
 		// TODO: What's the meaning? type = boolean? Is used only once in FilterBarBase: oProperty.maxConditions !== -1
 		maxConditions: {
@@ -158,9 +141,7 @@ sap.ui.define([
 			"default": {
 				value: -1
 			},
-			forComplexProperty: {
-				valueIfNotAllowed: null // TODO: Can be removed once warnings are replaced with errors.
-			}
+			valueForComplexProperty: null
 		},
 		caseSensitive: {
 			type: "boolean",
@@ -170,48 +151,130 @@ sap.ui.define([
 		},
 		group: { // Key of the group the property is inside. Used to visually group properties in personalization dialogs.
 			type: "string",
-			forComplexProperty: {
-				allowed: true
-			}
+			allowedForComplexProperty: true
 		},
 		groupLabel: { // Translatable text of the group.
 			type: "string",
-			forComplexProperty: {
-				allowed: true
-			}
+			allowedForComplexProperty: true
 		},
 
-		// Enabled by:
-		// sap.ui.mdc.table.PropertyHelper
-		// sap.ui.mdc.chart.PropertyHelper
-		// sap.ui.mdc.p13n.PropertyHelper
+		// Table, Chart, P13N
 		filterable: { // Whether it is possible to filter by this property.
 			type: "boolean",
 			"default": {
 				value: true
 			},
-			forComplexProperty: {
-				valueIfNotAllowed: false
-			}
+			valueForComplexProperty: false
 		},
 		sortable: { // Whether it is possible to sort by this property.
 			type: "boolean",
 			"default": {
 				value: true
 			},
-			forComplexProperty: {
-				valueIfNotAllowed: false
-			}
+			valueForComplexProperty: false
 		},
 
-		// Enabled by:
-		// sap.ui.mdc.table.PropertyHelper
+		// Table
+		key: { // Whether the property is a key or part of a key in the data.
+			type: "boolean",
+			valueForComplexProperty: false
+		},
+		groupable: { // Whether it is possible to group by this property.
+			type: "boolean",
+			valueForComplexProperty: false
+		},
 		propertyInfos: { // List of names of simple properties. If this attribute is set, the property is a "complex property".
 			type: "PropertyReference[]",
-			forComplexProperty: {
-				allowed: true
-			}
+			allowedForComplexProperty: true
+		},
+		unit: { // Name of the unit property that is related to this property.
+			type: "PropertyReference"
+		},
+		text: { // Name of the text property that is related to this property in a 1:1 relation.
+			type: "PropertyReference"
+		},
+		exportSettings: { // Export settings as specified by sap.ui.export.Spreadsheet.
+			type: "object",
+			"default": {
+				value: {},
+				ignoreIfNull: true
+			},
+			allowedForComplexProperty: true
+		},
+		visualSettings: { // This object contains all relevant properties for visual adjustments
+			type: {
+				widthCalculation: { // This object contains all properties and their default values for the column width calculation
+					type: {
+						minWidth: {
+							type: "int",
+							"default": {
+								value: 2
+							}
+						},
+						maxWidth: {
+							type: "int",
+							"default": {
+								value: 19
+							}
+						},
+						defaultWidth: {
+							type: "int",
+							"default": {
+								value: 8
+							}
+						},
+						gap: {
+							type: "float",
+							"default": {
+								value: 0
+							}
+						},
+						includeLabel: {
+							type: "boolean",
+							"default": {
+								value: true
+							}
+						},
+						truncateLabel: {
+							type: "boolean",
+							"default": {
+								value: true
+							}
+						},
+						verticalArrangement: {
+							type: "boolean",
+							"default": {
+								value: false
+							}
+						},
+						excludeProperties: {
+							type: "PropertyReference[]"
+						}
+					},
+					"default": {
+						value: {},
+						ignoreIfNull: true
+					}
+				}
+			},
+			"default": {
+				value: {}
+			},
+			allowedForComplexProperty: true
+		},
+
+		// Chart
+
+		// FilterBar
+		required:  { // Whether there must be a filter condition for this property before firing a "search" event.
+			type: "boolean"
+		},
+		hiddenFilter:  { // Name of the property indicating if the filter is never to be shown on the UI.
+			type: "boolean"
 		}
+
+		// Reserved attributes
+		// extension - Used to add model-specific information. For example, for analytics in OData, see sap/ui/mdc/odata/v4/TableDelegate.
 	};
 
 	/**
@@ -221,7 +284,7 @@ sap.ui.define([
 		/**
 		 * Checks whether the property is complex.
 		 *
-		 * @this sap.ui.mdc.util.PropertyInfo
+		 * @this PropertyInfo
 		 * @returns {boolean | null} Whether the property is complex
 		 */
 		isComplex: function() {
@@ -230,7 +293,7 @@ sap.ui.define([
 		/**
 		 * Gets all relevant simple properties. Returns itself if it is a simple property, and the referenced simple properties if it is complex.
 		 *
-		 * @this sap.ui.mdc.util.PropertyInfo
+		 * @this PropertyInfo
 		 * @returns {sap.ui.mdc.util.PropertyInfo[]} The referenced simple properties if it is complex, otherwise itself
 		 */
 		getSimpleProperties: function() {
@@ -239,7 +302,7 @@ sap.ui.define([
 		/**
 		 * Gets all sortable properties referenced by the property, including the property itself if it is not complex.
 		 *
-		 * @this sap.ui.mdc.util.PropertyInfo
+		 * @this PropertyInfo
 		 * @returns {sap.ui.mdc.util.PropertyInfo[]} The sortable properties
 		 */
 		getSortableProperties: function() {
@@ -250,7 +313,7 @@ sap.ui.define([
 		/**
 		 * Gets all filterable properties referenced by the property, including the property itself if it is not complex.
 		 *
-		 * @this sap.ui.mdc.util.PropertyInfo
+		 * @this PropertyInfo
 		 * @returns {sap.ui.mdc.util.PropertyInfo[]} The filterable properties
 		 */
 		getFilterableProperties: function() {
@@ -259,9 +322,20 @@ sap.ui.define([
 			});
 		},
 		/**
+		 * Gets all groupable properties referenced by the property, including the property itself if it is not complex.
+		 *
+		 * @this PropertyInfo
+		 * @returns {object[]} The groupable properties
+		 */
+		getGroupableProperties: function() {
+			return this.getSimpleProperties().filter(function(oProperty) {
+				return oProperty.groupable;
+			});
+		},
+		/**
 		 * Gets all visible properties referenced by the property, including the property itself if it is not complex.
 		 *
-		 * @this sap.ui.mdc.util.PropertyInfo
+		 * @this PropertyInfo
 		 * @returns {sap.ui.mdc.util.PropertyInfo[]} The visible properties
 		 */
 		getVisibleProperties: function() {
@@ -382,9 +456,9 @@ sap.ui.define([
 			var sAttributePath = bTopLevel ? sAttribute : sPath + "." + sAttribute;
 			var vValue = oPropertySection[sAttribute];
 
-			if (bIsComplex && !mAttribute.forComplexProperty.allowed) {
-				if ("valueIfNotAllowed" in mAttribute.forComplexProperty) {
-					oPropertySection[sAttribute] = mAttribute.forComplexProperty.valueIfNotAllowed;
+			if (bIsComplex && !mAttribute.allowedForComplexProperty) {
+				if ("valueForComplexProperty" in mAttribute) {
+					oPropertySection[sAttribute] = mAttribute.valueForComplexProperty;
 				}
 				continue;
 			}
@@ -470,48 +544,99 @@ sap.ui.define([
 		}, {}));
 	}
 
-	function finalizeAttributeMetadata(mAttributeSection, sPath, mParentAttributeSection) {
+	function finalizeAttributeMetadata(mAttributeSection, sPath, bParentAllowedForComplexProperty) {
 		for (var sAttribute in mAttributeSection) {
 			var mAttribute = mAttributeSection[sAttribute];
 			var sAttributePath = sPath == null ? sAttribute : sPath + "." + sAttribute;
-			var mParentForComplexProperty = mParentAttributeSection ? mParentAttributeSection.forComplexProperty : {};
 
-			mAttribute.forComplexProperty = Object.assign({
-				allowed: mParentForComplexProperty.allowed && mParentForComplexProperty.propagateAllowance,
-				propagateAllowance: true
-			}, mAttribute.forComplexProperty);
+			if (sPath === "extension") {
+				finalizeAttributeMetadata(mAttribute.type, sAttributePath);
+				continue;
+			}
+
+			if (bParentAllowedForComplexProperty && mAttribute.allowedForComplexProperty !== false) {
+				mAttribute.allowedForComplexProperty = true;
+			}
 
 			if (typeof mAttribute.type === "object") {
-				finalizeAttributeMetadata(mAttribute.type, sAttributePath, mAttribute);
+				finalizeAttributeMetadata(mAttribute.type, sAttributePath, mAttribute.allowedForComplexProperty);
 			}
 		}
 	}
 
-	/**
-	 * Validates the properties, applies defaults, and enriches them with additional information and functions.
-	 *
-	 * @param {sap.ui.mdc.util.PropertyHelper} oPropertyHelper
-	 *     The instance of the <code>PropertyHelper</code> to initialize or re-initialize.
-	 * @param {sap.ui.mdc.util.PropertyInfo[]} aProperties
-	 *     The properties to process in this helper.
-	 * @throws {Error} If the properties are invalid.
-	 */
-	function processProperties(oPropertyHelper, aProperties) {
-		if (!Array.isArray(aProperties)) {
-			throwInvalidPropertyError("Property infos must be an array.");
+	function mergeExtensionsIntoProperties(aProperties, mExtensions) {
+		var iMatchingExtensions = 0;
+		mExtensions = mExtensions || {};
+		for (var i = 0; i < aProperties.length; i++) {
+			if ("extension" in aProperties[i]) {
+				throwInvalidPropertyError("Property contains invalid attribute 'extension'.", aProperties[i]);
+			}
+			if (aProperties[i].name in mExtensions) {
+				aProperties[i].extension = mExtensions[aProperties[i].name];
+				iMatchingExtensions++;
+			} else {
+				aProperties[i].extension = {};
+			}
+		}
+		if (iMatchingExtensions !== Object.keys(mExtensions).length) {
+			throw new Error("At least one property extension does not point to an existing property.");
+		}
+	}
+
+	function _createPrivate(oInstance, oParent, aProperties, mExtensions, aAllowedAttributes, mExtensionAttributeMetadata) {
+		var mPrivate = {};
+		var mInstanceAttributeMetadata = aCommonAttributes.concat(aAllowedAttributes || []).reduce(function(mMetadata, sAttribute) {
+			if (sAttribute in mAttributeMetadata) {
+				mMetadata[sAttribute] = mAttributeMetadata[sAttribute];
+			}
+			return mMetadata;
+		}, Object.assign({}, oInstance._mExperimentalAdditionalAttributes));
+		if (mExtensionAttributeMetadata) {
+			mPrivate.mAttributeMetadata = Object.assign({
+				extension: {
+					type: mExtensionAttributeMetadata,
+					mandatory: true,
+					allowedForComplexProperty: true
+				}
+			}, mInstanceAttributeMetadata);
+			mPrivate.aMandatoryExtensionAttributes = Object.keys(mExtensionAttributeMetadata).filter(function(sAttribute) {
+				return mExtensionAttributeMetadata[sAttribute].mandatory;
+			});
+		} else {
+			mPrivate.mAttributeMetadata = mInstanceAttributeMetadata;
+			mPrivate.aMandatoryExtensionAttributes = [];
 		}
 
-		var mPrivate = _private.get(oPropertyHelper);
+		finalizeAttributeMetadata(mPrivate.mAttributeMetadata);
+
+		mPrivate.aMandatoryAttributes = Object.keys(mPrivate.mAttributeMetadata).filter(function(sAttribute) {
+			return mPrivate.mAttributeMetadata[sAttribute].mandatory;
+		});
+
 		var aClonedProperties = merge([], aProperties);
+		var mProperties = createPropertyMap(aClonedProperties);
+		if (mExtensionAttributeMetadata) {
+			mergeExtensionsIntoProperties(aClonedProperties, merge({}, mExtensions));
+		}
 
-		oPropertyHelper.validateProperties(aClonedProperties, mPrivate.aPreviousRawProperties);
+		var oPreviousPrivate = _private.get(oInstance);
+		var aPreviousProperties = oPreviousPrivate && oPreviousPrivate.aRawProperties;
+		_private.set(oInstance, mPrivate);
+		oInstance.validateProperties(aClonedProperties, aPreviousProperties);
 
+
+		mPrivate.oParent = oParent || null;
+		mPrivate.aRawProperties = aProperties;
 		mPrivate.aProperties = aClonedProperties;
-		mPrivate.mProperties = createPropertyMap(aClonedProperties);
-		mPrivate.aPreviousRawProperties = merge([], aProperties);
+		mPrivate.mProperties = mProperties;
+		mPrivate._ = {
+			mExtensions: mExtensions,
+			aAllowedAttributes: aAllowedAttributes,
+			mExtensionAttributeMetadata: mExtensionAttributeMetadata
+		};
 
-		enrichProperties(oPropertyHelper, aClonedProperties);
-		prepareProperties(oPropertyHelper, aClonedProperties);
+		enrichProperties(oInstance, aClonedProperties);
+		prepareProperties(oInstance, aClonedProperties);
 	}
 
 	/**
@@ -519,14 +644,18 @@ sap.ui.define([
 	 *
 	 * @param {sap.ui.mdc.util.PropertyInfo[]} aProperties
 	 *     The properties to process in this helper
+	 * @param {Object<string, object>} [mExtensions]
+	 *     Key-value map, where the key is the name of the property and the value is the extension containing mode-specific information.
+	 *     The extension of a property is stored in a reserved <code>extension</code> attribute and its attributes must be specified with
+	 *     <code>mExtensionAttributeMetadata</code>.
 	 * @param {sap.ui.base.ManagedObject} [oParent]
 	 *     A reference to an instance that will act as the parent of this helper
-	 * @param {object} [mAdditionalAttributes]
-	 *     Additional attributes that the <code>PropertyInfo</code> may contain. It is a key-value map, where the key is the name of the
-	 *     attribute, and the value is the attribute metadata definition. To add a standard property, the value must be <code>true</code>. Metadata
-	 *     of standard attributes cannot be overridden.
-	 *     The following common standard attributes are always included. They do not need to be added explicitly and cannot be excluded.
-	 *     name, label, visible, path, typeConfig, maxConditions, group, groupLabel, caseSensitive
+     * @param {string[]} [aAllowedAttributes]
+	 *     List of attributes that the <code>PropertyInfo</code> may contain.
+	 *     The following common attributes are always allowed:
+	 *     name, label, tooltip, visible, path, typeConfig, maxConditions, group, groupLabel
+	 * @param {object} [mExtensionAttributeMetadata]
+	 *     The attribute metadata for the model-specific property extension
 	 *
 	 * @class
 	 * Property helpers in this SAPUI5 library provide a consistent and standardized structure of properties and their attributes.
@@ -536,7 +665,7 @@ sap.ui.define([
 	 * @extends sap.ui.base.Object
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @experimental
@@ -545,36 +674,33 @@ sap.ui.define([
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var PropertyHelper = BaseObject.extend("sap.ui.mdc.util.PropertyHelper", {
-		constructor: function(aProperties, oParent, mAdditionalAttributes) {
+		constructor: function(aProperties, mExtensions, oParent, aAllowedAttributes, mExtensionAttributeMetadata) {
 			BaseObject.call(this);
 
+			if (!Array.isArray(aProperties)) {
+				throwInvalidPropertyError("Property infos must be an array.");
+			}
+
+			if (mExtensions) {
+				if (!mExtensionAttributeMetadata) {
+					throw new Error("Property extensions are not supported.");
+				} else if (!isPlainObject(mExtensions)) {
+					throw new Error("Property extensions must be a plain object.");
+				}
+			}
 			if (oParent && !BaseObject.isA(oParent, "sap.ui.base.ManagedObject")) {
 				throw new Error("The type of the parent is invalid.");
 			}
 
-			Object.keys(mAdditionalAttributes || {}).forEach(function(sAdditionalAttribute) {
-				if (sAdditionalAttribute in mAttributeMetadata && mAdditionalAttributes[sAdditionalAttribute] !== true) {
-					throw new Error("The attribute '" + sAdditionalAttribute + "' is reserved and cannot be overridden by additional attributes.");
-				}
-			});
+			if (this._mExperimentalAdditionalAttributes) {
+				Object.keys(mAttributeMetadata).concat("extension").forEach(function(sAttribute) {
+					if (sAttribute in this._mExperimentalAdditionalAttributes) {
+						throw new Error("The attribute '" + sAttribute + "' is reserved and cannot be overridden by additional attributes.");
+					}
+				}.bind(this));
+			}
 
-			var mPrivate = {};
-			var aAdditionalAttributes = Object.keys(mAdditionalAttributes || {});
-
-			mPrivate.mAttributeMetadata = aCommonAttributes.concat(aAdditionalAttributes).reduce(function(mMetadata, sAttribute) {
-				mMetadata[sAttribute] = sAttribute in mAttributeMetadata ? mAttributeMetadata[sAttribute] : mAdditionalAttributes[sAttribute];
-				return mMetadata;
-			}, {});
-			finalizeAttributeMetadata(mPrivate.mAttributeMetadata);
-
-			mPrivate.aMandatoryAttributes = Object.keys(mPrivate.mAttributeMetadata).filter(function(sAttribute) {
-				return mPrivate.mAttributeMetadata[sAttribute].mandatory;
-			});
-
-			mPrivate.oParent = oParent || null;
-			_private.set(this, mPrivate);
-
-			processProperties(this, aProperties);
+			_createPrivate(this, oParent, aProperties, mExtensions, aAllowedAttributes, mExtensionAttributeMetadata);
 		}
 	});
 
@@ -636,6 +762,13 @@ sap.ui.define([
 				throwInvalidPropertyError("Property does not contain mandatory attribute '" + sMandatoryAttribute + "'.", oProperty);
 			}
 		});
+		_private.get(this).aMandatoryExtensionAttributes.forEach(function(sMandatoryAttribute) {
+			if (!(sMandatoryAttribute in oProperty.extension)) {
+				reportInvalidProperty("Property does not contain mandatory attribute 'extension." + sMandatoryAttribute + "'.", oProperty);
+			} else if (oProperty.extension[sMandatoryAttribute] == null) {
+				throwInvalidPropertyError("Property does not contain mandatory attribute 'extension." + sMandatoryAttribute + "'.", oProperty);
+			}
+		});
 	};
 
 	function validatePropertyDeep(oPropertyHelper, oProperty, aProperties, sPath, oPropertySection, mAttributeSection) {
@@ -653,7 +786,7 @@ sap.ui.define([
 
 			if (!mAttribute) {
 				reportInvalidProperty("Property contains invalid attribute '" + sAttributePath + "'.", oProperty);
-			} else if (PropertyHelper.isPropertyComplex(oProperty) && !mAttribute.forComplexProperty.allowed) {
+			} else if (PropertyHelper.isPropertyComplex(oProperty) && !mAttribute.allowedForComplexProperty) {
 				reportInvalidProperty("Complex property contains invalid attribute '" + sAttributePath + "'.", oProperty);
 			} else if (typeof mAttribute.type === "object" && vValue && typeof vValue === "object") {
 				validatePropertyDeep(
@@ -741,9 +874,12 @@ sap.ui.define([
 	 *
 	 * @param {sap.ui.mdc.util.PropertyInfo[]} aProperties The properties to process
 	 * @public
+	 * @since 1.100.0
 	 */
-	PropertyHelper.prototype.setProperties = function(aProperties) {
-		processProperties(this, aProperties);
+	 PropertyHelper.prototype.setProperties = function (aProperties) {
+		var mPrivate = _private.get(this);
+		_createPrivate(this, mPrivate.oParent, aProperties, mPrivate._.mExtensions, mPrivate._.aAllowedAttributes, mPrivate._.mExtensionAttributeMetadata);
+		return this;
 	};
 
 	/**
@@ -823,6 +959,30 @@ sap.ui.define([
 	PropertyHelper.prototype.getFilterableProperties = function() {
 		return this.getProperties().filter(function(oProperty) {
 			return oProperty.filterable;
+		});
+	};
+
+	/**
+	 * Gets all groupable properties.
+	 *
+	 * @returns {object[]} All groupable properties
+	 * @public
+	 */
+	PropertyHelper.prototype.getGroupableProperties = function() {
+		return this.getProperties().filter(function(oProperty) {
+			return oProperty.groupable;
+		});
+	};
+
+	/**
+	 * Gets all key properties.
+	 *
+	 * @returns {sap.ui.mdc.util.PropertyInfo[]} All key properties
+	 * @public
+	 */
+	PropertyHelper.prototype.getKeyProperties = function() {
+		return this.getProperties().filter(function(oProperty) {
+			return oProperty.key;
 		});
 	};
 

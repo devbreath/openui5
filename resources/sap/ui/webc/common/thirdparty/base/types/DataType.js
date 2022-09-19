@@ -1,2 +1,1 @@
-sap.ui.define(["exports"],function(t){"use strict";Object.defineProperty(t,"__esModule",{value:true});t.default=void 0;class e{static isValid(t){}static attributeToProperty(t){return t}static propertyToAttribute(t){return`${t}`}static valuesAreEqual(t,e){return t===e}static generateTypeAccessors(t){Object.keys(t).forEach(e=>{Object.defineProperty(this,e,{get(){return t[e]}})})}}var r=e;t.default=r});
-//# sourceMappingURL=DataType.js.map
+sap.ui.define(function(){"use strict";class t{static isValid(t){}static attributeToProperty(t){return t}static propertyToAttribute(t){return`${t}`}static valuesAreEqual(t,e){return t===e}static generateTypeAccessors(t){Object.keys(t).forEach(e=>{Object.defineProperty(this,e,{get(){return t[e]}})})}}return t});

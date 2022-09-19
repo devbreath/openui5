@@ -8,18 +8,16 @@ sap.ui.define([
 	"./QuickActionItem",
 	"./QuickAction",
 	"sap/m/ToggleButton",
-	"sap/m/library",
 	"sap/ui/core/library"
 ], function (
 	QuickActionItem,
 	QuickAction,
 	ToggleButton,
-	library,
-	CoreLibrary
+	library
 ) {
 	"use strict";
 
-	var SortOrder = CoreLibrary.SortOrder;
+	var SortOrder = library.SortOrder;
 
 	/**
 	 * Constructor for a new QuickSortItem.
@@ -34,7 +32,7 @@ sap.ui.define([
 	 * @extends sap.m.table.columnmenu.QuickActionItem
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @experimental
@@ -45,7 +43,7 @@ sap.ui.define([
 		metadata: {
 			library: "sap.m",
 			properties: {
-				sortOrder: { type: "sap.ui.core.SortOrder", defaultValue: CoreLibrary.SortOrder.None }
+				sortOrder: { type: "sap.ui.core.SortOrder", defaultValue: library.SortOrder.None }
 			},
 			aggregations: {
 				quickAction: { type: "sap.m.table.columnmenu.QuickAction", multiple: false, visibility: "hidden" }
@@ -62,8 +60,7 @@ sap.ui.define([
 		} else {
 			oQuickAction = new QuickAction({
 				label: sLabel,
-				content: [this._createContent()],
-				category: library.table.columnmenu.Category.Sort
+				content: [this._createContent()]
 			});
 		}
 

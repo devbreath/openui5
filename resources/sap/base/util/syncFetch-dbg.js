@@ -10,17 +10,24 @@ sap.ui.define([
 	"use strict";
 
 	function SyncResponseMixin() {
-		var superText = this.text;
-		var superJson = this.json;
-
-		this.text = function() {
-			return superText().unwrap();
-		};
-		this.json = function () {
-			return superJson().unwrap();
-		};
+		this.text = text;
+		this.json = json;
 	}
 
+	function text () {
+		return SyncPromise.resolve(this.xhr.responseText).unwrap();
+	}
+	function json () {
+		if (this.xhr.responseType === "json") {
+			return SyncPromise.resolve(this.xhr.response).unwrap();
+		} else {
+			try {
+				return SyncPromise.resolve(JSON.parse(this.xhr.responseText)).unwrap();
+			} catch (err) {
+				return SyncPromise.reject(err).unwrap();
+			}
+		}
+	}
 
 	/**
 	 * Performs a synchronous XMLHttpRequest (XHR) with the provided resource URL and request settings.

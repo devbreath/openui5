@@ -59,7 +59,7 @@ sap.ui.define([
 			 * @implements sap.ui.core.IFormContent
 			 *
 			 * @author SAP SE
-			 * @version 1.106.0
+			 * @version 1.105.1
 			 *
 			 * @constructor
 			 * @public
@@ -418,6 +418,13 @@ sap.ui.define([
 			 * @returns {sap.m.RadioButton} The created radio button.
 			 */
 			RadioButtonGroup.prototype._createRadioButton = function(oButton) {
+
+				if (this.iIDCount == undefined) {
+					this.iIDCount = 0;
+				} else {
+					this.iIDCount++;
+				}
+
 				oButton.setValueState(this.getValueState());
 				oButton.setGroupName(this.getId());
 				oButton.attachEvent("select", this._handleRBSelect, this);

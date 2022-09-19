@@ -1,2 +1,1 @@
-sap.ui.define(["exports"],function(e){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;const t=(e,t,u=false)=>{if(typeof e!=="function"||typeof t!=="function"){return false}if(u&&e===t){return true}let f=e;do{f=Object.getPrototypeOf(f)}while(f!==null&&f!==t);return f===t};var u=t;e.default=u});
-//# sourceMappingURL=isDescendantOf.js.map
+sap.ui.define(function(){"use strict";const t=(t,e,n=false)=>{if(typeof t!=="function"||typeof e!=="function"){return false}if(n&&t===e){return true}let f=t;do{f=Object.getPrototypeOf(f)}while(f!==null&&f!==e);return f===e};return t});

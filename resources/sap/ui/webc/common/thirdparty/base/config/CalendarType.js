@@ -1,2 +1,1 @@
-sap.ui.define(["exports","../types/CalendarType","../InitialConfiguration"],function(e,t,n){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.getCalendarType=void 0;t=r(t);function r(e){return e&&e.__esModule?e:{default:e}}let a;const i=()=>{if(a===undefined){a=(0,n.getCalendarType)()}if(t.default.isValid(a)){return a}return t.default.Gregorian};e.getCalendarType=i});
-//# sourceMappingURL=CalendarType.js.map
+sap.ui.define(["exports","../types/CalendarType","../InitialConfiguration"],function(e,n,t){"use strict";let i;const r=()=>{if(i===undefined){i=t.getCalendarType()}if(n.isValid(i)){return i}return n.Gregorian};e.getCalendarType=r;Object.defineProperty(e,"__esModule",{value:true})});

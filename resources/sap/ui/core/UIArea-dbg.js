@@ -19,7 +19,8 @@ sap.ui.define([
 	'sap/ui/events/jquery/EventExtension',
 	"sap/ui/events/ControlEvents",
 	"sap/ui/events/F6Navigation",
-	"sap/ui/thirdparty/jquery"
+	"sap/ui/thirdparty/jquery",
+	"sap/ui/dom/jquery/control" // jQuery Plugin "control"
 ],
 	function(
 		ManagedObject,
@@ -174,7 +175,7 @@ sap.ui.define([
 	 *
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @param {sap.ui.core.Core} oCore internal API of the <core>Core</code> that manages this UIArea
 	 * @param {object} [oRootNode] reference to the DOM element that should be 'hosting' the UI Area.
 	 * @public
@@ -286,7 +287,7 @@ sap.ui.define([
 	 *
 	 * The node must have an ID that will be used as ID for this instance of <code>UIArea</code>.
 	 *
-	 * @param {Element} oRootNode
+	 * @param {object} oRootNode
 	 *            the hosting DOM node for this instance of <code>UIArea</code>.
 	 * @public
 	 */
@@ -828,8 +829,8 @@ sap.ui.define([
 	 *   });
 	 * });
 	 *
-	 * @param {Object<string, boolean>} [mEventTypes] Map of logging flags keyed by event types
-	 * @returns {Object<string, boolean>} A copy of the resulting event logging configuration (not normalized)
+	 * @param {object} [mEventTypes] Map of logging flags keyed by event types
+	 * @returns {object} A copy of the resulting event logging configuration (not normalized)
 	 * @public
 	 * @since 1.62
 	 */
@@ -852,7 +853,7 @@ sap.ui.define([
 
 		// TODO: this should be the 'lowest' SAPUI5 Control of this very
 		// UIArea instance's scope -> nesting scenario
-		oTargetElement = oElement = Element.closestTo(oEvent.target);
+		oTargetElement = oElement = jQuery(oEvent.target).control(0);
 
 		ActivityDetection.refresh();
 
@@ -984,7 +985,7 @@ sap.ui.define([
 			// ensure we do not bubble the control tree higher than our rootNode
 			while (oDomRef && oDomRef !== this.getRootNode()) {
 				if (oDomRef.id) {
-					oElement = Element.closestTo(oDomRef);
+					oElement = jQuery(oDomRef).control(0);
 					if (oElement) {
 						break;
 					}
@@ -1138,7 +1139,7 @@ sap.ui.define([
 		var oKey = UIArea._oFieldGroupValidationKey;
 		if (oEvent.type === "focusin" || oEvent.type === "focusout") {
 			if (oEvent.type === "focusout") {
-				oElement = Element.closestTo(document.activeElement);
+				oElement = jQuery(document.activeElement).control(0);
 			}
 			// delay the check for a field group change to allow focus forwarding and resetting focus after selection
 			if (UIArea._iFieldGroupDelayTimer) {

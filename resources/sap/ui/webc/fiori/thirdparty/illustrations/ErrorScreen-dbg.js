@@ -1,43 +1,22 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations", "./sapIllus-Dialog-ErrorScreen", "./sapIllus-Scene-ErrorScreen", "./sapIllus-Spot-ErrorScreen", "../generated/i18n/i18n-defaults"], function (_exports, _Illustrations, _sapIllusDialogErrorScreen, _sapIllusSceneErrorScreen, _sapIllusSpotErrorScreen, _i18nDefaults) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations', './sapIllus-Dialog-ErrorScreen', './sapIllus-Scene-ErrorScreen', './sapIllus-Spot-ErrorScreen', '../generated/i18n/i18n-defaults'], function (exports, Illustrations, sapIllusDialogErrorScreen, sapIllusSceneErrorScreen, sapIllusSpotErrorScreen, i18nDefaults) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "dialogSvg", {
-    enumerable: true,
-    get: function () {
-      return _sapIllusDialogErrorScreen.default;
-    }
-  });
-  Object.defineProperty(_exports, "sceneSvg", {
-    enumerable: true,
-    get: function () {
-      return _sapIllusSceneErrorScreen.default;
-    }
-  });
-  Object.defineProperty(_exports, "spotSvg", {
-    enumerable: true,
-    get: function () {
-      return _sapIllusSpotErrorScreen.default;
-    }
-  });
-  _sapIllusDialogErrorScreen = _interopRequireDefault(_sapIllusDialogErrorScreen);
-  _sapIllusSceneErrorScreen = _interopRequireDefault(_sapIllusSceneErrorScreen);
-  _sapIllusSpotErrorScreen = _interopRequireDefault(_sapIllusSpotErrorScreen);
+	const name = "ErrorScreen";
+	const set = "fiori";
+	const title = i18nDefaults.IM_TITLE_UNABLETOUPLOAD;
+	const subtitle = i18nDefaults.IM_SUBTITLE_UNABLETOUPLOAD;
+	Illustrations.registerIllustration(name, {
+		dialogSvg: sapIllusDialogErrorScreen,
+		sceneSvg: sapIllusSceneErrorScreen,
+		spotSvg: sapIllusSpotErrorScreen,
+		title,
+		subtitle,
+		set,
+	});
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	exports.dialogSvg = sapIllusDialogErrorScreen;
+	exports.sceneSvg = sapIllusSceneErrorScreen;
+	exports.spotSvg = sapIllusSpotErrorScreen;
 
-  const name = "ErrorScreen";
-  const set = "fiori";
-  const title = _i18nDefaults.IM_TITLE_UNABLETOUPLOAD;
-  const subtitle = _i18nDefaults.IM_SUBTITLE_UNABLETOUPLOAD;
-  (0, _Illustrations.registerIllustration)(name, {
-    dialogSvg: _sapIllusDialogErrorScreen.default,
-    sceneSvg: _sapIllusSceneErrorScreen.default,
-    spotSvg: _sapIllusSpotErrorScreen.default,
-    title,
-    subtitle,
-    set
-  });
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

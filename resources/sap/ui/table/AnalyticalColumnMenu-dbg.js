@@ -5,9 +5,12 @@
  */
 
 // Provides control sap.ui.table.AnalyticalColumnMenu.
-sap.ui.define(['./ColumnMenu', "sap/ui/unified/MenuRenderer", './utils/TableUtils', './library', "sap/ui/thirdparty/jquery"],
-	function(ColumnMenu, MenuRenderer, TableUtils, library, jQuery) {
+sap.ui.define(['./ColumnMenu', "sap/ui/unified/MenuRenderer", './library', "sap/ui/thirdparty/jquery"],
+	function(ColumnMenu, MenuRenderer, library, jQuery) {
 	"use strict";
+
+	// shortcut
+	var GroupEventType = library.GroupEventType;
 
 	/**
 	 * Constructor for a new AnalyticalColumnMenu.
@@ -20,7 +23,7 @@ sap.ui.define(['./ColumnMenu', "sap/ui/unified/MenuRenderer", './utils/TableUtil
 	 * @extends sap.ui.table.ColumnMenu
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -64,21 +67,10 @@ sap.ui.define(['./ColumnMenu', "sap/ui/unified/MenuRenderer", './utils/TableUtil
 				function(oEvent) {
 					var oMenuItem = oEvent.getSource();
 					var bGrouped = oColumn.getGrouped();
+					var sGroupEventType = bGrouped ? GroupEventType.group : GroupEventType.ungroup;
 
-					oColumn._setGrouped(!bGrouped);
-					if (!bGrouped && !oColumn.getShowIfGrouped()) {
-						var oDomRef;
-
-						if (TableUtils.isNoDataVisible(oTable)) {
-							oDomRef = oTable.getDomRef("noDataCnt");
-						} else {
-							oDomRef = oTable.getDomRef("rowsel0");
-						}
-
-						if (oDomRef) {
-							oDomRef.focus();
-						}
-					}
+					oColumn.setGrouped(!bGrouped);
+					oTable.fireGroup({column: oColumn, groupedColumns: oTable._aGroupedColumns, type: sGroupEventType});
 					oMenuItem.setIcon(!bGrouped ? "sap-icon://accept" : null);
 				}
 			);
@@ -91,9 +83,12 @@ sap.ui.define(['./ColumnMenu', "sap/ui/unified/MenuRenderer", './utils/TableUtil
 	 * @private
 	 */
 	AnalyticalColumnMenu.prototype._addSumMenuItem = function() {
-		var oColumn = this._oColumn;
+		var oColumn = this._oColumn,
+			oTable = this._oTable,
+			oBinding = oTable.getBinding(),
+			oResultSet = oBinding && oBinding.getAnalyticalQueryResult();
 
-		if (oColumn._isAggregatableByMenu()) {
+		if (oTable && oResultSet && oResultSet.findMeasureByPropertyName(oColumn.getLeadingProperty())) {
 			this._oSumItem = this._createMenuItem(
 				"total",
 				"TBL_TOTAL",

@@ -13,7 +13,7 @@ sap.ui.define([
 	 * @namespace FakeFlpConnector.
 	 * @name sap.ui.mdc.link.FakeFlpConnector
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @private
 	 * @since 1.54.0
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel

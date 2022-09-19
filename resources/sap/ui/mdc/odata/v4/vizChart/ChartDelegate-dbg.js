@@ -5,8 +5,10 @@
  */
 
 sap.ui.define([
-    "sap/ui/mdc/odata/v4/ChartDelegate",
+    "../ChartDelegate",
+    "../../../util/loadModules",
     "sap/ui/core/Core",
+    "sap/m/library",
     "sap/m/Text",
     "sap/ui/mdc/library",
     "sap/base/Log",
@@ -17,16 +19,19 @@ sap.ui.define([
     "sap/ui/model/Sorter",
     "sap/ui/mdc/chart/ChartImplementationContainer",
     "sap/ui/base/ManagedObjectObserver",
+    "sap/ui/core/ResizeHandler",
     "sap/ui/mdc/p13n/panels/ChartItemPanel",
     "sap/m/MessageStrip",
-    "sap/ui/mdc/odata/v4/TypeUtil",
+    "../TypeUtil",
     "sap/ui/mdc/FilterBarDelegate",
     "sap/ui/model/Filter",
-    "sap/ui/mdc/chart/PropertyHelper",
+    "sap/ui/mdc/odata/v4/ChartPropertyHelper",
     "sap/ui/thirdparty/jquery"
 ], function (
     V4ChartDelegate,
+    loadModules,
     Core,
+    mobileLibrary,
     Text,
     MDCLib,
     Log,
@@ -37,10 +42,11 @@ sap.ui.define([
     Sorter,
     ChartImplementationContainer,
     ManagedObjectObserver,
+    ResizeHandler,
     ChartItemPanel,
     MessageStrip,
     V4TypeUtil,
-    FilterBarDelegate,
+    V4FilterBarDelegate,
     Filter,
     PropertyHelper,
     jQuery
@@ -88,7 +94,7 @@ sap.ui.define([
     };
 
     ChartDelegate.getFilterDelegate = function() {
-        return FilterBarDelegate;
+        return V4FilterBarDelegate;
     };
 
     /**
@@ -1098,13 +1104,12 @@ sap.ui.define([
         }
 
         var sType = oMDCChart.getChartType(),
-            oMDCResourceBundle = Core.getLibraryResourceBundle("sap.ui.mdc"),
-            oChartResourceBundle = Core.getLibraryResourceBundle("sap.chart.messages");
+            oMDCResourceBundle = Core.getLibraryResourceBundle("sap.ui.mdc");
 
         var mInfo = {
             icon: ChartTypeButton.mMatchingIcon[sType],
             text: oMDCResourceBundle.getText("chart.CHART_TYPE_TOOLTIP", [
-                oChartResourceBundle.getText("info/" + sType)
+                sType
             ])
         };
 
@@ -1397,11 +1402,10 @@ sap.ui.define([
 
         if (oPropertyInfo.textProperty){
             oDimension.setTextProperty(oPropertyInfo.textProperty);
+            if (oPropertyInfo.textFormatter){
+                oDimension.setTextFormatter(this._formatText.bind(oPropertyInfo));
+            }
             oDimension.setDisplayText(true);
-        }
-
-        if (oPropertyInfo.textFormatter){
-            oDimension.setTextFormatter(this._formatText.bind(oPropertyInfo));
         }
 
         this._getChart(oMDCChart).addDimension(oDimension);

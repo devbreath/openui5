@@ -23,7 +23,7 @@ sap.ui.define([
 	 * @class The BaseCreate allows trigger BaseCreate operations on the overlay.
 	 * @extends sap.ui.rta.plugin.Plugin
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @since 1.75
@@ -124,7 +124,7 @@ sap.ui.define([
 		return aActions[0];
 	};
 
-	BaseCreate.prototype.isAvailable = function (aElementOverlays, bSibling) {
+	BaseCreate.prototype.isAvailable = function (bSibling, aElementOverlays) {
 		return this._isEditableByPlugin(aElementOverlays[0], bSibling);
 	};
 

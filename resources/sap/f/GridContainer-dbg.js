@@ -165,7 +165,7 @@ sap.ui.define([
 	 * @see {@link sap.f.dnd.GridDropInfo}
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @extends sap.ui.core.Control
 	 *
@@ -274,18 +274,6 @@ sap.ui.define([
 				 * Default sap.f.GridContainerSettings
 				 */
 				_defaultLayout: { type: "sap.f.GridContainerSettings", multiple: false, visibility: "hidden" }
-			},
-			associations : {
-
-				/**
-				 * Association to controls / IDs which describe this control (see WAI-ARIA attribute aria-describedby).
-				 */
-				ariaDescribedBy: {type: "sap.ui.core.Control", multiple: true, singularName: "ariaDescribedBy"},
-
-				/**
-				 * Association to controls / IDs which label this control (see WAI-ARIA attribute aria-labelledby).
-				 */
-				ariaLabelledBy: {type: "sap.ui.core.Control", multiple: true, singularName: "ariaLabelledBy"}
 			},
 			events: {
 
@@ -669,7 +657,7 @@ sap.ui.define([
 	 * Removes an item from the aggregation named <code>items</code>.
 	 *
 	 * @param {int | string | sap.ui.core.Item} vItem The item to remove or its index or ID.
-	 * @returns {sap.ui.core.Control|null} The removed item or <code>null</code>.
+	 * @returns {sap.ui.core.Control} The removed item or null.
 	 * @public
 	 */
 	GridContainer.prototype.removeItem = function (vItem) {

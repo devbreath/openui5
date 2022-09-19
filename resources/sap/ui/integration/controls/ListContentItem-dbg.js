@@ -34,7 +34,7 @@ sap.ui.define([
 	 * @extends sap.m.StandardListItem
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @private
@@ -112,12 +112,6 @@ sap.ui.define([
 			.setBackgroundColor(this.getIconBackgroundColor());
 
 		return oAvatar;
-	};
-
-	ListContentItem.prototype._getVisibleAttributes = function () {
-		return this.getAttributes().filter(function (oAttribute) {
-			return oAttribute.getVisible();
-		});
 	};
 
 	return ListContentItem;

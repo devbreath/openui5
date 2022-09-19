@@ -9,10 +9,11 @@
  */
 sap.ui.define([
 		"sap/ui/webc/common/library",
+		"sap/ui/webc/common/thirdparty/base/CSP",
 		"./thirdparty/Assets",
 		"./library.config"
 	], // library dependency
-	function(commonLibrary) {
+	function(commonLibrary, CSP) {
 
 		"use strict";
 
@@ -22,14 +23,14 @@ sap.ui.define([
 		 * @namespace
 		 * @alias sap.ui.webc.fiori
 		 * @author SAP SE
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
 		 */
 		var thisLib = sap.ui.getCore().initLibrary({
 			name: "sap.ui.webc.fiori",
-			version: "1.106.0",
+			version: "1.105.1",
 			dependencies: ["sap.ui.core", "sap.ui.webc.common"],
 			noLibraryCSS: true,
 			designtime: "sap/ui/webc/main/designtime/library.designtime",
@@ -1286,6 +1287,8 @@ Use to display both a list and a detail page when the user should focus on the l
 			 */
 			Uploading: "Uploading"
 		};
+
+		CSP.setPackageCSSRoot("@ui5/webcomponents-fiori", sap.ui.require.toUrl("sap/ui/webc/fiori/thirdparty/css/"));
 
 		return thisLib;
 

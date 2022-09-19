@@ -44,7 +44,7 @@ sap.ui.define(
 		 * Destroying the cache will cancel all registered promises and delete references. Convenience methods for promise creation, wrapping and replacement are offered.
 		 *
 		 * @author SAP SE
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 * @alias sap.ui.mdc.util.PromiseCache
 		 * @namespace
 		 * @since 1.85.0

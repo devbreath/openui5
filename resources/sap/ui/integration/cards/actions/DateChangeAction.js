@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["./BaseAction"],function(a){"use strict";var t=a.extend("sap.ui.integration.cards.actions.DateChangeAction",{metadata:{library:"sap.ui.integration"}});return t});
-//# sourceMappingURL=DateChangeAction.js.map
+sap.ui.define(["./BaseAction"],function(B){"use strict";var D=B.extend("sap.ui.integration.cards.actions.DateChangeAction",{metadata:{library:"sap.ui.integration"}});return D;});

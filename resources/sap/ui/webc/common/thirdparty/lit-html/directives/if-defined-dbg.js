@@ -1,17 +1,13 @@
-sap.ui.define(["exports", "../lit-html"], function (_exports, _litHtml) {
-  "use strict";
+sap.ui.define(['exports', '../lit-html'], function (exports, litHtml) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.ifDefined = void 0;
+	/**
+	 * @license
+	 * Copyright 2018 Google LLC
+	 * SPDX-License-Identifier: BSD-3-Clause
+	 */const l=l=>null!=l?l:litHtml.nothing;
 
-  /**
-   * @license
-   * Copyright 2018 Google LLC
-   * SPDX-License-Identifier: BSD-3-Clause
-   */
-  const l = l => null != l ? l : _litHtml.nothing;
+	exports.ifDefined = l;
 
-  _exports.ifDefined = l;
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

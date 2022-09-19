@@ -413,7 +413,7 @@ var Template = /** @class */ (function () {
 	/**
 	 * Parses an interpolated string into an Expression object ready to evaluate.
 	 *
-	 * @param interpolatedString The interpolated string to parse. Example: "Hello ${name}"
+	 * @param interpolatedString The interpolated string to parse. Example: "Hello sap.ui.integration"
 	 * @returns An Expression object if the provided interpolated string contained at least one expression (e.g. "${expression}"); the original string otherwise.
 	 */
 	Template.parseInterpolatedString = function (interpolatedString) {

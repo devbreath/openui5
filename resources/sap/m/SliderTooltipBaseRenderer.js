@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define([],function(){"use strict";var n={apiVersion:2};n.CSS_CLASS="sapMSliderTooltip";n.render=function(n,e){n.openStart("div",e).openEnd();this.renderTooltipContent(n,e);n.close("div")};n.renderTooltipContent=function(n,e){};return n},true);
-//# sourceMappingURL=SliderTooltipBaseRenderer.js.map
+sap.ui.define([],function(){"use strict";var S={apiVersion:2};S.CSS_CLASS="sapMSliderTooltip";S.render=function(r,c){r.openStart("div",c).openEnd();this.renderTooltipContent(r,c);r.close("div");};S.renderTooltipContent=function(r,c){};return S;},true);

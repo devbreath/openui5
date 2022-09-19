@@ -24,7 +24,7 @@ sap.ui.define([
 	 * The <code>sap.ui.webc.main.SuggestionGroupItem</code> is type of suggestion item, that can be used to split the <code>sap.ui.webc.main.Input</code> suggestions into groups.
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public

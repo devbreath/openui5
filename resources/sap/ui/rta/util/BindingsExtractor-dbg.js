@@ -7,16 +7,12 @@
 sap.ui.define([
 	"sap/ui/dt/ElementUtil",
 	"sap/ui/dt/OverlayRegistry",
-	"sap/base/util/isPlainObject",
-	"sap/base/util/restricted/_uniqWith",
-	"sap/base/util/deepEqual"
+	"sap/base/util/isPlainObject"
 ],
 function(
 	ElementUtil,
 	OverlayRegistry,
-	isPlainObject,
-	_uniqWith,
-	deepEqual
+	isPlainObject
 ) {
 	"use strict";
 
@@ -39,12 +35,7 @@ function(
 		};
 		var sAggregationName = oElement.sParentAggregationName;
 		var oParent = oElement.getParent();
-		var aBindings = BindingsExtractor.getBindings({
-			element: oElement,
-			model: oModel,
-			relevantContainerElement: oRelevantContainerElement,
-			parent: oParent
-		});
+		var aBindings = BindingsExtractor.getBindings(oElement, oModel, undefined, undefined, oRelevantContainerElement);
 
 		if (oParent) {
 			var oDefaultAggregation = oParent.getMetadata().getAggregation();
@@ -61,13 +52,7 @@ function(
 					if (oTemplateDefaultAggregation) {
 						var sTemplateDefaultAggregationName = oTemplateDefaultAggregation.name;
 						var oTemplateElement = ElementUtil.getAggregation(oTemplate, sTemplateDefaultAggregationName)[iPositionOfInvisibleElement];
-						aBindings = aBindings.concat(BindingsExtractor.getBindings({
-							model: oModel,
-							element: oTemplateElement,
-							template: true,
-							relevantContainerElement: oRelevantContainerElement,
-							parent: oParent
-						}));
+						aBindings = aBindings.concat(BindingsExtractor.getBindings(oTemplateElement, null, true, undefined, oRelevantContainerElement));
 					}
 				}
 			}
@@ -108,77 +93,58 @@ function(
 
 	/**
 	 * Gets bindings for the whole hierarchy of children for a specified Element
-	 * and filters out bindings which are not relevant (based on the given model)
+	 * and filters out bindings which are not relevant (based on the parent model)
 	 *
-	 * @param {object} mPropertyBag - PropertyBag
-	 * @param {sap.ui.core.Control} mPropertyBag.element - Starting point of the search
-	 * @param {sap.ui.model.Model} [mPropertyBag.model] - Model for filtering irrelevant binding paths
-	 * @param {boolean} [mPropertyBag.template] - Whether we should consider provided element as a template or part of a template
-	 * @param {string} [mPropertyBag.aggregationName] - if aggregation name is given then only for this aggregation bindings are returned, if not then all aggregations are considered
-	 * @param {sap.ui.core.Control} [mPropertyBag.relevantContainerElement] - if this element is given then only bindings from element related to the relevant container are considered
-	 * @param {sap.ui.core.Control} [mPropertyBag.parent] - parent of the element being evaluated; if the element is a template, the parent is the control hosting the template
+	 * @param {sap.ui.core.Control} oElement - Starting point of the search
+	 * @param {sap.ui.model.Model} oParentDefaultModel - Model for filtering irrelevant binding paths
+	 * @param {boolean} [vTemplate] - Whether we should consider provided element as a template
+	 * @param {string} [sAggregationName] - if aggregation name is given then only for this aggregation bindings are returned, if not then all aggregations are considered
+	 * @param {sap.ui.core.Control} [oRelevantContainerElement] - if this element is given then only bindings from element related to the relevant container are considered
 	 * @returns {Array} - returns array with all relevant bindings for all properties of the element
 	 *
 	 * @private
 	 */
-	BindingsExtractor.getBindings = function(mPropertyBag) {
-		var oElement = mPropertyBag.element;
-		var oModel = mPropertyBag.model;
-		var oParent = mPropertyBag.parent;
-		var sAggregationName = mPropertyBag.aggregationName;
-		var oRelevantContainerElement = mPropertyBag.relevantContainerElement;
+	BindingsExtractor.getBindings = function(oElement, oParentDefaultModel, vTemplate, sAggregationName, oRelevantContainerElement) {
 		var aBindings = [];
 		if (isElementRelatedToRelevantContainer(oElement, oRelevantContainerElement)) {
 			aBindings = (
-				mPropertyBag.template
-					? getBindingsFromTemplateProperties(oElement, oParent, oModel)
-					: BindingsExtractor.getBindingsFromProperties(oElement, oModel)
+				vTemplate
+					? getBindingsFromTemplateProperties(oElement)
+					: BindingsExtractor.getBindingsFromProperties(oElement, oParentDefaultModel)
 			);
 		}
 		var aAggregationNames = sAggregationName ? [sAggregationName] : Object.keys(oElement.getMetadata().getAllAggregations());
 
 		aAggregationNames.forEach(function (sAggregationNameInLoop) {
-			aBindings = aBindings.concat(getBindingsForAggregation(oElement, oModel, mPropertyBag.template, sAggregationNameInLoop, oRelevantContainerElement));
+			aBindings = aBindings.concat(getBindingsForAggregation(oElement, oParentDefaultModel, vTemplate, sAggregationNameInLoop, oRelevantContainerElement));
 		});
 
-		// Remove duplicates
-		return _uniqWith(aBindings, deepEqual);
+		return aBindings;
 	};
 
-	function getBindingsForAggregation(oElement, oModel, bTemplate, sAggregationName, oRelevantContainerElement) {
+	function getBindingsForAggregation(oElement, oParentDefaultModel, vTemplate, sAggregationName, oRelevantContainerElement) {
 		var aBindings = [];
-		var aElements = [];
-		var bIsInTemplate = bTemplate;
-
-		var oBinding = oElement.getBindingInfo(sAggregationName);
-		var oTemplate = oBinding && oBinding.template;
-
-		// If a template is bound to the current element, we continue
-		// the evaluation on the template (as it has no direct parent)
-		if (oTemplate) {
-			bIsInTemplate = true;
-			aElements = [oTemplate];
-		} else {
-			aElements = ElementUtil.getAggregation(oElement, sAggregationName);
-		}
-
+		var oTemplate;
+		var bTemplate;
 		// Getting children of the current aggregation and iterating through all of them
+		var oBinding = oElement.getBindingInfo(sAggregationName);
+		if (vTemplate !== false) {
+			oTemplate = oBinding && oBinding.template;
+			bTemplate = !!vTemplate;
+		}
+		var aElements = oTemplate ? [oTemplate] : ElementUtil.getAggregation(oElement, sAggregationName);
+
 		aElements.forEach(function (oChildElement) {
 			if (oChildElement.getMetadata) {
 				if (isElementRelatedToRelevantContainer(oElement, oRelevantContainerElement)) {
 					// Fetching bindings from Element and all children of Element
-					aBindings = aBindings.concat(bIsInTemplate
-						? getBindingsFromTemplateProperties(oChildElement, oElement, oModel)
-						: BindingsExtractor.getBindingsFromProperties(oChildElement, oModel));
+					aBindings = aBindings.concat(oTemplate || bTemplate
+						? getBindingsFromTemplateProperties(oChildElement, oRelevantContainerElement)
+						: BindingsExtractor.getBindingsFromProperties(oChildElement, oParentDefaultModel));
 				}
+				// For children, templates should not be evaluated (because the delegate also does not consider them)
 				aBindings = aBindings.concat(
-					BindingsExtractor.getBindings({
-						element: oChildElement,
-						model: oModel,
-						template: bIsInTemplate,
-						relevantContainerElement: oRelevantContainerElement,
-						parent: oElement
-					})
+					BindingsExtractor.getBindings(oChildElement, oParentDefaultModel, false, undefined, oRelevantContainerElement)
 				);
 			}
 		});
@@ -187,7 +153,7 @@ function(
 	}
 
 	/**
-	 * Fetches all bindings for a specified binding model, filtering out the irrelevant ones
+	 * Fetches all bindings for a specified binding model
 	 *
 	 * @param {sap.ui.model.PropertyBinding} oBinding - Binding model to get paths from
 	 * @param {sap.ui.model.odata.XX.ODataModel} oParentDefaultModel - Data model (XX = '', v2, v4...)
@@ -196,13 +162,13 @@ function(
 	 *
 	 * @private
 	 */
-	BindingsExtractor.filterAndFlattenBindings = function(oBinding, oParentDefaultModel) {
+	BindingsExtractor.flattenBindings = function(oBinding, oParentDefaultModel) {
 		var aBindings = [];
 		var sModelName = oBinding.getMetadata().getName();
 
 		if (sModelName === "sap.ui.model.CompositeBinding") {
 			oBinding.getBindings().forEach(function (oBinding) {
-				aBindings = aBindings.concat(BindingsExtractor.filterAndFlattenBindings(oBinding, oParentDefaultModel));
+				aBindings = aBindings.concat(BindingsExtractor.flattenBindings(oBinding, oParentDefaultModel));
 			});
 		} else if (
 			(
@@ -249,13 +215,13 @@ function(
 	 * Retrieving all bindings from all available properties for a specified element
 	 *
 	 * @param {sap.ui.core.Control} oElement - element to get bindings from
-	 * @param {sap.ui.model.Model} oModel - model to filter irrelevant bindings
+	 * @param {sap.ui.model.Model} oParentDefaultModel - parent model to filter irrelevant bindings
 	 *
 	 * @return {Array} - returns found bindings
 	 *
 	 * @private
 	 */
-	BindingsExtractor.getBindingsFromProperties = function(oElement, oModel) {
+	BindingsExtractor.getBindingsFromProperties = function(oElement, oParentDefaultModel) {
 		var aPropertiesKeys = Object.keys(oElement.getMetadata().getAllProperties());
 
 		return aPropertiesKeys
@@ -263,45 +229,32 @@ function(
 			.filter(oElement.getBinding.bind(oElement))
 			.reduce(function (aBindings, sPropertyName) {
 				return aBindings.concat(
-					BindingsExtractor.filterAndFlattenBindings(
+					BindingsExtractor.flattenBindings(
 						oElement.getBinding(sPropertyName),
-						oModel
+						oParentDefaultModel
 					)
 				);
 			}, []);
 	};
 
 	/**
-	 * Retrieving all bindings from all available properties for a template
+	 * Retrieving all bindings from all available properties for a specified element of template
 	 *
-	 * @param {sap.ui.core.Control} oTemplate - template being evaluated
-	 * @param {sap.ui.core.Control} oTemplateParent - template "parent"; control to which it is bound
-	 * @param {sap.ui.model.Modell} oModel - relevant model, usually the parent default model
-	 *
+	 * @param {sap.ui.core.Control} oElement - element to get bindings from
 	 * @return {Array} - returns found bindings
 	 * @private
 	 */
-	function getBindingsFromTemplateProperties(oTemplate, oTemplateParent, oModel) {
-		var aPropertiesKeys = Object.keys(oTemplate.getMetadata().getAllProperties());
-		var bIsSameModel;
+	function getBindingsFromTemplateProperties(oElement) {
+		var aPropertiesKeys = Object.keys(oElement.getMetadata().getAllProperties());
 
 		return aPropertiesKeys
 			.filter(function (sPropertyName) {
-				var mBindingInfo = oTemplate.mBindingInfos[sPropertyName];
-				var sModelName = mBindingInfo && mBindingInfo.parts[0] && mBindingInfo.parts[0].model;
-				if (!sModelName) {
-					var oParentDefaultModel = oTemplateParent.getDefaultModel ? oTemplateParent.getDefaultModel() : null;
-					var oTemplateDefaultModel = oTemplate.getDefaultModel ? oTemplate.getDefaultModel() : null;
-					bIsSameModel = oParentDefaultModel === oTemplateDefaultModel;
-				} else {
-					bIsSameModel = oModel === oTemplateParent.getModel(sModelName);
-				}
-				return mBindingInfo && bIsSameModel;
+				return sPropertyName in oElement.mBindingInfos;
 			})
 			.reduce(function (aBindings, sPropertyName) {
 				return aBindings.concat(
 					flattenBindingsFromTemplate(
-						oTemplate.mBindingInfos[sPropertyName]
+						oElement.mBindingInfos[sPropertyName]
 					)
 				);
 			}, []);

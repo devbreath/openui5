@@ -58,7 +58,7 @@ sap.ui.define([
 		 *
 		 * @protected
 		 * @alias sap.ui.core.delegate.ScrollEnablement
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 * @author SAP SE
 		 */
 		var ScrollEnablement = BaseObject.extend("sap.ui.core.delegate.ScrollEnablement", /** @lends sap.ui.core.delegate.ScrollEnablement.prototype */ {
@@ -226,7 +226,7 @@ sap.ui.define([
 			 * @param {int} [time=0]
 			 *           The duration of animated scrolling in milliseconds. To scroll immediately without animation,
 			 *           give 0 as value.
-			 * @param {function} fnScrollEndCallback Called when the scroll completes or stops without completing
+			 * @param {function} fnScrollEndCallback
 			 * @returns {this}
 			 * @public
 			 */
@@ -785,11 +785,10 @@ sap.ui.define([
 			_scrollTo: function(x, y, time, fnScrollEndCallback) {
 				if (this._$Container.length > 0) {
 					if (time > 0) {
-						this._$Container.finish().animate({ scrollTop: y, scrollLeft: x }, {
-							duration: time,
-							complete: this._readActualScrollPosition.bind(this),
-							always: fnScrollEndCallback
-						});
+						this._$Container.finish().animate({ scrollTop: y, scrollLeft: x }, time, function() {
+							this._readActualScrollPosition();
+							fnScrollEndCallback && fnScrollEndCallback();
+						}.bind(this));
 					} else {
 						this._$Container.scrollTop(y);
 						this._$Container.scrollLeft(x);

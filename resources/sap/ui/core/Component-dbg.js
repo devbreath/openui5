@@ -244,7 +244,7 @@ sap.ui.define([
 	 * @extends sap.ui.base.ManagedObject
 	 * @abstract
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @alias sap.ui.core.Component
 	 * @since 1.9.2
 	 */
@@ -661,7 +661,7 @@ sap.ui.define([
 	 * not a guarantee for the existence of the corresponding owner.
 	 *
 	 * @param {sap.ui.base.ManagedObject} oObject Object to retrieve the owner ID for
-	 * @return {string|undefined} ID of the owner or <code>undefined</code>
+	 * @return {string} ID of the owner or <code>undefined</code>
 	 * @static
 	 * @public
 	 * @since 1.15.1
@@ -682,7 +682,7 @@ sap.ui.define([
 	 * will be returned.
 	 *
 	 * @param {sap.ui.base.ManagedObject} oObject Object to retrieve the owner Component for
-	 * @return {sap.ui.core.Component|undefined} the owner Component or <code>undefined</code>.
+	 * @return {sap.ui.core.Component} the owner Component or <code>undefined</code>.
 	 * @static
 	 * @public
 	 * @since 1.25.1
@@ -2668,7 +2668,7 @@ sap.ui.define([
 	 * Returns an existing component instance, identified by its ID.
 	 *
 	 * @param {string} sId ID of the component.
-	 * @returns {sap.ui.core.Component|undefined} Component instance or <code>undefined</code> when no component
+	 * @returns {sap.ui.core.Component} Component instance or <code>undefined</code> when no component
 	 *     with the given ID exists.
 	 * @since 1.56.0
 	 * @static
@@ -2753,7 +2753,7 @@ sap.ui.define([
 	 *                                        component preload (should only be set via <code>sap.ui.component</code>)
 	 * @param {boolean} mOptions.preloadOnly see <code>sap.ui.component.load</code> (<code>vConfig.asyncHints.preloadOnly</code>)
 	 * @param {Promise|Promise[]} mOptions.waitFor see <code>sap.ui.component</code> (<code>vConfig.asyncHints.waitFor</code>)
-	 * @return {function|Promise<function>} the constructor of the Component class or a Promise that will be fulfilled with the same
+	 * @return {function|Promise} the constructor of the Component class or a Promise that will be fulfilled with the same
 	 *
 	 * @private
 	*/

@@ -84,7 +84,7 @@ sap.ui.define([
 		 * @param {string} [oConfiguration.additionalInfo] additionalInfo text for the operator. Will be shown in the operator suggest as second column. If not used (undefined) the Include or Exclude information of the operator is used.
 		 * @constructor
 		 * @author SAP SE
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 * @private
 		 * @ui5-restricted sap.fe
 		 * @MDC_PUBLIC_CANDIDATE
@@ -291,7 +291,7 @@ sap.ui.define([
 		 * @param {sap.ui.mdc.enum.BaseType} [sBaseType] Basic type
 		 * @returns {sap.ui.model.Filter} filter object
 		 * @private
-		 * @ui5-restricted sap.ui.mdc, sap.fe
+		 * @ui5-restricted sap.ui.mdc
 		 */
 		Operator.prototype.getModelFilter = function(oCondition, sFieldPath, oType, bCaseSensitive, sBaseType) {
 

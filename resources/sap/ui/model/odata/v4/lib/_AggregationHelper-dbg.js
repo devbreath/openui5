@@ -43,8 +43,7 @@ sap.ui.define([
 			+ ")(?:" + _Parser.sWhitespace + "+(?:asc|desc))?$"),
 		mRecursiveHierarchyType = {
 			expandTo : /^[1-9]\d*$/, // a positive integer
-			hierarchyQualifier : "string",
-			search : "string"
+			hierarchyQualifier : "string"
 		},
 		/**
 		 * Collection of helper methods for data aggregation.
@@ -349,18 +348,9 @@ sap.ui.define([
 		 * @param {object} oAggregation
 		 *   An object holding the information needed for a recursive hierarchy; see
 		 *   {@link sap.ui.model.odata.v4.ODataListBinding#setAggregation}.
-		 * @param {string} [oAggregation.search]
-		 *   Like the value for a "$search" system query option (remember ODATA-1452); it is turned
-		 *   into the search expression parameter of an "ancestors()" transformation
 		 * @param {object} [mQueryOptions={}]
 		 *   A map of key-value pairs representing the query string; it is not modified
-		 * @param {string} [mQueryOptions.$filter]
-		 *   The value for a "$filter" system query option; it is removed from the returned map and
-		 *   turned into the filter expression parameter of an "ancestors()" transformation
-		 * @param {string} [mQueryOptions.$orderby]
-		 *   The value for a "$orderby" system query option; it is removed from the returned map and
-		 *   turned into an "orderby()" transformation
-		 * @param {string[]} [mQueryOptions.$select]
+		 * @param {number} [mQueryOptions.$select]
 		 *   The value for a "$select" system query option; additional technical properties are
 		 *   added to the returned copy
 		 * @returns {object}
@@ -371,7 +361,7 @@ sap.ui.define([
 		 * @public
 		 */
 		buildApply4Hierarchy : function (oAggregation, mQueryOptions) {
-			var sApply = "",
+			var sApply,
 				sHierarchyQualifier = oAggregation.hierarchyQualifier,
 				sPath = oAggregation.$path,
 				sNodeProperty = mQueryOptions
@@ -379,8 +369,7 @@ sap.ui.define([
 						+ "/@Org.OData.Aggregation.V1.RecursiveHierarchy#" + sHierarchyQualifier
 						+ "/NodeProperty/$PropertyPath").getResult()
 					: "???",
-				mRecursiveHierarchy,
-				sSeparator = "";
+				mRecursiveHierarchy;
 
 			function select(sProperty) {
 				if (mQueryOptions.$select) {
@@ -399,36 +388,13 @@ sap.ui.define([
 				mQueryOptions.$select = mQueryOptions.$select.slice();
 			}
 
-			if (mQueryOptions.$filter || oAggregation.search) {
-				if (mQueryOptions.$filter) {
-					sApply = "filter(" + mQueryOptions.$filter;
-					sSeparator = ")/";
-					delete mQueryOptions.$filter;
-				}
-				if (oAggregation.search) {
-					sApply += sSeparator + "search(" + oAggregation.search;
-				}
-				sApply = "ancestors($root" + sPath
-					+ "," + sHierarchyQualifier
-					+ "," + sNodeProperty
-					+ "," + sApply
-					+ "),keep start)/";
-			}
 			if (mQueryOptions.$$filterBeforeAggregate) { // children of a given parent
-				sApply += "descendants($root" + sPath + "," + sHierarchyQualifier
+				sApply = "descendants($root" + sPath + "," + sHierarchyQualifier
 					+ "," + sNodeProperty
 					+ ",filter(" + mQueryOptions.$$filterBeforeAggregate + "),1)";
 				delete mQueryOptions.$$filterBeforeAggregate;
-				if (mQueryOptions.$orderby) {
-					sApply += "/orderby(" + mQueryOptions.$orderby + ")";
-					delete mQueryOptions.$orderby;
-				}
 			} else { // top levels of nodes
-				if (mQueryOptions.$orderby) {
-					sApply += "orderby(" + mQueryOptions.$orderby + ")/";
-					delete mQueryOptions.$orderby;
-				}
-				sApply += "com.sap.vocabularies.Hierarchy.v1.TopLevels(HierarchyNodes=$root" + sPath
+				sApply = "com.sap.vocabularies.Hierarchy.v1.TopLevels(HierarchyNodes=$root" + sPath
 					+ ",HierarchyQualifier='" + sHierarchyQualifier
 					+ "',NodeProperty='" + sNodeProperty
 					+ "',Levels=" + (oAggregation.expandTo || 1)

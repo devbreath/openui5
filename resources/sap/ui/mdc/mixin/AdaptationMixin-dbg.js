@@ -32,7 +32,7 @@ sap.ui.define(
          *
          *
          * @author SAP SE
-         * @version 1.106.0
+         * @version 1.105.1
          * @alias sap.ui.mdc.mixin.AdaptationMixin
          * @namespace
          * @since 1.82.0
@@ -58,15 +58,6 @@ sap.ui.define(
         */
         AdaptationMixin._onModifications = function() {
             //
-        };
-
-        /**
-         * Returns a promise after the Control#_onModifications hook has been fulfilled which may return a promise.
-         *
-         * @returns {Promise} Resolves after all control updates have been considered
-         */
-        AdaptationMixin.awaitPendingModification = function() {
-            return this._pPendingModification || Promise.resolve();
         };
 
         /**
@@ -164,7 +155,6 @@ sap.ui.define(
             this.getInbuiltFilter = AdaptationMixin.getInbuiltFilter;
             this.validateState = AdaptationMixin.validateState;
             this._onModifications = AdaptationMixin._onModifications;
-            this.awaitPendingModification = AdaptationMixin.awaitPendingModification;
             this._getWaitForChangesPromise = AdaptationMixin._getWaitForChangesPromise;
             this.getEngine = AdaptationMixin.getEngine;
             this.exit = AdaptationMixin.exit(this.exit);

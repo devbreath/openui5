@@ -44,7 +44,7 @@
 		},
 		{
 			"name": "Carousel.less",
-			"size": 1614,
+			"size": 1562,
 			"designtime": true,
 			"theme": "sap_bluecrystal"
 		},
@@ -497,23 +497,22 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 686814,
+			"size": 686573,
 			"theme": "sap_bluecrystal"
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/m/themes/sap_bluecrystal/library-parameters.json",
 			"size": 19420,
 			"theme": "sap_bluecrystal"
 		},
 		{
 			"name": "library.css",
-			"size": 686803,
+			"size": 686562,
 			"theme": "sap_bluecrystal"
 		},
 		{
 			"name": "library.less",
-			"size": 85290,
+			"size": 85238,
 			"designtime": true,
 			"theme": "sap_bluecrystal"
 		},
@@ -525,17 +524,13 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 734365,
+			"size": 734060,
 			"theme": "sap_bluecrystal"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 734354,
+			"size": 734049,
 			"theme": "sap_bluecrystal"
-		},
-		{
-			"name": "resources.json",
-			"size": 9951
 		},
 		{
 			"name": "shared.less",

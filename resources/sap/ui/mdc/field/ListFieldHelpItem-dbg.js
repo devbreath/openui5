@@ -23,7 +23,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.ListItem
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @ui5-restricted sap.fe

@@ -27,7 +27,7 @@ sap.ui.define(['sap/m/Button', 'sap/m/ButtonRenderer'],
 	 * @implements sap.f.IShellBar
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -73,7 +73,7 @@ sap.ui.define(['sap/m/Button', 'sap/m/ButtonRenderer'],
 		OverflowToolbarButton.prototype.getOverflowToolbarConfig = function () {
 			var oConfig = {
 				canOverflow: true,
-				propsUnrelatedToSize: ["enabled", "type", "accesskey"],
+				propsUnrelatedToSize: ["enabled", "type"],
 				autoCloseEvents: ["press"]
 			};
 

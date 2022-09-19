@@ -1,25 +1,13 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/config/Theme", "./v5/geographic-bubble-chart", "./v4/geographic-bubble-chart"], function (_exports, _Theme, _geographicBubbleChart, _geographicBubbleChart2) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/config/Theme', './v5/geographic-bubble-chart', './v4/geographic-bubble-chart'], function (exports, Theme, geographicBubbleChart$1, geographicBubbleChart$2) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "accData", {
-    enumerable: true,
-    get: function () {
-      return _geographicBubbleChart.accData;
-    }
-  });
-  _exports.default = void 0;
-  Object.defineProperty(_exports, "ltr", {
-    enumerable: true,
-    get: function () {
-      return _geographicBubbleChart.ltr;
-    }
-  });
-  _exports.pathData = void 0;
-  const pathData = (0, _Theme.isThemeFamily)("sap_horizon") ? _geographicBubbleChart.pathData : _geographicBubbleChart2.pathData;
-  _exports.pathData = pathData;
-  var _default = "geographic-bubble-chart";
-  _exports.default = _default;
+	const pathData = Theme.isThemeFamily("sap_horizon") ? geographicBubbleChart$1.pathData : geographicBubbleChart$2.pathData;
+	var geographicBubbleChart = "geographic-bubble-chart";
+
+	exports.accData = geographicBubbleChart$1.accData;
+	exports.ltr = geographicBubbleChart$1.ltr;
+	exports.default = geographicBubbleChart;
+	exports.pathData = pathData;
+
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/m/IllustrationPool"],function(t){"use strict";return t},true);
-//# sourceMappingURL=IllustrationPool.js.map
+sap.ui.define(["sap/m/IllustrationPool"],function(I){"use strict";return I;},true);

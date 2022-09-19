@@ -94,7 +94,6 @@
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/ui/unified/themes/sap_belize/library-parameters.json",
 			"size": 14137,
 			"theme": "sap_belize"
 		},
@@ -124,10 +123,6 @@
 			"name": "library_skeleton.css",
 			"size": 275028,
 			"theme": "sap_belize"
-		},
-		{
-			"name": "resources.json",
-			"size": 2315
 		}
 	]
 }

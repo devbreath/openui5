@@ -1,3 +1,5 @@
-sap.ui.define(["./json-imports/Icons"], function (_Icons) {
-  "use strict";
+sap.ui.define(['./json-imports/Icons'], function (Icons) { 'use strict';
+
+
+
 });

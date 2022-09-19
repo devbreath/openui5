@@ -39,7 +39,7 @@ sap.ui.define([
 		 *  All properties of the associated constructor can be used. Unknown properties are ignored.
 		 *  It should contain at least a property named src. If it's given with a string type, it will be taken as the value of src property.
 		 * @param {function} constructor The constructor function which is called when the given URI isn't an icon URI
-		 * @returns {sap.ui.core.Control} Either an instance of <code>sap.ui.core.Icon</code> or instance created by calling the given constructor
+		 * @return {sap.ui.core.Control} Either an instance of sap.ui.core.Icon or instance created by calling the given constructor
 		 * @static
 		 * @public
 		 */
@@ -79,7 +79,7 @@ sap.ui.define([
 		 * @param {boolean} [iconInfo.suppressMirroring=false] indicates whether this icon should NOT be mirrored in RTL (right to left) mode.
 		 * @param {module:sap/base/i18n/ResourceBundle} [iconInfo.resourceBundle] ResourceBundle to be used for translation. Key format: "Icon.<iconName>".
 		 *
-		 * @returns {{name: string, collection: string, uri: string, fontFamily: string, content: string | string[], suppressMirroring: boolean}} the info object of the registered icon which has the name, collection, uri, fontFamily, content and suppressMirroring properties.
+		 * @return {object} the info object of the registered icon which has the name, collection, uri, fontFamily, content and suppressMirroring properties.
 		 * @static
 		 * @public
 		 * @function
@@ -91,7 +91,7 @@ sap.ui.define([
 		 *
 		 * @param {string} iconName Name of the icon, must not be empty
 		 * @param {string} [collectionName] Name of the icon collection; to access built-in icons, omit the collection name
-		 * @returns {string|undefined} URI of the icon or <code>undefined</code> if the icon can't be found in the IconPool
+		 * @return {string} URI of the icon or <code>undefined</code> if the icon can't be found in the IconPool
 		 * @static
 		 * @public
 		 * @function
@@ -124,7 +124,7 @@ sap.ui.define([
 		 *   sync - font metadata is loaded synchronously and the icon info is returned immediately
 		 *   async - a promise is returned that returns the icon info when the font metadata is loaded
 		 *   mixed - until the font metadata is loaded a promise is returned, afterwards the icon info
-		 * @returns {object|Promise|undefined} Info object or Promise for the icon depending on the loadingMode
+		 * @return {object|Promise|undefined} Info object or Promise for the icon depending on the loadingMode
 		 *   or <code>undefined</code> when the icon can't be found or no icon name was given.
 		 * @static
 		 * @public
@@ -163,7 +163,7 @@ sap.ui.define([
 		 * where collectionName and iconName must be non-empty.
 		 *
 		 * @param {string} uri The URI to check
-		 * @returns {boolean} Whether the URI matches the icon URI format
+		 * @return {boolean} Whether the URI matches the icon URI format
 		 * @static
 		 * @public
 		 * @function
@@ -173,7 +173,7 @@ sap.ui.define([
 		/**
 		 * Returns all names of registered collections in IconPool
 		 *
-		 * @returns {array} An array contains all of the registered collections' names.
+		 * @return {array} An array contains all of the registered collections' names.
 		 * @static
 		 * @public
 		 * @function
@@ -184,7 +184,7 @@ sap.ui.define([
 		 * Returns all name of icons that are registered under the given collection.
 		 *
 		 * @param {string} collectionName the name of collection where icon names are retrieved.
-		 * @returns {array} An array contains all of the registered icon names under the given collection.
+		 * @return {array} An array contains all of the registered icon names under the given collection.
 		 * @static
 		 * @public
 		 * @function
@@ -307,7 +307,7 @@ sap.ui.define([
 		 * Returns the icon url based on the given mime type
 		 *
 		 * @param {string} sMimeType the mime type of a file (e.g. "application/zip")
-		 * @returns {string} the icon url (e.g. "sap-icon://attachment-zip-file")
+		 * @return {string} the icon url (e.g. "sap-icon://attachment-zip-file")
 		 * @static
 		 * @public
 		 * @since 1.25.0

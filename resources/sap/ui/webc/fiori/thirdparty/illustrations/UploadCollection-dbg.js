@@ -1,43 +1,22 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations", "./sapIllus-Dialog-UploadCollection", "./sapIllus-Scene-UploadCollection", "./sapIllus-Spot-UploadCollection", "../generated/i18n/i18n-defaults"], function (_exports, _Illustrations, _sapIllusDialogUploadCollection, _sapIllusSceneUploadCollection, _sapIllusSpotUploadCollection, _i18nDefaults) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations', './sapIllus-Dialog-UploadCollection', './sapIllus-Scene-UploadCollection', './sapIllus-Spot-UploadCollection', '../generated/i18n/i18n-defaults'], function (exports, Illustrations, sapIllusDialogUploadCollection, sapIllusSceneUploadCollection, sapIllusSpotUploadCollection, i18nDefaults) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "dialogSvg", {
-    enumerable: true,
-    get: function () {
-      return _sapIllusDialogUploadCollection.default;
-    }
-  });
-  Object.defineProperty(_exports, "sceneSvg", {
-    enumerable: true,
-    get: function () {
-      return _sapIllusSceneUploadCollection.default;
-    }
-  });
-  Object.defineProperty(_exports, "spotSvg", {
-    enumerable: true,
-    get: function () {
-      return _sapIllusSpotUploadCollection.default;
-    }
-  });
-  _sapIllusDialogUploadCollection = _interopRequireDefault(_sapIllusDialogUploadCollection);
-  _sapIllusSceneUploadCollection = _interopRequireDefault(_sapIllusSceneUploadCollection);
-  _sapIllusSpotUploadCollection = _interopRequireDefault(_sapIllusSpotUploadCollection);
+	const name = "UploadCollection";
+	const set = "fiori";
+	const title = i18nDefaults.IM_TITLE_UPLOADCOLLECTION;
+	const subtitle = i18nDefaults.IM_SUBTITLE_UPLOADCOLLECTION;
+	Illustrations.registerIllustration(name, {
+		dialogSvg: sapIllusDialogUploadCollection,
+		sceneSvg: sapIllusSceneUploadCollection,
+		spotSvg: sapIllusSpotUploadCollection,
+		title,
+		subtitle,
+		set,
+	});
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	exports.dialogSvg = sapIllusDialogUploadCollection;
+	exports.sceneSvg = sapIllusSceneUploadCollection;
+	exports.spotSvg = sapIllusSpotUploadCollection;
 
-  const name = "UploadCollection";
-  const set = "fiori";
-  const title = _i18nDefaults.IM_TITLE_UPLOADCOLLECTION;
-  const subtitle = _i18nDefaults.IM_SUBTITLE_UPLOADCOLLECTION;
-  (0, _Illustrations.registerIllustration)(name, {
-    dialogSvg: _sapIllusDialogUploadCollection.default,
-    sceneSvg: _sapIllusSceneUploadCollection.default,
-    spotSvg: _sapIllusSpotUploadCollection.default,
-    title,
-    subtitle,
-    set
-  });
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

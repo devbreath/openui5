@@ -8,9 +8,8 @@ sap.ui.define([
 	"sap/m/library",
 	"sap/ui/core/Core",
 	"sap/ui/core/theming/Parameters",
-	"sap/m/IllustratedMessage",
-	"sap/m/Button"
-], function(MLibrary, Core, ThemeParameters, IllustratedMessage, Button) {
+	"sap/m/IllustratedMessage"
+], function(MLibrary, Core, ThemeParameters, IllustratedMessage) {
 	"use strict";
 	/*global Intl*/
 
@@ -20,7 +19,7 @@ sap.ui.define([
 	 * @namespace
 	 * @alias module:sap/m/table/Util
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @since 1.96.0
 	 * @private
 	 * @ui5-restricted sap.fe, sap.ui.mdc, sap.ui.comp
@@ -268,27 +267,16 @@ sap.ui.define([
 	 * Returns an instance of <code>sap.m.IllustratedMessage</code> in case there are no visible columns in the table.
 	 *
 	 * @returns {sap.m.IllustratedMessage} The message to be displayed when the table has no visible columns
-	 * @param {function} [fnAddColumn] The handler to be executed when the additional add column button is pressed
 	 * @private
 	 */
-	Util.getNoColumnsIllustratedMessage = function(fnAddColumn) {
+	Util.getNoColumnsIllustratedMessage = function() {
 		var oResourceBundle = Core.getLibraryResourceBundle("sap.m");
 
-		var oIllustratedMessage = new IllustratedMessage({
+		return new IllustratedMessage({
 			illustrationType: MLibrary.IllustratedMessageType.AddColumn,
 			title: oResourceBundle.getText("TABLE_NO_COLUMNS_TITLE"),
 			description: oResourceBundle.getText("TABLE_NO_COLUMNS_DESCRIPTION")
 		});
-
-		if (fnAddColumn) {
-			var oAddButton = new Button({
-				icon: "sap-icon://action-settings",
-				press: fnAddColumn
-			});
-			oIllustratedMessage.addAdditionalContent(oAddButton);
-		}
-
-		return oIllustratedMessage;
 	};
 
 	return Util;

@@ -1,2 +1,1 @@
-(function(){ace.require(["ace/snippets/logiql"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
-//# sourceMappingURL=logiql.js.map
+;(function(){ace.require(["ace/snippets/logiql"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();

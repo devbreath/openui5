@@ -332,7 +332,7 @@ sap.ui.define([
 	 *   1.93.0, string values for "$expand" and "$select" are ignored if they are unchanged;
 	 *   pending changes are ignored if all parameters are unchanged. Since 1.97.0, pending changes
 	 *   are ignored if they relate to a
-	 *   {@link sap.ui.model.odata.v4.Context#isKeepAlive kept-alive} context of this binding.
+	 *   {@link sap.ui.model.odata.v4.Context#setKeepAlive kept-alive} context of this binding.
 	 *   Since 1.98.0, {@link sap.ui.model.odata.v4.Context#isTransient transient} contexts
 	 *   of a {@link #getRootBinding root binding} do not count as pending changes.
 	 *
@@ -416,7 +416,7 @@ sap.ui.define([
 	 *
 	 * @abstract
 	 * @function
-	 * @name sap.ui.model.odata.v4.ODataParentBinding#checkKeepAlive
+	 * @name sap.ui.model.odata.v4.ODataListBinding#checkKeepAlive
 	 * @private
 	 * @see sap.ui.model.odata.v4.Context#setKeepAlive
 	 */
@@ -564,22 +564,17 @@ sap.ui.define([
 	/**
 	 * Creates a promise for the refresh to be resolved by the binding's GET request.
 	 *
-	 * @param {boolean} bPreventBubbling
-	 *   Whether the dataRequested and dataReceived events related to the refresh must not be
-	 *   bubbled up to the model
-	 * @returns {Promise} The created promise
+	 * @returns {Promise} the created promise
 	 *
-	 * @see #isRefreshWithoutBubbling
 	 * @see #resolveRefreshPromise
 	 * @private
 	 */
-	ODataParentBinding.prototype.createRefreshPromise = function (bPreventBubbling) {
+	ODataParentBinding.prototype.createRefreshPromise = function () {
 		var oPromise, fnResolve;
 
 		oPromise = new Promise(function (resolve) {
 			fnResolve = resolve;
 		});
-		oPromise.$preventBubbling = bPreventBubbling;
 		oPromise.$resolve = fnResolve;
 		this.oRefreshPromise = oPromise;
 		return oPromise;
@@ -1086,19 +1081,6 @@ sap.ui.define([
 	};
 
 	/**
-	 * Whether the dataRequested and dataReceived events related to the refresh must not be bubbled
-	 * up to the model.
-	 *
-	 * @returns {boolean}  Whether to prevent bubbling
-	 *
-	 * @private
-	 * @see #createRefreshPromise
-	 */
-	ODataParentBinding.prototype.isRefreshWithoutBubbling = function () {
-		return this.oRefreshPromise && this.oRefreshPromise.$preventBubbling;
-	};
-
-	/**
 	 * @override
 	 * @see sap.ui.model.odata.v4.ODataBinding#onDelete
 	 */
@@ -1350,7 +1332,7 @@ sap.ui.define([
 	 * Suspends this binding. A suspended binding does not fire change events nor does it trigger
 	 * data service requests. Call {@link #resume} to resume the binding. Before 1.53.0, this method
 	 * was not supported and threw an error. Since 1.97.0, pending changes are ignored if they
-	 * relate to a {@link sap.ui.model.odata.v4.Context#isKeepAlive kept-alive} context of this
+	 * relate to a {@link sap.ui.model.odata.v4.Context#setKeepAlive kept-alive} context of this
 	 * binding. Since 1.98.0, {@link sap.ui.model.odata.v4.Context#isTransient transient} contexts
 	 * of a {@link #getRootBinding root binding} do not count as pending changes.
 	 *

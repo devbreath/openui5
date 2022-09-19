@@ -31,7 +31,7 @@ sap.ui.define([
 	 * @extends sap.ui.rta.command.BaseCommand
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @private
@@ -217,7 +217,7 @@ sap.ui.define([
 				// ATTENTION! the change gets applied as soon as the parent is available, so there might be possible side effects with lazy loading
 				if (mFlexSettings && mFlexSettings.originalSelector) {
 					oChange.addDependentControl(mFlexSettings.originalSelector, "originalSelector", {modifier: JsControlTreeModifier, appComponent: this.getAppComponent()});
-					oChange.setSelector(Object.assign(oChange.getSelector(), JsControlTreeModifier.getSelector(this.getSelector().id, this.getAppComponent())));
+					oChange.getDefinition().selector = Object.assign(oChange.getDefinition().selector, JsControlTreeModifier.getSelector(this.getSelector().id, this.getAppComponent()));
 					oChange.setContent(Object.assign({}, oChange.getContent(), mFlexSettings.content));
 				}
 				return oChange;

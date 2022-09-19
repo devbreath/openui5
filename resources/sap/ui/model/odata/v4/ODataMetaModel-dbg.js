@@ -157,7 +157,7 @@ sap.ui.define([
 		 * @hideconstructor
 		 * @public
 		 * @since 1.37.0
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 */
 		ODataMetaModel = MetaModel.extend("sap.ui.model.odata.v4.ODataMetaModel", {
 				constructor : constructor
@@ -2221,7 +2221,7 @@ sap.ui.define([
 	/**
 	 * Returns a map of entity tags for each $metadata or annotation file loaded so far.
 	 *
-	 * @returns {Object<string,string|null>}
+	 * @returns {object}
 	 *   A map which contains one entry for each $metadata or annotation file loaded so far: the key
 	 *   is the file's URL as a <code>string</code> and the value is the <code>string</code> value
 	 *   of the "ETag" response header for that file. Initially, the map is empty. If no "ETag"
@@ -2305,7 +2305,7 @@ sap.ui.define([
 	 *   Optional (binding) parameters; if they are given, <code>oContext</code> cannot be omitted
 	 * @param {object} [mParameters.scope]
 	 *   Optional scope for lookup of aliases for computed annotations (since 1.43.0)
-	 * @returns {any|undefined}
+	 * @returns {any}
 	 *   The requested metadata object if it is already available, or <code>undefined</code>
 	 *
 	 * @function
@@ -2697,7 +2697,7 @@ sap.ui.define([
 	 *   If present, it must point to this meta model's root entity container, that is,
 	 *   <code>oDetails.context.getModel() === this</code> and
 	 *   <code>oDetails.context.getPath() === "/"</code>
-	 * @returns {Promise<Object<string,{StandardCode: string, Text: string, UnitSpecificScale: string}>|null>}
+	 * @returns {Promise}
 	 *   A promise resolving with the currency customizing which is a map from currency key to an
 	 *   object with the following properties:
 	 *   <ul>
@@ -2773,11 +2773,9 @@ sap.ui.define([
 	 * &lt;/template:with>
 	 * </pre>
 	 *
-	 * The basic idea is that every path described in <a href=
-	 * "https://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part3-csdl.html#_Attribute_Target"
-	 * >"14.2.1 Attribute Target"</a> in specification "OData Version 4.0 Part 3: Common Schema
-	 * Definition Language" is a valid absolute path within the metadata model if a leading slash is
-	 * added; for example
+	 * The basic idea is that every path described in "14.2.1 Attribute Target" in specification
+	 * "OData Version 4.0 Part 3: Common Schema Definition Language" is a valid absolute path
+	 * within the metadata model if a leading slash is added; for example
 	 * "/" + "MySchema.MyEntityContainer/MyEntitySet/MyComplexProperty/MyNavigationProperty". Also,
 	 * every path described in "14.5.2 Expression edm:AnnotationPath",
 	 * "14.5.11 Expression edm:NavigationPropertyPath", "14.5.12 Expression edm:Path", and
@@ -2852,9 +2850,8 @@ sap.ui.define([
 	 * "14.5.14.2 Element edm:PropertyValue" are addressed by segments like
 	 * "&lt;7.2.1 Attribute Property>@...", "$OnDelete@...", "&lt;10.2.1 Attribute Name>@..." and
 	 * "&lt;14.5.14.2.1 Attribute Property>@..." (where angle brackets denote a variable part and
-	 * sections refer to specification <a href=
-	 * "https://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part3-csdl.htm"
-	 * >"OData Version 4.0 Part 3: Common Schema Definition Language"</a>).
+	 * sections refer to specification "OData Version 4.0 Part 3: Common Schema Definition
+	 * Language").
 	 *
 	 * Annotations starting with "@@", for example
 	 * "@@sap.ui.model.odata.v4.AnnotationHelper.isMultiple" or "@@.AH.isMultiple" or
@@ -3033,7 +3030,7 @@ sap.ui.define([
 	 *   If present, it must point to this meta model's root entity container, that is,
 	 *   <code>oDetails.context.getModel() === this</code> and
 	 *   <code>oDetails.context.getPath() === "/"</code>
-	 * @returns {Promise<Object<string,{StandardCode: string, Text: string, UnitSpecificScale: string}>|null>}
+	 * @returns {Promise}
 	 *   A promise resolving with the unit customizing which is a map from unit key to an object
 	 *   with the following properties:
 	 *   <ul>

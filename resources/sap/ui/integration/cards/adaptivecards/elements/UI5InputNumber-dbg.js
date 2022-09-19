@@ -19,7 +19,7 @@ sap.ui.define([
 	 * <code>ui5-step-input</code> web component.
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @since 1.74

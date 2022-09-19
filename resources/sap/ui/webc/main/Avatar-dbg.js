@@ -43,7 +43,7 @@ sap.ui.define([
 	 * <br>
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -101,7 +101,7 @@ sap.ui.define([
 				 * import "@ui5/webcomponents-icons/dist/{icon_name}.js" <br>
 				 * <pre>&lt;ui5-avatar icon="employee"></pre>
 				 *
-				 * See all the available icons in the {@link demo:sap/m/demokit/iconExplorer/webapp/index.html Icon Explorer}.
+				 * See all the available icons in the <ui5-link target="_blank" href="https://openui5.hana.ondemand.com/test-resources/sap/m/demokit/iconExplorer/webapp/index.html" class="api-table-content-cell-link">Icon Explorer</ui5-link>.
 				 */
 				icon: {
 					type: "string",

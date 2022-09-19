@@ -31,7 +31,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class Container for the {@link sap.ui.mdc.ValueHelp ValueHelp} element showing a popover.
 	 * @extends sap.ui.mdc.valuehelp.base.Container
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -113,7 +113,7 @@ sap.ui.define([
 				ValueStateHeader = aLoaded[4];
 
 				var oValueStateHeader = new ValueStateHeader();
-				fUpdateValueHelpHeader(this.getControl(), oValueStateHeader);
+				fUpdateValueHelpHeader(this._getControl(), oValueStateHeader);
 
 				oPopover = new MPopover(this.getId() + "-pop", {
 					contentHeight: "auto",
@@ -168,7 +168,7 @@ sap.ui.define([
 			}.bind(this));
 		}
 
-		fUpdateValueHelpHeader(this.getControl(), oPopover.getCustomHeader());
+		fUpdateValueHelpHeader(this._getControl(), oPopover.getCustomHeader());
 
 		return oPopover;
 	};
@@ -207,15 +207,16 @@ sap.ui.define([
 
 		var oContent = this._getContent();
 		var oContentPromise = oContent && oContent.getContent();
+		var oBeforeShowPromise = oContent && oContent.onBeforeShow();
 		var oContainerConfig = this._getContainerConfig(oContent);
 		var oFooterContentPromise = oContainerConfig && oContainerConfig.getFooter && oContainerConfig.getFooter();
 
-		return Promise.all([oContentPromise, oFooterContentPromise]).then(function (aContents) {
+		return Promise.all([oContentPromise, oFooterContentPromise, oBeforeShowPromise]).then(function (aContents) {
 			this._oCurrentContent = aContents[0];
 			var oFooterContent = aContents[1];
 
 			// to prevent a Fieldgroup leave if opening control has fieldgroups, asign the fieldgroups to content
-			var oControl = this.getControl();
+			var oControl = this._getControl();
 			this._oCurrentContent.setFieldGroupIds(oControl.getFieldGroupIds());
 
 			if (oFooterContent && oPopover.getFooter() != oFooterContent && oFooterContent.isA && oFooterContent.isA("sap.m.Toolbar")) {
@@ -247,19 +248,16 @@ sap.ui.define([
 
 		Container.prototype._open.apply(this, arguments);
 
-		var oContent = this._getContent();
-		Promise.resolve(oContent && oContent.onBeforeShow(true)).then(function () {
-			var oControl = this.getControl();
-			var oTarget = oControl && oControl.getFocusElementForValueHelp ? oControl.getFocusElementForValueHelp(this.isTypeahead()) : oControl;
+		var oControl = this._getControl();
+		var oTarget = oControl && oControl.getFocusElementForValueHelp ? oControl.getFocusElementForValueHelp(this.isTypeahead()) : oControl;
 
-			if (oTarget && oTarget.getDomRef()) {
-				oPopover.setContentMinWidth(jQuery(oTarget.getDomRef()).outerWidth() + "px");
-				if (!this.isFocusInHelp()) {
-					oPopover.setInitialFocus(oTarget);
-				}
-				oPopover.openBy(oTarget);
+		if (oTarget && oTarget.getDomRef()) {
+			oPopover.setContentMinWidth(jQuery(oTarget.getDomRef()).outerWidth() + "px");
+			if (!this.isFocusInHelp()) {
+				oPopover.setInitialFocus(oTarget);
 			}
-		}.bind(this));
+			oPopover.openBy(oTarget);
+		}
 	};
 
 	Popover.prototype._close = function () {
@@ -281,7 +279,7 @@ sap.ui.define([
 
 		if (oContent) {
 			oContent.onContainerOpen();
-			oContent.onShow(true);
+			oContent.onShow();
 		}
 
 	};

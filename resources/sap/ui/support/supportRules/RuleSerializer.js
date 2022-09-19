@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["./util/EvalUtils"],function(e){"use strict";return{serialize:function e(i){var n=function(e,i){if(typeof i==="function"){return i.toString()}else{return i}};var t=JSON.stringify(i,n);return t},deserialize:function(i,n){var t;if(typeof i==="string"){t=JSON.parse(i)}else{t=i}if(!n&&t.check!==undefined){t.check=e.evalFunction(t.check)}return t}}},true);
-//# sourceMappingURL=RuleSerializer.js.map
+sap.ui.define(["./util/EvalUtils"],function(E){"use strict";return{serialize:function s(r){var a=function(k,v){if(typeof v==="function"){return v.toString();}else{return v;}};var b=JSON.stringify(r,a);return b;},deserialize:function(s,a){var r;if(typeof s==='string'){r=JSON.parse(s);}else{r=s;}if(!a&&r.check!==undefined){r.check=E.evalFunction(r.check);}return r;}};},true);

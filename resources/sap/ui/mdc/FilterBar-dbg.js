@@ -21,7 +21,7 @@ sap.ui.define([
 	 * The metadata information is provided via the {@link sap.ui.mdc.FilterBarDelegate FilterBarDelegate} implementation. This implementation has to be provided by the application.
 	 * @extends sap.ui.mdc.filterbar.FilterBarBase
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @experimental As of version 1.61
 	 * @private

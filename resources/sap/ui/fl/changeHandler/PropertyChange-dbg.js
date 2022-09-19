@@ -5,15 +5,15 @@
  */
 
 sap.ui.define([
+	"sap/ui/thirdparty/jquery",
 	"sap/ui/fl/Utils",
 	"sap/ui/fl/changeHandler/condenser/Classification",
-	"sap/base/Log",
-	"sap/base/util/isPlainObject"
+	"sap/base/Log"
 ], function(
+	jQuery,
 	FlexUtils,
 	CondenserClassification,
-	Log,
-	isPlainObject
+	Log
 ) {
 	"use strict";
 
@@ -22,7 +22,7 @@ sap.ui.define([
 	 *
 	 * @alias sap.ui.fl.changeHandler.PropertyChange
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @since 1.36
 	 * @private
 	 * @experimental Since 1.36. This class is experimental and provides only limited functionality. Also the API might be changed in future.
@@ -32,7 +32,7 @@ sap.ui.define([
 	// var sBindingError = "Please use 'PropertyBindingChange' to set a binding";
 
 	function isBinding(vPropertyValue) {
-		return FlexUtils.isBinding(vPropertyValue) || isPlainObject(vPropertyValue);
+		return FlexUtils.isBinding(vPropertyValue) || jQuery.isPlainObject(vPropertyValue);
 	}
 
 	function changeProperty(oControl, sPropertyName, vPropertyValue, oModifier) {

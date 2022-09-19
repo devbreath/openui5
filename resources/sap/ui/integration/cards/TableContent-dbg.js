@@ -77,7 +77,7 @@ sap.ui.define([
 	 * @extends sap.ui.integration.cards.BaseListContent
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @private
@@ -204,11 +204,7 @@ sap.ui.define([
 		if (bHasGroups) {
 			oStaticConfiguration.groups = aResolvedGroups;
 		} else {
-			oStaticConfiguration.groups = [
-				{
-					rows: aResolvedRows
-				}
-			];
+			oStaticConfiguration.rows = aResolvedRows;
 		}
 
 		return oStaticConfiguration;

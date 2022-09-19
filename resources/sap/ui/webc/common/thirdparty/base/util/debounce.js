@@ -1,2 +1,1 @@
-sap.ui.define(["exports"],function(e){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;let t=null;const u=(e,u)=>{clearTimeout(t);t=setTimeout(()=>{t=null;e()},u)};var l=u;e.default=l});
-//# sourceMappingURL=debounce.js.map
+sap.ui.define(function(){"use strict";let e=null;const t=(t,u)=>{clearTimeout(e);e=setTimeout(()=>{e=null;t()},u)};return t});

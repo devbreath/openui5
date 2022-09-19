@@ -8,7 +8,7 @@
  * Adds support rules of the <code>sap.ui.fl</code>
  * library to the support infrastructure.
  */
-sap.ui.predefine("sap/ui/fl/library.support", [
+sap.ui.predefine('sap/ui/fl/library.support',[
 	"sap/ui/support/library",
 	"sap/ui/fl/Utils",
 	"sap/ui/dt/DesignTime",
@@ -57,7 +57,7 @@ sap.ui.predefine("sap/ui/fl/library.support", [
 		resolution: "Replace the generated control ID with a stable ID. We strongly recommend that you use stable IDs for all controls in your app.",
 		resolutionurls: [{
 			text: "Documentation: Stable IDs: All You Need to Know",
-			href: "https://sdk.openui5.org/topic/f51dbb78e7d5448e838cdc04bdf65403"
+			href: "https://openui5.hana.ondemand.com/topic/f51dbb78e7d5448e838cdc04bdf65403"
 		}],
 		async: true,
 		check: function (issueManager, oCoreFacade, oScope, resolve) {

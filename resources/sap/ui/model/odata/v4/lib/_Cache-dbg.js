@@ -491,8 +491,7 @@ sap.ui.define([
 				aSelect = _Helper.getQueryOptionsForPath(that.mQueryOptions, sPath).$select;
 				_Helper.updateSelected(that.mChangeListeners,
 					_Helper.buildPath(sPath, sPredicate || sTransientPredicate), oEntityData,
-					oCreatedEntity, aSelect, /*fnCheckKeyPredicate*/ undefined,
-					/*bOkIfMissing*/ true);
+					oCreatedEntity, aSelect);
 
 				that.removePendingRequest();
 				fnResolve(true);
@@ -559,7 +558,8 @@ sap.ui.define([
 	};
 
 	/**
-	 * Deregisters the given change listener. Note: shared caches have no listeners anyway.
+	 * Deregisters the given change listener. Note: shared caches only have listeners for the empty
+	 * path.
 	 *
 	 * @param {string} sPath
 	 *   The path
@@ -569,7 +569,7 @@ sap.ui.define([
 	 * @public
 	 */
 	_Cache.prototype.deregisterChangeListener = function (sPath, oListener) {
-		if (!this.bSharedRequest) {
+		if (!(this.bSharedRequest && sPath)) {
 			_Helper.removeByPath(this.mChangeListeners, sPath, oListener);
 		}
 	};
@@ -650,8 +650,7 @@ sap.ui.define([
 			return that.oRequestor.getModelInterface()
 				.fetchMetadata(that.sMetaPath + "/" + sPropertyMetaPath)
 				.then(function (oProperty) {
-					var vPermissions,
-						vResult = false;
+					var vPermissions;
 
 					if (!oProperty) {
 						return invalidSegment(sSegment);
@@ -681,14 +680,12 @@ sap.ui.define([
 							oEntity = oData;
 							iEntityPathLength = 0;
 						}
-						if (oEntity && !bAgain) {
-							vResult = that.fetchLateProperty(oGroupLock, oEntity,
+						return oEntity && !bAgain
+							&& that.fetchLateProperty(oGroupLock, oEntity,
 								aSegments.slice(0, iEntityPathLength).join("/"),
-								aSegments.slice(iEntityPathLength).join("/"));
-						}
-						return typeof vResult === "boolean"
-							? invalidSegment(sSegment, /*bAsInfo*/vResult)
-							: vResult; // fetchLateProperty's promise
+								aSegments.slice(iEntityPathLength).join("/"),
+								aSegments.slice(iEntityPathLength, iPathLength).join("/"))
+							|| invalidSegment(sSegment);
 					}
 					// inside a transient entity, implicit values are determined as follows
 					if (oProperty.$kind === "NavigationProperty") {
@@ -772,7 +769,7 @@ sap.ui.define([
 
 	/**
 	 * Fetches a missing property while drilling down into the cache. Writes it into the cache and
-	 * resolves so that the drill-down can proceed.
+	 * returns it so that drillDown can continue.
 	 *
 	 * @param {sap.ui.model.odata.v4.lib._GroupLock} oGroupLock
 	 *   A lock for the group ID (on which unlock has already been called)
@@ -788,18 +785,19 @@ sap.ui.define([
 	 *   The path of the requested property relative to oResource; this property is requested from
 	 *   the server. For annotations, except client annotations, the annotated property is requested
 	 *   from the server.
-	 * @returns {sap.ui.base.SyncPromise|boolean}
-	 *   A promise resolving w/o any result if the requested property is an expected late property,
-	 *   or a <code>boolean</code> value if it is not; it rejects with an error if the GET request
-	 *   failed, or if the key predicate or the ETag has changed. The returned <code>boolean</code>
-	 *   value tells if the issue can be safely ignored.
+	 * @param {string} sMissingPropertyPath
+	 *   The path of the missing property relative to oResource; this property is returned so that
+	 *   drillDown can proceed
+	 * @returns {sap.ui.base.SyncPromise|undefined}
+	 *   A promise resolving with the missing property value or <code>undefined</code> if the
+	 *   requested property is not an expected late property; it rejects with an error if the GET
+	 *   request failed, or if the key predicate or the ETag has changed
 	 *
 	 * @private
 	 */
 	_Cache.prototype.fetchLateProperty = function (oGroupLock, oResource, sResourcePath,
-			sRequestedPropertyPath) {
-		var bDataRequested = false,
-			sFullResourceMetaPath,
+			sRequestedPropertyPath, sMissingPropertyPath) {
+		var sFullResourceMetaPath,
 			sFullResourcePath,
 			sGroupId,
 			iIndexOfAt = sRequestedPropertyPath.indexOf("@"),
@@ -811,11 +809,6 @@ sap.ui.define([
 			mTypeForMetaPath = this.fetchTypes().getResult(),
 			aUpdateProperties,
 			that = this;
-
-		function onSubmit() {
-			bDataRequested = true;
-			that.oRequestor.getModelInterface().fireDataRequested();
-		}
 
 		/*
 		 * Visits the query options recursively descending $expand. Determines the target type, adds
@@ -856,12 +849,12 @@ sap.ui.define([
 		}
 
 		if (!this.mLateQueryOptions) {
-			return false; // no autoExpandSelect
+			return undefined; // no autoExpandSelect
 		}
 
 		if (iIndexOfAt >= 0) {
 			if (sRequestedPropertyPath.startsWith("@$ui5.", iIndexOfAt)) {
-				return true; // send no request for a client annotation
+				return undefined; // do not request for a client annotation
 			}
 			sRequestedPropertyPath = sRequestedPropertyPath.slice(0, iIndexOfAt);
 		}
@@ -875,7 +868,7 @@ sap.ui.define([
 			[sRequestedPropertyPath], this.oRequestor.getModelInterface().fetchMetadata,
 			sFullResourceMetaPath);
 		if (!mQueryOptions) {
-			return false;
+			return undefined;
 		}
 
 		visitQueryOptions(mQueryOptions);
@@ -892,7 +885,7 @@ sap.ui.define([
 			sGroupId = _Helper.getPrivateAnnotation(oResource, "groupId");
 			oPromise = this.oRequestor.request("GET", sMergeBasePath,
 				sGroupId ? this.oRequestor.lockGroup(sGroupId, this) : oGroupLock.getUnlockedCopy(),
-				undefined, undefined, onSubmit, undefined, sFullResourceMetaPath, undefined,
+				undefined, undefined, undefined, undefined, sFullResourceMetaPath, undefined,
 				false, mQueryOptions
 			).then(function (oData) {
 				that.visitResponse(oData, mTypeForMetaPath, sFullResourceMetaPath, sResourcePath);
@@ -919,15 +912,9 @@ sap.ui.define([
 
 			_Helper.updateSelected(that.mChangeListeners, sResourcePath, oResource, oData,
 				aUpdateProperties);
-			if (bDataRequested) {
-				bDataRequested = false;
-				that.oRequestor.getModelInterface().fireDataReceived();
-			}
-		}).catch(function (oError) {
-			if (bDataRequested) {
-				that.oRequestor.getModelInterface().fireDataReceived(oError);
-			}
-			throw oError;
+
+			// return the missing property, so that drillDown properly proceeds
+			return _Helper.drillDown(oResource, sMissingPropertyPath.split("/"));
 		}).finally(function () { // clean up only after updateSelected!
 			delete that.mPropertyRequestByPath[sRequestPath];
 		});
@@ -1443,8 +1430,8 @@ sap.ui.define([
 	};
 
 	/**
-	 * Registers the listener for the path. Shared caches do not register listeners because they are
-	 * read-only.
+	 * Registers the listener for the path. Shared caches do not register listeners except for the
+	 * empty path, because they are read-only.
 	 *
 	 * @param {string} sPath The path
 	 * @param {object} [oListener] The listener
@@ -1452,7 +1439,7 @@ sap.ui.define([
 	 * @private
 	 */
 	_Cache.prototype.registerChangeListener = function (sPath, oListener) {
-		if (!this.bSharedRequest) {
+		if (!(this.bSharedRequest && sPath)) {
 			_Helper.addByPath(this.mChangeListeners, sPath, oListener);
 		}
 	};
@@ -1604,7 +1591,7 @@ sap.ui.define([
 			delete mQueryOptions.$expand;
 			delete mQueryOptions.$orderby;
 			delete mQueryOptions.$select;
-			sExclusiveFilter = this.getExclusiveFilter();
+			sExclusiveFilter = this.getFilterExcludingCreated();
 			if (sExclusiveFilter) {
 				mQueryOptions.$filter = mQueryOptions.$filter
 					? "(" + mQueryOptions.$filter + ") and " + sExclusiveFilter
@@ -1691,8 +1678,8 @@ sap.ui.define([
 			this.iActiveUsages -= 1;
 			if (!this.iActiveUsages) {
 				this.iInactiveSince = Date.now();
+				this.mChangeListeners = {};
 			}
-			this.mChangeListeners = {}; // Note: shared caches have no listeners anyway
 		}
 	};
 
@@ -1928,7 +1915,7 @@ sap.ui.define([
 					mHeaders.Prefer = "return=minimal";
 				}
 				oPatchPromise = that.oRequestor.request("PATCH", sEditUrl, oPatchGroupLock,
-					mHeaders, oUpdateData, onSubmit, onCancel, /*sMetaPath*/ undefined,
+					mHeaders, oUpdateData, onSubmit, onCancel, /*sMetaPath*/undefined,
 					_Helper.buildPath(that.getOriginalResourcePath(oEntity), sEntityPath),
 					bAtFront, /*mQueryOptions*/ undefined, /*vOwner*/ undefined,
 					mergePatchRequests);
@@ -1960,7 +1947,7 @@ sap.ui.define([
 				}, function (oError) {
 					var sRetryGroupId = sGroupId;
 
-					if (!fnErrorCallback && !oError.canceled) {
+					if (!fnErrorCallback) {
 						onCancel();
 						throw oError;
 					}
@@ -2324,34 +2311,6 @@ sap.ui.define([
 	};
 
 	/**
-	 * Checks the given range of currently available elements to contain the given promise.
-	 *
-	 * @param {sap.ui.base.SyncPromise} oPromise
-	 *   The promise
-	 * @param {number} iStart
-	 *   The start index
-	 * @param {number} iEnd
-	 *   The end index (will not be filled)
-	 * @throws {Error}
-	 *   If there is an index no longer containing the promise
-	 *
-	 * @private
-	 */
-	_CollectionCache.prototype.checkRange = function (oPromise, iStart, iEnd) {
-		var i;
-
-		// if the request used $tail, not all indexes got the promise, so we cannot check
-		if (oPromise !== this.aElements.$tail) {
-			iEnd = Math.min(iEnd, this.aElements.length);
-			for (i = iStart; i < iEnd; i += 1) {
-				if (this.aElements[i] !== oPromise) {
-					throw new Error("Found data at an index being read from the back end");
-				}
-			}
-		}
-	};
-
-	/**
 	 * Creates an empty element for the given predicate to the cache, adds it to the cache and
 	 * returns it.
 	 *
@@ -2484,15 +2443,15 @@ sap.ui.define([
 	};
 
 	/**
-	 * Returns a filter that excludes all created entities in this cache's collection and all
-	 * entities that have been deleted on the client, but not on the server yet.
+	 * Returns a filter that excludes all created entities in this cache's collection (including
+	 * those that have been deleted on the client again).
 	 *
 	 * @returns {string|undefined}
-	 *   The filter or <code>undefined</code> if there is no such entity.
+	 *   The filter or <code>undefined</code> if there is no created entity.
 	 *
 	 * @private
 	 */
-	_CollectionCache.prototype.getExclusiveFilter = function () {
+	_CollectionCache.prototype.getFilterExcludingCreated = function () {
 		var oElement,
 			aKeyFilters = [],
 			mTypeForMetaPath,
@@ -2517,7 +2476,9 @@ sap.ui.define([
 			}
 		}
 		(this.aElements.$deleted || []).forEach(function (oDeleted) {
-			addKeyFilter(that.aElements.$byPredicate[oDeleted.predicate]);
+			if (oDeleted.created) {
+				addKeyFilter(that.aElements.$byPredicate[oDeleted.predicate]);
+			}
 		});
 
 		return aKeyFilters.length ? "not (" + aKeyFilters.sort().join(" or ") + ")" : undefined;
@@ -2533,7 +2494,7 @@ sap.ui.define([
 	 * @private
 	 */
 	_CollectionCache.prototype.getQueryString = function () {
-		var sExclusiveFilter = this.getExclusiveFilter(),
+		var sExclusiveFilter = this.getFilterExcludingCreated(),
 			mQueryOptions = Object.assign({}, this.mQueryOptions),
 			sFilterOptions = mQueryOptions.$filter,
 			sQueryString = this.sQueryString;
@@ -2550,6 +2511,28 @@ sap.ui.define([
 		}
 
 		return sQueryString;
+	};
+
+	/**
+	 * Determines the offset to <code>$skip</code> due to deleted elements in other groups.
+	 *
+	 * @param {string} sGroupId - The group ID for the read request
+	 * @param {number} iStart - The start index for the read
+	 * @returns {number} The offset
+	 */
+	_CollectionCache.prototype.getReadOffset = function (sGroupId, iStart) {
+		var iOffset = 0;
+
+		(this.aElements.$deleted || []).forEach(function (oDeleteInfo) {
+			// if deleting in the same group, the entity is gone when the server reads
+			// created-persisted entities are excluded via filter
+			if (oDeleteInfo.groupId !== sGroupId && !oDeleteInfo.created
+					&& oDeleteInfo.index <= iStart) {
+				iOffset += 1;
+			}
+		});
+
+		return iOffset;
 	};
 
 	/**
@@ -2633,7 +2616,7 @@ sap.ui.define([
 			iResultLength = oResult.value.length,
 			i;
 
-		// simulate #getExclusiveFilter for newly created persisted
+		// simulate #getFilterExcludingCreated for newly created persisted
 		iEnd -= iFiltered;
 		iResultLength -= iFiltered;
 
@@ -2805,7 +2788,7 @@ sap.ui.define([
 				// count persisted inline creation rows which are refreshed separately during a
 				// side-effects refresh (see #refreshKeptElements) and might be deleted on server;
 				// increase prefetch to compensate for our exclusive filter (see
-				// #getExclusiveFilter) (JIRA: CPOUI5ODATAV4-1521)
+				// #getFilterExcludingCreated) (JIRA: CPOUI5ODATAV4-1521)
 				iCreatedPersisted += 1;
 			}
 		}
@@ -2977,7 +2960,8 @@ sap.ui.define([
 	 */
 	_CollectionCache.prototype.requestElements = function (iStart, iEnd, oGroupLock,
 			iTransientElements, fnDataRequested) {
-		var oPromise,
+		var iOffset = this.getReadOffset(oGroupLock.getGroupId(), iStart),
+			oPromise,
 			oReadRequest = {
 				iEnd : iEnd,
 				iStart : iStart
@@ -2988,13 +2972,12 @@ sap.ui.define([
 		this.bSentRequest = true;
 		oPromise = SyncPromise.all([
 			this.oRequestor.request("GET",
-				this.getResourcePathWithQuery(iStart, iEnd),
+				this.getResourcePathWithQuery(iStart + iOffset, iEnd + iOffset),
 				oGroupLock, undefined, undefined, fnDataRequested),
 			this.fetchTypes()
 		]).then(function (aResult) {
 			var iFiltered;
 
-			that.checkRange(oPromise, oReadRequest.iStart, oReadRequest.iEnd);
 			if (that.aElements.$tail === oPromise) {
 				that.aElements.$tail = undefined;
 			}
@@ -3003,7 +2986,6 @@ sap.ui.define([
 			return that.handleCount(oGroupLock, iTransientElements, oReadRequest.iStart,
 				oReadRequest.iEnd, aResult[0], iFiltered);
 		}).catch(function (oError) {
-			that.checkRange(oPromise, oReadRequest.iStart, oReadRequest.iEnd);
 			that.fill(undefined, oReadRequest.iStart, oReadRequest.iEnd);
 			throw oError;
 		}).finally(function () {
@@ -3156,8 +3138,8 @@ sap.ui.define([
 				for (i = 0, n = oResult.value.length; i < n; i += 1) {
 					oElement = oResult.value[i];
 					sPredicate = _Helper.getPrivateAnnotation(oElement, "predicate");
-					_Helper.updateSelected(that.mChangeListeners, sPredicate,
-						that.aElements.$byPredicate[sPredicate], oElement, aPaths,
+					_Helper.updateAll(that.mChangeListeners, sPredicate,
+						that.aElements.$byPredicate[sPredicate], oElement,
 						preventKeyPredicateChange);
 				}
 			});
@@ -3230,6 +3212,10 @@ sap.ui.define([
 		aKeptElementPredicates.forEach(function (sPredicate) {
 			that.aElements.$byPredicate[sPredicate] = mByPredicate[sPredicate];
 		});
+		if (mChangeListeners[""]) {
+			this.mChangeListeners[""] = mChangeListeners[""];
+			_Helper.fireChange(this.mChangeListeners, "");
+		}
 	};
 
 	/**
@@ -3674,12 +3660,11 @@ sap.ui.define([
 				_Helper.getPrivateAnnotation(oOldValue, "predicate"));
 			// visit response to report the messages
 			that.visitResponse(oNewValue, aResult[1]);
-			_Helper.updateSelected(that.mChangeListeners, "", oOldValue, oNewValue, aPaths,
-				function (sPath) {
-					// not (below) a $NavigationPropertyPath?
-					return !aPaths.some(function (sSideEffectPath) {
-						return _Helper.getRelativePath(sPath, sSideEffectPath) !== undefined;
-					});
+			_Helper.updateAll(that.mChangeListeners, "", oOldValue, oNewValue, function (sPath) {
+				// not (below) a $NavigationPropertyPath?
+				return !aPaths.some(function (sSideEffectPath) {
+					return _Helper.getRelativePath(sPath, sSideEffectPath) !== undefined;
+				});
 			});
 		});
 

@@ -116,7 +116,7 @@ sap.ui.define([
 	 * @class The runtime authoring allows to adapt the fields of a running application.
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @since 1.30
@@ -257,7 +257,6 @@ sap.ui.define([
 			if (window.parent !== window) {
 				this.startService("receiver");
 			}
-			this.startService("supportTools");
 
 			this._loadUShellServicesPromise = FlexUtils.getUShellServices(["URLParsing", "AppLifeCycle", "CrossApplicationNavigation"])
 				.then(function (mUShellServices) {
@@ -609,20 +608,14 @@ sap.ui.define([
 	 * isProductiveSystem should only return true if it is a test or development system with the provision of custom catalog extensions
 	 */
 	RuntimeAuthoring.prototype._getToolbarButtonsVisibility = function() {
-		return Promise.all([
-			FeaturesAPI.isPublishAvailable(),
-			RtaAppVariantFeature.isSaveAsAvailable(this.getRootControlInstance(), this.getLayer(), this._oSerializer),
-			FeaturesAPI.isContextBasedAdaptationAvailable(this.getLayer())
-		]).then(function(aRtaFeaturesAvailability) {
-			var bIsPublishAvailable = aRtaFeaturesAvailability[0];
-			var bIsSaveAsAvailable = aRtaFeaturesAvailability[1];
-			var bIsContextBasedAdaptationAvailable = aRtaFeaturesAvailability[2];
-			return {
-				publishAvailable: bIsPublishAvailable,
-				saveAsAvailable: bIsPublishAvailable && bIsSaveAsAvailable,
-				contextBasedAdaptationAvailable: bIsContextBasedAdaptationAvailable
-			};
-		});
+		return FeaturesAPI.isPublishAvailable().then(function(bIsPublishAvailable) {
+			return RtaAppVariantFeature.isSaveAsAvailable(this.getRootControlInstance(), this.getLayer(), this._oSerializer).then(function(bIsSaveAsAvailable) {
+				return {
+					publishAvailable: bIsPublishAvailable,
+					saveAsAvailable: bIsPublishAvailable && bIsSaveAsAvailable
+				};
+			});
+		}.bind(this));
 	};
 
 	RuntimeAuthoring.prototype._isOldVersionDisplayed = function() {
@@ -1132,7 +1125,6 @@ sap.ui.define([
 						appVariantsOverviewVisible: bSaveAsAvailable && bExtendedOverview,
 						appVariantsOverviewEnabled: bSaveAsAvailable && bExtendedOverview,
 						saveAsVisible: bSaveAsAvailable,
-						contextBasedAdaptationVisible: aButtonsVisibility.contextBasedAdaptationAvailable,
 						saveAsEnabled: false,
 						manageAppsVisible: bSaveAsAvailable && !bExtendedOverview,
 						manageAppsEnabled: bSaveAsAvailable && !bExtendedOverview,
@@ -1528,6 +1520,10 @@ sap.ui.define([
 	RuntimeAuthoring.prototype.setMode = function (sNewMode) {
 		var sCurrentMode = this.getMode();
 		if (sCurrentMode !== sNewMode) {
+			var oChangeVisualization = this.getChangeVisualization && this.getChangeVisualization();
+			if (sNewMode === "visualization" || sCurrentMode === "visualization") {
+				oChangeVisualization.triggerModeChange(this.getRootControl(), this.getToolbar());
+			}
 			var oTabHandlingPlugin = this.getPluginManager().getPlugin("tabHandling");
 			var oSelectionPlugin = this.getPluginManager().getPlugin("selection");
 
@@ -1535,14 +1531,6 @@ sap.ui.define([
 			if (sCurrentMode === "navigation" || sNewMode === "navigation") {
 				this._oDesignTime.setEnabled(sNewMode !== "navigation");
 				oTabHandlingPlugin[(sNewMode === "navigation") ? "restoreTabIndex" : "removeTabIndex"]();
-			}
-
-			var oChangeVisualization = this.getChangeVisualization && this.getChangeVisualization();
-			if (sNewMode === "visualization" || sCurrentMode === "visualization") {
-				DtUtil.waitForSynced(this._oDesignTime)()
-					.then(function () {
-						return oChangeVisualization.triggerModeChange(this.getRootControl(), this.getToolbar());
-					}.bind(this));
 			}
 
 			if (sCurrentMode === "adaptation") {

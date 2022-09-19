@@ -1,2 +1,1 @@
-sap.ui.define(["exports"],function(e){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;const t=(e,t,a)=>Math.min(Math.max(e,t),a);var a=t;e.default=a});
-//# sourceMappingURL=clamp.js.map
+sap.ui.define(function(){"use strict";const t=(t,n,i)=>Math.min(Math.max(t,n),i);return t});

@@ -23,7 +23,7 @@ sap.ui.define(['sap/ui/core/Element', 'sap/ui/base/ManagedObjectObserver', './sh
 		 * @extends sap.ui.core.Element
 		 *
 		 * @author SAP SE
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 *
 		 * @constructor
 		 * @public

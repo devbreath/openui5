@@ -78,7 +78,7 @@ function(
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -283,7 +283,7 @@ function(
 	};
 
 	ListItemBase.prototype.onAfterRendering = function() {
-		if (!this._oDomRef || this._oDomRef !== this.getDomRef()) {
+		if (this._oDomRef !== this.getDomRef()) {
 			this.informList("DOMUpdate", true);
 		}
 		this._oDomRef = undefined;

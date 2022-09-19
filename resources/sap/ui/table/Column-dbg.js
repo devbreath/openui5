@@ -8,9 +8,7 @@
 sap.ui.define([
 	"./ColumnMenu",
 	"./utils/TableUtils",
-	"./menus/ColumnHeaderMenuAdapter",
 	"./library",
-	"sap/ui/core/Core",
 	"sap/ui/core/Element",
 	"sap/ui/core/Popup",
 	"sap/ui/core/library",
@@ -26,9 +24,7 @@ sap.ui.define([
 ], function(
 	ColumnMenu,
 	TableUtils,
-	ColumnHeaderMenuAdapter,
 	library,
-	Core,
 	Element,
 	Popup,
 	coreLibrary,
@@ -72,7 +68,7 @@ sap.ui.define([
 	 * @class
 	 * The column allows you to define column specific properties that will be applied when rendering the table.
 	 * @extends sap.ui.core.Element
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -327,11 +323,11 @@ sap.ui.define([
 		},
 		associations: {
 			/**
-			 * The menu that can be opened by the header element of this column.
-			 *
-			 * @since 1.104
+			 * Provides a menu that is used by the column and replaces the menu aggregation when set.
+			 * The given menu has to follow the same pattern as the <code>sap.ui.core.IColumnHeaderMenu</code> interface.
+			 * @since 1.98.0
 			 */
-			headerMenu: {type: "sap.ui.core.IColumnHeaderMenu", multiple: false, visibility: "hidden"}
+			columnHeaderMenu: {type: "sap.ui.core.IColumnHeaderMenu", multiple: false, visibility: "hidden"}
 		},
 		events : {
 			/**
@@ -390,7 +386,6 @@ sap.ui.define([
 	 */
 	Column.prototype.exit = function() {
 		this._destroyTemplateClones();
-		ColumnHeaderMenuAdapter.unlink(this);
 	};
 
 	/**
@@ -812,31 +807,6 @@ sap.ui.define([
 		}
 	};
 
-	Column.prototype._openHeaderMenu = function(oDomRef) {
-		var oHeaderMenu = this.getHeaderMenuInstance();
-		if (oHeaderMenu) {
-			ColumnHeaderMenuAdapter.activateFor(this).then(function() {
-				oHeaderMenu.openBy(oDomRef);
-			});
-		}
-	};
-
-	Column.prototype._isMenuOpen = function() {
-		var oHeaderMenu = this.getHeaderMenuInstance();
-		if (!oHeaderMenu) {
-			return false;
-		}
-		return oHeaderMenu.isOpen();
-	};
-
-	Column.prototype._setGrouped = function(bGrouped) {
-		var oTable = this._getTable();
-		oTable.setGroupBy(bGrouped ? this : null);
-	};
-
-	Column.prototype._isAggregatableByMenu = function() {
-		return false;
-	};
 
 	/**
 	 * Toggles the sort order of the column.
@@ -877,70 +847,54 @@ sap.ui.define([
 			});
 
 			if (bExecuteDefault) {
+				var aSortedCols = oTable.getSortedColumns();
+				var aColumns = oTable.getColumns();
+
+				// reset the sorting status of all columns which are not sorted anymore
+				for (var i = 0, l = aColumns.length; i < l; i++) {
+					if (aSortedCols.indexOf(aColumns[i]) < 0) {
+						// column is not sorted anymore -> reset default and remove sorter
+						aColumns[i].setProperty("sorted", false, true);
+						aColumns[i].setProperty("sortOrder", SortOrder.Ascending, true);
+						aColumns[i]._updateIcons(true);
+						delete _private(aColumns[i]).oSorter;
+					}
+				}
+
 				// update properties of current column
 				this.setProperty("sorted", true, true);
 				this.setProperty("sortOrder", sNewSortOrder, true);
 				_private(this).oSorter = new Sorter(this.getSortProperty(), this.getSortOrder() === SortOrder.Descending);
 
-				this._applySorters(sNewSortOrder, bAdd);
+				// add sorters of all sorted columns to one sorter-array and update sort icon rendering for sorted columns
+				var aSorters = [];
+				for (var i = 0, l = aSortedCols.length; i < l; i++) {
+					aSortedCols[i]._updateIcons(true);
+					aSorters.push(_private(aSortedCols[i]).oSorter);
+				}
+
+				oTable._resetColumnHeaderHeights();
+				oTable._updateRowHeights(oTable._collectRowHeights(true), true);
+
+				var oBinding = oTable.getBinding();
+				if (oBinding) {
+					// For the AnalyticalTable with an AnalyticalColumn.
+					if (this._updateTableAnalyticalInfo) {
+						// The analytical info must be updated before sorting via the binding. The request will still be correct, but the binding
+						// will create its internal data structure based on the analytical info. We also do not need to get the contexts right
+						// now (therefore "true" is passed"), this will be done later in refreshRows.
+						this._updateTableAnalyticalInfo(true);
+					}
+
+					// sort the binding
+					oBinding.sort(aSorters);
+
+				} else {
+					Log.warning("Sorting not performed because no binding present", this);
+				}
 			}
 		}
 		return this;
-	};
-
-	Column.prototype._unsort = function() {
-		var oTable = this.getParent();
-		if (oTable) {
-			// add current column to list of sorted columns
-			oTable._removeSortedColumn(this);
-
-			this._applySorters();
-		}
-		return this;
-	};
-
-	Column.prototype._applySorters = function(sNewSortOrder, bAdd) {
-		var oTable = this.getParent();
-		var aSortedCols = oTable.getSortedColumns();
-		var aColumns = oTable.getColumns();
-
-		// reset the sorting status of all columns which are not sorted anymore
-		for (var i = 0, l = aColumns.length; i < l; i++) {
-			if (aSortedCols.indexOf(aColumns[i]) < 0) {
-				// column is not sorted anymore -> reset default and remove sorter
-				aColumns[i].setProperty("sorted", false, true);
-				aColumns[i].setProperty("sortOrder", SortOrder.Ascending, true);
-				aColumns[i]._updateIcons(true);
-				delete _private(aColumns[i]).oSorter;
-			}
-		}
-
-		// add sorters of all sorted columns to one sorter-array and update sort icon rendering for sorted columns
-		var aSorters = [];
-		for (var i = 0, l = aSortedCols.length; i < l; i++) {
-			aSortedCols[i]._updateIcons(true);
-			aSorters.push(_private(aSortedCols[i]).oSorter);
-		}
-
-		oTable._resetColumnHeaderHeights();
-		oTable._updateRowHeights(oTable._collectRowHeights(true), true);
-
-		var oBinding = oTable.getBinding();
-		if (oBinding) {
-			// For the AnalyticalTable with an AnalyticalColumn.
-			if (this._updateTableAnalyticalInfo) {
-				// The analytical info must be updated before sorting via the binding. The request will still be correct, but the binding
-				// will create its internal data structure based on the analytical info. We also do not need to get the contexts right
-				// now (therefore "true" is passed"), this will be done later in refreshRows.
-				this._updateTableAnalyticalInfo(true);
-			}
-
-			// sort the binding
-			oBinding.sort(aSorters);
-
-		} else {
-			Log.warning("Sorting not performed because no binding present", this);
-		}
 	};
 
 	Column.prototype._updateIcons = function(bSkipUpdateRowHeights) {
@@ -969,15 +923,6 @@ sap.ui.define([
 
 	Column.prototype._renderSortIcon = function() {
 		this._updateIcons();
-	};
-
-	Column.prototype._getFilterState = function() {
-		try {
-			this._getFilter();
-			return ValueState.None;
-		} catch (e) {
-			return ValueState.Error;
-		}
 	};
 
 	Column.prototype._getFilter = function() {
@@ -1371,13 +1316,13 @@ sap.ui.define([
 	};
 
 	/**
-	 * Returns the column header menu instance that this column is associated with via the <code>headerMenu</code> association.
+	 * Returns the <code>sap.ui.core.IColumnHeaderMenu<\code>, which is the current target of the association <code>columnHeaderMenu</code>, or null.
 	 *
-	 * @returns {sap.ui.core.IColumnHeaderMenu | undefined} The column header menu instance
+	 * @returns {sap.ui.core.IColumnHeaderMenu}
 	 * @private
 	 */
-	Column.prototype.getHeaderMenuInstance = function () {
-		return Core.byId(this.getAssociation("headerMenu"));
+	Column.prototype.getColumnHeaderMenu = function () {
+		return sap.ui.getCore().byId(this.getAssociation("columnHeaderMenu"));
 	};
 
 	function validateCellContentVisibilitySettings(mSettings) {

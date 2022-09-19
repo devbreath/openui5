@@ -1,2 +1,1 @@
-(function(){ace.require(["ace/snippets/less"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
-//# sourceMappingURL=less.js.map
+;(function(){ace.require(["ace/snippets/less"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();

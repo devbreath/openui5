@@ -40,7 +40,7 @@ sap.ui.define([
 	 * <h3>Keyboard Handling</h3>
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public

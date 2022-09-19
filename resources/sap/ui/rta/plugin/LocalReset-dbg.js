@@ -35,7 +35,7 @@ sap.ui.define([
 	 * @class
 	 * @extends sap.ui.rta.plugin.Plugin
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @since 1.90
@@ -170,7 +170,7 @@ sap.ui.define([
 				throw DtUtil.propagateError(
 					vError,
 					"LocalReset#handler",
-					"Error occurred during handler execution",
+					"Error occured during handler execution",
 					"sap.ui.rta.plugin"
 				);
 			});

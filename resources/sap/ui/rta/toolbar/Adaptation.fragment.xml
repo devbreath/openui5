@@ -119,7 +119,7 @@
 				<Button
 						id="sapUiRta_toggleChangeVisualizationMenuButton"
 						visible="{= ${controls>/modeSwitcher} === 'visualization'}"
-						text="{visualizationModel>/changeCategoryText}"
+						text="{visualizationModel>/commandCategoryText}"
 						type="Transparent"
 						icon="sap-icon://slim-arrow-down"
 						iconFirst="false"
@@ -204,16 +204,6 @@
 						<OverflowToolbarLayoutData priority="Low" />
 					</layoutData>
 				</MenuButton>
-				<toolbar:OverflowToolbarButton
-						id="sapUiRta_saveAsContextBasedAdaptation"
-						visible="{= (${controls>/contextBasedAdaptationVisible} &amp;&amp; ${controls>/modeSwitcher} === 'adaptation')}"
-						press=".saveAsContextBasedAdaptation"
-						type="Transparent"
-						text="{i18n>BTN_SAVE_AS}" >
-					<toolbar:layoutData>
-						<OverflowToolbarLayoutData priority="Low" />
-					</toolbar:layoutData>
-				</toolbar:OverflowToolbarButton>
 				<toolbar:OverflowToolbarButton
 						id="sapUiRta_saveAs"
 						visible="{= (${controls>/saveAsVisible} &amp;&amp; ${controls>/modeSwitcher} === 'adaptation')}"

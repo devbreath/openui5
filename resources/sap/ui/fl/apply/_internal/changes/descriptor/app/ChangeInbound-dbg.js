@@ -25,7 +25,7 @@ sap.ui.define([
      *
      * @namespace sap.ui.fl.apply._internal.changes.descriptor.app.ChangeInbound
      * @experimental
-     * @version 1.106.0
+     * @version 1.105.1
      * @private
      * @ui5-restricted sap.ui.fl.apply._internal
      */

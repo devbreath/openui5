@@ -74,7 +74,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.write._internal.connectors.BackendConnector
 	 * @since 1.72
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @private
 	 * @ui5-restricted sap.ui.fl.write._internal.connectors
 	 */

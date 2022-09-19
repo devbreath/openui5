@@ -30,7 +30,7 @@ sap.ui.define([
 	 * @namespace sap.ui.rta.util.ReloadManager
 	 * @alias sap.ui.rta.util.ReloadManager
 	 * @since 1.104
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @private
 	 * @ui5-restricted
 	 */

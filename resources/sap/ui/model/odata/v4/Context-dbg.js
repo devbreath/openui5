@@ -42,7 +42,7 @@ sap.ui.define([
 		 * @hideconstructor
 		 * @public
 		 * @since 1.39.0
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 */
 		Context = BaseContext.extend("sap.ui.model.odata.v4.Context", {
 				constructor : constructor
@@ -258,7 +258,7 @@ sap.ui.define([
 	 * Once the promise is resolved, {@link #getPath} returns a path including the key predicate
 	 * of the new entity. This requires that all key properties are available.
 	 *
-	 * @returns {Promise<void>|undefined}
+	 * @returns {Promise}
 	 *   A promise that is resolved without data when the entity represented by this context has
 	 *   been created in the back end. It is rejected with an <code>Error</code> instance where
 	 *   <code>oError.canceled === true</code> if the transient entity is deleted before it is
@@ -322,11 +322,11 @@ sap.ui.define([
 	 *   <ul>
 	 *     <li> the given group ID is invalid,
 	 *     <li> this context's root binding is suspended,
-	 *     <li> a <code>null</code> group ID is used with a context which is not
-	 *       {@link #isKeepAlive kept alive},
+	 *     <li> a <code>null</code> group ID is used with a context which is not kept-alive
+	 *       (see {@link #isKeepAlive}),
 	 *     <li> the context is already being deleted,
 	 *     <li> the resulting group ID has {@link sap.ui.model.odata.v4.SubmitMode.API}, and the
-	 *       context is {@link #isKeepAlive kept alive}, but not in the current collection,
+	 *       context is kept alive (see {@link #isKeepAlive}), but not in the current collection,
 	 *     <li> (only before 1.105) the resulting group ID has
 	 *       {@link sap.ui.model.odata.v4.SubmitMode.API}
 	 *   </ul>
@@ -441,8 +441,7 @@ sap.ui.define([
 	 * @private
 	 */
 	Context.prototype.doSetProperty = function (sPath, vValue, oGroupLock, bSkipRetry) {
-		var oModel = this.oModel,
-			oMetaModel = oModel.getMetaModel(),
+		var oMetaModel = this.oModel.getMetaModel(),
 			oPromise,
 			oValue,
 			that = this;
@@ -494,7 +493,8 @@ sap.ui.define([
 					 * @param {Error} oError
 					 */
 					function errorCallback(oError) {
-						oModel.reportError("Failed to update path " + oModel.resolve(sPath, that),
+						that.oModel.reportError(
+							"Failed to update path " + that.oModel.resolve(sPath, that),
 							sClassName, oError);
 						firePatchCompleted(false);
 					}
@@ -643,13 +643,12 @@ sap.ui.define([
 	};
 
 	/**
-	 * Returns the "canonical path" of the entity for this context. According to <a href=
-	 * "https://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part2-url-conventions.html#canonical-urlurl4.1.1"
-	 * >"4.3.1 Canonical URL"</a> of the specification "OData Version 4.0 Part 2: URL Conventions",
-	 * this is the "name of the entity set associated with the entity followed by the key predicate
-	 * identifying the entity within the collection". Use the canonical path in
-	 * {@link sap.ui.core.Element#bindElement} to create an element binding.
-	 *
+	 * Returns the "canonical path" of the entity for this context.
+	 * According to "4.3.1 Canonical URL" of the specification "OData Version 4.0 Part 2: URL
+	 * Conventions", this is the "name of the entity set associated with the entity followed by the
+	 * key predicate identifying the entity within the collection".
+	 * Use the canonical path in {@link sap.ui.core.Element#bindElement} to create an element
+	 * binding.
 	 * Note: For a transient context (see {@link #isTransient}) a wrong path is returned unless all
 	 * key properties are available within the initial data.
 	 *
@@ -709,7 +708,7 @@ sap.ui.define([
 	 *   The context's index within the binding's collection. It is <code>undefined</code> if
 	 *   <ul>
 	 *     <li> it does not belong to a list binding,
-	 *     <li> it is {@link #isKeepAlive kept alive}, but not in the collection currently.
+	 *     <li> it is kept alive (see {@link #isKeepAlive}), but not in the collection currently.
 	 *   </ul>
 	 *
 	 * @public
@@ -741,7 +740,7 @@ sap.ui.define([
 	 *   The context's index within the binding's collection. It is <code>undefined</code> if
 	 *   <ul>
 	 *     <li> it does not belong to a list binding,
-	 *     <li> it is {@link #isKeepAlive kept alive}, but not in the collection currently.
+	 *     <li> it is kept alive (see {@link #isKeepAlive}), but not in the collection currently.
 	 *   </ul>
 	 *
 	 * @private
@@ -756,9 +755,10 @@ sap.ui.define([
 	/**
 	 * Returns the value for the given path relative to this context. The function allows access to
 	 * the complete data the context points to (if <code>sPath</code> is "") or any part thereof.
-	 * The data is a JSON structure as described in <a href=
-	 * "https://docs.oasis-open.org/odata/odata-json-format/v4.0/odata-json-format-v4.0.html"
-	 * >"OData JSON Format Version 4.0"</a>.
+	 * The data is a JSON structure as described in
+	 * <a
+	 * href="http://docs.oasis-open.org/odata/odata-json-format/v4.0/odata-json-format-v4.0.html">
+	 * "OData JSON Format Version 4.0"</a>.
 	 * Note that the function clones the result. Modify values via
 	 * {@link sap.ui.model.odata.v4.ODataPropertyBinding#setValue}.
 	 *
@@ -863,9 +863,10 @@ sap.ui.define([
 	/**
 	 * Returns the value for the given path relative to this context. The function allows access to
 	 * the complete data the context points to (if <code>sPath</code> is "") or any part thereof.
-	 * The data is a JSON structure as described in <a href=
-	 * "https://docs.oasis-open.org/odata/odata-json-format/v4.0/odata-json-format-v4.0.html"
-	 * >"OData JSON Format Version 4.0"</a>.
+	 * The data is a JSON structure as described in
+	 * <a
+	 * href="http://docs.oasis-open.org/odata/odata-json-format/v4.0/odata-json-format-v4.0.html">
+	 * "OData JSON Format Version 4.0"</a>.
 	 * Note that the function returns the cache instance. Do not modify the result, use
 	 * {@link sap.ui.model.odata.v4.ODataPropertyBinding#setValue} instead.
 	 *
@@ -901,8 +902,8 @@ sap.ui.define([
 	 * Returns whether there are pending changes for bindings dependent on this context, or for
 	 * unresolved bindings (see {@link sap.ui.model.Binding#isResolved}) which were dependent on
 	 * this context at the time the pending change was created. This includes the context itself
-	 * being {@link #isTransient transient} or {@link #isDeleted deleted}. Since 1.98.0,
-	 * {@link #isInactive inactive} contexts are ignored.
+	 * being {@link #isTransient transient}. Since 1.98.0, {@link #isInactive inactive} contexts are
+	 * ignored.
 	 *
 	 * @returns {boolean}
 	 *   Whether there are pending changes
@@ -913,11 +914,8 @@ sap.ui.define([
 	Context.prototype.hasPendingChanges = function () {
 		return this.isTransient()
 			|| this.isDeleted()
-			|| this.getBinding().hasPendingChangesForPath(this.sPath)
 			|| this.oModel.getDependentBindings(this).some(function (oDependentBinding) {
-				return oDependentBinding.oCache
-					? oDependentBinding.hasPendingChanges()
-					: oDependentBinding.hasPendingChangesInDependents();
+				return oDependentBinding.hasPendingChanges();
 			})
 			|| this.oModel.withUnresolvedBindings("hasPendingChangesInCaches", this.sPath.slice(1));
 	};
@@ -931,7 +929,7 @@ sap.ui.define([
 	 *
 	 * @public
 	 * @see #delete
-	 * @since 1.105.0
+	 * @since 1.105
 	 */
 	Context.prototype.isDeleted = function () {
 		return this.bDeleted;
@@ -957,9 +955,9 @@ sap.ui.define([
 	 * Returns whether this context is inactive. The result of this function can also be accessed
 	 * via instance annotation "@$ui5.context.isInactive" at the entity.
 	 *
-	 * @returns {boolean|undefined} <code>true</code> if this context is inactive,
-	 *   <code>false</code> if it was created in an inactive state and has been activated, and
-	 *   <code>undefined</code> otherwise.
+	 * @returns {boolean} <code>true</code> if this context is inactive, <code>false</code> if it
+	 *   was created in an inactive state and has been activated, and <code>undefined</code>
+	 *   otherwise.
 	 *
 	 * @public
 	 * @see #isTransient
@@ -972,9 +970,7 @@ sap.ui.define([
 	};
 
 	/**
-	 * Returns whether this context is kept alive even when it is removed from its binding's
-	 * collection, for example if a filter is applied and the entity represented by this context
-	 * does not match the filter criteria.
+	 * Returns whether this context is kept alive.
 	 *
 	 * @returns {boolean} <code>true</code> if this context is kept alive
 	 *
@@ -993,7 +989,7 @@ sap.ui.define([
 	 * if the context is not transient. The result of this function can also be accessed via
 	 * instance annotation "@$ui5.context.isTransient" at the entity.
 	 *
-	 * @returns {boolean|undefined}
+	 * @returns {boolean}
 	 *   Whether this context is transient if it is created using
 	 *   {@link sap.ui.model.odata.v4.ODataListBinding#create}; <code>undefined</code> if it is not
 	 *   created using {@link sap.ui.model.odata.v4.ODataListBinding#create}
@@ -1037,9 +1033,9 @@ sap.ui.define([
 	 *   binding, the parameter must not be used.
 	 *   Supported since 1.55.0
 	 *
-	 *   Since 1.84.0, if this context is {@link #isKeepAlive kept alive}, it is only destroyed if
-	 *   the corresponding entity does no longer exist in the back end. In this case, the
-	 *   <code>fnOnBeforeDestroy</code> callback passed with {@link #setKeepAlive}) is called.
+	 *   Since 1.84.0, if this context is kept alive (see {@link #isKeepAlive}), it is only
+	 *   destroyed if the corresponding entity does no longer exist in the back end. In this case,
+	 *   the <code>fnOnBeforeDestroy</code> callback passed with {@link #setKeepAlive}) is called.
 	 * @throws {Error}
 	 *   If the group ID is not valid, if this context has pending changes or does not represent a
 	 *   single entity (see {@link sap.ui.model.odata.v4.ODataListBinding#getHeaderContext}), if the
@@ -1097,9 +1093,8 @@ sap.ui.define([
 	 *   <ul>
 	 *     <li> this context's root binding is suspended,
 	 *     <li> this context is transient (see {@link #isTransient}),
-	 *     <li> the given other context does not belong to the same list binding as this context, is
-	 *       already in the collection (has an index, see {@link #getIndex}), or is not
-	 *       {@link #isKeepAlive kept alive}.
+	 *     <li> the given other context does not belong to the same list binding as this context, or
+	 *       is already in the collection (has an index, see {@link #getIndex}).
 	 *   </ul>
 	 *
 	 * @public
@@ -1112,8 +1107,7 @@ sap.ui.define([
 		if (this.isTransient()) {
 			throw new Error("Cannot replace " + this);
 		}
-		if (oOtherContext.oBinding !== this.oBinding || oOtherContext.iIndex !== undefined
-				|| !oOtherContext.bKeepAlive) {
+		if (oOtherContext.oBinding !== this.oBinding || oOtherContext.iIndex !== undefined) {
 			throw new Error("Cannot replace with " + oOtherContext);
 		}
 		oElement = oOtherContext.getValue();
@@ -1122,14 +1116,12 @@ sap.ui.define([
 	};
 
 	/**
-	 * Returns a promise for the "canonical path" of the entity for this context. According to
-	 * <a href=
-	 * "https://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part2-url-conventions.html#canonical-urlurl4.1.1"
-	 * >"4.3.1 Canonical URL"</a> of the specification "OData Version 4.0 Part 2: URL Conventions",
-	 * this is the "name of the entity set associated with the entity followed by the key predicate
-	 * identifying the entity within the collection". Use the canonical path in
-	 * {@link sap.ui.core.Element#bindElement} to create an element binding.
-	 *
+	 * Returns a promise for the "canonical path" of the entity for this context.
+	 * According to "4.3.1 Canonical URL" of the specification "OData Version 4.0 Part 2: URL
+	 * Conventions", this is the "name of the entity set associated with the entity followed by the
+	 * key predicate identifying the entity within the collection".
+	 * Use the canonical path in {@link sap.ui.core.Element#bindElement} to create an element
+	 * binding.
 	 * Note: For a transient context (see {@link #isTransient}) a wrong path is returned unless all
 	 * key properties are available within the initial data.
 	 *
@@ -1147,9 +1139,10 @@ sap.ui.define([
 	/**
 	 * Returns a promise on the value for the given path relative to this context. The function
 	 * allows access to the complete data the context points to (if <code>sPath</code> is "") or
-	 * any part thereof. The data is a JSON structure as described in <a href=
-	 * "https://docs.oasis-open.org/odata/odata-json-format/v4.0/odata-json-format-v4.0.html"
-	 * >"OData JSON Format Version 4.0"</a>.
+	 * any part thereof. The data is a JSON structure as described in
+	 * <a
+	 * href="http://docs.oasis-open.org/odata/odata-json-format/v4.0/odata-json-format-v4.0.html">
+	 * "OData JSON Format Version 4.0"</a>.
 	 * Note that the function clones the result. Modify values via
 	 * {@link sap.ui.model.odata.v4.Context#setProperty}.
 	 *
@@ -1329,7 +1322,7 @@ sap.ui.define([
 	 *   specified, make sure that {@link #requestSideEffects} is called after the corresponding
 	 *   updates have been successfully processed by the server and that there are no pending
 	 *   changes for the affected properties.
-	 * @returns {Promise<undefined>}
+	 * @returns {Promise}
 	 *   Promise resolved with <code>undefined</code>, or rejected with an error if loading of side
 	 *   effects fails. Use it to set fields affected by side effects to read-only before
 	 *   {@link #requestSideEffects} and make them editable again when the promise resolves; in the
@@ -1715,46 +1708,19 @@ sap.ui.define([
 	};
 
 	/**
-	 * Returns a string representation of this object including the {@link #getPath binding path),
-	 * {@link #getIndex index}, and state (see also "Context states" of
-	 * {@link topic:c9723f8265f644af91c0ed941e114d46 Creating an Entity}).
+	 * Returns a string representation of this object including the binding path.
 	 *
 	 * @return {string} A string description of this binding
-	 *
 	 * @public
-	 * @see #destroy
-	 * @see #isDeleted
-	 * @see #isInactive
-	 * @see #isTransient
 	 * @since 1.39.0
 	 */
 	Context.prototype.toString = function () {
-		var sSuffix = "";
-
-		if (!this.oModel) {
-			sSuffix = ";destroyed";
-		} else if (this.bDeleted) {
-			sSuffix = ";deleted";
-		}
+		var sIndex = "";
 
 		if (this.iIndex !== undefined) {
-			if (!sSuffix) {
-				switch (this.isTransient()) {
-					case false:
-						sSuffix = ";createdPersisted";
-						break;
-
-					case true:
-						sSuffix = this.bInactive ? ";inactive" : ";transient";
-						break;
-
-					// no default
-				}
-			}
-			sSuffix = "[" + this.iIndex + sSuffix + "]";
+			sIndex = "[" + this.iIndex + (this.isTransient() ? "|transient" : "") + "]";
 		}
-
-		return this.sPath + sSuffix;
+		return this.sPath + sIndex;
 	};
 
 	/**

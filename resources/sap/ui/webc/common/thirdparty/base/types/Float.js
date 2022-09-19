@@ -1,2 +1,1 @@
-sap.ui.define(["exports","./DataType"],function(e,t){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;t=r(t);function r(e){return e&&e.__esModule?e:{default:e}}class u extends t.default{static isValid(e){return Number(e)===e}static attributeToProperty(e){return parseFloat(e)}}var a=u;e.default=a});
-//# sourceMappingURL=Float.js.map
+sap.ui.define(["./DataType"],function(t){"use strict";class e extends t{static isValid(t){return Number(t)===t}static attributeToProperty(t){return parseFloat(t)}}return e});

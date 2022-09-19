@@ -1,25 +1,13 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/config/Theme", "./v5/bbyd-active-sales", "./v4/bbyd-active-sales"], function (_exports, _Theme, _bbydActiveSales, _bbydActiveSales2) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/config/Theme', './v5/bbyd-active-sales', './v4/bbyd-active-sales'], function (exports, Theme, bbydActiveSales$1, bbydActiveSales$2) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "accData", {
-    enumerable: true,
-    get: function () {
-      return _bbydActiveSales.accData;
-    }
-  });
-  _exports.default = void 0;
-  Object.defineProperty(_exports, "ltr", {
-    enumerable: true,
-    get: function () {
-      return _bbydActiveSales.ltr;
-    }
-  });
-  _exports.pathData = void 0;
-  const pathData = (0, _Theme.isThemeFamily)("sap_horizon") ? _bbydActiveSales.pathData : _bbydActiveSales2.pathData;
-  _exports.pathData = pathData;
-  var _default = "bbyd-active-sales";
-  _exports.default = _default;
+	const pathData = Theme.isThemeFamily("sap_horizon") ? bbydActiveSales$1.pathData : bbydActiveSales$2.pathData;
+	var bbydActiveSales = "bbyd-active-sales";
+
+	exports.accData = bbydActiveSales$1.accData;
+	exports.ltr = bbydActiveSales$1.ltr;
+	exports.default = bbydActiveSales;
+	exports.pathData = pathData;
+
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

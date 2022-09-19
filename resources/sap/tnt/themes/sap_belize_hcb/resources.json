@@ -43,18 +43,17 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 14987,
+			"size": 14925,
 			"theme": "sap_belize_hcb"
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/tnt/themes/sap_belize_hcb/library-parameters.json",
 			"size": 1900,
 			"theme": "sap_belize_hcb"
 		},
 		{
 			"name": "library.css",
-			"size": 14984,
+			"size": 14922,
 			"theme": "sap_belize_hcb"
 		},
 		{
@@ -71,17 +70,13 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 15271,
+			"size": 15209,
 			"theme": "sap_belize_hcb"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 15268,
+			"size": 15206,
 			"theme": "sap_belize_hcb"
-		},
-		{
-			"name": "resources.json",
-			"size": 1550
 		}
 	]
 }

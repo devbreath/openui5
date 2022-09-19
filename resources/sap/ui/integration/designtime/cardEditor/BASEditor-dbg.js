@@ -124,7 +124,7 @@ sap.ui.define([
 					oItem = merge({}, oCopyConfig.form.items[n]);
 					if (!mParameters[n]) {
 						if (mParametersInDesigntime[n]) {
-							if (oItem.type === "group" || oItem.type === "separator") {
+							if (oItem.type === "group" || oItem.type === "separater") {
 								mParameters[n] = {};
 							} else if (oItem.manifestpath && !oItem.manifestpath.startsWith("/sap.card/configuration/parameters")) {
 								var sPath = oItem.manifestpath;

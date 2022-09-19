@@ -84,7 +84,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.editor.fields.ObjectField
 	 * @author SAP SE
 	 * @since 1.100.0
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @private
 	 * @experimental since 1.100.0
 	 * @ui5-restricted

@@ -30,7 +30,6 @@
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/ui/mdc/themes/sap_bluecrystal/library-parameters.json",
 			"size": 382,
 			"theme": "sap_bluecrystal"
 		},
@@ -60,10 +59,6 @@
 			"name": "library_skeleton.css",
 			"size": 17232,
 			"theme": "sap_bluecrystal"
-		},
-		{
-			"name": "resources.json",
-			"size": 1240
 		}
 	]
 }

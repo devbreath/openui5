@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define([],function(){"use strict";function t(t,e,o){if(o!==""||o.toLowerCase()==="auto"){t.style(e,o)}}var e={apiVersion:2};e.render=function(e,o){e.openStart("iframe",o);t(e,"width",o.getWidth());t(e,"height",o.getHeight());e.style("display","block");e.style("border","none");e.attr("sandbox","allow-forms allow-popups allow-scripts allow-same-origin allow-modals");e.attr("src",o.getUrl());var r=o.getTitle();if(r){e.attr("title",r)}e.openEnd();e.close("iframe")};return e},true);
-//# sourceMappingURL=IFrameRenderer.js.map
+sap.ui.define([],function(){"use strict";function _(r,d,v){if(v!==""||v.toLowerCase()==="auto"){r.style(d,v);}}var I={apiVersion:2};I.render=function(r,i){r.openStart("iframe",i);_(r,"width",i.getWidth());_(r,"height",i.getHeight());r.style("display","block");r.style("border","none");r.attr("sandbox","allow-forms allow-popups allow-scripts allow-same-origin allow-modals");r.attr("src",i.getUrl());var t=i.getTitle();if(t){r.attr("title",t);}r.openEnd();r.close("iframe");};return I;},true);

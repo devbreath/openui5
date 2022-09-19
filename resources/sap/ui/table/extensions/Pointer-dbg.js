@@ -723,9 +723,7 @@ sap.ui.define([
 
 			if (oCellInfo.isOfType(TableUtils.CELLTYPE.COLUMNHEADER)) {
 				var oPointerExtension = this._getPointerExtension();
-				var oColumn = this.getColumns()[oCellInfo.columnIndex];
-
-				if (oPointerExtension._bShowMenu && !oColumn._isMenuOpen()) {
+				if (oPointerExtension._bShowMenu) {
 					TableUtils.Menu.openContextMenu(this, oEvent.target);
 					delete oPointerExtension._bShowMenu;
 				}
@@ -798,7 +796,7 @@ sap.ui.define([
 	 * @class Extension for sap.ui.table.Table which handles mouse and touch related things.
 	 * @extends sap.ui.table.extensions.ExtensionBase
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @alias sap.ui.table.extensions.Pointer

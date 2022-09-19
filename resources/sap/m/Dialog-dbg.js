@@ -178,7 +178,7 @@ function(
 		*
 		* @implements sap.ui.core.PopupInterface
 		* @author SAP SE
-		* @version 1.106.0
+		* @version 1.105.1
 		*
 		* @constructor
 		* @public
@@ -1267,12 +1267,7 @@ function(
 			oPosition = {
 				top: Math.round(oAreaDimensions.top + iTop)
 			};
-
-			if (this._bRTL) {
-				oPosition.right = Math.round(window.innerWidth - oAreaDimensions.right + iLeft);
-			} else {
-				oPosition.left = Math.round(oAreaDimensions.left + iLeft);
-			}
+			oPosition[this._bRTL ? "right" : "left"] = Math.round(oAreaDimensions.left + iLeft);
 
 			return oPosition;
 		};

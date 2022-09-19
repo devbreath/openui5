@@ -32,7 +32,7 @@
 		},
 		{
 			"name": "DynamicPageTitle.less",
-			"size": 4512,
+			"size": 4468,
 			"designtime": true,
 			"theme": "sap_horizon_dark"
 		},
@@ -91,23 +91,22 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 107426,
+			"size": 105686,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/f/themes/sap_horizon_dark/library-parameters.json",
 			"size": 1916,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library.css",
-			"size": 107438,
+			"size": 105698,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library.less",
-			"size": 30116,
+			"size": 30072,
 			"designtime": true,
 			"theme": "sap_horizon_dark"
 		},
@@ -119,17 +118,13 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 110182,
+			"size": 108381,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 110195,
+			"size": 108394,
 			"theme": "sap_horizon_dark"
-		},
-		{
-			"name": "resources.json",
-			"size": 2486
 		}
 	]
 }

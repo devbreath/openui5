@@ -19,7 +19,7 @@ sap.ui.define([
 	 * @extends sap.f.cards.loading.ListPlaceholder
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @private

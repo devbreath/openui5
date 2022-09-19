@@ -20,7 +20,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class Base type for <code>MultiValueFieldItem</code> control.
 	 * @extends sap.ui.core.Element
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @abstract
 	 * @private

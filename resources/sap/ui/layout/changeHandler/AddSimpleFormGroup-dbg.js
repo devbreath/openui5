@@ -17,7 +17,7 @@ sap.ui.define([
 		* Change handler for adding a simple form group.
 		* @alias sap.ui.layout.changeHandler.AddSimpleFormGroup
 		* @author SAP SE
-		* @version 1.106.0
+		* @version 1.105.1
 		* @experimental Since 1.27.0
 		*/
 	var AddSimpleFormGroup = {};
@@ -190,8 +190,8 @@ sap.ui.define([
 	AddSimpleFormGroup.getControlIdFromChangeContent = function (oChange) {
 		var sControlId;
 
-		if (oChange && oChange.getContent()) {
-			sControlId = oChange.getContent().group.id;
+		if (oChange && oChange._oDefinition) {
+			sControlId = oChange._oDefinition.content.group.id;
 		}
 
 		return sControlId;
@@ -229,10 +229,9 @@ sap.ui.define([
 
 	AddSimpleFormGroup.getChangeVisualizationInfo = function(oChange, oAppComponent) {
 		var oSelector = oChange.getContent().group.selector;
-		var oAffectedGroup = JsControlTreeModifier.bySelector(oSelector, oAppComponent).getId();
+		var oAffectedGroup = JsControlTreeModifier.bySelector(oSelector, oAppComponent).getParent().getId();
 		return {
-			affectedControls: [oAffectedGroup],
-			hasParentWithUnstableId: true
+			affectedControls: [oAffectedGroup]
 		};
 	};
 

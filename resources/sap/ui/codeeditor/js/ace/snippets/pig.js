@@ -1,2 +1,1 @@
-(function(){ace.require(["ace/snippets/pig"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
-//# sourceMappingURL=pig.js.map
+;(function(){ace.require(["ace/snippets/pig"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();

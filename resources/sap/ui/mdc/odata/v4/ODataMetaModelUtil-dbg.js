@@ -11,7 +11,6 @@ sap.ui.define(["sap/ui/mdc/util/TypeUtil"], function(TypeUtil) {
 	 *
 	 * @private
 	 * @since 1.62
-	 * @deprecated This module should not be used and will be removed in future versions!
 	 */
 	var util = function() {};
 

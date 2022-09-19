@@ -69,13 +69,13 @@ sap.ui.define([
 	 * @namespace
 	 * @alias sap.m
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @since 1.4
 	 * @public
 	 */
 	var thisLib = sap.ui.getCore().initLibrary({
 		name : "sap.m",
-		version: "1.106.0",
+		version: "1.105.1",
 		dependencies : ["sap.ui.core"],
 		designtime: "sap/m/designtime/library.designtime",
 		types: [
@@ -179,7 +179,6 @@ sap.ui.define([
 			"sap.m.WrappingType",
 			"sap.m.WizardRenderMode",
 			"sap.m.semantic.SemanticRuleSetType",
-			"sap.m.table.columnmenu.Category",
 			"sap.m.upload.UploaderHttpRequestMethod"
 		],
 		interfaces: [
@@ -2419,16 +2418,7 @@ sap.ui.define([
 		* The image is rendered with 'span' tag and the 'src' property is set to the 'background-image' CSS style on the output DOM element
 		* @public
 		*/
-		Background: "Background",
-
-		/**
-		* The image is rendered with 'div' tag, containing the inline 'svg'
-		* <b>Note:</b> Please, be aware that this feature works under the Browser's Cross-Origin Resource Sharing (CORS) policy.
-		* This means that a web application using those APIs can only request resources from the same origin the application was loaded from unless the response from other origins includes the right CORS headers.
-		* @public
-		* @experimental since 1.106
-		*/
-		InlineSvg: "InlineSvg"
+		Background: "Background"
 
 	};
 
@@ -4201,25 +4191,6 @@ sap.ui.define([
 		 */
 		Optimized : "Optimized"
 
-	};
-
-
-	thisLib.table = thisLib.table || {};
-	thisLib.table.columnmenu = thisLib.table.columnmenu || {};
-
-	/**
-	 * Categories of column menu entries.
-	 *
-	 * @enum {string}
-	 * @private
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
-	 */
-	thisLib.table.columnmenu.Category = {
-		Sort: "Sort",
-		Filter: "Filter",
-		Group: "Group",
-		Aggregate: "Aggregate",
-		Generic: "Generic"
 	};
 
 

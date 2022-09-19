@@ -294,7 +294,7 @@ sap.ui.define([
 			 * @param {number} [iPart]
 			 *   index of part in case of the root formatter of a composite binding
 			 *   (since 1.31.0)
-			 * @returns {sap.ui.model.Model|undefined}
+			 * @returns {sap.ui.model.Model}
 			 *   the model related to the current formatter call, or (since 1.31.0)
 			 *   <code>undefined</code> in case of a root formatter if no <code>iPart</code> is
 			 *   given or if <code>iPart</code> is out of range
@@ -310,7 +310,7 @@ sap.ui.define([
 			 *
 			 * @param {number} [iPart]
 			 *   index of part in case of the root formatter of a composite binding (since 1.31.0)
-			 * @returns {string|undefined}
+			 * @returns {string}
 			 *   the absolute path related to the current formatter call, or (since 1.31.0)
 			 *   <code>undefined</code> in case of a root formatter if no <code>iPart</code> is
 			 *   given or if <code>iPart</code> is out of range

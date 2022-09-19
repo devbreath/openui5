@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(function(){"use strict";var t={Global:"Global",Auto:"Auto",Transient:"Transient"};return t},true);
-//# sourceMappingURL=PersistenceMode.js.map
+sap.ui.define(function(){"use strict";var P={Global:"Global",Auto:"Auto",Transient:"Transient"};return P;},true);

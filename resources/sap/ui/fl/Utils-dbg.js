@@ -6,7 +6,6 @@
 
 sap.ui.define([
 	"sap/base/strings/formatMessage",
-	"sap/base/util/ObjectPath",
 	"sap/base/util/isPlainObject",
 	"sap/base/util/uid",
 	"sap/base/util/UriParameters",
@@ -17,10 +16,9 @@ sap.ui.define([
 	"sap/ui/core/Component",
 	"sap/ui/fl/Scenario",
 	"sap/ui/thirdparty/hasher",
-	"sap/ui/core/mvc/View"
+	"sap/ui/thirdparty/jquery"
 ], function(
 	formatMessage,
-	ObjectPath,
 	isPlainObject,
 	uid,
 	UriParameters,
@@ -31,7 +29,7 @@ sap.ui.define([
 	Component,
 	Scenario,
 	hasher,
-	View
+	jQuery
 ) {
 	"use strict";
 
@@ -41,13 +39,13 @@ sap.ui.define([
 	 * @namespace
 	 * @alias sap.ui.fl.Utils
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @ui5-restricted sap.ui.fl, sap.ui.rta
 	 */
 	var Utils = {
-		APP_ID_AT_DESIGN_TIME: "${pro" + "ject.art" + "ifactId}", //avoid replaced by content of ${project.artifactId} placeholder at build steps
+		APP_ID_AT_DESIGN_TIME: "${pro" + "ject.art" + "ifactId}", //avoid replaced by content of sap.ui.fl placeholder at build steps
 		VARIANT_MODEL_NAME: "$FlexVariants",
 
 		/**
@@ -348,7 +346,7 @@ sap.ui.define([
 		 * @ui5-restricted sap.ui.fl
 		 */
 		getViewForControl: function(oControl) {
-			return Utils.getFirstAncestorOfControlWithControlType(oControl, View);
+			return Utils.getFirstAncestorOfControlWithControlType(oControl, sap.ui.core.mvc.View);
 		},
 
 		getFirstAncestorOfControlWithControlType: function(oControl, controlType) {
@@ -488,9 +486,11 @@ sap.ui.define([
 		asciiToString: function(ascii) {
 			var asciiArray = ascii.split(",");
 			var parsedString = "";
-			for (var i = 0; i < asciiArray.length; i++) {
-				parsedString += String.fromCharCode(asciiArray[i]);
-			}
+
+			jQuery.each(asciiArray, function(index, asciiChar) {
+				parsedString += String.fromCharCode(asciiChar);
+			});
+
 			return parsedString;
 		},
 
@@ -569,8 +569,7 @@ sap.ui.define([
 		 * @returns {object|undefined} Returns UShell container object if available or undefined
 		 */
 		getUshellContainer: function() {
-			// TODO wait until  FLP does offer anything
-			return ObjectPath.get("sap.ushell.Container");
+			return sap.ushell && sap.ushell.Container;
 		},
 
 		createDefaultFileName: function(sNameAddition) {
@@ -791,7 +790,7 @@ sap.ui.define([
 					}
 				})
 				.catch(function(e) {
-					var sErrorMessage = "Error during execPromiseQueueSequentially processing occurred";
+					var sErrorMessage = "Error during execPromiseQueueSequentially processing occured";
 					sErrorMessage += e ? ": " + e.message : "";
 					Log.error(sErrorMessage, e);
 

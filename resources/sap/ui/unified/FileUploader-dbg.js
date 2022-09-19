@@ -63,7 +63,7 @@ sap.ui.define([
 	 * @implements sap.ui.core.IFormContent, sap.ui.unified.IProcessableBlobs
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -1048,12 +1048,7 @@ sap.ui.define([
 		this.setProperty("enabled", bEnabled);
 		this.oFilePath.setEnabled(bEnabled);
 		this.oBrowse.setEnabled(bEnabled);
-
-		if (this.getEnabled()) {
-			$oFileUpload.removeAttr('disabled');
-		} else {
-			$oFileUpload.attr('disabled', 'disabled');
-		}
+		bEnabled ? $oFileUpload.removeAttr('disabled') : $oFileUpload.attr('disabled', 'disabled');
 
 		return this;
 	};

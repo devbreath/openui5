@@ -39,7 +39,7 @@ sap.ui.define([
 	 * @class
 	 * The column menu provides all common actions that can be performed on a column.
 	 * @extends sap.ui.unified.Menu
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -265,18 +265,7 @@ sap.ui.define([
 				"TBL_GROUP",
 				null,
 				function() {
-					var oDomRef;
 					oTable.setGroupBy(oColumn);
-
-					if (TableUtils.isNoDataVisible(oTable)) {
-						oDomRef = oTable.getDomRef("noDataCnt");
-					} else {
-						oDomRef = oTable.getDomRef("rowsel0");
-					}
-
-					if (oDomRef) {
-						oDomRef.focus();
-					}
 				}
 			));
 		}
@@ -367,10 +356,6 @@ sap.ui.define([
 						});
 					}
 					if (bExecuteDefault) {
-						if (oTable.getFocusDomRef().getAttribute("id") === oColumn.getId()) {
-							var aVisibleColumns = oTable._getVisibleColumns();
-							aVisibleColumns[Math.min(aVisibleColumns.indexOf(oColumn) + 1, TableUtils.getVisibleColumnCount(oTable) - 2)].focus();
-						}
 						oColumn.setVisible(bVisible);
 					}
 				}
@@ -419,7 +404,7 @@ sap.ui.define([
 
 
 	/**
-	 * Sets a new filter value into the filter field
+	 * sets a new filter value into the filter field
 	 * @param {string} sValue value of the filter input field to be set
 	 * @returns {this} this reference for chaining
 	 * @private
@@ -436,7 +421,7 @@ sap.ui.define([
 	};
 
 	/**
-	 * Sets the value state of the filter field
+	 * sets a new filter value into the filter field
 	 * @param {sap.ui.core.ValueState} sFilterState value state for filter text field item
 	 * @returns {this} this reference for chaining
 	 * @private

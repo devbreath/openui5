@@ -32,15 +32,10 @@ sap.ui.define([],
 				getTextMutators: function (oControl) {
 					return {
 						getText: function () {
-							return oControl.getDomRef().shadowRoot.querySelector(".ui5-panel-header-title").textContent;
+							return oControl.getDomRef().getAttribute("header-text");
 						},
 						setText: function (sNewText) {
-							var oTitleElement = oControl.getDomRef().shadowRoot.querySelector(".ui5-panel-header-title");
-							var oTextNode = [].find.call(oTitleElement.childNodes, function (el) {
-								return el.nodeType === 3;
-							});
-
-							oTextNode.nodeValue = sNewText;
+							oControl.getDomRef().setAttribute("header-text", sNewText);
 						}
 					};
 				}

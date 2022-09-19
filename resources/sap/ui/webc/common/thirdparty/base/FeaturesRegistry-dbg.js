@@ -1,21 +1,16 @@
-sap.ui.define(["exports"], function (_exports) {
-  "use strict";
+sap.ui.define(['exports'], function (exports) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.registerFeature = _exports.getFeature = void 0;
-  const features = new Map();
+	const features = new Map();
+	const registerFeature = (name, feature) => {
+		features.set(name, feature);
+	};
+	const getFeature = name => {
+		return features.get(name);
+	};
 
-  const registerFeature = (name, feature) => {
-    features.set(name, feature);
-  };
+	exports.getFeature = getFeature;
+	exports.registerFeature = registerFeature;
 
-  _exports.registerFeature = registerFeature;
+	Object.defineProperty(exports, '__esModule', { value: true });
 
-  const getFeature = name => {
-    return features.get(name);
-  };
-
-  _exports.getFeature = getFeature;
 });

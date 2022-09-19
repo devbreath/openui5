@@ -126,7 +126,7 @@ sap.ui.define([
 	 * Returns the object with keys and values from which this enum type was created
 	 * or <code>undefined</code> if this is not an enum type.
 	 *
-	 * @returns {object|undefined} Object with enum keys and values or <code>undefined</code>
+	 * @returns {object} Object with enum keys and values or <code>undefined</code>
 	 * @public
 	 */
 	DataType.prototype.getEnumValues = function() {

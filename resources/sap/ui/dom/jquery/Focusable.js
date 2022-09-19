@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/ui/thirdparty/jquery","sap/ui/dom/isHidden","./hasTabIndex"],function(jQuery,i){"use strict";function n(e,r){var t=r?e.firstChild:e.lastChild,u;while(t){if(t.nodeType==1&&!i(t)){if(jQuery(t).hasTabIndex()){return t}u=n(t,r);if(u){return u}}t=r?t.nextSibling:t.previousSibling}return null}jQuery.fn.firstFocusableDomRef=function(){var e=this.get(0);if(!e||i(e)){return null}return n(e,true)};jQuery.fn.lastFocusableDomRef=function(){var e=this.get(0);if(!e||i(e)){return null}return n(e,false)};return jQuery});
-//# sourceMappingURL=Focusable.js.map
+sap.ui.define(["sap/ui/thirdparty/jquery","sap/ui/dom/isHidden","./hasTabIndex"],function(q,i){"use strict";function f(c,F){var C=F?c.firstChild:c.lastChild,o;while(C){if(C.nodeType==1&&!i(C)){if(q(C).hasTabIndex()){return C;}o=f(C,F);if(o){return o;}}C=F?C.nextSibling:C.previousSibling;}return null;}q.fn.firstFocusableDomRef=function(){var c=this.get(0);if(!c||i(c)){return null;}return f(c,true);};q.fn.lastFocusableDomRef=function(){var c=this.get(0);if(!c||i(c)){return null;}return f(c,false);};return q;});

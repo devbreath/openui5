@@ -27,7 +27,6 @@ sap.ui.define([
 	"sap/ui/integration/util/BindingHelper",
 	"sap/ui/integration/util/BindingResolver",
 	"sap/ui/integration/util/Utils",
-	"sap/ui/integration/util/Forms",
 	"sap/f/AvatarGroup",
 	"sap/f/AvatarGroupItem",
 	"sap/f/cards/NumericIndicators",
@@ -60,7 +59,6 @@ sap.ui.define([
 	BindingHelper,
 	BindingResolver,
 	Utils,
-	Forms,
 	AvatarGroup,
 	AvatarGroupItem,
 	NumericIndicators,
@@ -102,7 +100,7 @@ sap.ui.define([
 	 *
 	 * @extends sap.ui.integration.cards.BaseContent
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @since 1.64
@@ -118,8 +116,6 @@ sap.ui.define([
 	ObjectContent.prototype.exit = function() {
 		BaseContent.prototype.exit.apply(this, arguments);
 
-		delete this._aValidationControls;
-
 		if (this._sResizeListenerId) {
 			ResizeHandler.deregister(this._sResizeListenerId);
 			this._sResizeListenerId = "";
@@ -131,27 +127,6 @@ sap.ui.define([
 	 */
 	ObjectContent.prototype.onDataChanged = function () {
 		this._handleNoItemsError(this.getParsedConfiguration().hasData);
-		this._validateInputFields(false);
-	};
-
-	ObjectContent.prototype.validateControls = function () {
-		this._validateInputFields(true);
-	};
-
-	ObjectContent.prototype._validationControlChanged = function (oEvent) {
-		Forms.validateControl(oEvent.getSource(), this.getCardInstance(), true);
-	};
-
-	ObjectContent.prototype._validateInputFields = function (bShowValueState) {
-		(this._aValidationControls || []).forEach(function (oControl) {
-			Forms.validateControl(oControl, this.getCardInstance(), bShowValueState);
-		}.bind(this));
-	};
-
-	ObjectContent.prototype._prepareValidationControl = function (oControl, oItem, sChangeFunction) {
-		oControl.attachEvent(sChangeFunction, this._validationControlChanged.bind(this));
-		this._aValidationControls.push(oControl);
-		oControl._oItem = oItem;
 	};
 
 	/**
@@ -181,8 +156,6 @@ sap.ui.define([
 			return this;
 		}
 
-		this._aValidationControls = [];
-
 		if (oConfiguration.groups) {
 			this._addGroups(oConfiguration);
 		}
@@ -210,7 +183,6 @@ sap.ui.define([
 			oAFLayout,
 			bNextAFLayout = true,
 			aGroups = oConfiguration.groups || [];
-		this._formElementsIds = new Set();
 
 		aGroups.forEach(function (oGroupConfiguration, i) {
 			var oGroup = this._createGroup(oGroupConfiguration);
@@ -259,16 +231,14 @@ sap.ui.define([
 		}).addStyleClass("sapFCardObjectGroup");
 
 		if (oGroupConfiguration.title) {
-			oGroup.addItem(new Text({
-				text: oGroupConfiguration.title,
-				maxLines: oGroupConfiguration.titleMaxLines || 1
-			}).addStyleClass("sapFCardObjectItemTitle sapMTitle sapMTitleStyleAuto"));
+			oGroup.addItem(new Title({
+				text: oGroupConfiguration.title
+			}).addStyleClass("sapFCardObjectItemTitle"));
 
 			oGroup.addStyleClass("sapFCardObjectGroupWithTitle");
 		}
 
 		oGroupConfiguration.items.forEach(function (oItem) {
-			oItem.labelWrapping = oGroupConfiguration.labelWrapping;
 			this._createGroupItems(oItem).forEach(oGroup.addItem, oGroup);
 		}, this);
 
@@ -295,8 +265,7 @@ sap.ui.define([
 
 			oLabel = new Label({
 				text: vLabel,
-				visible: vVisible,
-				wrapping: oItem.labelWrapping
+				visible: vVisible
 			}).addStyleClass("sapFCardObjectItemLabel");
 
 			oLabel.addEventDelegate({
@@ -320,18 +289,12 @@ sap.ui.define([
 					oLabel,
 					oControl
 				]
-			}).addStyleClass("sapFCardObjectItemPairContainer");
-
-			var oAvatar = this._createGroupItemAvatar(oItem.icon);
-			oAvatar.setLayoutData(new FlexItemData({
-				shrinkFactor: 0
-			}));
-
+			});
 			var oHBox = new HBox({
 				visible: vVisible,
 				renderType: FlexRendertype.Bare,
 				items: [
-					oAvatar,
+					this._createGroupItemAvatar(oItem.icon),
 					oVbox
 				]
 			}).addStyleClass("sapFCardObjectItemLabel");
@@ -633,8 +596,7 @@ sap.ui.define([
 			oFormModel = oCard.getModel("form"),
 			oSettings = {
 				visible: BindingHelper.reuse(vVisible),
-				placeholder: oItem.placeholder,
-				required: Forms.getRequiredValidationValue(oItem)
+				placeholder: oItem.placeholder
 			},
 			oControl,
 			oItemTemplate,
@@ -668,11 +630,7 @@ sap.ui.define([
 		if (!oItem.id) {
 			Log.error("Each input element must have an ID.", "sap.ui.integration.widgets.Card");
 			return oControl;
-		} else if (this._formElementsIds.has(oItem.id)) {
-			Log.error("Duplicate form element ID - " + "'" + oItem.id + "'" , "sap.ui.integration.widgets.Card");
 		}
-
-		this._formElementsIds.add(oItem.id);
 
 		fnUpdateValue = function () {
 			oFormModel.setProperty("/" + oItem.id, {
@@ -685,7 +643,6 @@ sap.ui.define([
 		oControl.addEventDelegate({
 			onAfterRendering: fnUpdateValue
 		});
-		this._prepareValidationControl(oControl, oItem, "change");
 
 		return oControl;
 	};
@@ -694,7 +651,6 @@ sap.ui.define([
 		var oCard = this.getCardInstance(),
 			oFormModel = oCard.getModel("form"),
 			oControl = new TextArea({
-				required: Forms.getRequiredValidationValue(oItem),
 				value: oItem.value,
 				visible: BindingHelper.reuse(vVisible),
 				rows: oItem.rows,
@@ -709,11 +665,7 @@ sap.ui.define([
 		if (!oItem.id) {
 			Log.error("Each input element must have an ID.", "sap.ui.integration.widgets.Card");
 			return oControl;
-		} else if (this._formElementsIds.has(oItem.id)) {
-			Log.error("Duplicate form element ID - " + "'" + oItem.id + "'" , "sap.ui.integration.widgets.Card");
 		}
-
-		this._formElementsIds.add(oItem.id);
 
 		fnUpdateValue = function () {
 			oFormModel.setProperty("/" + oItem.id, oControl.getValue());
@@ -723,7 +675,6 @@ sap.ui.define([
 		oControl.addEventDelegate({
 			onAfterRendering: fnUpdateValue
 		});
-		this._prepareValidationControl(oControl, oItem, "liveChange");
 
 		return oControl;
 	};

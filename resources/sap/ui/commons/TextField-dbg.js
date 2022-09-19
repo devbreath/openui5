@@ -50,7 +50,7 @@ sap.ui.define([
 	 * @implements sap.ui.commons.ToolbarItem, sap.ui.core.IFormContent
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -682,7 +682,7 @@ sap.ui.define([
 
 	/**
 	 * Method for accessing the DOM Ref of the input element.
-	 * @returns {HTMLElement|null} DOM reference or <code>null</code>
+	 * @return {object} DOM reference or null
 	 * @protected
 	 */
 	TextField.prototype.getInputDomRef = function(){

@@ -74,13 +74,13 @@
 		},
 		{
 			"name": "GridList.less",
-			"size": 2457,
+			"size": 2455,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "GridListItem.less",
-			"size": 2665,
+			"size": 2663,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -127,12 +127,6 @@
 			"theme": "base"
 		},
 		{
-			"name": "TimelinePlaceholder.less",
-			"size": 1439,
-			"designtime": true,
-			"theme": "base"
-		},
-		{
 			"name": "css_variables.css",
 			"size": 4267,
 			"theme": "base"
@@ -151,45 +145,40 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 72617,
+			"size": 70879,
 			"theme": "base"
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/f/themes/base/library-parameters.json",
 			"size": 1735,
 			"theme": "base"
 		},
 		{
 			"name": "library.css",
-			"size": 72617,
+			"size": 70879,
 			"theme": "base"
 		},
 		{
 			"name": "library.less",
-			"size": 70251,
+			"size": 68730,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "library.source.less",
-			"size": 921,
+			"size": 885,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 74822,
+			"size": 73090,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 74823,
+			"size": 73091,
 			"theme": "base"
-		},
-		{
-			"name": "resources.json",
-			"size": 3239
 		}
 	]
 }

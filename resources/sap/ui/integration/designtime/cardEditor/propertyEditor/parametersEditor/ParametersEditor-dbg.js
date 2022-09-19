@@ -45,7 +45,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.designtime.cardEditor.propertyEditor.parametersEditor.ParametersEditor
 	 * @author SAP SE
 	 * @since 1.70
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @experimental 1.70
@@ -179,7 +179,7 @@ sap.ui.define([
 				allowBindings: true,
 				enabled: true,
 				visible: sType === "date" || sType === "datetime" || sType === "number" || sType === "integer",
-				type: "code",
+				type: "textArea",
 				itemKey: sKey
 			},
 			{
@@ -289,9 +289,9 @@ sap.ui.define([
 				path: "visualization",
 				allowBindings: true,
 				value: oVisualization,
-				visible: sType !== "separator" && sType !== "object" && sType !== "objectArray",
+				visible: sType !== "separator",
 				placeholder: this.getI18nProperty("CARD_EDITOR.PARAMETERS.VISUALIZATION.PLACEHOLDER"),
-				type: "code",
+				type: "textArea",
 				itemKey: sKey
 			},
 			{
@@ -299,10 +299,9 @@ sap.ui.define([
 				path: "validations",
 				allowBindings: true,
 				value: oValidations,
-				visible: sType === "string" || sType === "number" || sType === "integer" || sType === "boolean",
+				visible: sType === "string" || sType === "number" || sType === "integer",
 				placeholder: this.getI18nProperty("CARD_EDITOR.PARAMETERS.VALIDATIONS.PLACEHOLDER"),
-				type: "code",
-				codeType: "javascript",
+				type: "textArea",
 				itemKey: sKey
 			},
 			{
@@ -312,7 +311,7 @@ sap.ui.define([
 				value: oValues,
 				visible: sType === "string" || sType === "array" || sType === "object" || sType === "objectArray",
 				placeholder: this.getI18nProperty("CARD_EDITOR.PARAMETERS.VALUES.PLACEHOLDER"),
-				type: "code",
+				type: "textArea",
 				itemKey: sKey
 			},
 			{
@@ -322,7 +321,7 @@ sap.ui.define([
 				value: oProperties,
 				visible: sType === "object" || sType === "objectArray",
 				placeholder: this.getI18nProperty("CARD_EDITOR.PARAMETERS.PROPERTIES.PLACEHOLDER"),
-				type: "code",
+				type: "textArea",
 				itemKey: sKey
 			},
 			{
@@ -332,7 +331,7 @@ sap.ui.define([
 				value: oLayout,
 				visible: sType !== "group" && sType !== "separator",
 				placeholder: this.getI18nProperty("CARD_EDITOR.PARAMETERS.LAYOUT.PLACEHOLDER"),
-				type: "code",
+				type: "textArea",
 				itemKey: sKey
 			}
 		);

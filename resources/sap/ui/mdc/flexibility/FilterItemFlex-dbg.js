@@ -12,7 +12,7 @@ sap.ui.define(['./ItemBaseFlex'], function(ItemBaseFlex) {
 	 *
 	 * @alias sap.ui.mdc.flexibility.FilterBar
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 */
 
 	var oFilterItemFlex = Object.assign({}, ItemBaseFlex);

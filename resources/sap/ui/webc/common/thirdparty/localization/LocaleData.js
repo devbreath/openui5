@@ -1,2 +1,1 @@
-sap.ui.define(["exports","sap/ui/core/LocaleData"],function(e,t){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;t=u(t);function u(e){return e&&e.__esModule?e:{default:e}}var a=t.default;e.default=a});
-//# sourceMappingURL=LocaleData.js.map
+sap.ui.define(["sap/ui/core/LocaleData"],function(e){"use strict";function t(e){return e&&typeof e==="object"&&"default"in e?e["default"]:e}var u=t(e);return u});

@@ -25,7 +25,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new element
 	 * @class Content for the {@link sap.ui.mdc.valuehelp.base.Container Container} element showing a condition panel.
 	 * @extends sap.ui.mdc.valuehelp.base.Content
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -62,22 +62,6 @@ sap.ui.define([
 					}
 				},
 				aggregations: {
-				},
-				associations: {
-					/**
-					 * Optional <code>FieldHelp</code>.
-					 *
-					 * This is an association that allows the usage of one <code>FieldHelp</code> instance for the value fields for the <code>Conditions</code>.
-
-					 * <b>Note:</b> The value fields on the conditions UI are created by the used <code>DefineConditionPanel</code>. They cannot be accessed from outside.
-					 The fields are single-value input, and the display is always set to <code>FieldDisplay.Value</code>. Only a <code>ValueHelp>/code> with a <code>TypeAhead</code> and a single-selection <code>MTable</code> can be used.
-
-					 * <b>Note:</b> For <code>Boolean</code>, <code>Date</code>, or <code>Time</code> types, no <code>FieldHelp</code> should be added, but a default <code>FieldHelp</code> used instead.
-					 */
-					fieldHelp: {
-						type: "sap.ui.mdc.ValueHelp",
-						multiple: false
-					}
 				},
 				events: {}
 			}
@@ -124,8 +108,7 @@ sap.ui.define([
 							conditions: "{$help>/conditions}",
 							inputOK: "{$valueHelp>/_valid}",
 							formatOptions: {path: "$help>/config", formatter: _convertConfig}, // TODO: change DefineConditionPanel to use Config
-							conditionProcessed: _handleConditionProcessed.bind(this),
-							fieldHelp: this.getFieldHelp() //TODO FieldHelp can only be set once and not modified?
+							conditionProcessed: _handleConditionProcessed.bind(this)
 						}
 					).setModel(this._oManagedObjectModel, "$help");
 

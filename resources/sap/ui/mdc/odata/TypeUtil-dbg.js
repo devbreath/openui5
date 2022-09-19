@@ -21,7 +21,6 @@ sap.ui.define([
 	 * @experimental As of version 1.79
 	 * @since 1.79.0
 	 * @alias sap.ui.mdc.odata.TypeUtil
-	 * @deprecated This module should not be used and will be removed in future versions!
 	 */
 	var TypeUtil = Object.assign({}, BaseTypeUtil, {
 

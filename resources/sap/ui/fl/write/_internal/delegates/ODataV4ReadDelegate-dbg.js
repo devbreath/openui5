@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-sap.ui.define(["sap/ui/base/Object"], function(BaseObject) {
+sap.ui.define([], function() {
 	"use strict";
 	/**
 	 * Is property of complex type.
@@ -88,7 +88,7 @@ sap.ui.define(["sap/ui/base/Object"], function(BaseObject) {
 		var sFieldControlPath = mFieldControlAnnotation && mFieldControlAnnotation.Path;
 		if (sFieldControlPath && !mProp.hideFromReveal) {
 			// if the binding is a list binding, skip the check for field control
-			var bListBinding = BaseObject.isA(oElement.getBinding(sAggregationName), "sap/ui/model/ListBinding");
+			var bListBinding = oElement.getBinding(sAggregationName) instanceof sap.ui.model.ListBinding;
 			if (!bListBinding) {
 				var iFieldControlValue = oElement.getBindingContext().getProperty(sFieldControlPath);
 				mProp.hideFromReveal = iFieldControlValue === 0;

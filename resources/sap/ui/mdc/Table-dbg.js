@@ -19,7 +19,6 @@ sap.ui.define([
 	"sap/m/ColumnPopoverSelectListItem",
 	"sap/m/OverflowToolbar",
 	"sap/m/library",
-	"sap/m/table/Util",
 	"sap/m/table/columnmenu/Menu",
 	"sap/ui/core/Core",
 	"sap/ui/core/format/NumberFormat",
@@ -59,7 +58,6 @@ sap.ui.define([
 	ColumnPopoverSelectListItem,
 	OverflowToolbar,
 	MLibrary,
-	MTableUtil,
 	ColumnMenu,
 	Core,
 	NumberFormat,
@@ -92,7 +90,6 @@ sap.ui.define([
 	var P13nMode = library.TableP13nMode;
 	var ToolbarDesign = MLibrary.ToolbarDesign;
 	var ToolbarStyle = MLibrary.ToolbarStyle;
-	var IllustratedMessageType = MLibrary.IllustratedMessageType;
 	var MultiSelectMode = library.MultiSelectMode;
 	var TitleLevel = coreLibrary.TitleLevel;
 	var SortOrder = coreLibrary.SortOrder;
@@ -484,16 +481,7 @@ sap.ui.define([
 				dataStateIndicator: {
 					type: "sap.m.plugins.DataStateIndicator",
 					multiple: false
-				},
-
-				/**
-				 * Defines the custom visualization if there is no data to show in the table.
-				 *
-				 * <b>Note:</b> If {@link sap.m.IllustratedMessage} control is set for the <code>noData</code> aggregation and its {@link sap.m.IllustratedMessage#getTitle title} property is not set
-				 * then the table automatically offers a no data text with fitting {@link sap.m.IllustratedMessage.IllustratedMessageType illustration}.
-				 * @since 1.106
-				 */
-				noData: { type: "sap.ui.core.Control", multiple: false, altTypes: ["string"] }
+				}
 			},
 			associations: {
 				/**
@@ -857,12 +845,6 @@ sap.ui.define([
 				} else {
 					this._oTable.removeExtension(this._oToolbar);
 				}
-
-				// store and remove the noData otherwise it gets destroyed
-				var vNoData = this.getNoData();
-				this.setNoData();
-				this._vNoData = vNoData;
-
 				this._oTable.destroy("KeepDom");
 				this._oTable = null;
 				this._bTableExists = false;
@@ -1235,11 +1217,11 @@ sap.ui.define([
 
 	// Start: FilterIntegrationMixin hooks
 	Table.prototype._onFilterProvided = function(oFilter) {
-		this._updateInnerTableNoData();
+		this._updateInnerTableNoDataText();
 	};
 
 	Table.prototype._onFilterRemoved = function(oFilter) {
-		this._updateInnerTableNoData();
+		this._updateInnerTableNoDataText();
 	};
 
 	Table.prototype._onFiltersChanged = function(oEvent) {
@@ -1254,75 +1236,6 @@ sap.ui.define([
 	};
 	// End: FilterIntegrationMixin hooks
 
-	Table.prototype.setNoData = function(vNoData) {
-		this._vNoData = this.validateAggregation("noData", vNoData, false);
-		if (!this._oTable) {
-			return this;
-		}
-
-		if (vNoData && vNoData.isA && vNoData.isA("sap.m.IllustratedMessage")) {
-			this._sLastNoDataTitle = "";
-			vNoData.setEnableVerticalResponsiveness(!this._bMobileTable);
-
-			var oNoColumnsMessage = this._oTable.getAggregation("_noColumnsMessage");
-			if (!oNoColumnsMessage) {
-				var fnOpenColumnsPanel = TableSettings.showPanel.bind(TableSettings, this, "Columns");
-				oNoColumnsMessage = MTableUtil.getNoColumnsIllustratedMessage(fnOpenColumnsPanel);
-				oNoColumnsMessage.setEnableVerticalResponsiveness(!this._bMobileTable);
-				this._oTable.setAggregation("_noColumnsMessage", oNoColumnsMessage);
-			}
-		}
-
-		this._oTable.setNoData(vNoData);
-		this._updateInnerTableNoData();
-		return this;
-	};
-
-	Table.prototype.getNoData = function() {
-		return (this._vNoData && !this._vNoData.bIsDestroyed) ? this._vNoData : null;
-	};
-
-	Table.prototype.destroyNoData = function() {
-		if (this._oTable) {
-			this._oTable.destroyNoData(true);
-			this._vNoData = null;
-		}
-		return this;
-	};
-
-	Table.prototype._updateInnerTableNoData = function() {
-		var vNoData = this.getNoData();
-		if (!vNoData || typeof vNoData == "string") {
-			return this._updateInnerTableNoDataText();
-		}
-
-		if (!vNoData.isA("sap.m.IllustratedMessage") || this._sLastNoDataTitle != vNoData.getTitle()) {
-			return;
-		}
-
-		var oRb = Core.getLibraryResourceBundle("sap.ui.mdc");
-		if (!this.isTableBound()) {
-			vNoData.setDescription(" ");
-			if (this.getFilter()) {
-				vNoData.setTitle(oRb.getText("table.NO_DATA_WITH_FILTERBAR"));
-				vNoData.setIllustrationType(IllustratedMessageType.SearchEarth);
-			} else {
-				vNoData.setIllustrationType(IllustratedMessageType.EmptyList);
-				vNoData.setTitle(oRb.getText("table.NO_DATA"));
-			}
-		} else {
-			if (isFiltered(this)) {
-				vNoData.setTitle(oRb.getText("table.NO_RESULTS_TITLE"));
-				vNoData.setDescription(oRb.getText("table.NO_RESULTS_DESCRIPTION"));
-				vNoData.setIllustrationType(IllustratedMessageType.NoFilterResults);
-			} else {
-				vNoData.setTitle(oRb.getText("table.NO_DATA")).setDescription(" ");
-				vNoData.setIllustrationType(IllustratedMessageType.NoEntries);
-			}
-		}
-		this._sLastNoDataTitle = vNoData.getTitle();
-	};
-
 	Table.prototype.setNoDataText = function(sNoData) {
 		this.setProperty("noDataText", sNoData, true);
 		this._updateInnerTableNoDataText();
@@ -1330,8 +1243,14 @@ sap.ui.define([
 	};
 
 	Table.prototype._updateInnerTableNoDataText = function() {
-		if (this._oTable) {
-			this._oTable.setNoData(this._getNoDataText());
+		if (!this._oTable) {
+			return;
+		}
+		var sNoDataText = this._getNoDataText();
+		if (this._bMobileTable) {
+			this._oTable.setNoDataText(sNoDataText);
+		} else {
+			this._oTable.setNoData(sNoDataText);
 		}
 	};
 
@@ -1341,18 +1260,18 @@ sap.ui.define([
 			return sNoDataText;
 		}
 
-		var vNoData = this.getNoData();
-		if (vNoData && typeof vNoData == "string") {
-			return vNoData;
-		}
-
 		var oRb = Core.getLibraryResourceBundle("sap.ui.mdc");
+
 		if (!this.isTableBound()) {
-			return oRb.getText(this.getFilter() ? "table.NO_DATA_WITH_FILTERBAR" : "table.NO_DATA");
+			if (this.getFilter()) {
+				return oRb.getText("table.NO_DATA_WITH_FILTERBAR");
+			}
+			return oRb.getText("table.NO_DATA");
 		}
 
 		// Table is bound, but does not show any data.
-		// If the table is filtered internally or externally, e.g. FilterBar, then show the message that no data was found and that filters can be adjusted.
+		// If the table is filtered internally or externally, e.g. FilterBar, then show the message that no data was found and that filters can be
+		// adjusted.
 		if (isFiltered(this)) {
 			return oRb.getText("table.NO_RESULTS");
 		}
@@ -1963,7 +1882,7 @@ sap.ui.define([
 					this._onSelectionChange, this
 				],
 				growingThreshold: iThreshold,
-				noData: this._getNoDataText(),
+				noDataText: this._getNoDataText(),
 				headerToolbar: this._oToolbar,
 				ariaLabelledBy: [
 					this._oTitle
@@ -2026,11 +1945,6 @@ sap.ui.define([
 		this._oTable.addDragDropConfig(oDDI);
 
 		this._oTable.setBusyIndicatorDelay(this.getBusyIndicatorDelay());
-
-		// let the inner table get the nodata aggregation from the mdc table
-		if (this.getNoData()) {
-			this.setNoData(this.getNoData());
-		}
 
 		// Attach paste event
 		this._oTable.attachPaste(this._onInnerTablePaste, this);
@@ -2292,6 +2206,7 @@ sap.ui.define([
 			this._oTable.removeColumn(oInnerColumn);
 			this._oTable.insertColumn(oInnerColumn, iIndex);
 
+			this._setMobileColumnOrder();
 			this._updateMobileColumnTemplate(oColumn, iIndex);
 		}
 	};
@@ -2362,6 +2277,29 @@ sap.ui.define([
 				}
 			});
 		}
+	};
+
+	/**
+	 * Sets the column order for the responsive table. The order is set according to the index of the mdc columns.
+	 * Updating the responsive table's column order and invalidating avoid rebinds.
+	 * @private
+	 */
+	Table.prototype._setMobileColumnOrder = function() {
+		if (!this._bMobileTable) {
+			return;
+		}
+
+		this.getColumns().forEach(function(oColumn) {
+			var oInnerColumn = oColumn.getInnerColumn();
+			if (!oInnerColumn) {
+				return;
+			}
+			// since we ensure correct index of the mdcColumn control we can set the same order to the inner responsive table columns
+			oInnerColumn.setOrder(this.indexOfColumn(oColumn));
+		}, this);
+
+		// invalidate the inner table to apply the correct order on the UI. See sap.m.Column#setOrder
+		this._oTable.invalidate();
 	};
 
 	function removeMobileItemCell(oItem, iRemoveIndex, iInsertIndex) {
@@ -2533,7 +2471,7 @@ sap.ui.define([
 
 			this._updateColumnsBeforeBinding();
 			this.getControlDelegate().updateBinding(this, oBindingInfo, this._bForceRebind ? null : this.getRowBinding());
-			this._updateInnerTableNoData();
+			this._updateInnerTableNoDataText();
 			this._bForceRebind = false;
 		}
 	};
@@ -2780,17 +2718,6 @@ sap.ui.define([
 		});
 	};
 
-	//Due to flexibility handling an additional invalidation on the inner control might be necessary
-	//Note: ManagedObject#invalidate does not provide arguments - sReason will only be provided when called during mdc flex handling
-	Table.prototype.invalidate = function(sReason) {
-		if (sReason === "InvalidationSuppressedByMDCFlex" && this._oTable) {
-			// Invalidation might have been suppressed when applying column changes, for example. See sap.ui.mdc.flexibility.ItemBaseFlex.
-			// The inner table might react to an invalidation, so it needs to be called manually.
-			this._oTable.invalidate();
-		}
-		Control.prototype.invalidate.apply(this, arguments);
-	};
-
 	/**
 	 * Terminates the <code>MDCTable</code> control.
 	 * @private
@@ -2809,7 +2736,6 @@ sap.ui.define([
 		}
 		this._oToolbar = null;
 		this._oTitle = null;
-		this._vNoData = null;
 		this._oNumberFormatInstance = null;
 
 		aToolBarBetweenAggregations.forEach(function(sAggregationName) {

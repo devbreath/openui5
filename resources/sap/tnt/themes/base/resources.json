@@ -14,7 +14,7 @@
 		},
 		{
 			"name": "NavigationList.less",
-			"size": 6336,
+			"size": 6273,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -55,7 +55,6 @@
 		},
 		{
 			"name": "fonts/SAP-icons-TNT.json",
-			"module": "sap/tnt/themes/base/fonts/SAP-icons-TNT.json",
 			"size": 6484,
 			"theme": "base"
 		},
@@ -66,7 +65,6 @@
 		},
 		{
 			"name": "illustrations/metadata.json",
-			"module": "sap/tnt/themes/base/illustrations/metadata.json",
 			"size": 554,
 			"theme": "base"
 		},
@@ -597,23 +595,22 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 14170,
+			"size": 14108,
 			"theme": "base"
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/tnt/themes/base/library-parameters.json",
 			"size": 1896,
 			"theme": "base"
 		},
 		{
 			"name": "library.css",
-			"size": 14167,
+			"size": 14105,
 			"theme": "base"
 		},
 		{
 			"name": "library.less",
-			"size": 21352,
+			"size": 21289,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -625,17 +622,13 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 14323,
+			"size": 14261,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 14320,
+			"size": 14258,
 			"theme": "base"
-		},
-		{
-			"name": "resources.json",
-			"size": 12243
 		}
 	]
 }

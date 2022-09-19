@@ -55,7 +55,8 @@ sap.ui.define([
 	var PlacementType = library.PlacementType,
 		ButtonType = library.ButtonType,
 		// From Device.media.RANGESETS.SAP_STANDARD - "Phone": For screens smaller than 600 pixels.
-		STANDART_PHONE_RANGESET = "Phone";
+		STANDART_PHONE_RANGESET = "Phone",
+		CalendarType = coreLibrary.CalendarType;
 
 	/**
 	 * Constructor for a new <code>DateTimePicker</code>.
@@ -141,7 +142,7 @@ sap.ui.define([
 	 * mobile devices, it opens in full screen.
 	 *
 	 * @extends sap.m.DatePicker
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -662,7 +663,7 @@ sap.ui.define([
 		if (oFormatOptions.calendarType === undefined) {
 			oFormatOptions.calendarType = bDisplayFormat
 				? this.getDisplayFormatType()
-				: sap.ui.getCore().getConfiguration().getCalendarType();
+				: CalendarType.Gregorian;
 		}
 
 		if (oFormatOptions.strictParsing === undefined) {
@@ -820,10 +821,7 @@ sap.ui.define([
 
 	DateTimePicker.prototype._getPickerParser = function() {
 		if (!this._clocksParser) {
-			this._clocksParser = DateFormat.getDateTimeWithTimezoneInstance({
-				showTimezone: false,
-				calendarType: this.getDisplayFormatType()
-			});
+			this._clocksParser = DateFormat.getDateTimeWithTimezoneInstance({ showTimezone: false });
 		}
 
 		return this._clocksParser;

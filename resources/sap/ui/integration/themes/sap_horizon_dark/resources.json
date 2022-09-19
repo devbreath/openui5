@@ -7,12 +7,6 @@
 			"theme": "sap_horizon_dark"
 		},
 		{
-			"name": "ObjectContent.less",
-			"size": 310,
-			"designtime": true,
-			"theme": "sap_horizon_dark"
-		},
-		{
 			"name": "Paginator.less",
 			"size": 235,
 			"designtime": true,
@@ -37,45 +31,40 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 21591,
+			"size": 21287,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/ui/integration/themes/sap_horizon_dark/library-parameters.json",
 			"size": 574,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library.css",
-			"size": 21582,
+			"size": 21281,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library.less",
-			"size": 1198,
+			"size": 822,
 			"designtime": true,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library.source.less",
-			"size": 393,
+			"size": 363,
 			"designtime": true,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 22261,
+			"size": 21957,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 22252,
+			"size": 21951,
 			"theme": "sap_horizon_dark"
-		},
-		{
-			"name": "resources.json",
-			"size": 1480
 		}
 	]
 }

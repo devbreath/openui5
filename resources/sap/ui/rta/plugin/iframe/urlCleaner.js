@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define([],function(){"use strict";return function(n){return n.replace(/\t|\r|\n/g,"")}});
-//# sourceMappingURL=urlCleaner.js.map
+sap.ui.define([],function(){"use strict";return function(u){return u.replace(/\t|\r|\n/g,"");};});

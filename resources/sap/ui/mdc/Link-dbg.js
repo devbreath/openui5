@@ -45,7 +45,7 @@ sap.ui.define([
 	 * @extends sap.ui.mdc.field.FieldInfoBase
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @alias sap.ui.mdc.Link

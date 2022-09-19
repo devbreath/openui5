@@ -18,8 +18,7 @@ sap.ui.define(function () {
 	ObjectPageSectionRenderer.render = function (oRm, oControl) {
 		var sTitle, bTitleVisible,
 			bAccessibilityOn = sap.ui.getCore().getConfiguration().getAccessibility(),
-			oLabelledBy = oControl.getAggregation("ariaLabelledBy"),
-			oHeading = oControl.getHeading();
+			oLabelledBy = oControl.getAggregation("ariaLabelledBy");
 
 		if (!oControl.getVisible() || !oControl._getInternalVisible()) {
 			return;
@@ -44,14 +43,6 @@ sap.ui.define(function () {
 		oRm.attr("data-sap-ui-customfastnavgroup", true);
 
 		oRm.openEnd();
-
-		if (oHeading) {
-			oRm.openStart("div")
-				.class("sapUxAPObjectPageSectionHeading")
-				.openEnd();
-				oRm.renderControl(oHeading);
-			oRm.close("div");
-		}
 
 		oRm.openStart("div", oControl.getId() + "-header")
 			.attr("role", "heading")

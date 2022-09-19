@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["./StandardListItemRenderer","sap/ui/core/Renderer"],function(e,r){"use strict";var t=r.extend(e);t.apiVersion=2;t.renderTitle=function(r,t){if(t.getActiveTitle()){r.renderControl(t.getLink());r.renderControl(t.getLinkAriaDescribedBy())}else{e.renderTitle.apply(this,arguments)}};return t},true);
-//# sourceMappingURL=MessageListItemRenderer.js.map
+sap.ui.define(["./StandardListItemRenderer","sap/ui/core/Renderer"],function(S,R){"use strict";var M=R.extend(S);M.apiVersion=2;M.renderTitle=function(r,c){if(c.getActiveTitle()){r.renderControl(c.getLink());r.renderControl(c.getLinkAriaDescribedBy());}else{S.renderTitle.apply(this,arguments);}};return M;},true);

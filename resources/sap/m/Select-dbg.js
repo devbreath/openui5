@@ -103,7 +103,7 @@ function(
 		 * @implements sap.ui.core.IFormContent, sap.ui.core.ISemanticFormContent
 		 *
 		 * @author SAP SE
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 *
 		 * @constructor
 		 * @public
@@ -3006,7 +3006,7 @@ function(
 		 * <b>Note: </b> If duplicate keys exist, the first item matching the key is returned.
 		 *
 		 * @param {string} sKey An item key that specifies the item to be retrieved.
-		 * @returns {sap.ui.core.Item|null} The <code>sap.ui.core.Item</code> instance or <code>null</code> if there is no such item
+		 * @returns {sap.ui.core.Item} The <code>sap.ui.core.Item</code> instance or <code>null</code> if thre is no such item
 		 * @public
 		 * @since 1.16
 		 */

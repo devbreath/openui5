@@ -1,2 +1,1 @@
-(function(){ace.require(["ace/snippets/asciidoc"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
-//# sourceMappingURL=asciidoc.js.map
+;(function(){ace.require(["ace/snippets/asciidoc"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();

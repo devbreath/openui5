@@ -20,7 +20,7 @@ function (Control, Renderer
      * @class The Chart control creates a chart based on metadata and the configuration specified.
      * @extends sap.ui.core.Control
      * @author SAP SE
-     * @version 1.106.0
+     * @version 1.105.1
      * @constructor
      * @experimental As of version 1.105
      * @private

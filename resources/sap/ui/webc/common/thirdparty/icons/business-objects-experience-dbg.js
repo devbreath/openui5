@@ -1,25 +1,13 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/config/Theme", "./v5/business-objects-experience", "./v4/business-objects-experience"], function (_exports, _Theme, _businessObjectsExperience, _businessObjectsExperience2) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/config/Theme', './v5/business-objects-experience', './v4/business-objects-experience'], function (exports, Theme, businessObjectsExperience$1, businessObjectsExperience$2) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "accData", {
-    enumerable: true,
-    get: function () {
-      return _businessObjectsExperience.accData;
-    }
-  });
-  _exports.default = void 0;
-  Object.defineProperty(_exports, "ltr", {
-    enumerable: true,
-    get: function () {
-      return _businessObjectsExperience.ltr;
-    }
-  });
-  _exports.pathData = void 0;
-  const pathData = (0, _Theme.isThemeFamily)("sap_horizon") ? _businessObjectsExperience.pathData : _businessObjectsExperience2.pathData;
-  _exports.pathData = pathData;
-  var _default = "business-objects-experience";
-  _exports.default = _default;
+	const pathData = Theme.isThemeFamily("sap_horizon") ? businessObjectsExperience$1.pathData : businessObjectsExperience$2.pathData;
+	var businessObjectsExperience = "business-objects-experience";
+
+	exports.accData = businessObjectsExperience$1.accData;
+	exports.ltr = businessObjectsExperience$1.ltr;
+	exports.default = businessObjectsExperience;
+	exports.pathData = pathData;
+
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

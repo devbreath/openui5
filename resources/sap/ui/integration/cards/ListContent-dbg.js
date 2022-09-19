@@ -66,7 +66,7 @@ sap.ui.define([
 	 * @extends sap.ui.integration.cards.BaseListContent
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @private
@@ -193,11 +193,7 @@ sap.ui.define([
 		if (bHasGroups) {
 			oStaticConfiguration.groups = aResolvedGroups;
 		} else {
-			oStaticConfiguration.groups = [
-				{
-					items: aResolvedItems
-				}
-			];
+			oStaticConfiguration.items = aResolvedItems;
 		}
 
 		return oStaticConfiguration;
@@ -281,8 +277,7 @@ sap.ui.define([
 				mSettings.attributes.push(new ObjectStatus({
 					text: attr.value,
 					state: attr.state,
-					emptyIndicatorMode: EmptyIndicatorMode.On,
-					visible: attr.visible
+					emptyIndicatorMode: EmptyIndicatorMode.On
 				}));
 			});
 		}

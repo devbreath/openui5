@@ -1624,7 +1624,7 @@ sap.ui.define([
 		 * Get a registered router.
 		 *
 		 * @param {string} sName Name of the router
-		 * @returns {sap.ui.core.routing.Router|undefined} The router with the specified name, else <code>undefined</code>
+		 * @returns {sap.ui.core.routing.Router} The router with the specified name, else undefined
 		 * @public
 		 */
 		Router.getRouter = function (sName) {

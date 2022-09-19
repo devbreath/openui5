@@ -15,7 +15,7 @@ sap.ui.define(["sap/ui/Device", "sap/ui/layout/library"],
 	/**
 	 * @author SAP SE
 	 * @version
-	 * 1.106.0
+	 * 1.105.1
 	 * @namespace
 	 */
 	var GridRenderer = {

@@ -5,7 +5,7 @@
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-sap.ui.predefine("sap/ui/support/jQuery.sap.support", ["sap/ui/thirdparty/jquery",
+sap.ui.predefine('sap/ui/support/jQuery.sap.support',["sap/ui/thirdparty/jquery",
 		"sap/ui/support/supportRules/Main",
 		"sap/ui/support/supportRules/RuleSetLoader"],
 	function (jQuery,
@@ -36,7 +36,7 @@ sap.ui.predefine("sap/ui/support/jQuery.sap.support", ["sap/ui/thirdparty/jquery
 		 * @deprecated Since version 1.60.0. Please use sap/ui/support/RuleAnalyzer instead.
 		 * @alias jQuery.sap.support
 		 * @author SAP SE
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 * @public
 		 */
 		jQuery.sap.support = {

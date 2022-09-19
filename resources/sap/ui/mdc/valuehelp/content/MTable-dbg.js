@@ -51,7 +51,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new element
 	 * @class Content for the {@link sap.ui.mdc.valuehelp.base.Container Container} element using a {@link sap.m.Table}.
 	 * @extends sap.ui.mdc.valuehelp.base.FilterableListContent
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -387,20 +387,20 @@ sap.ui.define([
 		var oPromise1 = _checkListBindingPending.call(this);
 		var oDelegate = this._getValueHelpDelegate();
 		var oDelegatePayload = this._getValueHelpDelegatePayload();
-		var oPromise2 = oDelegate && oDelegate.getFilterConditions(oDelegatePayload, this, oConfig);
+		var oPromise2 = oDelegate && oDelegate.getInitialFilterConditions(oDelegatePayload, this, oConfig.control);
 
 		return Promise.all([oPromise1, oPromise2]).then(function(aResult) {
 			var bPending = aResult[0];
-			var oConditions = aResult[1];
+			var oInitialConditions = aResult[1];
 			var oResult;
 
 			if (!bPending) {
 				var oTable = this.getTable();
-				oResult = _filterItems.call(this, oConfig, oTable.getItems(), oConditions);
+				oResult = _filterItems.call(this, oConfig, oTable.getItems(), oInitialConditions);
 			}
 
 			if (!oResult) {
-				oResult = this._loadItemForValue(oConfig, oConditions);
+				oResult = this._loadItemForValue(oConfig, oInitialConditions);
 			}
 
 			return oResult;
@@ -408,7 +408,7 @@ sap.ui.define([
 
 	};
 
-	function _filterItems(oConfig, aItems, oConditions) {
+	function _filterItems(oConfig, aItems, oInitialConditions) {
 
 		if (aItems.length === 0) {
 			return;
@@ -425,7 +425,7 @@ sap.ui.define([
 		var aInParameters;
 		var aOutParameters;
 
-		var oFilter = _createItemFilters.call(this, oConfig, oConditions);
+		var oFilter = _createItemFilters.call(this, oConfig, oInitialConditions);
 
 		var aFilteredItems = FilterProcessor.apply(aItems, oFilter, _getFilterValue);
 		if (aFilteredItems.length === 1) {
@@ -437,14 +437,14 @@ sap.ui.define([
 				// try with case sensitive search
 				var oNewConfig = merge({}, oConfig);
 				oNewConfig.caseSensitive = true;
-				return _filterItems.call(this, oNewConfig, aItems, oConditions);
+				return _filterItems.call(this, oNewConfig, aItems, oInitialConditions);
 			}
 			throw _createException.call(this, oConfig.exception, true, oConfig.parsedValue || oConfig.value);
 		}
 
 	}
 
-	function _createItemFilters(oConfig, oConditions) {
+	function _createItemFilters(oConfig, oInitialConditions) {
 
 		var bCaseSensitive = oConfig.caseSensitive;
 		var sKeyPath = this.getKeyPath();
@@ -459,9 +459,9 @@ sap.ui.define([
 
 		var oFilter = aFilters.length > 1 ? new Filter({filters: aFilters, and: false}) : aFilters[0];
 
-		if (oConditions) {
-			var oConditionTypes = this._getTypesForConditions(oConditions);
-			var oConditionsFilter = FilterConverter.createFilters(oConditions, oConditionTypes, undefined, this.getCaseSensitive());
+		if (oInitialConditions) {
+			var oConditionTypes = this._getTypesForConditions(oInitialConditions);
+			var oConditionsFilter = FilterConverter.createFilters(oInitialConditions, oConditionTypes, undefined, this.getCaseSensitive());
 			if (oConditionsFilter) {
 				oFilter = new Filter({filters: [oFilter, oConditionsFilter], and: true});
 			}
@@ -494,7 +494,7 @@ sap.ui.define([
 		return oTable && oTable.getBindingInfo("items");
 	};
 
-	MTable.prototype._loadItemForValue = function (oConfig, oConditions) {
+	MTable.prototype._loadItemForValue = function (oConfig, oInitialConditions) {
 
 		if (!oConfig.checkKey && oConfig.parsedValue && !oConfig.checkDescription) {
 			return null;
@@ -517,11 +517,10 @@ sap.ui.define([
 		var oDelegate = this._getValueHelpDelegate();
 		var oDelegatePayload = this._getValueHelpDelegatePayload();
 
-		var sPromiseKey = ["loadItemForValue", sPath, sKeyPath, oConfig.parsedValue || oConfig.value, JSON.stringify(oConfig.context)].join("_");
-
+		var sPromiseKey = ["loadItemForValue", sPath, sKeyPath, oConfig.parsedValue || oConfig.value].join("_");
 
 		return this._retrievePromise(sPromiseKey, function () {
-			var oFilter = _createItemFilters.call(this, oConfig, oConditions);
+			var oFilter = _createItemFilters.call(this, oConfig, oInitialConditions);
 			var oFilterListBinding = oModel.bindList(sPath, oBindingContext);
 
 			return oDelegate.executeFilter(oDelegatePayload, oFilterListBinding, oFilter, 2).then(function (oBinding) {
@@ -576,6 +575,7 @@ sap.ui.define([
 		}
 
 		var oTable = this._getTable();
+		oTable.addStyleClass("sapMListFocus"); // to show focus outline on navigated item
 
 		var aItems = this._oTable.getItems();
 		var oSelectedItem = oTable.getSelectedItem();
@@ -592,15 +592,12 @@ sap.ui.define([
 			iSelectedIndex = iItems + iStep;
 		}
 
-		if (this._getMaxConditions() !== 1) {
-			// in case of multiToken field the focus can be set to the table and the navigation will be handled by the focused table control.
+		if (this._getMaxConditions() !== 1) { // || (oFirstSelectedItem && !oTableItemForFirstSelection)  prevent navigation if selected item noch present in table?
 			if (this.getParent().isOpen()) {
 				oTable.focus();
 				return;
 			}
 		}
-
-		oTable.addStyleClass("sapMListFocus"); // to show focus outline on navigated item
 
 		var bSearchForNext;
 		if (iSelectedIndex < 0) {
@@ -637,15 +634,9 @@ sap.ui.define([
 
 		var oItem = aItems[iSelectedIndex];
 		if (oItem) {
-
 			var oCondition;
 			if (oItem !== oSelectedItem) {
 				oItem.setSelected(true);
-
-				// in case of a single value field trigger the focusin on the new selected item to update the screenreader invisible text
-				if (this.getParent().isOpen()) {
-					oItem.$().trigger("focusin");
-				}
 
 				var oBindingInfo = this._getListBindingInfo();
 				var sModelName = oBindingInfo.model;
@@ -756,6 +747,10 @@ sap.ui.define([
 	MTable.prototype.setParent = function(oParent) {
 		FilterableListContent.prototype.setParent.apply(this, arguments);
 		_adjustTable.call(this);
+	};
+
+	MTable.prototype._handleSearch = function (oEvent) {
+		return this.applyFilters(this.getFilterValue());
 	};
 
 	MTable.prototype._observeChanges = function (oChanges) {

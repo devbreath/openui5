@@ -1,2 +1,1 @@
-(function(){ace.require(["ace/snippets/jade"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
-//# sourceMappingURL=jade.js.map
+;(function(){ace.require(["ace/snippets/jade"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();

@@ -6,11 +6,12 @@
 sap.ui.define([
 	"../library",
 	"sap/ui/Device",
-	"sap/ui/core/Element",
 	"../UIArea",
-	"sap/ui/thirdparty/jquery"
+	"sap/ui/thirdparty/jquery",
+	// jQuery Plugin "control"
+	"sap/ui/dom/jquery/control"
 ],
-function(lib, Device, Element, UIArea, jQuery) {
+function(lib, Device, UIArea, jQuery) {
 	"use strict";
 
 	var RelativeDropPosition = lib.dnd.RelativeDropPosition;
@@ -64,7 +65,7 @@ function(lib, Device, Element, UIArea, jQuery) {
 	}
 
 	function dispatchEvent(oEvent, sEventName) {
-		var oControl = Element.closestTo(oEvent.target, true);
+		var oControl = jQuery(oEvent.target).control(0, true);
 		if (!oControl) {
 			return;
 		}
@@ -535,7 +536,7 @@ function(lib, Device, Element, UIArea, jQuery) {
 		}
 
 		// identify the control being dragged
-		oDragControl = Element.closestTo(oEvent.target, true);
+		oDragControl = jQuery(oEvent.target).control(0, true);
 		if (!oDragControl) {
 			return;
 		}
@@ -588,7 +589,7 @@ function(lib, Device, Element, UIArea, jQuery) {
 
 	DnD.onbeforedragenter = function(oEvent) {
 		// check whether we remain within the same control
-		var oControl = Element.closestTo(oEvent.target, true);
+		var oControl = jQuery(oEvent.target).control(0, true);
 		if (oControl && oDropControl === oControl) {
 			oEvent.setMark("DragWithin", "SameControl");
 		} else {
@@ -596,20 +597,15 @@ function(lib, Device, Element, UIArea, jQuery) {
 			oDropControl = oControl;
 		}
 
-		var aDropInfos = [], oParentDomRef;
+		var aDropInfos = [];
 		oValidDropControl = oControl;
 
 		// find the first valid drop control and corresponding valid DropInfos from the dom-control hierarchy
-		for (var i = 0; i < 20 && oValidDropControl; i++) {
+		for (var i = 0; i < 20 && oValidDropControl; i++, oValidDropControl = oValidDropControl.$ && oValidDropControl.$().parent().control(0, true)) {
 			aDropInfos = getValidDropInfos(oValidDropControl, aValidDragInfos, oEvent);
 			if (aDropInfos.length) {
 				break;
 			}
-
-			oParentDomRef = oValidDropControl.getDomRef();
-			oParentDomRef = oParentDomRef && oParentDomRef.parentElement;
-
-			oValidDropControl = Element.closestTo(oParentDomRef, true);
 		}
 
 		// if we are not dragging within the same control we can update valid drop infos

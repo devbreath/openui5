@@ -39,7 +39,7 @@ sap.ui.define([
 	 *
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @extends sap.f.delegate.GridItemNavigation
 	 *
@@ -205,13 +205,8 @@ sap.ui.define([
 	 * Handles when it is needed to return focus to correct place
 	 */
 	GridContainerItemNavigation.prototype.onfocusin = function(oEvent) {
-		GridItemNavigation.prototype.onfocusin.call(this, oEvent);
 
-		// focus is coming in the grid container from Shift + Tab
-		if (oEvent.target === this._getGridInstance().getDomRef("after") && !this.getRootDomRef().contains(oEvent.relatedTarget)) {
-			this._focusPrevious(oEvent);
-			return;
-		}
+		GridItemNavigation.prototype.onfocusin.call(this, oEvent);
 
 		var $listItem = jQuery(oEvent.target).closest('.sapFGridContainerItemWrapperNoVisualFocus'),
 			oControl,
@@ -251,32 +246,6 @@ sap.ui.define([
 		}
 
 		this._bFocusLeft = false;
-	};
-
-	/**
-	 * Focus previously focused element known in item navigation, or focus the first item or its content
-	 * @param {jQuery.Event} oEvent the event
-	 */
-	GridContainerItemNavigation.prototype._focusPrevious = function(oEvent) {
-		var aItemDomRefs = this.getItemDomRefs();
-		var iLastFocusedIndex = this.getFocusedIndex(); // get the last focused element from the ItemNavigation
-
-		if (!aItemDomRefs.length) {
-			return;
-		}
-
-		var oFocusCandidate;
-
-		if (iLastFocusedIndex < 0) {
-			oFocusCandidate = aItemDomRefs[0];
-			this.setFocusedIndex(0);
-		} else {
-			oFocusCandidate = aItemDomRefs[iLastFocusedIndex];
-		}
-
-		var $FocusCandidate = jQuery(oFocusCandidate);
-		var $TabbableChildren = $FocusCandidate.find(":sapTabbable");
-		$FocusCandidate.add($TabbableChildren).eq(-1).focus();
 	};
 
 	/**

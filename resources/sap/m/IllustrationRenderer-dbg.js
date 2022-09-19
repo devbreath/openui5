@@ -26,7 +26,6 @@ sap.ui.define([], function () {
 
 		oRm.openStart("svg", oIllustration);
 		oRm.class("sapMIllustration");
-		oRm.accessibilityState(oIllustration);
 		oRm.openEnd();
 
 			oRm.openStart("use");

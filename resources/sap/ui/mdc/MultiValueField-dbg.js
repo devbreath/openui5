@@ -35,7 +35,7 @@ sap.ui.define([
 	 * @constructor
 	 * @alias sap.ui.mdc.MultiValueField
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @since 1.93.0
 	 *
 	 * @private

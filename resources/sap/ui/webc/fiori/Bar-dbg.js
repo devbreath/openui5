@@ -32,7 +32,7 @@ sap.ui.define([
 	 *
 	 * <h3>CSS Shadow Parts</h3>
 	 *
-	 * {@link https://developer.mozilla.org/en-US/docs/Web/CSS/::part CSS Shadow Parts} allow developers to style elements inside the Shadow DOM. <br>
+	 * <ui5-link target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/::part">CSS Shadow Parts</ui5-link> allow developers to style elements inside the Shadow DOM. <br>
 	 * The <code>sap.ui.webc.fiori.Bar</code> exposes the following CSS Shadow Parts:
 	 * <ul>
 	 *     <li>bar - Used to style the wrapper of the content of the component</li>
@@ -41,7 +41,7 @@ sap.ui.define([
 	 * <h3>Keyboard Handling</h3>
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public

@@ -27,8 +27,9 @@ sap.ui.define(["sap/base/Log"], function(Log) {
 		 * @private
 		 * @static
 		 * @param {Object} getModuleSystemInfo Function, which should retrieve modules and prefixes.
+		 * @param {Object} oCfgData Configuration object of the project.
 		 */
-		init: function(getModuleSystemInfo) {
+		init: function(getModuleSystemInfo, oCfgData) {
 			// Check whether the left 'alt' key is used
 			// The TechnicalInfo should be shown only when left 'alt' key is used
 			// because the right 'alt' key is mapped to 'alt' + 'ctrl' on windows
@@ -50,7 +51,7 @@ sap.ui.define(["sap/base/Log"], function(Log) {
 							sap.ui.require(['sap/ui/core/support/techinfo/TechnicalInfo'], function(TechnicalInfo) {
 								TechnicalInfo.open(function() {
 									var oInfo = getModuleSystemInfo();
-									return { modules : oInfo.modules, prefixes : oInfo.prefixes };
+									return { modules : oInfo.modules, prefixes : oInfo.prefixes, config: oCfgData };
 								});
 							}, function (oError) {
 								Log.error("Could not load module 'sap/ui/core/support/techinfo/TechnicalInfo':", oError);

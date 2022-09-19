@@ -1,2 +1,1 @@
-(function(){ace.require(["ace/snippets/jsx"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
-//# sourceMappingURL=jsx.js.map
+;(function(){ace.require(["ace/snippets/jsx"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();

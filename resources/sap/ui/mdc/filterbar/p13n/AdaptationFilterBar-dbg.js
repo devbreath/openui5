@@ -18,7 +18,7 @@ sap.ui.define([
 	 *
 	 * @extends sap.ui.mdc.filterbar.FilterBarBase
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @since 1.80.0
@@ -208,6 +208,7 @@ sap.ui.define([
 	};
 
 	AdaptationFilterBar.prototype.applyConditionsAfterChangesApplied = function(oControl) {
+		FilterBarBase.prototype.applyConditionsAfterChangesApplied.apply(this, arguments);
 		if (oControl === this._getAdaptationControlInstance()) {
 			this.triggerSearch();
 		}

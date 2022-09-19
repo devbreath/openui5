@@ -109,7 +109,6 @@
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/ui/core/themes/sap_fiori_3_dark/library-parameters.json",
 			"size": 76669,
 			"theme": "sap_fiori_3_dark"
 		},
@@ -139,10 +138,6 @@
 			"name": "library_skeleton.css",
 			"size": 30379,
 			"theme": "sap_fiori_3_dark"
-		},
-		{
-			"name": "resources.json",
-			"size": 2855
 		},
 		{
 			"name": "shared.less",

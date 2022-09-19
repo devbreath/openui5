@@ -9,14 +9,13 @@ sap.ui.define([
 	'./library',
 	'sap/ui/core/Control',
 	'sap/ui/base/DataType',
-	'sap/base/security/URLListValidator',
 	'./ImageRenderer',
 	"sap/ui/events/KeyCodes",
 	"sap/ui/thirdparty/jquery",
 	"sap/base/security/encodeCSS",
 	"sap/ui/core/library"
 ],
-	function(library, Control, DataType, URLListValidator, ImageRenderer, KeyCodes, jQuery, encodeCSS, coreLibrary) {
+	function(library, Control, DataType, ImageRenderer, KeyCodes, jQuery, encodeCSS, coreLibrary) {
 	"use strict";
 
 
@@ -58,7 +57,7 @@ sap.ui.define([
 	 * @implements sap.ui.core.IFormContent
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @public
 	 * @alias sap.m.Image
@@ -283,10 +282,6 @@ sap.ui.define([
 		return ratio;
 	}());
 
-	Image.prototype.init = function () {
-		this._oSvgCachedData = {};
-	};
-
 	/**
 	 * Function is called when image is loaded successfully.
 	 *
@@ -423,17 +418,6 @@ sap.ui.define([
 		return this.setAggregation("detailBox", oLightBox);
 	};
 
-	Image.prototype.setSrc = function (sSrc) {
-		var oPreviousSrc = this.getSrc(),
-			oResult = this.setProperty("src", sSrc);
-
-		if (sSrc && oPreviousSrc !== this.getSrc() && this.getMode() === ImageMode.InlineSvg) {
-			sSrc.endsWith("svg") && this._loadSvg();
-		}
-
-		return oResult;
-	};
-
 	/*
 	 * @override
 	 */
@@ -465,10 +449,6 @@ sap.ui.define([
 		if (this.getMode() == ImageMode.Image) {
 			var $DomNode = this.getDetailBox() ? this.$().find(".sapMImg") : this.$();
 			$DomNode.off("load").off("error");
-		}
-
-		if (this.getMode() === ImageMode.InlineSvg) {
-			this._loadSvg();
 		}
 	};
 
@@ -521,8 +501,6 @@ sap.ui.define([
 		if (this._fnLightBoxOpen) {
 			this._fnLightBoxOpen = null;
 		}
-
-		this._oSvgCachedData = null;
 	};
 
 	/**
@@ -620,54 +598,6 @@ sap.ui.define([
 	 */
 	Image.prototype.onsapspace = function(oEvent) {
 		oEvent.preventDefault();
-	};
-
-	/**
-	* Loads "svg"
-	* @private
-	*/
-	Image.prototype._loadSvg = function() {
-		var that = this,
-			sSrc = this.getSrc(),
-			oSvg;
-
-		if (!this._oSvgCachedData[sSrc]) {
-			that._oSvgCachedData[sSrc] = {};
-			jQuery.get(this.getSrc(), function(data) {
-				oSvg = jQuery(data).find('svg')[0];
-
-				if (oSvg) {
-					sap.ui.require(["sap/m/_thirdparty/purify"],
-					function(DOMPurify) {
-							that._oSvgCachedData[sSrc].oSvgDomRef = DOMPurify.sanitize(oSvg, {RETURN_DOM: true});
-							that.invalidate();
-					});
-				}
-			})
-			.done(function() {
-				that.fireLoad();
-			})
-			.fail(function() {
-				that.fireError();
-			});
-		}
-	};
-
-	Image.prototype._getSvgCachedData = function () {
-		var sSrc = this.getSrc();
-
-		if (this._oSvgCachedData[sSrc]
-			&& typeof this._oSvgCachedData[sSrc].oSvgDomRef === "object") {
-				return this._oSvgCachedData[sSrc].oSvgDomRef;
-		}
-	};
-
-	/**
-	* Checks if href is valid
-	* @private
-	*/
-	Image.prototype._isHrefValid = function (sURL) {
-		return URLListValidator.validate(sURL);
 	};
 
 	/**

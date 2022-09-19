@@ -1,39 +1,18 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations", "./tnt-Dialog-CodePlaceholder", "./tnt-Scene-CodePlaceholder", "./tnt-Spot-CodePlaceholder"], function (_exports, _Illustrations, _tntDialogCodePlaceholder, _tntSceneCodePlaceholder, _tntSpotCodePlaceholder) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations', './tnt-Dialog-CodePlaceholder', './tnt-Scene-CodePlaceholder', './tnt-Spot-CodePlaceholder'], function (exports, Illustrations, tntDialogCodePlaceholder, tntSceneCodePlaceholder, tntSpotCodePlaceholder) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "dialogSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntDialogCodePlaceholder.default;
-    }
-  });
-  Object.defineProperty(_exports, "sceneSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntSceneCodePlaceholder.default;
-    }
-  });
-  Object.defineProperty(_exports, "spotSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntSpotCodePlaceholder.default;
-    }
-  });
-  _tntDialogCodePlaceholder = _interopRequireDefault(_tntDialogCodePlaceholder);
-  _tntSceneCodePlaceholder = _interopRequireDefault(_tntSceneCodePlaceholder);
-  _tntSpotCodePlaceholder = _interopRequireDefault(_tntSpotCodePlaceholder);
+	const name = "CodePlaceholder";
+	const set = "tnt";
+	Illustrations.registerIllustration(name, {
+		dialogSvg: tntDialogCodePlaceholder,
+		sceneSvg: tntSceneCodePlaceholder,
+		spotSvg: tntSpotCodePlaceholder,
+		set,
+	});
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	exports.dialogSvg = tntDialogCodePlaceholder;
+	exports.sceneSvg = tntSceneCodePlaceholder;
+	exports.spotSvg = tntSpotCodePlaceholder;
 
-  const name = "CodePlaceholder";
-  const set = "tnt";
-  (0, _Illustrations.registerIllustration)(name, {
-    dialogSvg: _tntDialogCodePlaceholder.default,
-    sceneSvg: _tntSceneCodePlaceholder.default,
-    spotSvg: _tntSpotCodePlaceholder.default,
-    set
-  });
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

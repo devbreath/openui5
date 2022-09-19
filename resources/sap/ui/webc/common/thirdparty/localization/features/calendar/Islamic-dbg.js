@@ -1,3 +1,5 @@
-sap.ui.define(["sap/ui/core/date/Islamic"], function (_Islamic) {
-  "use strict";
+sap.ui.define(['sap/ui/core/date/Islamic'], function (Islamic) { 'use strict';
+
+
+
 });

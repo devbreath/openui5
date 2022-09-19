@@ -1,14 +1,7 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/renderer/LitRenderer"], function (_exports, _LitRenderer) {
-  "use strict";
+sap.ui.define(['sap/ui/webc/common/thirdparty/base/renderer/LitRenderer'], function (litRender) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
+	const block0 = (context, tags, suffix) => litRender.html`<div class="ui5-cp-item" style="${litRender.styleMap(context.styles.root)}" value="${litRender.ifDefined(context.value)}" tabindex="${litRender.ifDefined(context._tabIndex)}" role="button" aria-label="${litRender.ifDefined(context.colorLabel)} - ${litRender.ifDefined(context.index)}: ${litRender.ifDefined(context.value)}" title="${litRender.ifDefined(context.colorLabel)} - ${litRender.ifDefined(context.index)}: ${litRender.ifDefined(context.value)}" ?disabled="${context._disabled}"></div>`;
 
-  /* eslint no-unused-vars: 0 */
-  const block0 = (context, tags, suffix) => (0, _LitRenderer.html)`<div class="ui5-cp-item" style="${(0, _LitRenderer.styleMap)(context.styles.root)}" value="${(0, _LitRenderer.ifDefined)(context.value)}" tabindex="${(0, _LitRenderer.ifDefined)(context._tabIndex)}" role="button" aria-label="${(0, _LitRenderer.ifDefined)(context.colorLabel)} - ${(0, _LitRenderer.ifDefined)(context.index)}: ${(0, _LitRenderer.ifDefined)(context.value)}" title="${(0, _LitRenderer.ifDefined)(context.colorLabel)} - ${(0, _LitRenderer.ifDefined)(context.index)}: ${(0, _LitRenderer.ifDefined)(context.value)}" ?disabled="${context._disabled}"></div>`;
+	return block0;
 
-  var _default = block0;
-  _exports.default = _default;
 });

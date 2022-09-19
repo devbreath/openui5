@@ -46,7 +46,7 @@ sap.ui.define([
 	 * @extends sap.ui.mdc.field.ConditionsType
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @since 1.96.0
 	 * @private

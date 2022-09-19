@@ -706,9 +706,9 @@ sap.ui.define([
 					}
 
 					if (!bHasColSpan && oColumn) {
-						var oColumnHeaderMenu = oColumn.getHeaderMenuInstance();
-						if (oColumnHeaderMenu) {
-							mAttributes["aria-haspopup"] = oColumnHeaderMenu.getAriaHasPopupType().toLowerCase();
+						var oPopover = oColumn.getColumnHeaderMenu();
+						if (oPopover) {
+							mAttributes["aria-haspopup"] = oPopover.getAriaHasPopupType().toLowerCase();
 						} else if (oColumn._menuHasItems()) {
 							mAttributes["aria-haspopup"] = "menu";
 						}
@@ -923,7 +923,7 @@ sap.ui.define([
 	 * @class Extension for sap.ui.table.Table which handles ACC related things.
 	 * @extends sap.ui.table.extensions.ExtensionBase
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @alias sap.ui.table.extensions.Accessibility

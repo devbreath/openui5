@@ -203,7 +203,7 @@ sap.ui.define([
 	 * This model is not prepared to be inherited from.
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @public
 	 * @alias sap.ui.model.odata.v2.ODataModel
@@ -2771,7 +2771,7 @@ sap.ui.define([
 	 * <code>undefined</code> when the <code>vValue</code> can't be interpreted.
 	 *
 	 * @param {string|object|sap.ui.model.Context} vValue The canonical entry URI, the context or entry object
-	 * @returns {string|undefined} Key of the entry or <code>undefined</code>
+	 * @returns {string} Key of the entry or <code>undefined</code>
 	 * @public
 	 */
 	ODataModel.prototype.getKey = function(vValue) {
@@ -2916,7 +2916,7 @@ sap.ui.define([
 	 *   Comma-separated list of properties or paths to properties to select
 	 * @param {string} [mParameters.expand]
 	 *   Comma-separated list of navigation properties or paths to navigation properties to expand
-	 * @returns {any|undefined}
+	 * @returns {any}
 	 *   The value for the given path and context or <code>undefined</code> if data or entity type
 	 *   cannot be found or if not all selected properties are available
 	 *
@@ -4767,7 +4767,7 @@ sap.ui.define([
 	 * @param {sap.ui.model.Context} [oContext] The binding context
 	 * @param {object} [oEntity] The entity data
 	 *
-	 * @returns {string|null} The found ETag (or <code>null</code> if none could be found)
+	 * @returns {string} The found ETag (or <code>null</code> if none could be found)
 	 * @public
 	 */
 	ODataModel.prototype.getETag = function(sPath, oContext, oEntity) {

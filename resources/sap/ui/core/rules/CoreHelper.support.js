@@ -6,8 +6,8 @@
 /**
  * Helper for core functionality in Support Tool infrastructure.
  */
-sap.ui.define(["sap/ui/core/Element", "sap/ui/thirdparty/jquery"],
-	function(Element, jQuery) {
+sap.ui.define(["sap/ui/thirdparty/jquery", "sap/ui/dom/jquery/control"],  // jQuery Plugin "control"
+	function(jQuery) {
 		"use strict";
 
 		var CoreHelper = {
@@ -24,7 +24,7 @@ sap.ui.define(["sap/ui/core/Element", "sap/ui/thirdparty/jquery"],
 				 */
 				// jQuery Plugin "control"
 				var skipParents = ["sap.ui.core.HTML"],
-					parentNode = Element.closestTo(node);
+					parentNode = jQuery(node).control()[0];
 
 				if (!parentNode) {
 					return false;

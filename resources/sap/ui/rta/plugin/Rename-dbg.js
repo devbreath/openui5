@@ -28,7 +28,7 @@ sap.ui.define([
 	 * @extends sap.ui.rta.plugin.Plugin
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @private
@@ -172,7 +172,7 @@ sap.ui.define([
 		oOverlay.detachEvent("editableChange", RenameHandler._manageClickEvent, this);
 		oOverlay.detachBrowserEvent("click", RenameHandler._onClick, this);
 
-		Plugin.prototype.deregisterElementOverlay.apply(this, arguments);
+		this.removeFromPluginsList(oOverlay);
 	};
 
 	/**
@@ -200,7 +200,7 @@ sap.ui.define([
 		}.bind(this))
 
 		.catch(function(oError) {
-			Log.error("Error during rename: ", oError);
+			Log.error("Error during rename : ", oError);
 		});
 	};
 

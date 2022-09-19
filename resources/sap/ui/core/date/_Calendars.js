@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define([],function(){"use strict";var e=new Map;var t={get:function(t){if(!e.has(t)){sap.ui.requireSync("sap/ui/core/date/"+t)}return e.get(t)},set:function(t,n){e.set(t,n)}};return t});
-//# sourceMappingURL=_Calendars.js.map
+sap.ui.define([],function(){"use strict";var r=new Map();var _={get:function(c){if(!r.has(c)){sap.ui.requireSync("sap/ui/core/date/"+c);}return r.get(c);},set:function(c,C){r.set(c,C);}};return _;});

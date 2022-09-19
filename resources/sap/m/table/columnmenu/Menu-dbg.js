@@ -52,9 +52,11 @@ sap.ui.define([
 ) {
 	"use strict";
 
+	// shortcut for sap.ui.core.aria.HasPopup
 	var HasPopup = coreLibrary.aria.HasPopup;
+
+	// shortcut for sap.ui.core.VerticalAlign
 	var VerticalAlign = coreLibrary.VerticalAlign;
-	var Category = library.table.columnmenu.Category;
 
 	/**
 	 * Constructor for a new Menu.
@@ -76,7 +78,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @experimental
@@ -109,12 +111,6 @@ sap.ui.define([
 				 * @private
 				 */
 				_items: { type: "sap.m.table.columnmenu.ItemBase", visibility: "hidden" }
-			},
-			events: {
-				/**
-				 * Fires before the column menu is opened
-				 */
-				beforeOpen: {}
 			}
 		},
 		renderer: MenuRenderer
@@ -126,7 +122,7 @@ sap.ui.define([
 
 	Menu.prototype.init = function() {
 		this.fAnyEventHandlerProxy = jQuery.proxy(function(oEvent){
-			if (!this.isOpen() || !this.getDomRef() || (oEvent.type != "mousedown" && oEvent.type != "touchstart")) {
+			if (!this._oPopover.isOpen() || !this.getDomRef() || (oEvent.type != "mousedown" && oEvent.type != "touchstart")) {
 				return;
 			}
 			this.handleOuterEvent(this.getId(), oEvent);
@@ -162,11 +158,7 @@ sap.ui.define([
 		}
 		this._initItemsContainer();
 
-		if (!this.isOpen()) {
-			this.fireBeforeOpen();
-			this._oPopover.openBy(oAnchor);
-		}
-
+		this._oPopover.openBy(oAnchor);
 		ControlEvents.bindAnyEvent(this.fAnyEventHandlerProxy);
 	};
 
@@ -179,15 +171,6 @@ sap.ui.define([
 	 */
 	Menu.prototype.getAriaHasPopupType = function () {
 		return ARIA_POPUP_TYPE;
-	};
-
-	/**
-	 * Returns true when the menu is open, otherwise it returns false.
-	 *
-	 * @returns {boolean} Whether the menu is open.
-	 */
-	Menu.prototype.isOpen = function () {
-		return this._oPopover && this._oPopover.isOpen();
 	};
 
 	/**
@@ -259,7 +242,7 @@ sap.ui.define([
 	};
 
 	Menu.prototype.onsapfocusleave = function(oEvent){
-		if (!this.isOpen()) {
+		if (!this._oPopover.isOpen()) {
 			return;
 		}
 		this.handleOuterEvent(this.getId(), oEvent);
@@ -454,31 +437,17 @@ sap.ui.define([
 		return sText ? this.oResourceBundle.getText(sText, vValue) : this.oResourceBundle;
 	};
 
-	var mSortOrder = {};
-	mSortOrder[Category.Sort] = 0;
-	mSortOrder[Category.Filter] = 1;
-	mSortOrder[Category.Group] = 2;
-	mSortOrder[Category.Aggregate] = 3;
-	mSortOrder[Category.Generic] = 4;
-
-	Menu.prototype._getAllEffectiveQuickActions = function(bSkipImplicitSorting) {
+	Menu.prototype._getAllEffectiveQuickActions = function() {
 		var aQuickActions = (this.getAggregation("_quickActions") || []).concat(this.getQuickActions());
-
-		aQuickActions = aQuickActions.reduce(function(aQuickActions, oQuickAction) {
-			return aQuickActions.concat(oQuickAction ? oQuickAction.getEffectiveQuickActions() : []);
-		}, []);
-
-		if (!bSkipImplicitSorting) {
-			aQuickActions.sort(function(oLeftQuickAction, oRightQuickAction) {
-				return mSortOrder[oLeftQuickAction.getCategory()] - mSortOrder[oRightQuickAction.getCategory()];
-			});
-		}
-
-		return aQuickActions;
+		return aQuickActions.reduce(function (a, oQuickAction) {
+			return a.concat(oQuickAction.getEffectiveQuickActions());
+		}, []).filter(function (oQuickAction) {
+			return oQuickAction.getVisible();
+		});
 	};
 
 	Menu.prototype._hasQuickActions = function() {
-		return this._getAllEffectiveQuickActions(true).length > 0;
+		return this._getAllEffectiveQuickActions().length > 0;
 	};
 
 	Menu.prototype._getAllEffectiveItems = function() {

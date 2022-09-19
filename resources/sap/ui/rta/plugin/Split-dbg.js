@@ -23,7 +23,7 @@ sap.ui.define([
 	 * @class
 	 * @extends sap.ui.rta.plugin.Plugin
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @since 1.46
@@ -143,7 +143,7 @@ sap.ui.define([
 			throw DtUtil.propagateError(
 				vError,
 				"Split#handleSplit",
-				"Error occurred during handleSplit execution",
+				"Error occured during handleSplit execution",
 				"sap.ui.rta.plugin"
 			);
 		});

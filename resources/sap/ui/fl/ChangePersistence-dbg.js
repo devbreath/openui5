@@ -66,7 +66,7 @@ sap.ui.define([
 	 *
 	 * @constructor
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @experimental Since 1.25.0
 	 * @param {object} mComponent - Component data to initiate <code>ChangePersistence</code> instance
 	 * @param {string} mComponent.name - Name of the component this instance is responsible for
@@ -137,7 +137,7 @@ sap.ui.define([
 	/**
 	 * Verifies whether a change fulfils the preconditions.
 	 *
-	 * All changes need to have a fileType;
+	 * All changes need to have a fileName;
 	 * only changes whose <code>fileType</code> is 'change' and whose <code>changeType</code> is different from 'defaultVariant' are valid;
 	 *
 	 * @param {object} oChangeOrChangeContent Change instance or content of the change
@@ -145,30 +145,14 @@ sap.ui.define([
 	 * @returns {boolean} <code>true</code> if all the preconditions are fulfilled
 	 */
 	function preconditionsFulfilled(oChangeOrChangeContent) {
-		var sFileType;
-		var sVariantManagementReference;
-		var sVariantReference;
-		var sSelectorId;
-
-		if (oChangeOrChangeContent instanceof Change) {
-			var oChange = oChangeOrChangeContent;
-			sFileType = oChange.getFileType();
-			sVariantReference = oChange.getVariantReference();
-			sSelectorId = oChange.getSelector() && oChange.getSelector().id;
-		} else {
-			var oChangeContent = oChangeOrChangeContent;
-			sFileType = oChangeContent.fileType;
-			sVariantManagementReference = oChangeContent.variantManagementReference;
-			sVariantReference = oChangeContent.variantReference;
-			sSelectorId = oChangeContent.selector && oChangeContent.selector.id;
-		}
+		var oChangeContent = oChangeOrChangeContent instanceof Change ? oChangeOrChangeContent.getDefinition() : oChangeOrChangeContent;
 
 		var bControlVariantChange = false;
-		if ((sFileType === "ctrl_variant") || (sFileType === "ctrl_variant_change") || (sFileType === "ctrl_variant_management_change")) {
-			bControlVariantChange = sVariantManagementReference || sVariantReference || sSelectorId;
+		if ((oChangeContent.fileType === "ctrl_variant") || (oChangeContent.fileType === "ctrl_variant_change") || (oChangeContent.fileType === "ctrl_variant_management_change")) {
+			bControlVariantChange = oChangeContent.variantManagementReference || oChangeContent.variantReference || (oChangeContent.selector && oChangeContent.selector.id);
 		}
 
-		return sFileType === "change" || bControlVariantChange;
+		return oChangeContent.fileType === "change" || bControlVariantChange;
 	}
 
 	/**
@@ -314,15 +298,15 @@ sap.ui.define([
 	};
 
 	/**
-	 * Checks the current dependencies map for any open (unresolved) dependencies belonging to the given control
-	 * and returns the IDs of the open dependent changes.
+	 * Checks the current dependencies map for any unresolved dependencies belonging to the given control
+	 * Returns true as soon as the first dependency is found, otherwise false
 	 *
 	 * @param {object} oSelector selector of the control
 	 * @param {sap.ui.core.Component} oAppComponent - Application component instance that is currently loading
-	 * @returns {sap.ui.fl.Change[]} Array of all open dependent changes for the control
+	 * @returns {boolean} Returns true if there are open dependencies
 	 */
-	ChangePersistence.prototype.getOpenDependentChangesForControl = function(oSelector, oAppComponent) {
-		return DependencyHandler.getOpenDependentChangesForControl(this._mChanges, JsControlTreeModifier.getControlIdBySelector(oSelector, oAppComponent), oAppComponent);
+	ChangePersistence.prototype.checkForOpenDependenciesForControl = function(oSelector, oAppComponent) {
+		return DependencyHandler.checkForOpenDependenciesForControl(this._mChanges, JsControlTreeModifier.getControlIdBySelector(oSelector, oAppComponent), oAppComponent);
 	};
 
 	function getInitalDependencyClone(oChange) {
@@ -577,7 +561,7 @@ sap.ui.define([
 			if (bAlreadyDeletedViaCondense) {
 				this.removeChange(oChange);
 				// Remove also from Cache if the persisted change is still there (e.g. navigate away and back to the app)
-				Cache.deleteChange(this._mComponent, oChange.convertToFileContent());
+				Cache.deleteChange(this._mComponent, oChange.getDefinition());
 			} else {
 				this.deleteChange(oChange);
 			}
@@ -748,13 +732,13 @@ sap.ui.define([
 				}
 				return Storage.write({
 					layer: oDirtyChange.getLayer(),
-					flexObjects: [oDirtyChange.convertToFileContent()],
+					flexObjects: [oDirtyChange.getDefinition()],
 					transport: oDirtyChange.getRequest(),
 					parentVersion: sParentVersion
 				});
 			case Change.states.DELETED:
 				return Storage.remove({
-					flexObject: oDirtyChange.convertToFileContent(),
+					flexObject: oDirtyChange.getDefinition(),
 					layer: oDirtyChange.getLayer(),
 					transport: oDirtyChange.getRequest(),
 					parentVersion: sParentVersion
@@ -983,7 +967,7 @@ sap.ui.define([
 				return false;
 			}
 
-			if (sGenerator && oChange.getSupportInformation().generator !== sGenerator) {
+			if (sGenerator && oChange.getDefinition().support.generator !== sGenerator) {
 				return false;
 			}
 

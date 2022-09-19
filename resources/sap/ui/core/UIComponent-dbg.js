@@ -54,7 +54,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Component
 	 * @abstract
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @alias sap.ui.core.UIComponent
 	 * @since 1.9.2
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
@@ -601,7 +601,7 @@ sap.ui.define([
 	 * Returns an element by its ID in the context of the component.
 	 *
 	 * @param {string} sId Component local ID of the element
-	 * @return {sap.ui.core.Element|undefined} element by its ID or <code>undefined</code>
+	 * @return {sap.ui.core.Element} element by its ID or <code>undefined</code>
 	 * @public
 	 */
 	UIComponent.prototype.byId = function(sId) {
@@ -629,7 +629,7 @@ sap.ui.define([
 	 * <code>null</code> if the ID does not contain a prefix.
 	 *
 	 * @param {string} sId Prefixed ID
-	 * @return {string|null} ID without prefix or <code>null</code>
+	 * @return {string} ID without prefix or <code>null</code>
 	 * @public
 	 * @since 1.39.0
 	 */

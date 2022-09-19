@@ -209,11 +209,6 @@ sap.ui.define([
 		 * This function works with date values in UTC to produce timezone agnostic results.
 		 * @param {Date} oDate the input date for which we search the first week date.
 		 * This date is considered as is (no UTC conversion, time cut etc).
-		 * @param {{firstDayOfWeek: int, minimalDaysInFirstWeek: int}} [oWeekConfig] calendar week calculation parameters,
-		 * defaults to oLocale but has precedence over oLocale if both are provided.
-		 * Both properties firstDayOfWeek and minimalDaysInFirstWeek must be provided, otherwise it will be ignored.
-		 * If provided US split week is ignored.
-		 * e.g. <code>{firstDayOfWeek: 1, minimalDaysInFirstWeek: 4}</code>
 		 *
 		 * <br>
 		 * The US weeks at the end of December and at the beginning of January(53th and 1st),
@@ -234,34 +229,23 @@ sap.ui.define([
 		 * @returns {Date} first date of the same week as the given <code>oDate</code> in local timezone.
 		 * @public
 		 */
-		CalendarUtils.getFirstDateOfWeek = function (oDate, oWeekConfig) {
+		CalendarUtils.getFirstDateOfWeek = function (oDate) {
 			var oUniversalDate = new UniversalDate(oDate.getTime()),
 				oFirstDateOfWeek,
 				oFirstUniversalDateOfWeek,
 				oLocaleData = LocaleData.getInstance(sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale()),
-				oLocale = sap.ui.getCore().getConfiguration().getLocale(),
 				iCLDRFirstWeekDay = oLocaleData.getFirstDayOfWeek(),
 				oWeek;
 
-			if (!oWeekConfig || (oWeekConfig.firstDayOfWeek === -1 || oWeekConfig.firstDayOfWeek === undefined)) {
-				oWeekConfig = {
-					firstDayOfWeek: oLocaleData.getFirstDayOfWeek(),
-					minimalDaysInFirstWeek: oLocaleData.getMinimalDaysInFirstWeek()
-				};
-			}
-
 			oWeek = UniversalDate.getWeekByDate(oUniversalDate.getCalendarType(), oUniversalDate.getUTCFullYear(),
-				oUniversalDate.getUTCMonth(), oUniversalDate.getUTCDate(), oLocale, oWeekConfig);
+				oUniversalDate.getUTCMonth(), oUniversalDate.getUTCDate());
 
-			oFirstDateOfWeek = UniversalDate.getFirstDateOfWeek(oUniversalDate.getCalendarType(), oWeek.year, oWeek.week, oLocale, oWeekConfig);
+			oFirstDateOfWeek = UniversalDate.getFirstDateOfWeek(oUniversalDate.getCalendarType(), oWeek.year, oWeek.week);
 			oFirstUniversalDateOfWeek = new UniversalDate(UniversalDate.UTC(oFirstDateOfWeek.year, oFirstDateOfWeek.month, oFirstDateOfWeek.day));
 
 			//In case the day of the computed weekFirstDate is not as in CLDR(e.g. en_US locales), make sure we align it
-
-			if (oWeekConfig && (oWeekConfig.firstDayOfWeek === -1 || oWeekConfig.firstDayOfWeek === undefined)) {
-				while (oFirstUniversalDateOfWeek.getUTCDay() !== iCLDRFirstWeekDay) {
-					oFirstUniversalDateOfWeek.setUTCDate(oFirstUniversalDateOfWeek.getUTCDate() - 1);
-				}
+			while (oFirstUniversalDateOfWeek.getUTCDay() !== iCLDRFirstWeekDay) {
+				oFirstUniversalDateOfWeek.setUTCDate(oFirstUniversalDateOfWeek.getUTCDate() - 1);
 			}
 
 			return new UniversalDate(UniversalDate.UTC(oFirstUniversalDateOfWeek.getUTCFullYear(), oFirstUniversalDateOfWeek.getUTCMonth(),
@@ -541,34 +525,16 @@ sap.ui.define([
 		 * week start date in the previous year(e.g. Sunday, 28 Dec 2014, week 53).
 		 *
 		 * @param {sap.ui.unified.calendar.CalendarDate} oCalendarDate the input date for which we search the first week date.
-		 * @param {{firstDayOfWeek: int, minimalDaysInFirstWeek: int}} [oWeekConfig] calendar week calculation parameters,
-		 * defaults to oLocale but has precedence over oLocale if both are provided.
-		 * Both properties firstDayOfWeek and minimalDaysInFirstWeek must be provided, otherwise it will be ignored.
-		 * If provided US split week is ignored.
-		 * e.g. <code>{firstDayOfWeek: 1, minimalDaysInFirstWeek: 4}</code>
 		 * @returns {sap.ui.unified.calendar.CalendarDate} first date of the same week as the given <code>oDate</code> in local timezone.
 		 * @throws Will throw an error if the arguments are null or are not of the correct type.
 		 * @private
 		 */
-		CalendarUtils._getFirstDateOfWeek = function (oCalendarDate, oWeekConfig) {
-			var oLocaleData = LocaleData.getInstance(sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale());
+		CalendarUtils._getFirstDateOfWeek = function (oCalendarDate) {
 			this._checkCalendarDate(oCalendarDate);
+			var oJSDate = CalendarUtils.getFirstDateOfWeek(oCalendarDate.toUTCJSDate());
+			oJSDate.setFullYear(oJSDate.getUTCFullYear(), oJSDate.getUTCMonth(), oJSDate.getUTCDate());
 
-			if (!oWeekConfig || (oWeekConfig.firstDayOfWeek === -1 || oWeekConfig.firstDayOfWeek === undefined)) {
-				oWeekConfig = {
-					firstDayOfWeek: oLocaleData.getFirstDayOfWeek(),
-					minimalDaysInFirstWeek: oLocaleData.getMinimalDaysInFirstWeek()
-				};
-			}
-
-			if (oCalendarDate.getDay() !== oWeekConfig.firstDayOfWeek) {
-				var oJSDate = CalendarUtils.getFirstDateOfWeek(oCalendarDate.toUTCJSDate(), oWeekConfig);
-				oJSDate.setFullYear(oJSDate.getUTCFullYear(), oJSDate.getUTCMonth(), oJSDate.getUTCDate());
-
-				return CalendarDate.fromLocalJSDate(oJSDate, oCalendarDate.getCalendarType());
-			}
-
-			return oCalendarDate;
+			return CalendarDate.fromLocalJSDate(oJSDate, oCalendarDate.getCalendarType());
 		};
 
 		/**

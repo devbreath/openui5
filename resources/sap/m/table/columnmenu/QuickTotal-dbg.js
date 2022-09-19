@@ -6,12 +6,10 @@
 
 sap.ui.define([
 	"sap/m/table/columnmenu/QuickActionBase",
-	"sap/m/ToggleButton",
-	"sap/m/library"
+	"sap/m/ToggleButton"
 ], function (
 	QuickActionBase,
-	ToggleButton,
-	library
+	ToggleButton
 ) {
 	"use strict";
 
@@ -27,7 +25,7 @@ sap.ui.define([
 	 * @extends sap.m.table.columnmenu.QuickActionBase
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @experimental
@@ -151,10 +149,6 @@ sap.ui.define([
 		oItem.setProperty("totaled", oEvent.getParameters().pressed, true);
 		this.fireChange({item: oItem});
 		this.getMenu().close();
-	};
-
-	QuickTotal.prototype.getCategory = function() {
-		return library.table.columnmenu.Category.Aggregate;
 	};
 
 	return QuickTotal;

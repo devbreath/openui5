@@ -24,7 +24,7 @@ function(
 	 * @alias sap.ui.fl.Cache
 	 * @experimental Since 1.25.0
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @ui5-restricted sap.ui.fl
@@ -196,15 +196,9 @@ function(
 	 */
 	Cache.removeChanges = function(oComponent, aChangeNames) {
 		var oEntry = FlexState.getFlexObjectsFromStorageResponse(oComponent.name);
-
-		if (!oEntry) {
-			return;
-		}
-
 		oEntry.changes = oEntry.changes.filter(function(oChange) {
 			return aChangeNames.indexOf(oChange.fileName) === -1;
 		});
-
 		var oVariantsState = FlexState.getVariantsState(oComponent.name);
 		Object.keys(oVariantsState).forEach(function(sId) {
 			oVariantsState[sId].variants.forEach(function(oVariant) {

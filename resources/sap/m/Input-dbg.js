@@ -157,7 +157,7 @@ function(
 	 * @extends sap.m.InputBase
 	 * @implements sap.ui.core.IAccessKeySupport
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -187,8 +187,6 @@ function(
 			 * Maximum number of characters. Value '0' means the feature is switched off.
 			 * This parameter is not compatible with the input type <code>sap.m.InputType.Number</code>.
 			 * If the input type is set to <code>Number</code>, the <code>maxLength</code> value is ignored.
-			 * If the <code>maxLength</code> is set after there is already a longer value, this value will not get truncated.
-			 * The <code>maxLength</code> property has effect only when the value is modified by user interaction.
 			 */
 			maxLength : {type : "int", group : "Behavior", defaultValue : 0},
 

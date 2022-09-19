@@ -24,12 +24,12 @@ sap.ui.define([
 	 */
 	return function (oChange, mPropertyBag, oSelector) {
 		var oModifier = mPropertyBag.modifier;
-		var oChangeContent = oChange.getContent();
+		var oChangeDefinition = oChange.getDefinition();
 		var oView = mPropertyBag.view;
 		var oComponent = mPropertyBag.appComponent;
 		var mIFrameSettings = { _settings: {} };
 		["url", "width", "height"].forEach(function (sIFrameProperty) {
-			var vValue = oChangeContent[sIFrameProperty];
+			var vValue = oChangeDefinition.content[sIFrameProperty];
 			mIFrameSettings[sIFrameProperty] = vValue;
 			mIFrameSettings._settings[sIFrameProperty] = vValue;
 		});

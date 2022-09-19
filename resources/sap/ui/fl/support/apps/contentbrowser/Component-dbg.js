@@ -6,14 +6,10 @@
 
 sap.ui.define([
 	"sap/ui/core/UIComponent",
-	"sap/ui/fl/Layer",
-	"sap/ui/model/resource/ResourceModel",
-	"sap/ui/model/json/JSONModel"
+	"sap/ui/fl/Layer"
 ], function (
 	UIComponent,
-	Layer,
-	ResourceModel,
-	JSONModel
+	Layer
 ) {
 	"use strict";
 
@@ -24,13 +20,13 @@ sap.ui.define([
 			UIComponent.prototype.init.apply(this, arguments);
 
 			// set i18n
-			var oI18nModel = new ResourceModel({
+			var oI18nModel = new sap.ui.model.resource.ResourceModel({
 				bundleUrl: "sap.ui.fl.support.apps.contentbrowser.i18n.i18n.properties"
 			});
 			this.setModel("i18n", oI18nModel);
 
 			var sMessages = [];
-			var oMessagesModel = new JSONModel(sMessages);
+			var oMessagesModel = new sap.ui.model.json.JSONModel(sMessages);
 			this.setModel(oMessagesModel, "messages");
 			sap.ui.require(["sap/ui/fl/support/apps/contentbrowser/utils/ErrorUtils"], function (ErrorUtils) {
 				ErrorUtils.setMessagesModel(that, oMessagesModel);
@@ -38,7 +34,7 @@ sap.ui.define([
 
 
 			var oContentJson = {};
-			var oContentJsonModel = new JSONModel(oContentJson);
+			var oContentJsonModel = new sap.ui.model.json.JSONModel(oContentJson);
 			this.setModel(oContentJsonModel, "content");
 
 			var oLayersJson = [
@@ -75,7 +71,7 @@ sap.ui.define([
 					icon: "sap-icon://person-placeholder"
 				}
 			];
-			var oLayersJsonModel = new JSONModel(oLayersJson);
+			var oLayersJsonModel = new sap.ui.model.json.JSONModel(oLayersJson);
 			this.setModel(oLayersJsonModel, "layers");
 
 			// create the views based on the url/hash

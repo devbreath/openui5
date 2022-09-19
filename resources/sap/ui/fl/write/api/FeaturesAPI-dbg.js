@@ -62,26 +62,8 @@ sap.ui.define([
 				if (
 					oSettings.isAppVariantSaveAsEnabled()
 					&& sLayer === Layer.CUSTOMER
-					&& sap.ushell_abap /* gravity todo*/ // Not a standalone app
+					&& sap.ushell_abap // Not a standalone app
 				) {
-					return true;
-				}
-				return false;
-			});
-		},
-
-		/**
-		 * Determine if the context-based adaptation feature is available in the connected backend
-		 *
-		 * @param {string} sLayer - Layer to check for key user app variants
-		 * @returns {Promise<boolean>} Promise resolving with a flag if the context-based adaptaion is available
-		 *
-		 * @private
-	 	 * @ui5-restricted
-		 */
-		isContextBasedAdaptationAvailable: function(sLayer) {
-			return Settings.getInstance().then(function (oSettings) {
-				if (oSettings.isContextBasedAdaptationEnabled() && sLayer === Layer.CUSTOMER) {
 					return true;
 				}
 				return false;

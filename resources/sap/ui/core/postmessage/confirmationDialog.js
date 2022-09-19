@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(function(){"use strict";return function(e){return new Promise(function(i,n){var o=sap.ui.getCore().getLoadedLibraries().hasOwnProperty("sap.m");if(o){sap.ui.require(["sap/m/MessageBox"],function(o){o.confirm(e,{actions:[o.Action.YES,o.Action.NO],onClose:function(e){if(e===o.Action.YES){i()}else{n()}}})},n)}else{var r=window.confirm(e);if(r){i()}else{n()}}})}});
-//# sourceMappingURL=confirmationDialog.js.map
+sap.ui.define(function(){"use strict";return function(m){return new Promise(function(r,R){var M=sap.ui.getCore().getLoadedLibraries().hasOwnProperty('sap.m');if(M){sap.ui.require(['sap/m/MessageBox'],function(a){a.confirm(m,{actions:[a.Action.YES,a.Action.NO],onClose:function(A){if(A===a.Action.YES){r();}else{R();}}});},R);}else{var c=window.confirm(m);if(c){r();}else{R();}}});};});

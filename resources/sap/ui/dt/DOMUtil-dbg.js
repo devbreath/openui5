@@ -21,7 +21,7 @@ sap.ui.define([
 	 *
 	 * @namespace
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @since 1.30
@@ -419,6 +419,18 @@ sap.ui.define([
 		this.copyComputedStyles(oNode, oCopy);
 
 		jQuery(oTarget).append(oCopy);
+	};
+
+	/**
+	 * Inserts a &lt;style> tag with specified styles into #overlay-container
+	 * @param {string} sStyles - Plain CSS as a string to be added into the page
+	 * @param {HTMLElement} oTarget - Target DOM Node where to add &lt;style> tag with CSS
+	 */
+	DOMUtil.insertStyles = function (sStyles, oTarget) {
+		var oStyle = document.createElement('style');
+		oStyle.type = 'text/css';
+		oStyle.appendChild(document.createTextNode(sStyles));
+		oTarget.appendChild(oStyle);
 	};
 
 	/**

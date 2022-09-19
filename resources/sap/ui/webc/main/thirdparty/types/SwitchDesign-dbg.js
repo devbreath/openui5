@@ -1,51 +1,20 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/types/DataType"], function (_exports, _DataType) {
-  "use strict";
+sap.ui.define(['sap/ui/webc/common/thirdparty/base/types/DataType'], function (DataType) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-  _DataType = _interopRequireDefault(_DataType);
+	function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e['default'] : e; }
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var DataType__default = /*#__PURE__*/_interopDefaultLegacy(DataType);
 
-  /**
-   * @lends sap.ui.webcomponents.main.types.SwitchDesign.prototype
-   * @public
-   */
-  const SwitchDesigns = {
-    /**
-     * Defines the Switch as Textual
-     * @public
-     * @type {Textual}
-     */
-    Textual: "Textual",
+	const SwitchDesigns = {
+		Textual: "Textual",
+		Graphical: "Graphical",
+	};
+	class SwitchDesign extends DataType__default {
+		static isValid(value) {
+			return !!SwitchDesigns[value];
+		}
+	}
+	SwitchDesign.generateTypeAccessors(SwitchDesigns);
 
-    /**
-     * Defines the Switch as Graphical
-     * @public
-     * @type {Graphical}
-     */
-    Graphical: "Graphical"
-  };
-  /**
-   * @class
-   * Defines input types
-   * @constructor
-   * @author SAP SE
-   * @alias sap.ui.webcomponents.main.types.SwitchDesign
-   * @public
-   * @enum {string}
-   */
+	return SwitchDesign;
 
-  class SwitchDesign extends _DataType.default {
-    static isValid(value) {
-      return !!SwitchDesigns[value];
-    }
-
-  }
-
-  SwitchDesign.generateTypeAccessors(SwitchDesigns);
-  var _default = SwitchDesign;
-  _exports.default = _default;
 });

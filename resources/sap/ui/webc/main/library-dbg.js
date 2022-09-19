@@ -9,10 +9,11 @@
  */
 sap.ui.define([
 		"sap/ui/webc/common/library",
+		"sap/ui/webc/common/thirdparty/base/CSP",
 		"./thirdparty/Assets",
 		"./library.config"
 	], // library dependency
-	function(commonLibrary) {
+	function(commonLibrary, CSP) {
 
 		"use strict";
 
@@ -22,14 +23,14 @@ sap.ui.define([
 		 * @namespace
 		 * @alias sap.ui.webc.main
 		 * @author SAP SE
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
 		 */
 		var thisLib = sap.ui.getCore().initLibrary({
 			name: "sap.ui.webc.main",
-			version: "1.106.0",
+			version: "1.105.1",
 			dependencies: ["sap.ui.core", "sap.ui.webc.common"],
 			noLibraryCSS: true,
 			designtime: "sap/ui/webc/main/designtime/library.designtime",
@@ -1706,6 +1707,8 @@ sap.ui.define([
 			 */
 			Normal: "Normal"
 		};
+
+		CSP.setPackageCSSRoot("@ui5/webcomponents", sap.ui.require.toUrl("sap/ui/webc/main/thirdparty/css/"));
 
 		return thisLib;
 

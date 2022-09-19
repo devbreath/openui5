@@ -37,7 +37,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @private
@@ -184,7 +184,7 @@ sap.ui.define([
 	};
 
 	BaseFilter.prototype._getErrorMessage = function () {
-		var sMessage = Core.getLibraryResourceBundle("sap.ui.integration").getText("CARD_FILTER_DATA_LOAD_ERROR");
+		var sMessage = "Unable to load the filter.";
 
 		return new HBox({
 			justifyContent: "Center",

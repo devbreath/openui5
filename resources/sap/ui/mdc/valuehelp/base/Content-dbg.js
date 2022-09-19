@@ -32,7 +32,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new element
 	 * @class Content for the {@link sap.ui.mdc.valuehelp.base.Container Container} element.
 	 * @extends sap.ui.core.Element
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -258,22 +258,21 @@ sap.ui.define([
 
 	/**
 	 * Finalize content before it is shown
-	 * @param {boolean} bInitial Indicates, if the content is to be shown for the first time since it's container opened.
+	 *
 	 * @private
 	 * @ui5-restricted sap.ui.mdc.valuehelp.base.Container
 	 */
-	Content.prototype.onBeforeShow = function (bInitial) {
+	Content.prototype.onBeforeShow = function () {
 
 	};
 
 	/**
 	 * Called if the content will be shown.
 	 *
-	 * @param {boolean} bInitial Indicates, if the content is shown for the first time since it's container opened.
 	 * @private
 	 * @ui5-restricted sap.ui.mdc.valuehelp.base.Container
 	 */
-	Content.prototype.onShow = function (bInitial) {
+	Content.prototype.onShow = function () {
 		this._bVisible = true;
 		this._handleConditionsUpdate();
 		//this._handleFilterValueUpdate();
@@ -495,9 +494,9 @@ sap.ui.define([
 		return oContainer && oContainer.isValueHelpDelegateInitialized();
 	};
 
-	Content.prototype.getControl = function () {
+	Content.prototype._getControl = function () {
 		var oContainer = this.getParent();
-		return oContainer && oContainer.getControl();
+		return oContainer && oContainer._getControl();
 	};
 
 	Content.prototype.getCount = function (aConditions) {
@@ -701,6 +700,7 @@ sap.ui.define([
 	Content.prototype.onContainerOpen = function() {
 
 	};
+
 
 	PromiseMixin.call(Content.prototype);
 

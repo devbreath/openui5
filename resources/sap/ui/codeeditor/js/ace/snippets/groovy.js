@@ -1,2 +1,1 @@
-(function(){ace.require(["ace/snippets/groovy"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
-//# sourceMappingURL=groovy.js.map
+;(function(){ace.require(["ace/snippets/groovy"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();

@@ -9,18 +9,14 @@ sap.ui.define([
 	"sap/ui/fl/Utils",
 	"sap/ui/rta/command/Settings",
 	"sap/ui/rta/command/CompositeCommand",
-	"sap/ui/core/util/reflection/JsControlTreeModifier",
-	"sap/ui/rta/util/showMessageBox",
-	"sap/ui/core/Core"
+	"sap/ui/core/util/reflection/JsControlTreeModifier"
 ], function(
 	ManagedObject,
 	PersistenceWriteAPI,
 	FlUtils,
 	Settings,
 	CompositeCommand,
-	JsControlTreeModifier,
-	showMessageBox,
-	Core
+	JsControlTreeModifier
 ) {
 	"use strict";
 
@@ -36,12 +32,12 @@ sap.ui.define([
 		var oSelector = oChange.getSelector && oChange.getSelector();
 		var oCommand = new Settings({
 			selector: oSelector,
-			changeType: oChange.getChangeType(),
+			changeType: oChange.getDefinition().changeType,
 			element: JsControlTreeModifier.bySelector(oSelector, oComponent)
 		});
 		oCommand._oPreparedChange = oChange;
 		// check if change belongs to a composite command
-		var sCompositeId = oChange.getSupportInformation().compositeCommand;
+		var sCompositeId = oChange.getDefinition().support.compositeCommand;
 		if (sCompositeId) {
 			if (!mComposite[sCompositeId]) {
 				mComposite[sCompositeId] = new CompositeCommand();
@@ -59,7 +55,7 @@ sap.ui.define([
 	 * @class
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @since 1.34
@@ -230,12 +226,6 @@ sap.ui.define([
 					oError.index = this._toBeExecuted;
 					oError.command = this.removeCommand(this._toBeExecuted); // remove failing command
 					this._toBeExecuted--;
-					var oRtaResourceBundle = Core.getLibraryResourceBundle("sap.ui.rta");
-					showMessageBox(
-						oRtaResourceBundle.getText("MSG_GENERIC_ERROR_MESSAGE", oError.message),
-						{title: oRtaResourceBundle.getText("HEADER_ERROR")},
-						"error"
-					);
 					return Promise.reject(oError);
 				}.bind(this));
 			}

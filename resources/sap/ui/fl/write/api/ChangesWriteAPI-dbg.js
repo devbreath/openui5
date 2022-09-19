@@ -18,8 +18,7 @@ sap.ui.define([
 	"sap/ui/fl/apply/_internal/ChangesController",
 	"sap/ui/fl/descriptorRelated/api/DescriptorChangeFactory",
 	"sap/ui/fl/initial/_internal/changeHandlers/ChangeHandlerStorage",
-	"sap/ui/fl/write/_internal/appVariant/AppVariantInlineChangeFactory",
-	"sap/ui/core/Core"
+	"sap/ui/fl/write/_internal/appVariant/AppVariantInlineChangeFactory"
 ], function(
 	includes,
 	_omit,
@@ -34,8 +33,7 @@ sap.ui.define([
 	ChangesController,
 	DescriptorChangeFactory,
 	ChangeHandlerStorage,
-	AppVariantInlineChangeFactory,
-	Core
+	AppVariantInlineChangeFactory
 ) {
 	"use strict";
 
@@ -145,22 +143,13 @@ sap.ui.define([
 			// TODO: Descriptor apply function
 			return Applier.applyChangeOnControl(mPropertyBag.change, mPropertyBag.element, _omit(mPropertyBag, ["element", "change"]))
 			.then(function(oResult) {
-				var aDependentChanges = oFlexController.getOpenDependentChangesForControl(mPropertyBag.change.getSelector(), mPropertyBag.appComponent);
-				if (aDependentChanges.length > 0) {
+				var bDependenciesExist = oFlexController.checkForOpenDependenciesForControl(mPropertyBag.change.getSelector(), mPropertyBag.appComponent);
+				if (bDependenciesExist) {
 					return ChangesWriteAPI.revert({
 						change: mPropertyBag.change,
 						element: mPropertyBag.element
 					}).then(function() {
-						var oFlResourceBundle = Core.getLibraryResourceBundle("sap.ui.fl");
-						var sDependentChangesFileNames = aDependentChanges.map(function(oChange) {
-							return oChange.getId();
-						}).join(", ");
-						throw Error(
-							oFlResourceBundle.getText(
-								"MSG_DEPENDENT_CHANGE_ERROR",
-								[mPropertyBag.change.getId(), sDependentChangesFileNames]
-							)
-						);
+						throw Error("The following Change cannot be applied because of a dependency: " + mPropertyBag.change.getId());
 					});
 				}
 				return oResult;

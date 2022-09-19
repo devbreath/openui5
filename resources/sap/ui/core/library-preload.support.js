@@ -7,7 +7,7 @@
 /**
  * Adds support rules to the core
  */
-sap.ui.predefine("sap/ui/core/library.support", [
+sap.ui.predefine('sap/ui/core/library.support',[
 	"./rules/Misc.support",
 	"./rules/Config.support",
 	"./rules/Model.support",
@@ -41,7 +41,7 @@ sap.ui.predefine("sap/ui/core/library.support", [
 /**
  * Defines Application related support rules.
  */
-sap.ui.predefine("sap/ui/core/rules/App.support", [
+sap.ui.predefine('sap/ui/core/rules/App.support',[
 	"sap/ui/support/library",
 	"sap/ui/core/mvc/View",
 	"sap/ui/core/mvc/Controller",
@@ -84,7 +84,7 @@ sap.ui.predefine("sap/ui/core/rules/App.support", [
 		resolution: "Use asynchronous XHR calls instead",
 		resolutionurls: [{
 			text: 'Documentation: Loading a Module',
-			href: 'https://sdk.openui5.org/topic/d12024e38385472a89c1ad204e1edb48'
+			href: 'https://openui5.hana.ondemand.com/topic/d12024e38385472a89c1ad204e1edb48'
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			// get the controllers and the associated viewId
@@ -185,7 +185,8 @@ sap.ui.predefine("sap/ui/core/rules/App.support", [
 		resolution: "Declare the dependency properly or even better: Migrate to the modern module API as documented.",
 		resolutionurls: [{
 			text: 'Documentation: Modularization',
-			href: 'https://sdk.openui5.org/topic/b8fdf0c903424c9191f142842323ae22'
+			// TODO: link to the modularization dev guide
+			href: 'https://openui5.hana.ondemand.com/api'
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var oLoggedObjects = oScope.getLoggedObjects("jquery.sap.stubs");
@@ -217,7 +218,8 @@ sap.ui.predefine("sap/ui/core/rules/App.support", [
 		resolution: "Migrate to the modern module API as documented.",
 		resolutionurls: [{
 			text: 'Documentation: Modularization',
-			href: 'https://sdk.openui5.org/topic/a075ed88ef324261bca41813a6ac4a1c'
+			// TODO: link to the modularization dev guide
+			href: 'https://openui5.hana.ondemand.com/topic/a075ed88ef324261bca41813a6ac4a1c'
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope, fnResolve) {
 			if (oScope.getType() === "global") {
@@ -257,7 +259,7 @@ sap.ui.predefine("sap/ui/core/rules/App.support", [
 		resolution: "Avoid using synchronous factory functions. Use the create() and/or load() functions of the respective modules instead. For example: View.create(...) or Component.load(). Migrate to the modern module API as documented.",
 		resolutionurls: [{
 			text: 'Documentation: Legacy Factories Replacement',
-			href: 'https://sdk.openui5.org/topic/491bd9c70b9f4c4d913c8c7b4a970833'
+			href: 'https://openui5.hana.ondemand.com/topic/491bd9c70b9f4c4d913c8c7b4a970833'
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var aFactoryTypes = [
@@ -301,7 +303,7 @@ sap.ui.predefine("sap/ui/core/rules/App.support", [
 		resolution: "Avoid using sap.ui.core.mvc.JSView. Instead use Typed Views by defining the view class with 'sap.ui.core.mvc.View.extend' and creating the view instances with 'sap.ui.core.mvc.View.create'.",
 		resolutionurls: [{
 			text: 'Documentation: Typed Views',
-			href: 'https://sdk.openui5.org/topic/e6bb33d076dc4f23be50c082c271b9f0'
+			href: 'https://openui5.hana.ondemand.com/topic/e6bb33d076dc4f23be50c082c271b9f0'
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var oLoggedObjects = oScope.getLoggedObjects("sap.ui.core.mvc.JSView");
@@ -331,11 +333,11 @@ sap.ui.predefine("sap/ui/core/rules/App.support", [
 		resolution: "Check the details of the findings for tips to fix the issue.",
 		resolutionurls: [{
 			text: "Performance: Speed Up Your App",
-			href: "https://sdk.openui5.org/topic/408b40efed3c416681e1bd8cdd8910d4"
+			href: "https://openui5.hana.ondemand.com/topic/408b40efed3c416681e1bd8cdd8910d4"
 		},
 		{
 			text: "Configuration of 'sap.ui.loader'",
-			href: "https://sdk.openui5.org/api/sap.ui.loader"
+			href: "https://openui5.hana.ondemand.com/api/sap.ui.loader"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var oLoggedObjects = oScope.getLoggedObjects("SyncXHR");
@@ -366,7 +368,7 @@ sap.ui.predefine("sap/ui/core/rules/App.support", [
 		resolution: "Check the details of the findings for tips to fix the issue.",
 		resolutionurls: [{
 			text: 'Documentation: Adapting to the Modularization of the Core',
-			href: 'https://sdk.openui5.org/topic/b8fdf0c903424c9191f142842323ae22'
+			href: 'https://openui5.hana.ondemand.com/topic/b8fdf0c903424c9191f142842323ae22'
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var oLoggedObjects = oScope.getLoggedObjects("Deprecation");
@@ -461,7 +463,7 @@ sap.ui.predefine("sap/ui/core/rules/App.support", [
 		resolution: "A bound call to sap.ui.core.UIComponent.prototype.init must be introduced in the sub-class.",
 		resolutionurls: [{
 			text: "API Documentation: sap.ui.core.UIComponent#init",
-			href: "https://sdk.openui5.org/api/sap.ui.core.UIComponent/methods/init"
+			href: "https://openui5.hana.ondemand.com/api/sap.ui.core.UIComponent#methods/init"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var oLoggedObjects = oScope.getLoggedObjects("missingInitInUIComponent");
@@ -491,11 +493,11 @@ sap.ui.predefine("sap/ui/core/rules/App.support", [
 		resolution: "A bound call to sap.ui.core.Component or sap.ui.core.mvc.Controller must be introduced in the sub-class.",
 		resolutionurls: [{
 			text: "API Documentation: sap.ui.core.mvc.Controller",
-			href: "https://sdk.openui5.org/api/sap.ui.core.mvc.Controller"
+			href: "https://openui5.hana.ondemand.com/api/sap.ui.core.mvc.Controller"
 		},
 		{
 			text: "API Documentation: sap.ui.core.Component",
-			href: "https://sdk.openui5.org/api/sap.ui.core.Component"
+			href: "https://openui5.hana.ondemand.com/api/sap.ui.core.Component"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var oLoggedObjects = oScope.getLoggedObjects("missingSuperConstructor");
@@ -521,7 +523,7 @@ sap.ui.predefine("sap/ui/core/rules/App.support", [
 /**
  * Defines support rules for the app configuration.
  */
-sap.ui.predefine("sap/ui/core/rules/Config.support", [
+sap.ui.predefine('sap/ui/core/rules/Config.support',[
 	"jquery.sap.global",
 	"sap/ui/support/library",
 	"sap/ui/core/mvc/XMLView"
@@ -554,15 +556,15 @@ sap.ui.predefine("sap/ui/core/rules/Config.support", [
 		resolutionurls: [
 			{
 				text: "Performance: Speed Up Your App",
-				href: "https://sdk.openui5.org/topic/408b40efed3c416681e1bd8cdd8910d4"
+				href: "https://openui5.hana.ondemand.com/topic/408b40efed3c416681e1bd8cdd8910d4"
 			},
 			{
 				text: "Best Practices for Loading Modules Asynchronously",
-				href: "https://sdk.openui5.org/topic/00737d6c1b864dc3ab72ef56611491c4"
+				href: "https://openui5.hana.ondemand.com/topic/00737d6c1b864dc3ab72ef56611491c4#loio00737d6c1b864dc3ab72ef56611491c4"
 			},
 			{
 				text: "Is Your Application Ready for Asynchronous Loading?",
-				href: "https://sdk.openui5.org/topic/493a15aa978d4fe9a67ea9407166eb01"
+				href: "https://openui5.hana.ondemand.com/topic/493a15aa978d4fe9a67ea9407166eb01"
 			}
 		]
 	};
@@ -630,7 +632,7 @@ sap.ui.predefine("sap/ui/core/rules/Config.support", [
 			"For more information, see the SAPUI5 developer guide.",
 		resolutionurls: [{
 			text: "Documentation: Cache Buster for SAPUI5 Application Resources",
-			href: "https://sdk.openui5.org/topic/4cfe7eff3001447a9d4b0abeaba95166"
+			href: "https://openui5.hana.ondemand.com/topic/4cfe7eff3001447a9d4b0abeaba95166"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var sUI5ICFNode = "/sap/bc/ui5_ui5/";
@@ -679,7 +681,7 @@ sap.ui.predefine("sap/ui/core/rules/Config.support", [
 		resolution: "Adapt your application descriptor and your application coding to improve the performance",
 		resolutionurls: [{
 			text: 'Documentation: Descriptor Dependencies to Libraries and Components',
-			href: 'https://sdk.openui5.org/topic/8521ad1955f340f9a6207d615c88d7fd'
+			href: 'https://openui5.hana.ondemand.com/topic/8521ad1955f340f9a6207d615c88d7fd'
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			if (oScope.getType() === "global") {
@@ -763,7 +765,7 @@ sap.ui.predefine("sap/ui/core/rules/Config.support", [
 		resolution: "Adapt your application descriptor and your application coding to improve the performance",
 		resolutionurls: [{
 			text: 'Documentation: Descriptor Dependencies to Libraries and Components',
-			href: 'https://sdk.openui5.org/topic/8521ad1955f340f9a6207d615c88d7fd'
+			href: 'https://openui5.hana.ondemand.com/topic/8521ad1955f340f9a6207d615c88d7fd'
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var mComponents = oCoreFacade.getComponents();
@@ -810,7 +812,7 @@ sap.ui.predefine("sap/ui/core/rules/Config.support", [
 		resolution: "Adapt your application descriptor and your application coding to improve the performance",
 		resolutionurls: [{
 			text: 'Documentation: Using and Nesting Components',
-			href: 'https://sdk.openui5.org/topic/346599f0890d4dfaaa11c6b4ffa96312'
+			href: 'https://openui5.hana.ondemand.com/topic/346599f0890d4dfaaa11c6b4ffa96312'
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var mComponents = oCoreFacade.getComponents();
@@ -860,7 +862,7 @@ sap.ui.predefine("sap/ui/core/rules/Config.support", [
 		resolution: "Adapt your application descriptor and your application coding to improve the performance",
 		resolutionurls: [{
 			text: 'Documentation: Manifest Model Preload',
-			href: 'https://sdk.openui5.org/topic/26ba6a5c1e5c417f8b21cce1411dba2c'
+			href: 'https://openui5.hana.ondemand.com/topic/26ba6a5c1e5c417f8b21cce1411dba2c'
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var mComponents = oCoreFacade.getComponents();
@@ -912,10 +914,10 @@ sap.ui.predefine("sap/ui/core/rules/Config.support", [
 		resolution: "Set manifest parameter models[<Model Name>].settings.earlyRequests to true",
 		resolutionurls: [{
 			text: 'Documentation: Manifest Model Preload',
-			href: 'https://sdk.openui5.org/topic/26ba6a5c1e5c417f8b21cce1411dba2c'
+			href: 'https://openui5.hana.ondemand.com/topic/26ba6a5c1e5c417f8b21cce1411dba2c'
 		}, {
 			text: 'API: V4 ODataModel, parameter earlyRequests',
-			href: 'https://sdk.openui5.org/api/sap.ui.model.odata.v4.ODataModel'
+			href: 'https://openui5.hana.ondemand.com/api/sap.ui.model.odata.v4.ODataModel'
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var mComponents = oCoreFacade.getComponents();
@@ -963,13 +965,13 @@ sap.ui.predefine("sap/ui/core/rules/Config.support", [
 		resolution: "Adapt your application descriptor and your application coding to improve the performance and efficiency",
 		resolutionurls: [{
 			text: 'Documentation: Routing Configuration',
-			href: 'https://sdk.openui5.org/topic/902313063d6f45aeaa3388cc4c13c34e'
+			href: 'https://openui5.hana.ondemand.com/topic/902313063d6f45aeaa3388cc4c13c34e'
 		}, {
 			text: "Documentation: Instantiating Views",
-			href: "https://sdk.openui5.org/topic/68d0e58857a647d49470d9f92dd859bd"
+			href: "https://openui5.hana.ondemand.com/topic/68d0e58857a647d49470d9f92dd859bd"
 		}, {
 			text: "Documentation: UI Adaptation at Runtime: Enable Your App",
-			href: "https://sdk.openui5.org/topic/f1430c0337534d469da3a56307ff76af"
+			href: "https://openui5.hana.ondemand.com/topic/f1430c0337534d469da3a56307ff76af"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var mComponents = oCoreFacade.getComponents();
@@ -1046,8 +1048,8 @@ sap.ui.predefine("sap/ui/core/rules/Config.support", [
 /**
  * Helper for core functionality in Support Tool infrastructure.
  */
-sap.ui.predefine("sap/ui/core/rules/CoreHelper.support", ["sap/ui/core/Element", "sap/ui/thirdparty/jquery"],
-	function(Element, jQuery) {
+sap.ui.predefine('sap/ui/core/rules/CoreHelper.support',["sap/ui/thirdparty/jquery", "sap/ui/dom/jquery/control"],  // jQuery Plugin "control"
+	function(jQuery) {
 		"use strict";
 
 		var CoreHelper = {
@@ -1064,7 +1066,7 @@ sap.ui.predefine("sap/ui/core/rules/CoreHelper.support", ["sap/ui/core/Element",
 				 */
 				// jQuery Plugin "control"
 				var skipParents = ["sap.ui.core.HTML"],
-					parentNode = Element.closestTo(node);
+					parentNode = jQuery(node).control()[0];
 
 				if (!parentNode) {
 					return false;
@@ -1132,7 +1134,7 @@ sap.ui.predefine("sap/ui/core/rules/CoreHelper.support", ["sap/ui/core/Element",
 /**
  * Defines miscellaneous support rules.
  */
-sap.ui.predefine("sap/ui/core/rules/Misc.support", [
+sap.ui.predefine('sap/ui/core/rules/Misc.support',[
 	"sap/ui/core/Component",
 	"sap/ui/support/library",
 	"./CoreHelper.support",
@@ -1300,7 +1302,7 @@ sap.ui.predefine("sap/ui/core/rules/Misc.support", [
 /**
  * Defines support rules related to the model.
  */
-sap.ui.predefine("sap/ui/core/rules/Model.support", [
+sap.ui.predefine('sap/ui/core/rules/Model.support',[
 	"sap/ui/support/library",
 	"sap/ui/support/supportRules/util/StringAnalyzer",
 	"sap/ui/model/CompositeBinding",
@@ -1414,19 +1416,19 @@ sap.ui.predefine("sap/ui/core/rules/Model.support", [
 		resolution: "Check the binding path for typos",
 		resolutionurls: [
 			{
-				href: "https://sdk.openui5.org/api/sap.ui.model.Context",
+				href: "https://openui5.hana.ondemand.com/api/sap.ui.model.Context",
 				text: "API Reference: Context"
 			},
 			{
-				href: "https://sdk.openui5.org/topic/e5310932a71f42daa41f3a6143efca9c",
+				href: "https://openui5.hana.ondemand.com/topic/e5310932a71f42daa41f3a6143efca9c",
 				text: "Documentation: Data Binding Tutorial"
 			},
 			{
-				href: "https://sdk.openui5.org/topic/97830de2d7314e93b5c1ee3878a17be9",
+				href: "https://openui5.hana.ondemand.com/topic/97830de2d7314e93b5c1ee3878a17be9",
 				text: "Documentation: Data Binding Tutorial - Step 12: Aggregation Binding Using Templates"
 			},
 			{
-				href: "https://sdk.openui5.org/topic/6c7c5c266b534e7ea9a28f861dc515f5",
+				href: "https://openui5.hana.ondemand.com/topic/6c7c5c266b534e7ea9a28f861dc515f5",
 				text: "Documentation: Data Binding Tutorial - Step 13: Element Binding"
 			}
 		],
@@ -1518,16 +1520,16 @@ sap.ui.predefine("sap/ui/core/rules/Model.support", [
 			resolution : "Use the '$select' binding parameter when binding an aggregation against "
 				+ "an OData V4 model, or 'select' in case of an OData V2 model",
 			resolutionurls : [{
-				href : "https://sdk.openui5.org/topic/408b40efed3c416681e1bd8cdd8910d4#section_useSelectQuery",
+				href : "https://openui5.hana.ondemand.com/topic/408b40efed3c416681e1bd8cdd8910d4.html#loio408b40efed3c416681e1bd8cdd8910d4/section_useSelectQuery",
 				text : "Documentation: Performance: Speed Up Your App"
 			}, {
-				href : "https://sdk.openui5.org/topic/10ca58b701414f7f93cd97156f898f80",
+				href : "https://openui5.hana.ondemand.com/topic/10ca58b701414f7f93cd97156f898f80",
 				text : "OData V4 only: Automatic determination of $expand and $select"
 			}, {
-				href : "https://sdk.openui5.org/api/sap.ui.model.odata.v4.ODataModel/methods/bindList",
+				href : "https://openui5.hana.ondemand.com/api/sap.ui.model.odata.v4.ODataModel%23methods/bindList",
 				text : "Documentation: v4.ODataModel#bindList"
 			}, {
-				href : "https://sdk.openui5.org/api/sap.ui.model.odata.v2.ODataModel/methods/bindList",
+				href : "https://openui5.hana.ondemand.com/api/sap.ui.model.odata.v2.ODataModel%23methods/bindList",
 				text : "Documentation: v2.ODataModel#bindList"
 			}],
 			title : "Model: Use the $select/select binding parameter when binding aggregations to "
@@ -1545,7 +1547,7 @@ sap.ui.predefine("sap/ui/core/rules/Model.support", [
 /**
  * Defines support rules related to the view.
  */
-sap.ui.predefine("sap/ui/core/rules/Rendering.support", [
+sap.ui.predefine('sap/ui/core/rules/Rendering.support',[
 		"sap/ui/support/library",
 		"sap/ui/core/RenderManager"
 	],
@@ -1575,7 +1577,7 @@ sap.ui.predefine("sap/ui/core/rules/Rendering.support", [
 		resolution: "Control and renderer must be migrated to modern rendering syntax. For more information consult with documentation.",
 		resolutionurls: [{
 			text: "Documentation: RenderManager syntax",
-			href: "https://sdk.openui5.org/api/sap.ui.core.RenderManager"
+			href: "https://openui5.hana.ondemand.com/api/sap.ui.core.RenderManager"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var aControls = oScope.getElements().filter(function (oElement) { return oElement.isA("sap.ui.core.Control"); });
@@ -1612,8 +1614,8 @@ sap.ui.predefine("sap/ui/core/rules/Rendering.support", [
 /**
  * Defines miscellaneous support rules.
  */
-sap.ui.predefine("sap/ui/core/rules/Theming.support", ["sap/ui/core/Element", "sap/ui/support/library", "./CoreHelper.support", "sap/ui/thirdparty/jquery"],
-	function(Element, SupportLib, CoreHelper, jQuery) {
+sap.ui.predefine('sap/ui/core/rules/Theming.support',["sap/ui/support/library", "./CoreHelper.support", "sap/ui/thirdparty/jquery", "sap/ui/dom/jquery/control"], // jQuery Plugin "control"
+	function(SupportLib, CoreHelper, jQuery) {
 	"use strict";
 
 	// support rules can get loaded within a ui5 version which does not have module "sap/base/Log" yet
@@ -1646,10 +1648,10 @@ sap.ui.predefine("sap/ui/core/rules/Theming.support", ["sap/ui/core/Element", "s
 		resolution: "Avoid CSS manipulations with custom CSS values as this could lead to rendering issues ",
 		resolutionurls: [{
 			text: 'CSS Styling Issues',
-			href: 'https://sdk.openui5.org/topic/9d87f925dfbb4e99b9e2963693aa00ef'
+			href: 'https://openui5.hana.ondemand.com/topic/9d87f925dfbb4e99b9e2963693aa00ef'
 		}, {
 			text: 'General Guidelines',
-			href: 'https://sdk.openui5.org/topic/5e08ff90b7434990bcb459513d8c52c4'
+			href: 'https://openui5.hana.ondemand.com/topic/5e08ff90b7434990bcb459513d8c52c4'
 		}],
 		check: function (issueManager, oCoreFacade, oScope) {
 			var cssFilesMessage = "Following stylesheet file(s) contain 'custom' CSS that could affects (overwrites) UI5 controls' own styles: \n",
@@ -1703,10 +1705,10 @@ sap.ui.predefine("sap/ui/core/rules/Theming.support", ["sap/ui/core/Element", "s
 		resolution: "Avoid CSS manipulations with custom CSS values as this could lead to rendering issues ",
 		resolutionurls: [{
 			text: 'CSS Styling Issues',
-			href: 'https://sdk.openui5.org/topic/9d87f925dfbb4e99b9e2963693aa00ef'
+			href: 'https://openui5.hana.ondemand.com/topic/9d87f925dfbb4e99b9e2963693aa00ef'
 		}, {
 			text: 'General Guidelines',
-			href: 'https://sdk.openui5.org/topic/5e08ff90b7434990bcb459513d8c52c4'
+			href: 'https://openui5.hana.ondemand.com/topic/5e08ff90b7434990bcb459513d8c52c4'
 		}],
 		check: function (issueManager, oCoreFacade, oScope) {
 			var controlCustomCssHashMap = {},
@@ -1722,7 +1724,7 @@ sap.ui.predefine("sap/ui/core/rules/Theming.support", ["sap/ui/core/Element", "s
 						var hasUI5Parent = CoreHelper.nodeHasUI5ParentControl(node, oScope);
 						if (hasUI5Parent) {
 							// jQuery Plugin "control"
-							var ui5Control = Element.closestTo(node);
+							var ui5Control = jQuery(node).control()[0];
 
 							if (!controlCustomCssHashMap.hasOwnProperty(ui5Control.getId())) {
 								controlCustomCssHashMap[ui5Control.getId()] =  "";
@@ -1762,7 +1764,7 @@ sap.ui.predefine("sap/ui/core/rules/Theming.support", ["sap/ui/core/Element", "s
 		resolution: "Use asynchronous variant of the Parameters.get API",
 		resolutionurls: [{
 			text: 'Parameters.get API Reference',
-			href: 'https://sdk.openui5.org/api/sap.ui.core.theming.Parameters/methods/sap.ui.core.theming.Parameters.get'
+			href: 'https://openui5.hana.ondemand.com/api/sap.ui.core.theming.Parameters#methods/sap.ui.core.theming.Parameters.get'
 		}],
 		check: function (issueManager, oCoreFacade, oScope) {
 			var oLoggedObjects = oScope.getLoggedObjects("LegacyParametersGet");
@@ -1792,7 +1794,7 @@ sap.ui.predefine("sap/ui/core/rules/Theming.support", ["sap/ui/core/Element", "s
 /**
  * Defines support rules related to the view.
  */
-sap.ui.predefine("sap/ui/core/rules/View.support", ["sap/base/Log", "sap/ui/support/library", "sap/ui/core/Element", "sap/ui/thirdparty/jquery", "sap/base/util/isEmptyObject", "sap/ui/base/DataType"],
+sap.ui.predefine('sap/ui/core/rules/View.support',["sap/base/Log", "sap/ui/support/library", "sap/ui/core/Element", "sap/ui/thirdparty/jquery", "sap/base/util/isEmptyObject", "sap/ui/base/DataType"],
 	function(Log, SupportLib, Element, jQuery, isEmptyObject, DataType) {
 	"use strict";
 
@@ -1827,7 +1829,7 @@ sap.ui.predefine("sap/ui/core/rules/View.support", ["sap/base/Log", "sap/ui/supp
 		resolution: "Define the XML view as '<mvc:View ...>' and configure the XML namespace as 'xmlns:mvc=\"sap.ui.core.mvc\"'",
 		resolutionurls: [{
 			text: "Documentation: Namespaces in XML Views",
-			href: "https://sdk.openui5.org/topic/2421a2c9fa574b2e937461b5313671f0"
+			href: "https://openui5.hana.ondemand.com/topic/2421a2c9fa574b2e937461b5313671f0"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var aXMLViews = oScope.getElements().filter(function (oControl) {
@@ -1863,7 +1865,7 @@ sap.ui.predefine("sap/ui/core/rules/View.support", ["sap/base/Log", "sap/ui/supp
 		resolution: "Set the namespace of the control library that holds most of the controls you use as default namespace (e.g. xmlns=\"sap.m\")",
 		resolutionurls: [{
 			text: "Documentation: Namespaces in XML Views",
-			href: "https://sdk.openui5.org/topic/2421a2c9fa574b2e937461b5313671f0"
+			href: "https://openui5.hana.ondemand.com/topic/2421a2c9fa574b2e937461b5313671f0"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var aXMLViews = oScope.getElements().filter(function (oControl) {
@@ -1896,7 +1898,7 @@ sap.ui.predefine("sap/ui/core/rules/View.support", ["sap/base/Log", "sap/ui/supp
 		resolution: "Start the Control tag with upper case",
 		resolutionurls: [{
 			text: "Documentation: SAPUI5 Control Development Guidelines",
-			href: "https://sdk.openui5.org/topic/4549da61e2d949d6a3d20ad8a9d17a6f"
+			href: "https://openui5.hana.ondemand.com/topic/4549da61e2d949d6a3d20ad8a9d17a6f"
 		}],
 		check: function (oIssueManager, oCoreFacade, oScope) {
 			var aRelevantLogMessages = Log.getLogEntries().filter(function(oEntry) {
@@ -1928,7 +1930,7 @@ sap.ui.predefine("sap/ui/core/rules/View.support", ["sap/base/Log", "sap/ui/supp
 		resolution: "Remove the unused namespaces from the view definition",
 		resolutionurls: [{
 			text: "Documentation: Namespaces in XML Views",
-			href: "https://sdk.openui5.org/topic/2421a2c9fa574b2e937461b5313671f0"
+			href: "https://openui5.hana.ondemand.com/topic/2421a2c9fa574b2e937461b5313671f0"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			var aXMLViews = oScope.getElements().filter(function (oControl) {
@@ -1981,7 +1983,7 @@ sap.ui.predefine("sap/ui/core/rules/View.support", ["sap/base/Log", "sap/ui/supp
 		resolution: "Refer to the API of the element which property should be used instead.",
 		resolutionurls: [{
 			text: "API Reference",
-			href: "https://sdk.openui5.org/api/deprecated"
+			href: "https://openui5.hana.ondemand.com/api/deprecated"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			oScope.getElementsByClassName(Element).forEach(function(oElement) {
@@ -2024,7 +2026,7 @@ sap.ui.predefine("sap/ui/core/rules/View.support", ["sap/base/Log", "sap/ui/supp
 		resolution: "Refer to the API of the element which element should be used instead.",
 		resolutionurls: [{
 			text: "API Reference",
-			href: "https://sdk.openui5.org/api/deprecated"
+			href: "https://openui5.hana.ondemand.com/api/deprecated"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			oScope.getElementsByClassName(Element).forEach(function(oElement) {
@@ -2058,7 +2060,7 @@ sap.ui.predefine("sap/ui/core/rules/View.support", ["sap/base/Log", "sap/ui/supp
 		resolution: "Refer to the API of the element which aggregation should be used instead.",
 		resolutionurls: [{
 			text: "API Reference",
-			href: "https://sdk.openui5.org/api/deprecated"
+			href: "https://openui5.hana.ondemand.com/api/deprecated"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			oScope.getElementsByClassName(Element).forEach(function(oElement) {
@@ -2098,7 +2100,7 @@ sap.ui.predefine("sap/ui/core/rules/View.support", ["sap/base/Log", "sap/ui/supp
 		resolution: "Refer to the API of the element which association should be used instead.",
 		resolutionurls: [{
 			text: "API Reference",
-			href: "https://sdk.openui5.org/api/deprecated"
+			href: "https://openui5.hana.ondemand.com/api/deprecated"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			oScope.getElementsByClassName(Element).forEach(function(oElement) {
@@ -2138,7 +2140,7 @@ sap.ui.predefine("sap/ui/core/rules/View.support", ["sap/base/Log", "sap/ui/supp
 		resolution: "Refer to the API of the element which event should be used instead.",
 		resolutionurls: [{
 			text: "API Reference",
-			href: "https://sdk.openui5.org/api/deprecated"
+			href: "https://openui5.hana.ondemand.com/api/deprecated"
 		}],
 		check: function(oIssueManager, oCoreFacade, oScope) {
 			oScope.getElementsByClassName(Element).forEach(function(oElement) {

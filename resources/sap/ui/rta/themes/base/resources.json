@@ -108,7 +108,6 @@
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/ui/rta/themes/base/library-parameters.json",
 			"size": 4050,
 			"theme": "base"
 		},
@@ -138,10 +137,6 @@
 			"name": "library_skeleton.css",
 			"size": 27758,
 			"theme": "base"
-		},
-		{
-			"name": "resources.json",
-			"size": 2430
 		}
 	]
 }

@@ -46,7 +46,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -204,7 +204,7 @@ sap.ui.define([
 			 *
 			 * @since 1.98.0
 			 */
-			headerMenu: {type: "sap.ui.core.IColumnHeaderMenu", multiple: false, visibility: "hidden"}
+			columnHeaderMenu: {type: "sap.ui.core.IColumnHeaderMenu", multiple: false, visibility: "hidden"}
 		},
 		designtime: "sap/m/designtime/Column.designtime"
 	}});
@@ -699,7 +699,7 @@ sap.ui.define([
 	// hence overwriting the getFocusDomRef to restore the focus on the active column header
 	Column.prototype.getFocusDomRef = function() {
 		var oParent = this.getParent();
-		if (oParent && (oParent.bActiveHeaders || oParent.bFocusableHeaders || this.getAssociation("headerMenu"))) {
+		if (oParent && (oParent.bActiveHeaders || oParent.bFocusableHeaders || this.getAssociation("columnHeaderMenu"))) {
 			var oColumnDomRef = this.getDomRef();
 			if (oColumnDomRef) {
 				return oColumnDomRef.firstChild;
@@ -724,14 +724,14 @@ sap.ui.define([
 	};
 
 	/**
-	 * Returns the <code>sap.ui.core.IColumnHeaderMenu<\code>, which is the current target of the association <code>headerMenu</code>, or null.
+	 * Returns the <code>sap.ui.core.IColumnHeaderMenu<\code>, which is the current target of the association <code>columnHeaderMenu</code>, or null.
 	 *
 	 * @returns {sap.ui.core.IColumnHeaderMenu}
 	 * @since 1.98.0
 	 * @public
 	 */
 	Column.prototype.getColumnHeaderMenu = function () {
-		return sap.ui.getCore().byId(this.getAssociation("headerMenu"));
+		return sap.ui.getCore().byId(this.getAssociation("columnHeaderMenu"));
 	};
 
 	return Column;

@@ -32,8 +32,9 @@ sap.ui.define([
 	 * @param {string} sResourcePath
 	 *   A resource path relative to the service URL
 	 * @param {object} oAggregation
-	 *   An object holding the information needed for data aggregation; see also "OData Extension
-	 *   for Data Aggregation Version 4.0"; must already be normalized by
+	 *   An object holding the information needed for data aggregation; see also
+	 *   <a href="http://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/">OData
+	 *   Extension for Data Aggregation Version 4.0</a>; must already be normalized by
 	 *   {@link _AggregationHelper.buildApply}
 	 * @param {object} mQueryOptions
 	 *   A map of key-value pairs representing the query string
@@ -868,8 +869,9 @@ sap.ui.define([
 	 * @param {string} sDeepResourcePath
 	 *   The deep resource path to be used to build the target path for bound messages
 	 * @param {object} [oAggregation]
-	 *   An object holding the information needed for data aggregation; see also "OData Extension
-	 *   for Data Aggregation Version 4.0"; must already be normalized by
+	 *   An object holding the information needed for data aggregation; see also
+	 *   <a href="http://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/">OData
+	 *   Extension for Data Aggregation Version 4.0</a>; must already be normalized by
 	 *   {@link _AggregationHelper.buildApply}
 	 * @param {object} mQueryOptions
 	 *   A map of key-value pairs representing the query string, the value in this pair has to
@@ -891,8 +893,7 @@ sap.ui.define([
 	 *   If the system query option "$filter" is combined with group levels or with grand totals
 	 *   (unless "grandTotal like 1.84"), or if grand totals or group levels are combined with
 	 *   min/max, or if the system query options "$expand" or "$select" are combined with pure data
-	 *   aggregation (no recursive hierarchy), or if the system query option "$search" is combined
-	 *   with grand totals or group levels or a recursive hierarchy
+	 *   aggregation (no recursive hierarchy)
 	 *
 	 * @public
 	 */
@@ -910,8 +911,7 @@ sap.ui.define([
 					|| bHasGroupLevels)) {
 				throw new Error("Unsupported system query option: $filter");
 			}
-			if (mQueryOptions.$search
-					&& (bHasGrandTotal || bHasGroupLevels || oAggregation.hierarchyQualifier)) {
+			if (mQueryOptions.$search && (bHasGrandTotal || bHasGroupLevels)) {
 				throw new Error("Unsupported system query option: $search");
 			}
 			if (bHasMinOrMax) {

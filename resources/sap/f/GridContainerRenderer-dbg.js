@@ -58,13 +58,13 @@ sap.ui.define([], function () {
 
 		oRM.openEnd();
 
-		this.renderDummyArea(oRM, sId, "before", -1);
+		this.renderDummyArea(oRM, sId, "before");
 
 		aItems.forEach(function (oItem, iIndex) {
 			this.renderItem(oRM, oItem, oControl, iIndex);
 		}.bind(this));
 
-		this.renderDummyArea(oRM, sId, "after", 0);
+		this.renderDummyArea(oRM, sId, "after");
 
 		oRM.close("div");
 	};
@@ -172,12 +172,11 @@ sap.ui.define([], function () {
 	 * @param {sap.ui.core.RenderManager} oRM The RenderManager that can be used for writing to the render output buffer
 	 * @param {string} sControlId the ID of the control
 	 * @param {string} sAreaId the ID of the dummy area (either, "before" or "after")
-	 * @param {int} iTabIndex the tabindex of the dummy area
 	 */
-	GridContainerRenderer.renderDummyArea = function (oRM, sControlId, sAreaId, iTabIndex) {
+	GridContainerRenderer.renderDummyArea = function (oRM, sControlId, sAreaId) {
 		oRM.openStart("div", sControlId + "-" + sAreaId)
 			.class("sapFGridContainerDummyArea")
-			.attr("tabindex", iTabIndex)
+			.attr("tabindex", "-1")
 			.openEnd()
 			.close("div");
 	};

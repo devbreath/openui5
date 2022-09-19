@@ -1,28 +1,18 @@
-sap.ui.define(["exports", "../types/CalendarType", "../InitialConfiguration"], function (_exports, _CalendarType, _InitialConfiguration) {
-  "use strict";
+sap.ui.define(['exports', '../types/CalendarType', '../InitialConfiguration'], function (exports, CalendarType, InitialConfiguration) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.getCalendarType = void 0;
-  _CalendarType = _interopRequireDefault(_CalendarType);
+	let calendarType;
+	const getCalendarType = () => {
+		if (calendarType === undefined) {
+			calendarType = InitialConfiguration.getCalendarType();
+		}
+		if (CalendarType.isValid(calendarType)) {
+			return calendarType;
+		}
+		return CalendarType.Gregorian;
+	};
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	exports.getCalendarType = getCalendarType;
 
-  let calendarType;
+	Object.defineProperty(exports, '__esModule', { value: true });
 
-  const getCalendarType = () => {
-    if (calendarType === undefined) {
-      calendarType = (0, _InitialConfiguration.getCalendarType)();
-    }
-
-    if (_CalendarType.default.isValid(calendarType)) {
-      return calendarType;
-    }
-
-    return _CalendarType.default.Gregorian;
-  }; // eslint-disable-line
-
-
-  _exports.getCalendarType = getCalendarType;
 });

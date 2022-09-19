@@ -18,7 +18,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 	 *
 	 * @extends sap.ui.base.Object
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @public
 	 * @alias sap.ui.core.LocaleData
 	 */
@@ -116,7 +116,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		/**
 		 * Get locale specific language names.
 		 *
-		 * @returns {Object<string, string>} map of locale specific language names
+		 * @returns {object} map of locale specific language names
 		 * @public
 		 */
 		getLanguages: function() {
@@ -126,7 +126,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		/**
 		 * Get locale specific script names.
 		 *
-		 * @returns {Object.<string, string>} map of locale specific script names
+		 * @returns {object} map of locale specific script names
 		 * @public
 		 */
 		getScripts: function() {
@@ -136,7 +136,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		/**
 		 * Get locale specific territory names.
 		 *
-		 * @returns {Object.<string, string>} map of locale specific territory names
+		 * @returns {object} map of locale specific territory names
 		 * @public
 		 */
 		getTerritories: function() {
@@ -1161,7 +1161,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		 * Returns the currency symbols available for this locale.
 		 * Currency symbols get accumulated by custom currency symbols.
 		 *
-		 * @returns {Object.<string, string>} the map of all currency symbols available in this locale, e.g.
+		 * @returns {object} the map of all currency symbols available in this locale, e.g.
 		 * {
 		 *     "AUD": "A$",
 		 *     "BRL": "R$",

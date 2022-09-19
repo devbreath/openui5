@@ -10,7 +10,6 @@ sap.ui.define([
 	"sap/ui/core/ComponentContainer",
 	"sap/ui/core/mvc/XMLView",
 	"sap/ui/rta/command/CommandFactory",
-	"sap/ui/rta/util/changeVisualization/ChangeVisualization",
 	"sap/ui/dt/DesignTime",
 	"sap/ui/dt/DesignTimeStatus",
 	"sap/ui/dt/OverlayRegistry",
@@ -27,7 +26,6 @@ sap.ui.define([
 	ComponentContainer,
 	XMLView,
 	CommandFactory,
-	ChangeVisualization,
 	DesignTime,
 	DesignTimeStatus,
 	OverlayRegistry,
@@ -44,23 +42,23 @@ sap.ui.define([
 	/**
 	 * Utility function which builds and registers QUnit tests to check if a SAPUI5 control is ready for UI adaptation at runtime (RTA)
 	 *
-	 * See <code>elementActionTest.qunit.js</code> as an example on how to use.
+	 * See <code>RTAControlEnabling.qunit.html</code> and <code>RTAControlEnabling.qunit.js</code> as an example on how to use.
 	 *
 	 * During development you may insert ".skip" to omit processing of a specific control enabling check:
-	 * <code>elementActionTest.skip(...);</code> instead of <code>elementActionTest(...);</code>.
+	 * <code>controlEnablingCheck.skip(...);</code> instead of <code>controlEnablingCheck(...);</code>.
 	 *
-	 * Use <code>elementActionTest.only( sMsgSubstring );</code> to specify that only some tests are to be executed:
-	 * E.g. <code>elementActionTest.only("Remove");</code>
+	 * Use <code>controlEnablingCheck.only( sMsgSubstring );</code> to specify that only some tests are to be executed:
+	 * E.g. <code>controlEnablingCheck.only("Remove");</code>
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @static
 	 * @since 1.42
 	 * @alias sap.ui.rta.enablement.elementActionTest
 	 *
 	 * @param {string} sMsg - Name of QUnit test - e.g. Checking the move action for a VerticalLayout control
-	 * @param {object} mOptions - Configuration for this elementActionTest
+	 * @param {object} mOptions - Configuration for this controlEnablingCheck
 	 * @param {string} [mOptions.layer] - Flex layer used during testing, use it in case actions are enabled for other layers then CUSTOMER
 	 * @param {string|object} mOptions.xmlView - XML view content or all settings available to sap.ui.xmlView, to have a view to apply the action
 	 * @param {sap.ui.model.Model} [mOptions.model] - Any model to be assigned on the view
@@ -78,17 +76,10 @@ sap.ui.define([
 	 * @param {function} mOptions.afterAction - Function(oUiComponent, oView, assert) which checks the outcome of the action
 	 * @param {function} mOptions.afterUndo - Function(oUiComponent, oView, assert) which checks the execution of the action and an immediate undo
 	 * @param {function} mOptions.afterRedo - Function(oUiComponent, oView, assert) which checks the outcome of action with immediate undo and redo
-	 * @param {object} [mOptions.changeVisualization] - Change visualization information
-	 * @param {string} [mOptions.changeVisualization.displayElementId] - ID of the element where the change indicator should be displayed
-	 * @param {object} [mOptions.changeVisualization.info] - Change visualization specific information from the change handler
-	 * @param {string[]} [mOptions.changeVisualization.info.affectedControls] - IDs of affected controls
-	 * @param {string[]} [mOptions.changeVisualization.info.dependentControls] - IDs of dependent controls
-	 * @param {string[]} [mOptions.changeVisualization.info.displayControls] - IDs of the elements where the change indicator will be displayed
-	 * @param {object} [mOptions.changeVisualization.info.payload] - Payload with additional data for the change visualization
 	 */
-	function elementActionTest(sMsg, mOptions) {
-		// Return if elementActionTest.only() has been used to exclude this call
-		if (elementActionTest._only && (sMsg.indexOf(elementActionTest._only) < 0)) { return; }
+	var controlEnablingCheck = function(sMsg, mOptions) {
+		// Return if controlEnablingCheck.only() has been used to exclude this call
+		if (controlEnablingCheck._only && (sMsg.indexOf(controlEnablingCheck._only) < 0)) { return; }
 
 		if (typeof mOptions.xmlView === "string") {
 			mOptions.xmlView = {
@@ -102,7 +93,7 @@ sap.ui.define([
 
 		// Do QUnit tests
 		QUnit.module(sMsg, function() {
-			QUnit.test("When using the 'elementActionTest' function to test if your control is ready for UI adaptation at runtime", function(assert) {
+			QUnit.test("When using the 'controlEnablingCheck' function to test if your control is ready for UI adaptation at runtime", function(assert) {
 				assert.ok(mOptions.afterAction, "then you implement a function to check if your action has been successful: See the afterAction parameter.");
 				assert.ok(mOptions.afterUndo, "then you implement a function to check if the undo has been successful: See the afterUndo parameter.");
 				assert.ok(mOptions.afterRedo, "then you implement a function to check if the redo has been successful: See the afterRedo parameter.");
@@ -332,61 +323,6 @@ sap.ui.define([
 			});
 		}
 
-		function checkChangeVisualization(oView, aCommands, assert) {
-			if (!mOptions.changeVisualization) {
-				return Promise.resolve();
-			}
-
-			var oChangeVisualization = new ChangeVisualization({
-				rootControlId: oView.getId(),
-				isActive: true
-			});
-
-			sandbox.stub(oChangeVisualization, "_updateChangeIndicators");
-			var aChanges = aCommands.map(function(oCommand) {
-				return oCommand.getPreparedChange();
-			});
-			sandbox.stub(oChangeVisualization, "_collectChanges").resolves(aChanges);
-
-			return oChangeVisualization._updateChangeRegistry()
-
-			.then(function() {
-				return oChangeVisualization._selectChangeCategory("all");
-			})
-
-			.then(function() {
-				var oChangeIndicatorRegistry = oChangeVisualization._oChangeIndicatorRegistry;
-				var oData = oChangeIndicatorRegistry.getSelectorsWithRegisteredChanges();
-				var sDisplayElementId = mOptions.changeVisualization.displayElementId;
-				var sSelector = sDisplayElementId ? oView.createId(sDisplayElementId) : oView.getId();
-				assert.ok(oData[sSelector] && oData[sSelector].length, "there is a change indicator at the correct element");
-				var oRegisteredChange = oChangeIndicatorRegistry.getAllRegisteredChanges()[0];
-				var mVisualizationInfo = mOptions.changeVisualization.info;
-
-				function mapIds(aIds) {
-					return aIds.map(function(sId) {
-						return oView.createId(sId);
-					});
-				}
-
-				if (mVisualizationInfo.affectedControls) {
-					var aAffectedControlIds = mapIds(mVisualizationInfo.affectedControls);
-					assert.deepEqual(aAffectedControlIds, oRegisteredChange.visualizationInfo.affectedElementIds, "then the affected control ids are correct");
-				}
-				if (mVisualizationInfo.dependentControls) {
-					var aDependentControlIds = mapIds(mVisualizationInfo.dependentControls);
-					assert.deepEqual(aDependentControlIds, oRegisteredChange.visualizationInfo.dependentElementIds, "then the dependent control ids are correct");
-				}
-				if (mVisualizationInfo.displayControls) {
-					var aDisplayControlIds = mapIds(mVisualizationInfo.displayControls);
-					assert.deepEqual(aDisplayControlIds, oRegisteredChange.visualizationInfo.displayElementIds, "then the display control ids are correct");
-				}
-				if (mVisualizationInfo.payload) {
-					assert.deepEqual(mVisualizationInfo.payload, oRegisteredChange.visualizationInfo.payload, "then the payload is correct");
-				}
-			});
-		}
-
 		/**
 		 * Since we don't use the CommandStack here, we have to take care of the applied Changes,
 		 * which are stored in the custom data of the control, ourselves;
@@ -463,13 +399,7 @@ sap.ui.define([
 				}
 			}, function() {
 				QUnit.test("When applying the change directly on the XMLView", function(assert) {
-					return applyChangeOnXML.call(this, assert)
-
-					.then(function() {
-						return checkChangeVisualization(this.oView, this.aCommands, assert);
-					}.bind(this))
-
-					.then(function() {
+					return applyChangeOnXML.call(this, assert).then(function() {
 						// Verify that UI change has been applied on XML view
 						return mOptions.afterAction(this.oUiComponent, this.oView, assert);
 					}.bind(this));
@@ -563,10 +493,6 @@ sap.ui.define([
 				return waitForDtSync(this.oDesignTime)
 
 				.then(function() {
-					return checkChangeVisualization(this.oView, this.aCommands, assert);
-				}.bind(this))
-
-				.then(function() {
 					sap.ui.getCore().applyChanges();
 					return mOptions.afterAction(this.oUiComponent, this.oView, assert);
 				}.bind(this));
@@ -610,10 +536,10 @@ sap.ui.define([
 				}.bind(this));
 			});
 		});
-	}
+	};
 
-	elementActionTest.skip = function() {};
-	elementActionTest.only = function(sMsgSubstring) { elementActionTest._only = sMsgSubstring; };
+	controlEnablingCheck.skip = function() {};
+	controlEnablingCheck.only = function(sMsgSubstring) { controlEnablingCheck._only = sMsgSubstring; };
 
-	return elementActionTest;
+	return controlEnablingCheck;
 });

@@ -1,25 +1,13 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/config/Theme", "./v5/per-diem", "./v4/per-diem"], function (_exports, _Theme, _perDiem, _perDiem2) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/config/Theme', './v5/per-diem', './v4/per-diem'], function (exports, Theme, perDiem$1, perDiem$2) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "accData", {
-    enumerable: true,
-    get: function () {
-      return _perDiem.accData;
-    }
-  });
-  _exports.default = void 0;
-  Object.defineProperty(_exports, "ltr", {
-    enumerable: true,
-    get: function () {
-      return _perDiem.ltr;
-    }
-  });
-  _exports.pathData = void 0;
-  const pathData = (0, _Theme.isThemeFamily)("sap_horizon") ? _perDiem.pathData : _perDiem2.pathData;
-  _exports.pathData = pathData;
-  var _default = "per-diem";
-  _exports.default = _default;
+	const pathData = Theme.isThemeFamily("sap_horizon") ? perDiem$1.pathData : perDiem$2.pathData;
+	var perDiem = "per-diem";
+
+	exports.accData = perDiem$1.accData;
+	exports.ltr = perDiem$1.ltr;
+	exports.default = perDiem;
+	exports.pathData = pathData;
+
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

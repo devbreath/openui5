@@ -22,7 +22,7 @@ sap.ui.define([
 	 *
 	 * @class Implements the selection methods for TreeTable and AnalyticalTable
 	 * @extends sap.ui.table.plugins.SelectionPlugin
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @alias sap.ui.table.plugins.BindingSelection

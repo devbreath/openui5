@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/ui/base/Object"],function(e){"use strict";var t=e.extend("sap.ui.mdc.p13n.AdaptationProvider",{metadata:{baseType:"sap.ui.mdc.p13n.AdaptationProvider"}});t.prototype.initAdaptation=function(e,t,n){throw new Error("Please implement 'initAdaptation'")};t.prototype.reset=function(e,t){throw new Error("Please implement 'reset'")};t.prototype.handleP13n=function(e,t){throw new Error("Please implement 'handleP13n'")};return t});
-//# sourceMappingURL=AdaptationProvider.js.map
+sap.ui.define(["sap/ui/base/Object"],function(B){"use strict";var A=B.extend("sap.ui.mdc.p13n.AdaptationProvider",{metadata:{baseType:"sap.ui.mdc.p13n.AdaptationProvider"}});A.prototype.initAdaptation=function(c,k,C){throw new Error("Please implement 'initAdaptation'");};A.prototype.reset=function(c,k){throw new Error("Please implement 'reset'");};A.prototype.handleP13n=function(c,k){throw new Error("Please implement 'handleP13n'");};return A;});

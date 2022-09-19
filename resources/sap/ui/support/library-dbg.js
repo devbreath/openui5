@@ -23,7 +23,7 @@ sap.ui.define(["sap/ui/core/library"],
 	 * @namespace
 	 * @alias sap.ui.support
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @since 1.50
 	 * @public
 	 */
@@ -37,7 +37,7 @@ sap.ui.define(["sap/ui/core/library"],
 		controls: [],
 		elements: [],
 		noLibraryCSS: true,
-		version: "1.106.0",
+		version: "1.105.1",
 		extensions: {
 			//Configuration used for rule loading of Support Assistant
 			"sap.ui.support": {

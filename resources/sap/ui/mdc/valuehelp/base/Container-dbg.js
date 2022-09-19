@@ -24,7 +24,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new element
 	 * @class Container for the {@link sap.ui.mdc.ValueHelp ValueHelp} element.
 	 * @extends sap.ui.core.Element
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -46,12 +46,6 @@ sap.ui.define([
 					type: "string",
 					group: "Appearance",
 					defaultValue: ""
-				},
-				/**
-				 * This property may be used by FilterableListContents to share basic search state in collective search scenarios
-				 */
-				localFilterValue: {
-					type: "string"
 				}
 			},
 			aggregations: {
@@ -195,7 +189,7 @@ sap.ui.define([
 	};
 
 	Container.prototype._unbindContent = function (oContent) {
-		oContent.unbindProperty("filterValue", true);
+		oContent.unbindProperty("filterValue");
 		oContent.unbindProperty("conditions");
 		oContent.unbindProperty("config");
 		oContent.detachConfirm(this._handleConfirmed, this);
@@ -222,7 +216,7 @@ sap.ui.define([
 	Container.prototype._getContainer = function () {
 	};
 
-	Container.prototype.getControl = function () {
+	Container.prototype._getControl = function () {
 		var oValueHelp = this.getParent();
 		return oValueHelp && oValueHelp.getControl();
 	};

@@ -41,7 +41,7 @@ sap.ui.define([
 	 * @extends sap.ui.mdc.p13n.AdaptationProvider
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @ui5-restricted sap.ui.mdc
@@ -770,7 +770,7 @@ sap.ui.define([
 	 */
 	Engine.prototype.getRegisteredControllers = function(vControl){
 		var oRegistryEntry = this._getRegistryEntry(vControl);
-		return oRegistryEntry ? Object.keys(oRegistryEntry.controller) : [];
+		return Object.keys(oRegistryEntry.controller);
 	};
 
 	/**
@@ -825,8 +825,7 @@ sap.ui.define([
 				controller: {},
 				activeP13n: null,
 				helper: null,
-				xConfig: null,
-				pendingAppliance: {}
+				xConfig: null
 			});
 
 		}
@@ -834,28 +833,6 @@ sap.ui.define([
 		return _mRegistry.get(oControl);
 	};
 
-	Engine.prototype.trace = function(vControl, oChange) {
-		var oRegistryEntry = this._getRegistryEntry(vControl);
-		this.getRegisteredControllers(vControl).forEach(function(sKey){
-			var oController = this.getController(vControl, sKey);
-			var mChangeOperations = oController.getChangeOperations();
-			Object.keys(mChangeOperations).forEach(function(sType){
-				if (mChangeOperations[sType] === oChange.changeSpecificData.changeType) {
-					oRegistryEntry.pendingAppliance[sKey] = [].concat(oRegistryEntry.pendingAppliance[sKey]).concat(oChange);
-				}
-			});
-		}.bind(this));
-	};
-
-	Engine.prototype.getTrace = function(vControl, oChange) {
-		var oRegistryEntry = this._getRegistryEntry(vControl);
-		return Object.keys(oRegistryEntry.pendingAppliance);
-	};
-
-	Engine.prototype.clearTrace = function(vControl, oChange) {
-		var oRegistryEntry = this._getRegistryEntry(vControl);
-		oRegistryEntry.pendingAppliance = {};
-	};
 
 	/**
 	 * Determines and registeres the ModificationHandler per control instance

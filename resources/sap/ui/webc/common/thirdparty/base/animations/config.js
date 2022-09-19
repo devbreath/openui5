@@ -1,2 +1,1 @@
-sap.ui.define(["exports"],function(e){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;var t={defaultDuration:400,element:document.createElement("DIV"),identity:()=>{}};e.default=t});
-//# sourceMappingURL=config.js.map
+sap.ui.define(function(){"use strict";var e={defaultDuration:400,element:document.createElement("DIV"),identity:()=>{}};return e});

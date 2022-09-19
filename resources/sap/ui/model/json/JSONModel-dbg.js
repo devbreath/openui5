@@ -44,7 +44,7 @@ sap.ui.define([
 	 * @extends sap.ui.model.ClientModel
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @public
 	 * @alias sap.ui.model.json.JSONModel
 	 */
@@ -383,7 +383,7 @@ sap.ui.define([
 	 *   The path to the property
 	 * @param {sap.ui.model.Context} [oContext]
 	 *   The context which will be used to retrieve the property
-	 * @return {any|null|undefined}
+	 * @return {any}
 	 *   The value of the property. If the property is not found, <code>null</code> or
 	 *   <code>undefined</code> is returned.
 	 * @public

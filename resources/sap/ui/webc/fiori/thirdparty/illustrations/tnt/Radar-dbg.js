@@ -1,39 +1,18 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations", "./tnt-Dialog-Radar", "./tnt-Scene-Radar", "./tnt-Spot-Radar"], function (_exports, _Illustrations, _tntDialogRadar, _tntSceneRadar, _tntSpotRadar) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations', './tnt-Dialog-Radar', './tnt-Scene-Radar', './tnt-Spot-Radar'], function (exports, Illustrations, tntDialogRadar, tntSceneRadar, tntSpotRadar) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "dialogSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntDialogRadar.default;
-    }
-  });
-  Object.defineProperty(_exports, "sceneSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntSceneRadar.default;
-    }
-  });
-  Object.defineProperty(_exports, "spotSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntSpotRadar.default;
-    }
-  });
-  _tntDialogRadar = _interopRequireDefault(_tntDialogRadar);
-  _tntSceneRadar = _interopRequireDefault(_tntSceneRadar);
-  _tntSpotRadar = _interopRequireDefault(_tntSpotRadar);
+	const name = "Radar";
+	const set = "tnt";
+	Illustrations.registerIllustration(name, {
+		dialogSvg: tntDialogRadar,
+		sceneSvg: tntSceneRadar,
+		spotSvg: tntSpotRadar,
+		set,
+	});
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	exports.dialogSvg = tntDialogRadar;
+	exports.sceneSvg = tntSceneRadar;
+	exports.spotSvg = tntSpotRadar;
 
-  const name = "Radar";
-  const set = "tnt";
-  (0, _Illustrations.registerIllustration)(name, {
-    dialogSvg: _tntDialogRadar.default,
-    sceneSvg: _tntSceneRadar.default,
-    spotSvg: _tntSpotRadar.default,
-    set
-  });
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

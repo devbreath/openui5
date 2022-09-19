@@ -32,7 +32,7 @@ sap.ui.define([
 	 * @extends sap.ui.integration.util.DataProvider
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @private
@@ -41,8 +41,8 @@ sap.ui.define([
 	 * @alias sap.ui.integration.util.RequestDataProvider
 	 */
 	var RequestDataProvider = DataProvider.extend("sap.ui.integration.util.RequestDataProvider", {
+
 		metadata: {
-			library: "sap.ui.integration",
 
 			/**
 			 * Defines whether it's possible to later provide a dataType property to the Request Configuration object, which declares the expected Content-Type of the response.
@@ -63,6 +63,7 @@ sap.ui.define([
 			}
 
 		}
+
 	});
 
 	RequestDataProvider.prototype.destroy = function () {
@@ -120,7 +121,8 @@ sap.ui.define([
 	};
 
 	RequestDataProvider.prototype._fetch = function (oRequestConfig) {
-		var sMessage = "Invalid request";
+		var sMessage = "Invalid request",
+			oSettings = this._oSettings;
 
 		if (!oRequestConfig || !oRequestConfig.url) {
 			Log.error(sMessage);
@@ -155,7 +157,7 @@ sap.ui.define([
 			mHeaders = Object.assign({}, mHeaders, oBatchSerialized.headers);
 		}
 
-		mHeaders = this._prepareHeaders(mHeaders, this.getSettings());
+		mHeaders = this._prepareHeaders(mHeaders, oSettings);
 
 		oRequest = {
 			"mode": oRequestConfig.mode || "cors",

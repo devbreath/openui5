@@ -7,13 +7,11 @@
 sap.ui.define([
 	"sap/ui/fl/write/_internal/Storage",
 	"sap/ui/fl/Utils",
-	"sap/base/Log",
-	"sap/base/util/UriParameters"
+	"sap/base/Log"
 ], function(
 	Storage,
 	Utils,
-	Log,
-	UriParameters
+	Log
 ) {
 	"use strict";
 
@@ -108,7 +106,6 @@ sap.ui.define([
 						isAtoAvailable: false,
 						isAtoEnabled: false,
 						isAppVariantSaveAsEnabled: false,
-						isContextBasedAdaptationEnabled: false,
 						isCondensingEnabled: false,
 						isProductiveSystem: true,
 						isPublicLayerAvailable: false,
@@ -229,18 +226,7 @@ sap.ui.define([
 	 * @returns {boolean} <code>true</code> if the underlying ABAP system allows app variants, <code>false</code> if not supported
 	 */
 	Settings.prototype.isAppVariantSaveAsEnabled = function() {
-		return !this.isContextBasedAdaptationEnabled() && this._getBooleanProperty("isAppVariantSaveAsEnabled");
-	};
-
-	/**
-	 * Returns a flag if save as key user adaptation is enabled in the backend
-	 *
-	 * @returns {boolean} <code>true</code> if the underlying ABAP system allows save as adaptation, <code>false</code> if not supported
-	 */
-	Settings.prototype.isContextBasedAdaptationEnabled = function() {
-		var oUriParameters = UriParameters.fromQuery(window.location.search);
-		var isContextBasedAdaptationEnabled = oUriParameters.get("sap-ui-xx-rta-adaptations");
-		return isContextBasedAdaptationEnabled === "true" || this._getBooleanProperty("isContextBasedAdaptationEnabled");
+		return this._getBooleanProperty("isAppVariantSaveAsEnabled");
 	};
 
 	/**

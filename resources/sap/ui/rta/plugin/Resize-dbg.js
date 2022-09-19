@@ -27,7 +27,7 @@ sap.ui.define([
 	 * @class
 	 * @extends sap.ui.rta.plugin.Plugin
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @since 1.101
@@ -143,7 +143,7 @@ sap.ui.define([
 							throw DtUtil.propagateError(
 								vError,
 								"Resize#handler",
-								"Error occurred during handler execution",
+								"Error occured during handler execution",
 								"sap.ui.rta.plugin"
 							);
 						});
@@ -265,7 +265,7 @@ sap.ui.define([
 				throw DtUtil.propagateError(
 					vError,
 					"Resize",
-					"Error occurred during resize command creation",
+					"Error occured during resize command creation",
 					"sap.ui.rta.plugin"
 				);
 			}.bind(this));

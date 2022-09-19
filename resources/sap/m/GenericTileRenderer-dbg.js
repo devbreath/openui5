@@ -48,7 +48,6 @@ sap.ui.define(["sap/m/library", "sap/base/security/encodeCSS"],
 		var sAriaRoleDescription = oControl.getAriaRoleDescription();
 		var sAriaRole = oControl.getAriaRole();
 		var isHalfFrame = frameType === frameTypes.OneByHalf || frameType === frameTypes.TwoByHalf;
-		var sBGColor = oControl._sBGColor;
 
 		// Render a link when URL is provided, not in action scope and the state is enabled
 		var bRenderLink = oControl.getUrl() && (!oControl._isInActionScope() || oControl.getMode() === GenericTileMode.IconMode) && sState !== LoadState.Disabled && !oControl._isNavigateActionEnabled() && !oControl._isActionMode();
@@ -113,10 +112,10 @@ sap.ui.define(["sap/m/library", "sap/base/security/encodeCSS"],
 				oRm.class("sapMGTTwoByHalf");
 			} else if (frameType === frameTypes.OneByOne) {
 				if (!this._isThemeHighContrast()) {
-					oRm.style("background-color", sBGColor);
+					oRm.style("background-color", oControl.getBackgroundColor());
 				} else {
-					oRm.style("border-color", sBGColor);
-					oRm.style("box-shadow", "0 0 0 1px" + sBGColor);
+					oRm.style("border-color", oControl.getBackgroundColor());
+					oRm.style("box-shadow", "0 0 0 1px" + oControl.getBackgroundColor());
 				}
 			}
 		}
@@ -257,11 +256,11 @@ sap.ui.define(["sap/m/library", "sap/base/security/encodeCSS"],
 					} else {
 						oRm.class("sapMGTTwoByHalfIcon");
 						if (!this._isThemeHighContrast()) {
-							oRm.style("background-color", sBGColor);
+							oRm.style("background-color", oControl.getBackgroundColor());
 						} else {
 							oRm.class("HighContrastTile");
-							oRm.style("border-color", sBGColor);
-							oRm.style("box-shadow", "0 0 0 1px" + sBGColor);
+							oRm.style("border-color", oControl.getBackgroundColor());
+							oRm.style("box-shadow", "0 0 0 1px" + oControl.getBackgroundColor());
 						}
 					}
 					oRm.openEnd();

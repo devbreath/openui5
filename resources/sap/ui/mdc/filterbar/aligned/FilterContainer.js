@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/ui/mdc/filterbar/IFilterContainer","sap/ui/layout/AlignedFlowLayout"],function(t,e){"use strict";var o=t.extend("sap.ui.mdc.filterbar.aligned.FilterContainer");o.prototype.init=function(){t.prototype.init.apply(this,arguments);this.oLayout=new e};o.prototype.addButton=function(t){this.oLayout.addEndContent(t)};o.prototype.insertFilterField=function(t,e){this.oLayout.insertContent(t,e)};o.prototype.removeFilterField=function(t){this.oLayout.removeContent(t)};o.prototype.getFilterFields=function(){return this.oLayout.getContent()};return o});
-//# sourceMappingURL=FilterContainer.js.map
+sap.ui.define(['sap/ui/mdc/filterbar/IFilterContainer','sap/ui/layout/AlignedFlowLayout'],function(I,A){"use strict";var F=I.extend("sap.ui.mdc.filterbar.aligned.FilterContainer");F.prototype.init=function(){I.prototype.init.apply(this,arguments);this.oLayout=new A();};F.prototype.addButton=function(c){this.oLayout.addEndContent(c);};F.prototype.insertFilterField=function(c,i){this.oLayout.insertContent(c,i);};F.prototype.removeFilterField=function(c){this.oLayout.removeContent(c);};F.prototype.getFilterFields=function(){return this.oLayout.getContent();};return F;});

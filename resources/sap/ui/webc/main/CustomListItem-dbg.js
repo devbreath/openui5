@@ -28,7 +28,7 @@ sap.ui.define([
 	 * The component accepts arbitrary HTML content to allow full customization.
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public

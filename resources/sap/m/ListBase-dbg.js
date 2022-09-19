@@ -92,7 +92,7 @@ function(
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -811,7 +811,9 @@ function(
 
 	ListBase.prototype.setEnableBusyIndicator = function(bEnable) {
 		this.setProperty("enableBusyIndicator", bEnable, true);
-		this._hideBusyIndicator();
+		if (!this.getEnableBusyIndicator()) {
+			this._hideBusyIndicator();
+		}
 		return this;
 	};
 
@@ -1368,10 +1370,7 @@ function(
 		if (this._bBusy) {
 			// revert busy state
 			this._bBusy = false;
-			if (this.getEnableBusyIndicator()) {
-				// only call the setBusy method if enableBusyIndicator=true
-				this.setBusy(false, "listUl");
-			}
+			this.setBusy(false, "listUl");
 		}
 	};
 

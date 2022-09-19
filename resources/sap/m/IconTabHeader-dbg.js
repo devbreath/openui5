@@ -77,7 +77,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -420,7 +420,24 @@ sap.ui.define([
 			return;
 		}
 
-		var iIndex = this._oItemNavigation.getItemDomRefs().indexOf(this.oSelectedItem._getRootTab().getDomRef());
+		var aItems = this.getItems();
+		var iIndex = -1;
+		var oItem;
+
+		for (var i = 0; i < aItems.length; i++) {
+			oItem = aItems[i];
+
+			if (!oItem.isA("sap.m.IconTabFilter") || !oItem.getVisible()) {
+				continue;
+			}
+
+			iIndex++;
+
+			if ((this.oSelectedItem._getRootTab() || this.oSelectedItem) === oItem) {
+				break;
+			}
+		}
+
 		this._oItemNavigation.setFocusedIndex(iIndex);
 	};
 

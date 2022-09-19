@@ -1,2 +1,1 @@
-sap.ui.define(["exports","sap/ui/webc/common/thirdparty/base/types/DataType"],function(e,t){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;t=a(t);function a(e){return e&&e.__esModule?e:{default:e}}const d={End:"End",StartAndEnd:"StartAndEnd"};class n extends t.default{static isValid(e){return!!d[e]}}n.generateTypeAccessors(d);var s=n;e.default=s});
-//# sourceMappingURL=TabsOverflowMode.js.map
+sap.ui.define(["sap/ui/webc/common/thirdparty/base/types/DataType"],function(t){"use strict";function e(t){return t&&typeof t==="object"&&"default"in t?t["default"]:t}var n=e(t);const a={End:"End",StartAndEnd:"StartAndEnd"};class s extends n{static isValid(t){return!!a[t]}}s.generateTypeAccessors(a);return s});

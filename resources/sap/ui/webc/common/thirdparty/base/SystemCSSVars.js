@@ -1,2 +1,1 @@
-sap.ui.define(["exports","./ManagedStyles","./generated/css/SystemCSSVars.css"],function(e,s,t){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;t=a(t);function a(e){return e&&e.__esModule?e:{default:e}}const u=()=>{if(!(0,s.hasStyle)("data-ui5-system-css-vars")){(0,s.createStyle)(t.default,"data-ui5-system-css-vars")}};var d=u;e.default=d});
-//# sourceMappingURL=SystemCSSVars.js.map
+sap.ui.define(["./ManagedStyles","./generated/css/SystemCSSVars.css"],function(s,e){"use strict";const t=()=>{if(!s.hasStyle("data-ui5-system-css-vars")){s.createStyle(e,"data-ui5-system-css-vars")}};return t});

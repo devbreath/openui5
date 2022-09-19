@@ -25,7 +25,7 @@ sap.ui.define([
 	 * @class The EasyAdd Plugin adds an Icon to an Overlay, which allows to trigger add operations directly
 	 * @extends sap.ui.rta.plugin.additionalElements.AdditionalElementsPlugin
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @since 1.48
@@ -114,8 +114,6 @@ sap.ui.define([
 			oOverlay.removeStyleClass("sapUiRtaPersAddTop");
 			oControl.$("sectionsContainer").removeClass("sapUiRtaPaddingTop");
 		}
-
-		AdditionalElementsPlugin.prototype.deregisterElementOverlay.apply(this, arguments);
 	};
 
 	/**

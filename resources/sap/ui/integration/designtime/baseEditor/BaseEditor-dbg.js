@@ -132,7 +132,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.designtime.baseEditor.BaseEditor
 	 * @author SAP SE
 	 * @since 1.70.0
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @private
 	 * @experimental since 1.70.0
 	 * @ui5-restricted

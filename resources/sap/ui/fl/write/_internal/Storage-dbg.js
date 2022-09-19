@@ -22,7 +22,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.write._internal.Storage
 	 * @since 1.67
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @private
 	 * @ui5-restricted sap.ui.fl
 	 */
@@ -160,7 +160,7 @@ sap.ui.define([
 					}
 					if (oChange.condenserState === "select" && oChange.getState() === States.NEW) {
 						mCondense.create.change[iChangeCreateIndex] = {};
-						mCondense.create.change[iChangeCreateIndex][oChange.getId()] = oChange.convertToFileContent();
+						mCondense.create.change[iChangeCreateIndex][oChange.getId()] = oChange.getDefinition();
 					} else if (oChange.condenserState === "update") {
 						var iChangeUpdateIndex = mCondense.update.change.length;
 						mCondense.update.change[iChangeUpdateIndex] = {};
@@ -172,7 +172,7 @@ sap.ui.define([
 					delete oChange.condenserState;
 				} else if (oChange.getState() === States.NEW) {
 					mCondense.create[oChange.getFileType()][iChangeCreateIndex] = {};
-					mCondense.create[oChange.getFileType()][iChangeCreateIndex][oChange.getId()] = oChange.convertToFileContent();
+					mCondense.create[oChange.getFileType()][iChangeCreateIndex][oChange.getId()] = oChange.getDefinition();
 				}
 			});
 		}

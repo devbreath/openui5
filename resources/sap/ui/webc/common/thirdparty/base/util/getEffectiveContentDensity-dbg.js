@@ -1,14 +1,8 @@
-sap.ui.define(["exports"], function (_exports) {
-  "use strict";
+sap.ui.define(function () { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-  const GLOBAL_CONTENT_DENSITY_CSS_VAR = "--_ui5_content_density";
+	const GLOBAL_CONTENT_DENSITY_CSS_VAR = "--_ui5_content_density";
+	const getEffectiveContentDensity = el => getComputedStyle(el).getPropertyValue(GLOBAL_CONTENT_DENSITY_CSS_VAR);
 
-  const getEffectiveContentDensity = el => getComputedStyle(el).getPropertyValue(GLOBAL_CONTENT_DENSITY_CSS_VAR);
+	return getEffectiveContentDensity;
 
-  var _default = getEffectiveContentDensity;
-  _exports.default = _default;
 });

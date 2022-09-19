@@ -79,18 +79,17 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 74160,
+			"size": 73912,
 			"theme": "sap_horizon_hcb"
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/uxap/themes/sap_horizon_hcb/library-parameters.json",
 			"size": 216,
 			"theme": "sap_horizon_hcb"
 		},
 		{
 			"name": "library.css",
-			"size": 74156,
+			"size": 73908,
 			"theme": "sap_horizon_hcb"
 		},
 		{
@@ -107,17 +106,13 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 76541,
+			"size": 76293,
 			"theme": "sap_horizon_hcb"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 76537,
+			"size": 76289,
 			"theme": "sap_horizon_hcb"
-		},
-		{
-			"name": "resources.json",
-			"size": 2267
 		}
 	]
 }

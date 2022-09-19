@@ -23,17 +23,12 @@
 		{
 			"name": "QuickViewUtils.js",
 			"module": "sap/ui/suite/QuickViewUtils.js",
-			"size": 3907,
+			"size": 3889,
 			"required": [
 				"sap/ui/core/Control.js",
 				"sap/ui/core/Element.js",
 				"sap/ui/thirdparty/jquery.js"
 			]
-		},
-		{
-			"name": "QuickViewUtils.js.map",
-			"size": 5321,
-			"isDebug": true
 		},
 		{
 			"name": "TaskCircle-dbg.js",
@@ -48,9 +43,14 @@
 			]
 		},
 		{
+			"name": "TaskCircle.control",
+			"size": 2340,
+			"designtime": true
+		},
+		{
 			"name": "TaskCircle.js",
 			"module": "sap/ui/suite/TaskCircle.js",
-			"size": 1100,
+			"size": 1065,
 			"required": [
 				"sap/ui/core/Control.js",
 				"sap/ui/core/EnabledPropagator.js",
@@ -59,9 +59,9 @@
 			]
 		},
 		{
-			"name": "TaskCircle.js.map",
-			"size": 1295,
-			"isDebug": true
+			"name": "TaskCircleColor.type",
+			"size": 685,
+			"designtime": true
 		},
 		{
 			"name": "TaskCircleRenderer-dbg.js",
@@ -76,16 +76,11 @@
 		{
 			"name": "TaskCircleRenderer.js",
 			"module": "sap/ui/suite/TaskCircleRenderer.js",
-			"size": 1651,
+			"size": 1620,
 			"required": [
 				"sap/ui/core/Core.js",
 				"sap/ui/suite/library.js"
 			]
-		},
-		{
-			"name": "TaskCircleRenderer.js.map",
-			"size": 2377,
-			"isDebug": true
 		},
 		{
 			"name": "VerticalProgressIndicator-dbg.js",
@@ -101,9 +96,14 @@
 			]
 		},
 		{
+			"name": "VerticalProgressIndicator.control",
+			"size": 1809,
+			"designtime": true
+		},
+		{
 			"name": "VerticalProgressIndicator.js",
 			"module": "sap/ui/suite/VerticalProgressIndicator.js",
-			"size": 1333,
+			"size": 1273,
 			"required": [
 				"sap/ui/core/Control.js",
 				"sap/ui/core/EnabledPropagator.js",
@@ -111,11 +111,6 @@
 				"sap/ui/suite/library.js",
 				"sap/ui/thirdparty/jquery.js"
 			]
-		},
-		{
-			"name": "VerticalProgressIndicator.js.map",
-			"size": 1771,
-			"isDebug": true
 		},
 		{
 			"name": "VerticalProgressIndicatorRenderer-dbg.js",
@@ -126,12 +121,7 @@
 		{
 			"name": "VerticalProgressIndicatorRenderer.js",
 			"module": "sap/ui/suite/VerticalProgressIndicatorRenderer.js",
-			"size": 1181
-		},
-		{
-			"name": "VerticalProgressIndicatorRenderer.js.map",
-			"size": 1536,
-			"isDebug": true
+			"size": 1127
 		},
 		{
 			"name": "library-dbg.js",
@@ -144,9 +134,37 @@
 			]
 		},
 		{
+			"name": "library-h2-preload.js",
+			"module": "sap/ui/suite/library-h2-preload.js",
+			"size": 2136,
+			"merged": true,
+			"required": [
+				"sap/ui/core/Control.js",
+				"sap/ui/core/Core.js",
+				"sap/ui/core/Element.js",
+				"sap/ui/core/EnabledPropagator.js",
+				"sap/ui/core/library.js",
+				"sap/ui/thirdparty/jquery.js"
+			],
+			"included": [
+				"sap/ui/suite/library.js",
+				"sap/ui/suite/manifest.json",
+				"sap/ui/suite/QuickViewUtils.js",
+				"sap/ui/suite/TaskCircle.js",
+				"sap/ui/suite/TaskCircleRenderer.js",
+				"sap/ui/suite/VerticalProgressIndicator.js",
+				"sap/ui/suite/VerticalProgressIndicatorRenderer.js"
+			]
+		},
+		{
+			"name": "library-h2-preload.js.map",
+			"size": 537,
+			"isDebug": true
+		},
+		{
 			"name": "library-preload.js",
 			"module": "sap/ui/suite/library-preload.js",
-			"size": 10538,
+			"size": 9877,
 			"merged": true,
 			"required": [
 				"sap/ui/core/Control.js",
@@ -168,22 +186,17 @@
 		},
 		{
 			"name": "library-preload.js.map",
-			"size": 13280,
+			"size": 10035,
 			"isDebug": true
 		},
 		{
 			"name": "library.js",
 			"module": "sap/ui/suite/library.js",
-			"size": 600,
+			"size": 566,
 			"required": [
 				"sap/ui/core/Core.js",
 				"sap/ui/core/library.js"
 			]
-		},
-		{
-			"name": "library.js.map",
-			"size": 553,
-			"isDebug": true
 		},
 		{
 			"name": "manifest.json",
@@ -192,7 +205,7 @@
 		},
 		{
 			"name": "resources.json",
-			"size": 7348
+			"size": 2519
 		},
 		{
 			"name": "themes/base/.theming",
@@ -235,7 +248,6 @@
 		},
 		{
 			"name": "themes/base/library-parameters.json",
-			"module": "sap/ui/suite/themes/base/library-parameters.json",
 			"size": 2,
 			"theme": "base"
 		},
@@ -313,7 +325,6 @@
 		},
 		{
 			"name": "themes/sap_hcb/library-parameters.json",
-			"module": "sap/ui/suite/themes/sap_hcb/library-parameters.json",
 			"size": 2,
 			"theme": "sap_hcb"
 		},

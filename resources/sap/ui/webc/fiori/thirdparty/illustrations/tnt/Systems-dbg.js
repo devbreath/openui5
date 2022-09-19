@@ -1,39 +1,18 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations", "./tnt-Dialog-Systems", "./tnt-Scene-Systems", "./tnt-Spot-Systems"], function (_exports, _Illustrations, _tntDialogSystems, _tntSceneSystems, _tntSpotSystems) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations', './tnt-Dialog-Systems', './tnt-Scene-Systems', './tnt-Spot-Systems'], function (exports, Illustrations, tntDialogSystems, tntSceneSystems, tntSpotSystems) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "dialogSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntDialogSystems.default;
-    }
-  });
-  Object.defineProperty(_exports, "sceneSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntSceneSystems.default;
-    }
-  });
-  Object.defineProperty(_exports, "spotSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntSpotSystems.default;
-    }
-  });
-  _tntDialogSystems = _interopRequireDefault(_tntDialogSystems);
-  _tntSceneSystems = _interopRequireDefault(_tntSceneSystems);
-  _tntSpotSystems = _interopRequireDefault(_tntSpotSystems);
+	const name = "Systems";
+	const set = "tnt";
+	Illustrations.registerIllustration(name, {
+		dialogSvg: tntDialogSystems,
+		sceneSvg: tntSceneSystems,
+		spotSvg: tntSpotSystems,
+		set,
+	});
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	exports.dialogSvg = tntDialogSystems;
+	exports.sceneSvg = tntSceneSystems;
+	exports.spotSvg = tntSpotSystems;
 
-  const name = "Systems";
-  const set = "tnt";
-  (0, _Illustrations.registerIllustration)(name, {
-    dialogSvg: _tntDialogSystems.default,
-    sceneSvg: _tntSceneSystems.default,
-    spotSvg: _tntSpotSystems.default,
-    set
-  });
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

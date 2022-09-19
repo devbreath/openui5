@@ -31,7 +31,7 @@ sap.ui.define([
 	 *
 	 * <h3>CSS Shadow Parts</h3>
 	 *
-	 * {@link https://developer.mozilla.org/en-US/docs/Web/CSS/::part CSS Shadow Parts} allow developers to style elements inside the Shadow DOM. <br>
+	 * <ui5-link target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/::part">CSS Shadow Parts</ui5-link> allow developers to style elements inside the Shadow DOM. <br>
 	 * The <code>sap.ui.webc.main.Dialog</code> exposes the following CSS Shadow Parts:
 	 * <ul>
 	 *     <li>header - Used to style the header of the component</li>
@@ -46,7 +46,7 @@ sap.ui.define([
 	 * <b>Note:</b> We don't recommend nesting popup-like components (<code>sap.ui.webc.main.Dialog</code>, <code>sap.ui.webc.main.Popover</code>) inside other components containing z-index. This might break z-index management.
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public

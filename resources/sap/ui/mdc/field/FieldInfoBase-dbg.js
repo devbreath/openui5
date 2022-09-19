@@ -27,7 +27,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class A <code>FieldInfoBase</code> element is a base class that shows any kind of information related to the <code>Field</code> control, for example, navigation targets or contact details.
 	 * @extends sap.ui.mdc.Element
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @since 1.54.0
@@ -67,7 +67,7 @@ sap.ui.define([
 	/**
 	 * Returns as a promise result href which defines the target navigation of the <code>Link</code> control created by <code>Field</code>.
 	 * If direct navigation is used, href is returned. If the information panel contains more content than only one link, <code>undefined</code> is returned.
-	 * @returns {Promise<string|undefined>} Result of promise is href with values {string | undefined}
+	 * @returns {Promise} Result of promise is href with values {string | undefined}
 	 * @protected
 	 */
 	FieldInfoBase.prototype.getTriggerHref = function() {

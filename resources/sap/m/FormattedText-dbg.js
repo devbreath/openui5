@@ -14,7 +14,8 @@ sap.ui.define([
 	"sap/base/Log",
 	"sap/base/security/URLListValidator",
 	"sap/base/security/sanitizeHTML",
-	"sap/ui/util/openWindow"
+	"sap/ui/util/openWindow",
+	'sap/ui/core/Core'
 ],
 function(
 	library,
@@ -25,7 +26,8 @@ function(
 	Log,
 	URLListValidator,
 	sanitizeHTML0,
-	openWindow
+	openWindow,
+	Core
 	) {
 		"use strict";
 
@@ -44,7 +46,7 @@ function(
 		 * @class
 		 * The FormattedText control allows the usage of a limited set of tags for inline display of formatted text in HTML format.
 		 * @extends sap.ui.core.Control
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 *
 		 * @constructor
 		 * @public
@@ -322,6 +324,10 @@ function(
 		// open links href using safe API
 		function openLink (oEvent) {
 			oEvent.preventDefault();
+			var oLink = Core.byId(oEvent.currentTarget.id);
+			if (oLink && oLink.isA('sap.m.Link') && oLink.getAccessibleRole() === library.LinkAccessibleRole.Button) {
+				return;
+			}
 			openWindow(oEvent.currentTarget.href, oEvent.currentTarget.target);
 		}
 

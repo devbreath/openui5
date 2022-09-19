@@ -31,8 +31,6 @@ sap.ui.define([
 	) {
 	"use strict";
 
-	var GroupEventType = library.GroupEventType;
-
 	function isInstanceOfAnalyticalTable(oControl) {
 		return TableUtils.isA(oControl, "sap.ui.table.AnalyticalTable");
 	}
@@ -48,7 +46,7 @@ sap.ui.define([
 	 * @extends sap.ui.table.Column
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -107,22 +105,6 @@ sap.ui.define([
 	 */
 	AnalyticalColumn.prototype._createMenu = function() {
 		return new AnalyticalColumnMenu(this.getId() + "-menu");
-	};
-
-	AnalyticalColumn.prototype._setGrouped = function(bGrouped) {
-		var oTable = this._getTable();
-		var sGroupEventType = bGrouped ? GroupEventType.group : GroupEventType.ungroup;
-
-		this.setGrouped(bGrouped);
-		oTable.fireGroup({column: this, groupedColumns: oTable._aGroupedColumns, type: sGroupEventType});
-	};
-
-	AnalyticalColumn.prototype._isAggregatableByMenu = function() {
-		var oTable = this._getTable(),
-			oBinding = oTable.getBinding(),
-			oResultSet = oBinding && oBinding.getAnalyticalQueryResult();
-
-		return oTable && oResultSet && oResultSet.findMeasureByPropertyName(this.getLeadingProperty());
 	};
 
 	AnalyticalColumn.prototype.setGrouped = function(bGrouped) {

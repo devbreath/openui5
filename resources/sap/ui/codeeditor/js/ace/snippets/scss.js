@@ -1,2 +1,1 @@
-(function(){ace.require(["ace/snippets/scss"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
-//# sourceMappingURL=scss.js.map
+;(function(){ace.require(["ace/snippets/scss"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();

@@ -20,7 +20,7 @@ sap.ui.define([
 	 *
 	 * @alias sap.ui.layout.changeHandler.MoveSimpleForm
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @experimental Since 1.34.0
 	 */
 	var MoveSimpleForm = {};
@@ -168,8 +168,12 @@ sap.ui.define([
 		return aResult;
 	}
 
-	function getGroupHeader(oElement) {
-		return oElement.getTitle() || oElement.getToolbar();
+	function getGroupHeader(oHeader) {
+		var oResult = oHeader.getTitle();
+		if (!oResult) {
+			oResult = oHeader.getToolbar();
+		}
+		return oResult;
 	}
 
 	function moveFormContainer(oSimpleForm, mMovedElement, mPropertyBag) {
@@ -465,7 +469,7 @@ sap.ui.define([
 		var oTargetParentContainer;
 		var oMovedElement = oChange.getContent().movedElements[0];
 		var oGroupSelector = oMovedElement.source.groupSelector;
-		var oAffectedControlSelector = JsControlTreeModifier.bySelector(oMovedElement.elementSelector, oAppComponent).getId();
+		var oAffectedControlSelector = JsControlTreeModifier.bySelector(oMovedElement.elementSelector, oAppComponent).getParent().getId();
 		if (oChange.getChangeType() === MoveSimpleForm.CHANGE_TYPE_MOVE_FIELD) {
 			var oSourceParentTitleElement = JsControlTreeModifier.bySelector(oMovedElement.source.groupSelector, oAppComponent);
 			var oTargetParentTitleElement = JsControlTreeModifier.bySelector(oMovedElement.target.groupSelector, oAppComponent);
@@ -482,7 +486,6 @@ sap.ui.define([
 					? oGroupSelector
 					: oChange.getContent().targetSelector
 			],
-			hasParentWithUnstableId: true,
 			payload: {
 				sourceParentContainer: oSourceParentContainer,
 				targetParentContainer: oTargetParentContainer

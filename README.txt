@@ -2,5 +2,3 @@ This archive contains the complete OpenUI5 runtime. Deploy the content on any we
 Further information can be found at http://openui5.org
 
 OpenUI5 is licensed under the Apache License, Version 2.0 - see LICENSE.txt
-
-OpenUI5 Version 1.106.0

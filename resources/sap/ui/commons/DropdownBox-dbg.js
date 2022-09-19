@@ -36,7 +36,7 @@ sap.ui.define([
 	 * The control provides a field that allows end users to an entry out of a list of pre-defined items.
 	 * The choosable items can be provided in the form of a complete <code>ListBox</code>, single <code>ListItems</code>.
 	 * @extends sap.ui.commons.ComboBox
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -1367,9 +1367,9 @@ sap.ui.define([
 	};
 
 	/**
-	 * Overrides the method inherited from {@link sap.ui.core.Element} by providing information on Search Help access (if needed)
+	 * Extends the method inherited from sap.ui.core.Element by providing information on Search Help access (if needed)
 	 *
-	 * @returns {string|undefined} string tooltip or <code>undefined</code>
+	 * @return {string} string tooltip or undefined
 	 * @public
 	 */
 	DropdownBox.prototype.getTooltip_AsString = function() {

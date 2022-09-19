@@ -1,25 +1,13 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/config/Theme", "./v5/detail-view", "./v4/detail-view"], function (_exports, _Theme, _detailView, _detailView2) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/config/Theme', './v5/detail-view', './v4/detail-view'], function (exports, Theme, detailView$1, detailView$2) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "accData", {
-    enumerable: true,
-    get: function () {
-      return _detailView.accData;
-    }
-  });
-  _exports.default = void 0;
-  Object.defineProperty(_exports, "ltr", {
-    enumerable: true,
-    get: function () {
-      return _detailView.ltr;
-    }
-  });
-  _exports.pathData = void 0;
-  const pathData = (0, _Theme.isThemeFamily)("sap_horizon") ? _detailView.pathData : _detailView2.pathData;
-  _exports.pathData = pathData;
-  var _default = "detail-view";
-  _exports.default = _default;
+	const pathData = Theme.isThemeFamily("sap_horizon") ? detailView$1.pathData : detailView$2.pathData;
+	var detailView = "detail-view";
+
+	exports.accData = detailView$1.accData;
+	exports.ltr = detailView$1.ltr;
+	exports.default = detailView;
+	exports.pathData = pathData;
+
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

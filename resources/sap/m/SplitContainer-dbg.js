@@ -80,7 +80,7 @@ function(
 	 *
 	 * @extends sap.ui.core.Control
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -1798,10 +1798,10 @@ function(
 		var oReturn = oPage, aContent;
 
 		while (oReturn) {
-			if (oReturn instanceof Control && oReturn.isA(["sap.m.Page", "sap.m.MessagePage", "sap.m.semantic.SemanticPage"])) {
+			if (oReturn && oReturn.isA(["sap.m.Page", "sap.m.MessagePage", "sap.m.semantic.SemanticPage"])) {
 				return oReturn;
 			}
-			if (oReturn instanceof Control && oReturn.isA("sap.ui.core.mvc.View")) {
+			if (oReturn && oReturn.isA("sap.ui.core.mvc.View")) {
 				aContent = oReturn.getContent();
 				if (aContent.length === 1) {
 					oReturn = aContent[0];

@@ -61,7 +61,7 @@ sap.ui.define([
 	 * @alias sap.m.p13n.Engine
 	 * @extends sap.m.p13n.AdaptationProvider
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @public
 	 * @experimental Since 1.104. Please note that the API of this control is not yet finalized!
 	 * @since 1.104

@@ -11,7 +11,6 @@ sap.ui.define([
 	'sap/ui/mdc/Control',
 	'sap/base/Log',
 	'sap/base/util/merge',
-	'sap/base/util/deepEqual',
 	'sap/ui/model/base/ManagedObjectModel',
 	'sap/ui/base/ManagedObjectObserver',
 	'sap/ui/mdc/condition/ConditionModel',
@@ -31,7 +30,6 @@ sap.ui.define([
 		Control,
 		Log,
 		merge,
-		deepEqual,
 		ManagedObjectModel,
 		ManagedObjectObserver,
 		ConditionModel,
@@ -54,7 +52,7 @@ sap.ui.define([
 	 * @class The <code>FilterBarBase</code> control is used as a faceless base class for common functionality of any MDC FilterBar derivation.
 	 * @extends sap.ui.mdc.Control
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @private
 	 * @ui5-restricted sap.ui.mdc
@@ -297,7 +295,7 @@ sap.ui.define([
 		}.bind(this));
 
 		this._bIgnoreChanges = false;
-		this._aOngoingChangeAppliance = [];
+
 		this._bSearchTriggered = false;
 		this._bIgnoreQueuing = false;     // used to overrule the default behaviour of suspendSelection
 	};
@@ -609,21 +607,10 @@ sap.ui.define([
 		return this._getAssignedFiltersText();
 	};
 
-	/**
-	 * Triggers updates for the assigned filters such as the text & count of active filters.
-	 * Orchestrates the central events of the FilterBarBase in addition.
-	 *
-	 * @param {object} mReportSettings Settings to control specific events
-	 * @param {object} mReportSettings.triggerFilterUpdate Determines if a filtersChange event should be fired
-	 * @param {object} mReportSettings.triggerSearch Determines if a search event should be fired
-	 */
-	FilterBarBase.prototype._reportModelChange = function(mReportSettings) {
+	FilterBarBase.prototype._reportModelChange = function(bTriggerSearch, bDoNotTriggerFiltersChangeEventBasedOnVariantSwitch) {
+		this._handleAssignedFilterNames(false, bDoNotTriggerFiltersChangeEventBasedOnVariantSwitch);
 
-		if (mReportSettings.triggerFilterUpdate) {
-			this._handleAssignedFilterNames(false);
-		}
-
-		if (this.getLiveMode() || mReportSettings.triggerSearch) {
+		if (this.getLiveMode() || bTriggerSearch) {
 			this.triggerSearch();
 		}
 	};
@@ -638,6 +625,11 @@ sap.ui.define([
 
 
 	FilterBarBase.prototype._addConditionChange = function(mOrigConditions, sFieldPath) {
+
+		if (!this._aOngoingChangeAppliance) {
+			this._aOngoingChangeAppliance = [];
+		}
+
 		this._aOngoingChangeAppliance.push(this.getEngine().createChanges({
 			control: this,
 			applySequentially: true,
@@ -676,10 +668,7 @@ sap.ui.define([
 					}
 
 				} else {
-					this._reportModelChange({
-						triggerSearch: false,
-						triggerFilterUpdate: true
-					});
+					this._reportModelChange(false);
 				}
 			}
 		}
@@ -776,7 +765,7 @@ sap.ui.define([
 		return aResultConditions;
 	};
 
-	FilterBarBase.prototype._handleAssignedFilterNames = function(bFiltersAggregationChanged) {
+	FilterBarBase.prototype._handleAssignedFilterNames = function(bFiltersAggregationChanged, bDoNotTriggerFiltersChangeEventBasedOnVariantSwitch) {
 		if (this._bIsBeingDestroyed) {
 			return;
 		}
@@ -790,12 +779,11 @@ sap.ui.define([
 
 		var mTexts = this._getAssignedFiltersText();
 		var oObj = {
-				conditionsBased: (!bFiltersAggregationChanged && !this._bDoNotTriggerFiltersChangeEventBasedOnVariantSwitch),
+				conditionsBased: (!bFiltersAggregationChanged && !bDoNotTriggerFiltersChangeEventBasedOnVariantSwitch),
 				filtersText: mTexts.filtersText,
 				filtersTextExpanded: mTexts.filtersTextExpanded
 		};
 
-		this._bDoNotTriggerFiltersChangeEventBasedOnVariantSwitch = false;
 		this.fireFiltersChanged(oObj);
 
 	};
@@ -1048,10 +1036,10 @@ sap.ui.define([
 	};
 
 	FilterBarBase.prototype._handleOngoingChangeAppliance = function(bFireSearch) {
-        if (this._aOngoingChangeAppliance && (this._aOngoingChangeAppliance.length > 0)) {
+		if (this._aOngoingChangeAppliance && (this._aOngoingChangeAppliance.length > 0)) {
 
-            var aChangePromises = this._aOngoingChangeAppliance.slice();
-            this._aOngoingChangeAppliance = [];
+			var aChangePromises = this._aOngoingChangeAppliance.slice();
+			this._aOngoingChangeAppliance = null;
 
 			Promise.all(aChangePromises).then(function() {
 				this._validate(bFireSearch);
@@ -1313,29 +1301,7 @@ sap.ui.define([
 
 	};
 
-	/**
-	 * Called whenever modification occured through personalization change appliance
-	 *
-	 * @param {string[]} aAffectedControllers Array of affected Engine controllers during appliance
-	 * @returns {Promise} Resolving after modification changes processed by the FilterBarBase
-	 * @private
-	 */
-	FilterBarBase.prototype._onModifications = function(aAffectedControllers) {
-		if (aAffectedControllers && aAffectedControllers.indexOf("Filter") === -1) {
-			// optimized executions in case nothing needs to be done
-			// --> no filter changes have been done
-			return Promise.resolve();
-		}
-		return this._setXConditions(this.getFilterConditions(), true).then(function(){
-			this._reportModelChange({
-				triggerSearch: false,
-				triggerFilterUpdate: true
-			});
-		}.bind(this));
-	};
-
 	FilterBarBase.prototype._setXConditions = function(mConditionsData, bRemoveBeforeApplying) {
-
 		var sFieldPath, oProperty, aConditions, oConditionModel = this._getConditionModel();
 
 		var fPromiseResolve = null;
@@ -1365,6 +1331,7 @@ sap.ui.define([
 					}
 				}
 			}
+
 			this._oConditionModel.attachPropertyChange(this._handleConditionModelPropertyChange, this);
 			fPromiseResolve();
 		}.bind(this);
@@ -1702,16 +1669,36 @@ sap.ui.define([
 		}
 	};
 
+	FilterBarBase.prototype.applyConditionsAfterChangesApplied = function() {
+		if (this._isChangeApplying()) {
+			return;
+		}
+		this._bIgnoreChanges = true;
+
+		// Wait until all changes have been applied
+		this._oFlexPromise = this._getWaitForChangesPromise();
+
+		Promise.all([this._oFlexPromise, this._oInitialFiltersAppliedPromise, this._oMetadataAppliedPromise]).then(function(vArgs) {
+
+			this._oFlexPromise = null;
+
+			//wait for changes not based on variant switch
+			this._changesApplied();
+
+		}.bind(this));
+	};
+
+	FilterBarBase.prototype._isChangeApplying = function() {
+		return  !!this._oFlexPromise;
+	};
+
 	FilterBarBase.prototype._applyInitialFilterConditions = function() {
 
 		this._bIgnoreChanges = true;
 
 		this._applyFilterConditionsChanges().then(function() {
-			this._bIgnoreChanges = false;
-			this._reportModelChange({
-				triggerFilterUpdate: true,
-				triggerSearch: this._bExecuteOnSelect
-			});
+
+			this._changesApplied();
 			this._bInitialFiltersApplied = true;
 			this._fResolveInitialFiltersApplied();
 			this._fResolveInitialFiltersApplied = null;
@@ -1747,29 +1734,22 @@ sap.ui.define([
 	};
 
 	FilterBarBase.prototype._handleVariantSwitch = function(oVariant) {
+		//clean-up fields in error state
+		this._cleanUpAllFilterFieldsInErrorState();
 
 		this._bExecuteOnSelect = this._getExecuteOnSelectionOnVariant(oVariant);
 
-		this._bDoNotTriggerFiltersChangeEventBasedOnVariantSwitch = false;
+		this._bDoNotTriggerFiltersChangeEventBasedOnVariantSwitch = undefined;
 		if (oVariant.hasOwnProperty("createScenario") && (oVariant.createScenario === "saveAs")) {
 			//during SaveAs a switch occurs but the processing of related variants based changes may still be ongoing
 			this._bDoNotTriggerFiltersChangeEventBasedOnVariantSwitch = true;
 		}
 
-		return this.awaitPendingModification().then(function(){
-			//clean-up fields in error state
-			this._cleanUpAllFilterFieldsInErrorState();
-
-			// ensure that the initial filters are applied --> only trigger search & validate
-			// _onModifications updates the filters & fires filtersChanged
-			if (this._bInitialFiltersApplied) {
-				this._reportModelChange({
-					triggerFilterUpdate: false,
-					triggerSearch: this._bExecuteOnSelect
-				});
-			}
-		}.bind(this));
-
+		// no changes exists, but variant switch occurs
+		// not relevant for applied default variant
+		if (!this._isChangeApplying() && this._bInitialFiltersApplied) {
+			this._changesApplied();
+		}
 	};
 
 	FilterBarBase.prototype._getExecuteOnSelectionOnVariant = function(oVariant) {
@@ -1796,6 +1776,18 @@ sap.ui.define([
 		}
 
 		return null;
+	};
+
+
+	FilterBarBase.prototype._changesApplied = function() {
+
+		if (!this._isChangeApplying()) {
+			this._bIgnoreChanges = false;
+		}
+
+		this._reportModelChange(this._bExecuteOnSelect, this._bDoNotTriggerFiltersChangeEventBasedOnVariantSwitch);
+		this._bExecuteOnSelect = undefined;
+		this._bDoNotTriggerFiltersChangeEventBasedOnVariantSwitch = undefined;
 	};
 
 	FilterBarBase.prototype._getView = function() {

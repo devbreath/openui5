@@ -1,58 +1,21 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/types/DataType"], function (_exports, _DataType) {
-  "use strict";
+sap.ui.define(['sap/ui/webc/common/thirdparty/base/types/DataType'], function (DataType) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.default = void 0;
-  _DataType = _interopRequireDefault(_DataType);
+	function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e['default'] : e; }
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var DataType__default = /*#__PURE__*/_interopDefaultLegacy(DataType);
 
-  /**
-   * @lends sap.ui.webcomponents.fiori.types.MediaGalleryLayout.prototype
-   * @public
-   */
-  const MediaGalleryLayouts = {
-    /**
-     * The layout is determined automatically.
-     * @public
-     * @type {Auto}
-     */
-    Auto: "Auto",
+	const MediaGalleryLayouts = {
+		 Auto: "Auto",
+		Vertical: "Vertical",
+		Horizontal: "Horizontal",
+	};
+	class MediaGalleryLayout extends DataType__default {
+		static isValid(value) {
+			return !!MediaGalleryLayouts[value];
+		}
+	}
+	MediaGalleryLayout.generateTypeAccessors(MediaGalleryLayouts);
 
-    /**
-     * Displays the layout as a vertical split between the thumbnails list and the selected image.
-     * @public
-     * @type {Vertical}
-     */
-    Vertical: "Vertical",
+	return MediaGalleryLayout;
 
-    /**
-     * Displays the layout as a horizontal split between the thumbnails list and the selected image.
-     * @public
-     * @type {Horizontal}
-     */
-    Horizontal: "Horizontal"
-  };
-  /**
-   * @class
-   * Defines the layout type of the thumbnails list of the <code>ui5-media-gallery</code> component.
-   * @constructor
-   * @author SAP SE
-   * @alias sap.ui.webcomponents.fiori.types.MediaGalleryLayout
-   * @public
-   * @enum {string}
-   */
-
-  class MediaGalleryLayout extends _DataType.default {
-    static isValid(value) {
-      return !!MediaGalleryLayouts[value];
-    }
-
-  }
-
-  MediaGalleryLayout.generateTypeAccessors(MediaGalleryLayouts);
-  var _default = MediaGalleryLayout;
-  _exports.default = _default;
 });

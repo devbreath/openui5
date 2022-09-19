@@ -13,6 +13,9 @@ sap.ui.define([
 ], function(Device, Menu, MenuItem, Popup) {
 	"use strict";
 
+	// Table uses z-indices, ensure that popups starts their z-indices at least with 20.
+	Popup.setInitialZIndex(10);
+
 	function onCellFilterSelect(oColumn, oRow) {
 		// "this" is the table instance.
 		var oRowContext = oRow.getRowBindingContext();
@@ -39,7 +42,7 @@ sap.ui.define([
 	 * Note: Do not access the functions of this helper directly, but via <code>sap.ui.table.utils.TableUtils.Menu...</code>
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @namespace
 	 * @alias sap.ui.table.utils._MenuUtils
 	 * @private
@@ -88,29 +91,28 @@ sap.ui.define([
 			var bExecuteDefault = true;
 
 			if (oCellInfo.isOfType(MenuUtils.TableUtils.CELLTYPE.COLUMNHEADER)) {
-				var oColumn = oTable.getColumns()[iColumnIndex];
-				var oColumnHeaderMenu = oColumn.getHeaderMenuInstance();
+				var bCellHasMenuButton = oCell.querySelector(".sapUiTableColDropDown") !== null;
 
-				if (oColumnHeaderMenu) {
-					oColumn._openHeaderMenu(oCell);
-					return true;
-				} else {
-					var bCellHasMenuButton = oCell.querySelector(".sapUiTableColDropDown") !== null;
-
-					if (!Device.system.desktop && !bCellHasMenuButton) {
-						return MenuUtils._applyColumnHeaderCellMenu(oTable, oCell);
-					}
-
+				if (Device.system.desktop || bCellHasMenuButton) {
 					MenuUtils._removeColumnHeaderCellMenu(oTable);
-					bExecuteDefault = oTable.fireColumnSelect({
-						column: oColumn
-					});
 
-					if (bExecuteDefault) {
-						return MenuUtils._openColumnContextMenu(oTable, oCell);
+					var oColumn = oTable.getColumns()[iColumnIndex];
+					var oPopover = oColumn.getColumnHeaderMenu();
+					if (oPopover) {
+						oPopover.openBy(oColumn);
 					} else {
-						return true; // We do not know whether the event handler opens a context menu or not, so we just assume it is done.
+						bExecuteDefault = oTable.fireColumnSelect({
+							column: oColumn
+						});
+
+						if (bExecuteDefault) {
+							return MenuUtils._openColumnContextMenu(oTable, oCell);
+						} else {
+							return true; // We do not know whether the event handler opens a context menu or not, so we just assume it is done.
+						}
 					}
+				} else {
+					return MenuUtils._applyColumnHeaderCellMenu(oTable, oCell);
 				}
 
 			} else if (oCellInfo.isOfType(MenuUtils.TableUtils.CELLTYPE.ANYCONTENTCELL)) {

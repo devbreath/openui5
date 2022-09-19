@@ -27,7 +27,7 @@ sap.ui.define([
 	 * Helper class for working with bindings for json objects.
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @private
 	 * @ui5-restricted sap.ui.integration, shell-toolkit
@@ -43,7 +43,7 @@ sap.ui.define([
 	 * @param {object} mLocalBindingNamespaces Local binding functions
 	 * @private
 	 * @ui5-restricted sap.ui.integration, shell-toolkit
-	 * @return {string|sap.ui.base.ManagedObject.PropertyBindingInfo} The json stringified object if there are no binding infos, or a binding info.
+	 * @return {string} The json stringified object with the binding infos.
 	 */
 	JSONBindingHelper.createJsonWithBindingInfos = function (oValue, mLocalBindingNamespaces) {
 		if (!oValue) {

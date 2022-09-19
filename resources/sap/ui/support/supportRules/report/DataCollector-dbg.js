@@ -135,9 +135,9 @@ sap.ui.define(["sap/base/util/LoaderExtensions", 'sap/base/security/encodeXML', 
 				// (e.g. "MyControl" instead of "com.example.MyControl").
 				continue;
 			}
-			var sPath = this._oCore._getThemePath(n, this._oCore.getConfiguration().getTheme());
+			var sPath = this._oCore._getThemePath(n, this._oCore.oConfiguration.theme);
 			aResults.push({
-				theme : this._oCore.getConfiguration().getTheme(),
+				theme : this._oCore.oConfiguration.theme,
 				library: n,
 				relativePath: sPath,
 				absolutePath: URI(sPath).absoluteTo(document.location.origin + document.location.pathname).toString()

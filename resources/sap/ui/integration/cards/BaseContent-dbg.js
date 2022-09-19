@@ -54,7 +54,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @private
@@ -589,12 +589,6 @@ sap.ui.define([
 	 */
 	BaseContent.prototype.onActionSubmitEnd = function (oResponse, oError) {
 	};
-
-	/**
-	* @private
-	* @ui5-restricted
- 	*/
-	BaseContent.prototype.validateControls = function () { };
 
 	BaseContent.prototype.getCardInstance = function () {
 		return Core.byId(this.getCard());

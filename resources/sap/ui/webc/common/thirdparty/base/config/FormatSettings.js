@@ -1,2 +1,1 @@
-sap.ui.define(["exports","../InitialConfiguration"],function(e,t){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.getFirstDayOfWeek=void 0;let i;const n=()=>{if(i===undefined){i=(0,t.getFormatSettings)()}return i.firstDayOfWeek};e.getFirstDayOfWeek=n});
-//# sourceMappingURL=FormatSettings.js.map
+sap.ui.define(["exports","../InitialConfiguration"],function(e,t){"use strict";let i;const n=()=>{if(i===undefined){i=t.getFormatSettings()}return i.firstDayOfWeek};e.getFirstDayOfWeek=n;Object.defineProperty(e,"__esModule",{value:true})});

@@ -142,7 +142,7 @@ function(
 		 * @extends sap.m.DateTimeField
 		 *
 		 * @author SAP SE
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 *
 		 * @constructor
 		 * @public
@@ -391,11 +391,11 @@ function(
 			this._bValid = false;
 
 			/*  stores the type of the used locale (e.g. 'medium', 'long') for the display
-			 see https://sdk.openui5.org/api/sap.ui.core.LocaleData/methods/getTimePattern */
+			 see https://openui5.hana.ondemand.com/api/sap.ui.core.LocaleData#methods/getTimePattern */
 			this._sUsedDisplayPattern = null;
 
 			/*  stores the type of the used locale (e.g. 'medium', 'long') for inputting
-				 see https://sdk.openui5.org/api/sap.ui.core.LocaleData/methods/getTimePattern */
+				 see https://openui5.hana.ondemand.com/api/sap.ui.core.LocaleData#methods/getTimePattern */
 			this._sUsedValuePattern = null;
 
 			this._oDisplayFormat = null;

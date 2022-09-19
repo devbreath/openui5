@@ -1,39 +1,18 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations", "./tnt-Dialog-ChartBPMNFlow", "./tnt-Scene-ChartBPMNFlow", "./tnt-Spot-ChartBPMNFlow"], function (_exports, _Illustrations, _tntDialogChartBPMNFlow, _tntSceneChartBPMNFlow, _tntSpotChartBPMNFlow) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/asset-registries/Illustrations', './tnt-Dialog-ChartBPMNFlow', './tnt-Scene-ChartBPMNFlow', './tnt-Spot-ChartBPMNFlow'], function (exports, Illustrations, tntDialogChartBPMNFlow, tntSceneChartBPMNFlow, tntSpotChartBPMNFlow) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "dialogSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntDialogChartBPMNFlow.default;
-    }
-  });
-  Object.defineProperty(_exports, "sceneSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntSceneChartBPMNFlow.default;
-    }
-  });
-  Object.defineProperty(_exports, "spotSvg", {
-    enumerable: true,
-    get: function () {
-      return _tntSpotChartBPMNFlow.default;
-    }
-  });
-  _tntDialogChartBPMNFlow = _interopRequireDefault(_tntDialogChartBPMNFlow);
-  _tntSceneChartBPMNFlow = _interopRequireDefault(_tntSceneChartBPMNFlow);
-  _tntSpotChartBPMNFlow = _interopRequireDefault(_tntSpotChartBPMNFlow);
+	const name = "ChartBPMNFlow";
+	const set = "tnt";
+	Illustrations.registerIllustration(name, {
+		dialogSvg: tntDialogChartBPMNFlow,
+		sceneSvg: tntSceneChartBPMNFlow,
+		spotSvg: tntSpotChartBPMNFlow,
+		set,
+	});
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	exports.dialogSvg = tntDialogChartBPMNFlow;
+	exports.sceneSvg = tntSceneChartBPMNFlow;
+	exports.spotSvg = tntSpotChartBPMNFlow;
 
-  const name = "ChartBPMNFlow";
-  const set = "tnt";
-  (0, _Illustrations.registerIllustration)(name, {
-    dialogSvg: _tntDialogChartBPMNFlow.default,
-    sceneSvg: _tntSceneChartBPMNFlow.default,
-    spotSvg: _tntSpotChartBPMNFlow.default,
-    set
-  });
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

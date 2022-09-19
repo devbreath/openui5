@@ -41,7 +41,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.LayerUtils
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 */
 	var LayerUtils = {
 		_mLayersIndex: mLayersIndex,

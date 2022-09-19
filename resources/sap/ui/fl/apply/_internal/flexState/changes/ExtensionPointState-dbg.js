@@ -28,7 +28,7 @@ sap.ui.define([
 	 * @namespace sap.ui.fl.apply._internal.flexState.changes.ExtensionPointState
 	 * @experimental Since 1.79
 	 * @since 1.79
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @private
 	 * @ui5-restricted
 	 */
@@ -60,16 +60,20 @@ sap.ui.define([
 				id: oExtensionPoint.closestAggregationBindingCarrier,
 				idIsLocal: false
 			});
+			var oChangeDefinition = oChange.getDefinition();
 			var mOriginalSelector = {
 				id: oExtensionPoint.targetControl.getId(),
 				idIsLocal: false
 			};
+			if (!oChangeDefinition.dependentSelector) {
+				oChangeDefinition.dependentSelector = {};
+			}
 			if (bOriginalSelectorNeedsToBeAdjusted) {
 				oChange.originalSelectorToBeAdjusted = mOriginalSelector;
 			} else {
-				oChange.setDependentSelector({originalSelector: mOriginalSelector});
+				oChangeDefinition.dependentSelector.originalSelector = mOriginalSelector;
 			}
-			oChange.setContent({boundAggregation: oExtensionPoint.closestAggregationBinding});
+			oChangeDefinition.content.boundAggregation = oExtensionPoint.closestAggregationBinding;
 		} else {
 			mSelector = merge(mSelector, {
 				id: oExtensionPoint.targetControl.getId(),
@@ -140,13 +144,12 @@ sap.ui.define([
 					} else if (isValidForRuntimeOnlyChanges(oChange, mExtensionPointInfo)) {
 						//Change is applied but we need to create additional runtime only changes
 						//in case of duplicate extension points with different fragment id (fragment as template)
-						var oChangeFileContent = oChange.convertToFileContent();
-						var oChangeContent = oChange.getContent();
-						var mChangeSpecificData = _omit(oChangeFileContent, ["dependentSelector", "fileName", "selector", "content"]);
-						Object.keys(oChangeContent).forEach(function (sKey) {
-							mChangeSpecificData[sKey] = oChangeContent[sKey];
+						var oChangeDefinition = oChange.getDefinition();
+						var mChangeSpecificData = _omit(oChangeDefinition, ["dependentSelector", "fileName", "selector", "content"]);
+						Object.keys(oChangeDefinition.content).forEach(function (sKey) {
+							mChangeSpecificData[sKey] = oChangeDefinition.content[sKey];
 						});
-						mChangeSpecificData.support.sourceChangeFileName = oChange.getId() || "";
+						mChangeSpecificData.support.sourceChangeFileName = oChangeDefinition.fileName || "";
 						aPromises.push(ChangesWriteAPI.create({
 							changeSpecificData: mChangeSpecificData,
 							selector: {
@@ -158,8 +161,8 @@ sap.ui.define([
 								//Set correct selector from extension point targetControl's ID
 								replaceChangeSelector(oRuntimeOnlyChange, mExtensionPointInfo, true);
 								oRuntimeOnlyChange.setExtensionPointInfo(mExtensionPointInfo);
-								oRuntimeOnlyChange.setModuleName(oChange.getModuleName());
-								oRuntimeOnlyChange.setCreation(oChange.getCreation());
+								oRuntimeOnlyChange.setModuleName(oChangeDefinition.moduleName);
+								oRuntimeOnlyChange.getDefinition().creation = oChangeDefinition.creation;
 								oChangePersistence.addChangeAndUpdateDependencies(mPropertyBag.appComponent, oRuntimeOnlyChange, oChange);
 							})
 						);

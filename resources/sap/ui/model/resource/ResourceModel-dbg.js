@@ -228,7 +228,7 @@ sap.ui.define([
 	 *
 	 * @extends sap.ui.model.Model
 	 * @public
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 */
 	var ResourceModel = Model.extend("sap.ui.model.resource.ResourceModel", /** @lends sap.ui.model.resource.ResourceModel.prototype */ {
 
@@ -501,7 +501,7 @@ sap.ui.define([
 	 *
 	 * @param {string} sPath
 	 *   The path to the property
-	 * @returns {string|null}
+	 * @returns {string}
 	 *   The value of the property in the resource bundle or <code>null</code> if resource bundle is
 	 *   not available
 	 *

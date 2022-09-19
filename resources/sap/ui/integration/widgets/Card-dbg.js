@@ -103,7 +103,7 @@ sap.ui.define([
 	/**
 	 * @const A list of model names which are used internally by the card.
 	 */
-	var INTERNAL_MODEL_NAMES = ["parameters", "filters", "paginator", "form", "messages", "context", "i18n"];
+	var INTERNAL_MODEL_NAMES = ["parameters", "filters", "paginator", "form", "context", "i18n"];
 
 	var RESERVED_PARAMETER_NAMES = ["visibleItems", "allItems"];
 
@@ -188,7 +188,7 @@ sap.ui.define([
 	 * @extends sap.f.CardBase
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @public
 	 * @constructor
 	 * @see {@link topic:5b46b03f024542ba802d99d67bc1a3f4 Cards}
@@ -203,7 +203,6 @@ sap.ui.define([
 
 				/**
 				 * Optional property which can be used by the host to reference the card.
-				 * It will be forwarded to any children cards.
 				 * Does not affect the card behavior.
 				 */
 				referenceId : {
@@ -256,15 +255,12 @@ sap.ui.define([
 				 *
 				 * This can be a list of flexibility changes generated during designtime.
 				 *
-				 * Each item in the array represents a separate level of changes. For example, the first item might be created by an administrator, the second by a page administrator and the third by the end user.
-				 *
-				 * The order of the items is the order in which the changes will be merged on top of each other. So the last item will overwrite the previous items where the paths match.
+				 * Each level of changes is an item in the list. The change has property "content" which contains the configuration, which will be merged on top of the original <code>sap.card</code> section.
 				 *
 				 * Example:
 				 * <pre>
 				 * [
 				 * 	{
-				 * 		// Administrator
 				 * 		"/sap.card/header/title": "My Configured Title in Default Language",
 				 * 		"/sap.card/content/maxItems": 10,
 				 * 		"texts": {
@@ -274,13 +270,13 @@ sap.ui.define([
 				 * 		}
 				 * 	},
 				 * 	{
-				 * 		// Page administrator
-				 * 		"/sap.card/content/maxItems": 5
-				 * 	},
-				 * 	{
-				 * 		// End user
-				 *      "/sap.card/header/title": "Title by End User",
-				 * 		"/sap.card/content/maxItems": 8
+				 * 		"/sap.card/header/title": "My Configured Title in Default Language",
+				 * 		"/sap.card/content/maxItems": 10,
+				 * 		"texts": {
+				 * 			"en-US": {
+				 * 				"/sap.card/header/title": "My Configured Title in US-English"
+				 * 			}
+				 * 		}
 				 * 	}
 				 * ]
 				 * </pre>
@@ -481,8 +477,8 @@ sap.ui.define([
 		this._bFirstRendering = true;
 		this._aFundamentalErrors = [];
 		this._sPerformanceId = "UI5 Integration Cards - " + this.getId() + "---";
-		this._fnOnDataReady = function () {
-			this._bDataReady = true;
+		this._fnOnCardReady = function () {
+			this._bCardReady = true;
 		}.bind(this);
 
 		/**
@@ -492,7 +488,7 @@ sap.ui.define([
 		 * @experimental since 1.79
 		 * @public
 		 * @author SAP SE
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 * @borrows sap.ui.integration.widgets.Card#getDomRef as getDomRef
 		 * @borrows sap.ui.integration.widgets.Card#setVisible as setVisible
 		 * @borrows sap.ui.integration.widgets.Card#getParameters as getParameters
@@ -519,7 +515,6 @@ sap.ui.define([
 		 * @borrows sap.ui.integration.widgets.Card#showCard as showCard
 		 * @borrows sap.ui.integration.widgets.Card#hide as hide
 		 * @borrows sap.ui.integration.widgets.Card#getOpener as getOpener
-		 * @borrows sap.ui.integration.widgets.Card#validateControls as validateControls
 		 */
 		this._oLimitedInterface = new Interface(this, [
 			"getDomRef",
@@ -547,8 +542,7 @@ sap.ui.define([
 			"hideLoadingPlaceholders",
 			"showCard",
 			"hide",
-			"getOpener",
-			"validateControls"
+			"getOpener"
 		]);
 	};
 
@@ -575,13 +569,6 @@ sap.ui.define([
 						ParameterMap.getParamsForModel()
 					);
 				break;
-				case "messages":
-					oModel = new JSONModel({
-						hasErrors: false,
-						hasWarnings: false,
-						records: []
-					});
-					break;
 				default:
 					oModel = new JSONModel();
 				break;
@@ -613,18 +600,17 @@ sap.ui.define([
 	Card.prototype._initReadyState = function () {
 		this._aReadyPromises = [];
 
-		this._awaitEvent("_dataReady");
-		this._awaitEvent("_dataPassedToContent");
 		this._awaitEvent("_headerReady");
 		this._awaitEvent("_filterBarReady");
 		this._awaitEvent("_contentReady");
+		this._awaitEvent("_cardReady");
 
 		Promise.all(this._aReadyPromises).then(function () {
 			this._bReady = true;
 			this.fireEvent("_ready");
 		}.bind(this));
 
-		this.attachEventOnce("_dataReady", this._fnOnDataReady);
+		this.attachEventOnce("_cardReady", this._fnOnCardReady);
 	};
 
 	/**
@@ -634,9 +620,9 @@ sap.ui.define([
 	 */
 	Card.prototype._clearReadyState = function () {
 		this._bReady = false;
-		this._bDataReady = false;
+		this._bCardReady = false;
 		this._aReadyPromises = [];
-		this.detachEvent("_dataReady", this._fnOnDataReady);
+		this.detachEvent("_cardReady", this._fnOnCardReady);
 	};
 
 	/**
@@ -662,7 +648,7 @@ sap.ui.define([
 				Measurement.end(this._sPerformanceId + "firstRenderingWithStaticData");
 			}
 
-			if (this._bDataReady && !Measurement.getMeasurement(this._sPerformanceId + "firstRenderingWithDynamicData").end) {
+			if (this._bCardReady && !Measurement.getMeasurement(this._sPerformanceId + "firstRenderingWithDynamicData").end) {
 				Measurement.end(this._sPerformanceId + "firstRenderingWithDynamicData");
 			}
 		}
@@ -830,12 +816,12 @@ sap.ui.define([
 			}.bind(this))
 			.then(this._applyManifest.bind(this))
 			.catch(function (e) {
-				if (e.message === CARD_DESTROYED_ERROR) {
+				if (e.message !== CARD_DESTROYED_ERROR) {
+					this._applyManifest();
 					return;
 				}
 
 				this._logFundamentalError(e.message);
-				this._applyManifest();
 			}.bind(this));
 	};
 
@@ -889,22 +875,6 @@ sap.ui.define([
 	 */
 	Card.prototype.getFundamentalErrors = function () {
 		return this._aFundamentalErrors;
-	};
-
-	/**
-	 * Causes all of the controls within the Card
-	 * that support validation to validate their data.
-	 * @public
-	 * @experimental
-	 * @returns {boolean} if all of the controls validated successfully; otherwise, false
-	 */
-	Card.prototype.validateControls = function () {
-		var oCardContent = this.getCardContent();
-		if (oCardContent) {
-			oCardContent.validateControls();
-		}
-
-		return !this.getModel("messages").getProperty("/hasErrors");
 	};
 
 	/**
@@ -1549,8 +1519,7 @@ sap.ui.define([
 			oModel;
 
 		if (!oDataSettings) {
-			this.fireEvent("_dataReady");
-			this.fireEvent("_dataPassedToContent");
+			this.fireEvent("_cardReady");
 			return;
 		}
 
@@ -1572,8 +1541,7 @@ sap.ui.define([
 		}
 
 		if (!oModel) {
-			this.fireEvent("_dataReady");
-			this.fireEvent("_dataPassedToContent");
+			this.fireEvent("_cardReady");
 			return;
 		}
 
@@ -1588,11 +1556,9 @@ sap.ui.define([
 			if (this._createContentPromise) {
 				this._createContentPromise.then(function (oContent) {
 					oContent.onDataChanged();
-					this.fireEvent("_dataPassedToContent");
 					this.onDataRequestComplete();
 				}.bind(this));
 			} else {
-				this.fireEvent("_dataPassedToContent");
 				this.onDataRequestComplete();
 			}
 
@@ -1604,21 +1570,17 @@ sap.ui.define([
 			}.bind(this));
 
 			this._oDataProvider.attachDataChanged(function (oEvent) {
-				this.fireEvent("_dataReady");
 				oModel.setData(oEvent.getParameter("data"));
-			}.bind(this));
+			});
 
 			this._oDataProvider.attachError(function (oEvent) {
-				this.fireEvent("_dataReady");
-				this.fireEvent("_dataPassedToContent");
 				this._handleError("Data service unavailable. " + oEvent.getParameter("message"));
 				this.onDataRequestComplete();
 			}.bind(this));
 
 			this._oDataProvider.triggerDataUpdate();
 		} else {
-			this.fireEvent("_dataReady");
-			this.fireEvent("_dataPassedToContent");
+			this.fireEvent("_cardReady");
 		}
 	};
 
@@ -2316,6 +2278,7 @@ sap.ui.define([
 		var oContent = this.getCardContent(),
 			oLoadingProvider = this.getAggregation("_loadingProvider");
 
+		this.fireEvent("_cardReady");
 		this.hideLoadingPlaceholders(CardArea.Header);
 		this.hideLoadingPlaceholders(CardArea.Filters);
 
@@ -2514,17 +2477,9 @@ sap.ui.define([
 	 * @private
 	 */
 	Card.prototype.getContentPageSize = function (oContentConfig) {
-		var iMaxItems = 0,
+		var iMaxItems = parseInt(BindingResolver.resolveValue(oContentConfig, this).maxItems) || 0,
 			oFooter = this.getAggregation("_footer"),
 			oPaginator;
-
-		if (oContentConfig.maxItems !== undefined) {
-			if (typeof oContentConfig.maxItems === "number") {
-				iMaxItems = oContentConfig.maxItems;
-			} else {
-				iMaxItems = parseInt(BindingResolver.resolveValue(oContentConfig, this).maxItems) || 0;
-			}
-		}
 
 		if (!oFooter) {
 			return iMaxItems;
@@ -2613,8 +2568,7 @@ sap.ui.define([
 			oChildCard = this._createCard({
 				width: oParameters.width,
 				host: this.getHostInstance(),
-				parameters: oParameters.parameters,
-				referenceId: this.getReferenceId()
+				parameters: oParameters.parameters
 			});
 
 		oChildCard.setAssociation("openerReference", this);

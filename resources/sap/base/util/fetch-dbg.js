@@ -53,28 +53,30 @@ sap.ui.define([], function () {
 	 * @ui5-restricted SAPUI5 Dist
 	 */
 	function SimpleResponse(xhr, PromiseImpl) {
-		var headers = parseHeaders(xhr.getAllResponseHeaders());
+		this.xhr = xhr;
+
+		var headers = parseHeaders(this.xhr.getAllResponseHeaders());
 		Object.defineProperties(this, {
 			headers: {
 				value: headers
 			},
 			ok: {
-				value: xhr.status >= 200 && xhr.status < 300
+				value: this.xhr.status >= 200 && this.xhr.status < 300
 			},
 			status: {
-				value: xhr.status
+				value: this.xhr.status
 			},
 			statusText: {
-				value: xhr.statusText
+				value: this.xhr.statusText
 			}
 		});
 
 		this.json = function() {
-			if (xhr.responseType === "json") {
-				return PromiseImpl.resolve(xhr.response);
+			if (this.xhr.responseType === "json") {
+				return PromiseImpl.resolve(this.xhr.response);
 			} else {
 				try {
-					var oData = JSON.parse(xhr.responseText);
+					var oData = JSON.parse(this.xhr.responseText);
 					return PromiseImpl.resolve(oData);
 				} catch (err) {
 					return PromiseImpl.reject(err);
@@ -83,7 +85,7 @@ sap.ui.define([], function () {
 		};
 
 		this.text = function() {
-			return PromiseImpl.resolve(xhr.responseText);
+			return PromiseImpl.resolve(this.xhr.responseText);
 		};
 	}
 
@@ -148,6 +150,9 @@ sap.ui.define([], function () {
 			if (oUrl.username || oUrl.password) {
 				reject(new TypeError("Failed to execute 'fetch': Request cannot be constructed from a URL that includes credentials:" + resource));
 			}
+
+			// adding the missing protocol back to the URL string which is taken from the document.baseURI
+			resource = resource.replace(/^\/\//, oUrl.protocol + "//");
 
 			if (init.body !== null && (init.method == "GET" || init.method == "HEAD")) {
 				reject(new TypeError("Failed to execute 'fetch': Request with GET/HEAD method cannot have body."));

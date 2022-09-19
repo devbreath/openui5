@@ -44,7 +44,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @private
@@ -637,7 +637,7 @@ sap.ui.define([
 			.catch(function(vError) {
 				Log.error(Util.createError(
 					"Overlay#applyStyles",
-					"An error occurred during applySizes calculation: " + vError
+					"Error occured during applySizes calculation: " + vError
 				));
 			})
 			.then(function() {

@@ -788,7 +788,6 @@
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/ui/commons/themes/base/library-parameters.json",
 			"size": 523,
 			"theme": "base"
 		},
@@ -818,10 +817,6 @@
 			"name": "library_skeleton.css",
 			"size": 83153,
 			"theme": "base"
-		},
-		{
-			"name": "resources.json",
-			"size": 14228
 		}
 	]
 }

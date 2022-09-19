@@ -1,2 +1,1 @@
-(function(){ace.require(["ace/snippets/gitignore"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
-//# sourceMappingURL=gitignore.js.map
+;(function(){ace.require(["ace/snippets/gitignore"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();

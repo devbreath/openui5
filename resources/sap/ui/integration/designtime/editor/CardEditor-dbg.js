@@ -44,7 +44,7 @@ sap.ui.define([
 	 * @extends sap.ui.integration.editor.Editor
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @constructor
 	 * @see {@link topic:5b46b03f024542ba802d99d67bc1a3f4 Cards}
 	 * @since 1.83
@@ -148,7 +148,7 @@ sap.ui.define([
 		if (typeof vCardIdOrSettings === "object") {
 			this._oEditorCard = new Card(vCardIdOrSettings);
 			this._oEditorCard.onBeforeRendering();
-			this._oEditorCard.attachEventOnce("_dataReady", function () {
+			this._oEditorCard.attachEventOnce("_cardReady", function () {
 				this.setJson(vCardIdOrSettings, bSuppressRerendering);
 			}.bind(this));
 		}

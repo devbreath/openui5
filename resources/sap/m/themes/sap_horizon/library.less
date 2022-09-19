@@ -2849,6 +2849,12 @@ html.sap-desktop {
 	background-color: @sapField_Hover_Background;
 }
 
+.sapMInputBaseReadonly:not(.sapMTextArea) .sapMInputBaseInner,
+.sapMInputBaseReadonly.sapMInputBase:not(.sapMTextArea):not(.sapMInputBaseHasEndIcons):not(.sapMInputBaseHasBeginIcons) .sapMInputBaseInner,
+.sapMInputBaseReadonly.sapMInputBaseNoWidth:not(.sapMTextArea) .sapMInputBaseInner {
+	width: ~"calc(100% - 1.625rem)";
+}
+
 .sapUiSizeCondensed {
 	.sapUiTableDataCell .sapMInputBase .sapMInputBaseIconContainer .sapMInputBaseIcon {
 		min-width: 1.375rem;
@@ -5218,10 +5224,6 @@ html.sap-desktop .sapUiSizeCompact .sapMSliderProgress:focus:before {
 /* ====================================== */
 
 .sapMRI {
-	& {
-		margin: 0.75rem 0;
-	}
-
 	&:not(.sapMRIDisabled):not(.sapMRIDisplayOnly):not(.sapMRIReadOnly):hover {
 		opacity: 0.9;
 	}
@@ -6447,7 +6449,7 @@ html.sap-desktop .sapMSPCMonthDay.sapMSPCMonthDayToday:focus .sapMSPCMonthNowMar
 
 .sapMSliderInner .sapMSliderHandle:not(.sapMSliderHandlePressed):not(.sapMRangeSlider.sapMSlider .sapMSliderInner:not(.sapMSliderInnerDisabled) .sapMSliderHandle:focus):after {
 	font-family: SAP-icons;
-	content: "\e29c";
+	content: "\e244";
 	position: absolute;
 	top: 4px;
 	right: 0.5rem;
@@ -6524,7 +6526,7 @@ html.sap-desktop .sapMSPCMonthDay.sapMSPCMonthDayToday:focus .sapMSPCMonthNowMar
 	width: 0.5rem;
 	height: 0.5rem;
 	right: 2px;
-	top: 22px;
+	top: 23px;
 }
 
 .sapMSliderTooltip {

@@ -220,10 +220,10 @@ sap.ui.define([
 					});
 				}
 
-				this.checkUpdate();
-
 				// tell listeners that variant switch has happened
 				this._callVariantSwitchListeners(mPropertyBag.vmReference, mPropertyBag.newVReference, undefined, sScenario);
+
+				this.checkUpdate();
 			}.bind(this));
 	}
 
@@ -264,7 +264,7 @@ sap.ui.define([
 	 * @class Variant model implementation for JSON format.
 	 * @extends sap.ui.model.json.JSONModel
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @param {object} oData - Either the URL where to load the JSON from or a JS object
 	 * @param {object} mPropertyBag - Map of properties required for the constructor
 	 * @param {sap.ui.fl.FlexController} mPropertyBag.flexController - <code>FlexController</code> instance for the component which uses the variant model
@@ -647,7 +647,7 @@ sap.ui.define([
 			reference: this.sFlexReference
 		})
 			.map(function(oVariantChange) {
-				return oVariantChange.convertToFileContent();
+				return oVariantChange.getDefinition();
 			});
 
 		mPropertyBag.currentVariantComparison = LayerUtils.compareAgainstCurrentLayer(oSourceVariant.instance.getLayer(), mPropertyBag.layer);
@@ -906,7 +906,7 @@ sap.ui.define([
 			oChange.setText("title", mPropertyBag.title, "XFLD");
 		}
 
-		mUpdateVariantsStateParams.changeContent = oChange.convertToFileContent();
+		mUpdateVariantsStateParams.changeContent = oChange.getDefinition();
 		//update variants state and write change to ChangePersistence
 		VariantManagementState.updateChangesForVariantManagementInMap(mUpdateVariantsStateParams);
 		this.oChangePersistence.addDirtyChange(oChange);
@@ -929,7 +929,7 @@ sap.ui.define([
 		};
 
 		this.setVariantProperties(sVariantManagementReference, mPropertyBag, true);
-		mUpdateVariantsStateParams.changeContent = oChange.convertToFileContent();
+		mUpdateVariantsStateParams.changeContent = oChange.getDefinition();
 		//update variants state and write change to ChangePersistence
 		VariantManagementState.updateChangesForVariantManagementInMap(mUpdateVariantsStateParams);
 		this.oChangePersistence.deleteChange(oChange);
@@ -1288,7 +1288,7 @@ sap.ui.define([
 			var sVariantChangeLayer = mParameters.layer || Layer.USER;
 
 			// handle triggered "SaveAs" button
-			var sNewVariantReference = mParameters.newVariantReference || Utils.createDefaultFileName("flVariant");
+			var sNewVariantReference = mParameters.newVariantReference || Utils.createDefaultFileName();
 			var mPropertyBag = {
 				variantManagementReference: sVariantManagementReference,
 				appComponent: oAppComponent,
@@ -1444,7 +1444,7 @@ sap.ui.define([
 	 */
 	VariantModel.prototype._getDirtyChangesFromVariantChanges = function(aControlChanges) {
 		var aChangeFileNames = aControlChanges.map(function(oChange) {
-			return oChange.getId();
+			return oChange.getDefinition().fileName;
 		});
 
 		return this.oChangePersistence.getDirtyChanges().filter(function(oChange) {

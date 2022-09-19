@@ -33,7 +33,7 @@ sap.ui.define([
 	 * @alias sap.ui.core.ResizeHandler
 	 * @extends sap.ui.base.Object
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @public
 	 */
 
@@ -98,7 +98,7 @@ sap.ui.define([
 	 *
 	 * @param {Element|sap.ui.core.Control} oRef the DOM reference or a control
 	 * @param {function} fHandler the event handler function
-	 * @returns {string} Registration-ID for later detaching.
+	 * @return {string} Registration-ID for later detaching.
 	 * @private
 	 */
 	ResizeHandler.prototype.attachListener = function(oRef, fHandler){
@@ -227,7 +227,7 @@ sap.ui.define([
 	 * @param {function} fHandler
 	 *             The event handler which should be called whenever the size of the given reference is changed.
 	 *             The event object is passed as first argument to the event handler. See the description of this function for more details about the available parameters of this event.
-	 * @returns {string|null}
+	 * @return {string}
 	 *             A registration ID which can be used for deregistering the event handler, see {@link sap.ui.core.ResizeHandler.deregister}.
 	 *             If the UI5 framework is not yet initialized <code>null</code> is returned.
 	 * @public
@@ -265,7 +265,7 @@ sap.ui.define([
 	/**
 	 * Suspends indefinitely the execution of ResizeHandler listeners for the given DOM reference and its children
 	 * @param {Element} oDomRef the DOM reference to suspend
-	 * @returns {boolean} Whether the <code>oDomRef</code> was successfully marked as suspended
+	 * @return {boolean} Whether the <code>oDomRef</code> was successfully marked as suspended
 	 * @private
 	 */
 	ResizeHandler.suspend = function(oDomRef) {
@@ -285,7 +285,7 @@ sap.ui.define([
 	/**
 	 * Resumes the execution of ResizeHandler listeners for the given DOM reference
 	 * @param {Element} oDomRef the DOM reference to resume
-	 * @returns {boolean} Whether resume for <code>oDomRef</code> was successful
+	 * @return {boolean} Whether resume for <code>oDomRef</code> was successful
 	 * @private
 	 */
 	ResizeHandler.resume = function(oDomRef) {
@@ -316,7 +316,7 @@ sap.ui.define([
 	 * Checks if the given DOM reference is a child (or exact match) of a DOM area that is suspended from observation for size changes.
 	 * This instance method is an internal shortcut.
 	 * @param {Element} oDomRef the DOM reference
-	 * @returns {boolean} Whether the <code>oDomRef</code> is suspended
+	 * @return {boolean} Whether the <code>oDomRef</code> is suspended
 	 * @private
 	 */
 	ResizeHandler.prototype._isSuspended = function(oDomRef) {
@@ -338,7 +338,7 @@ sap.ui.define([
 	 * @param {function} [fnCallback] a callback function to be called once the DOM node is resumed which was found to be the primary
 	 *        reason for oDomRef to be suspended. Note that isSuspended() may still be true when other DOM nodes are still suspended.
 	 *        Also note that each isSuspended() call registers the callback, but only if it was not found to be already registered.
-	 * @returns {boolean} Whether the <code>oDomRef</code> is suspended
+	 * @return {boolean} Whether the <code>oDomRef</code> is suspended
 	 * @private
 	 */
 	ResizeHandler.isSuspended = function(oDomRef, fnCallback) {

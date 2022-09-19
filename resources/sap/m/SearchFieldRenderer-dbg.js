@@ -93,7 +93,6 @@ sap.ui.define([
 			rm.voidStart('input', sId + "-I")
 				.class("sapMSFI")
 				.attr("type", "search")
-				.attr("aria-label", sPlaceholder)
 				.attr("autocomplete", "off");
 
 			if (oSF.getEnableSuggestions()) {

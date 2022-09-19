@@ -30,7 +30,6 @@ sap.ui.define([
 	 * @since 1.95.0
 	 * @extends module:sap/ui/mdc/ValueHelpDelegate
 	 * @alias module:sap/ui/mdc/odata/v4/ValueHelpDelegate
-	 * @deprecated This module should not be used and will be removed in future versions!
 	 */
 	 var ODataV4ValueHelpDelegate = Object.assign({}, ValueHelpDelegate);
 

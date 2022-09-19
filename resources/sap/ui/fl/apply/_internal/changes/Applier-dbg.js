@@ -31,17 +31,26 @@ sap.ui.define([
 			return Promise.reject(Error("No selector in change found or no selector ID."));
 		}
 
+		function checkFailedSelectors(oSelector) {
+			if (FlUtils.indexOfObject(mPropertyBag.failedSelectors, oSelector) > -1) {
+				throw Error("A change depending on that control already failed, so the current change is skipped");
+			}
+		}
+
 		return mPropertyBag.modifier.bySelectorTypeIndependent(oSelector, mPropertyBag.appComponent, mPropertyBag.view)
 			.then(function (oControl) {
 				if (!oControl) {
 					throw Error("A flexibility change tries to change a nonexistent control.");
 				}
+				checkFailedSelectors(oSelector);
+
 				var aDependentControlSelectorList = oChange.getDependentControlSelectorList();
-				aDependentControlSelectorList.forEach(function(sDependentControlSelector) {
-					var oDependentControl = mPropertyBag.modifier.bySelector(sDependentControlSelector, mPropertyBag.appComponent, mPropertyBag.view);
+				aDependentControlSelectorList.forEach(function(oDependentControlSelector) {
+					var oDependentControl = mPropertyBag.modifier.bySelector(oDependentControlSelector, mPropertyBag.appComponent, mPropertyBag.view);
 					if (!oDependentControl) {
 						throw new Error("A dependent selector control of the flexibility change is not available.");
 					}
+					checkFailedSelectors(oDependentControlSelector);
 				});
 				return oControl;
 			});
@@ -131,7 +140,7 @@ sap.ui.define([
 
 	function _checkPreconditions(oChange, mPropertyBag) {
 		var sErrorMessage;
-		if (_isXmlModifier(mPropertyBag) && oChange.getJsOnly()) {
+		if (_isXmlModifier(mPropertyBag) && oChange.getDefinition().jsOnly) {
 			// change is not capable of xml modifier
 			// the change status has to be reset to initial
 			sErrorMessage = "Change cannot be applied in XML. Retrying in JS.";
@@ -175,8 +184,8 @@ sap.ui.define([
 
 		var sChangeId = oChange.getId();
 		var sLogMessage = "Change ''{0}'' could not be applied.";
-		var bErrorOccurred = oError instanceof Error;
-		var sCustomDataIdentifier = FlexCustomData.getCustomDataIdentifier(false, bErrorOccurred, bXmlModifier);
+		var bErrorOccured = oError instanceof Error;
+		var sCustomDataIdentifier = FlexCustomData.getCustomDataIdentifier(false, bErrorOccured, bXmlModifier);
 		switch (sCustomDataIdentifier) {
 			case FlexCustomData.notApplicableChangesCustomDataKey:
 				FlUtils.formatAndLogMessage("info", [sLogMessage, oError.message], [sChangeId]);
@@ -203,9 +212,10 @@ sap.ui.define([
 	}
 
 	function _logApplyChangeError(oError, oChange) {
-		var sChangeType = oChange.getChangeType();
-		var sTargetControlId = oChange.getSelector().id;
-		var fullQualifiedName = oChange.getNamespace() + oChange.getId() + "." + oChange.getFileType();
+		var oDefinition = oChange.getDefinition();
+		var sChangeType = oDefinition.changeType;
+		var sTargetControlId = oDefinition.selector.id;
+		var fullQualifiedName = oDefinition.namespace + oDefinition.fileName + "." + oDefinition.fileType;
 
 		var sWarningMessage = "A flexibility change could not be applied.";
 		sWarningMessage += "\nThe displayed UI might not be displayed as intedend.";
@@ -424,6 +434,7 @@ sap.ui.define([
 			}
 
 			var aOnAfterXMLChangeProcessingHandlers = [];
+			mPropertyBag.failedSelectors = [];
 
 			return aChanges.reduce(function(oPreviousPromise, oChange) {
 				var oControl;
@@ -458,10 +469,17 @@ sap.ui.define([
 						}
 					})
 					.catch(function(oError) {
+						oChange.getDependentSelectorList().forEach(function(oDependentControlSelector) {
+							if (FlUtils.indexOfObject(mPropertyBag.failedSelectors, oDependentControlSelector) === -1) {
+								mPropertyBag.failedSelectors.push(oDependentControlSelector);
+							}
+						});
 						_logApplyChangeError(oError, oChange);
 					});
 			}, new FlUtils.FakePromise())
 			.then(function() {
+				delete mPropertyBag.failedSelectors;
+
 				// Once all changes for a control are processed, call the
 				// onAfterXMLChangeProcessing hooks of all involved change handlers
 				aOnAfterXMLChangeProcessingHandlers.forEach(function (mHandler) {

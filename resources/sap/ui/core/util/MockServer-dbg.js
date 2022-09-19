@@ -32,7 +32,7 @@ sap.ui
 			 * @extends sap.ui.base.ManagedObject
 			 * @abstract
 			 * @author SAP SE
-			 * @version 1.106.0
+			 * @version 1.105.1
 			 * @public
 			 * @alias sap.ui.core.util.MockServer
 			 */
@@ -759,8 +759,6 @@ sap.ui
 				}
 				var that = this;
 				var fnGetFilteredData = function(bValue, iValueIndex, iPathIndex, fnSelectFilteredData) {
-					// TODO: do the check using the property type and not value
-					//       or consider the reuse of sap/ui/model/odata/ODataUtils.parseValue
 					var aODataFilterValues, sValue, sPath;
 					if (!bValue) { //e.g eq, ne, gt, lt, le, ge
 						aODataFilterValues = rExp.exec(sODataQueryValue);
@@ -776,7 +774,13 @@ sap.ui
 					if (/^\(.+\)$/.test(sValue)) {
 						sValue = sValue.replace(/^\(|\)$/g, "");
 					}
-					// fix for filtering on date time properties
+					//TODO do the check using the property type and not value
+					// remove number suffixes from EDM types decimal, Int64, Single
+					var sTypecheck = sValue[sValue.length - 1];
+					if (sTypecheck === "M" || sTypecheck === "m" || sTypecheck === "L" || sTypecheck === "f") {
+						sValue = sValue.substring(0, sValue.length - 1);
+					}
+					//fix for filtering on date time properties
 					if (sValue.indexOf("datetime") === 0) {
 						sValue = that._getJsonDate(sValue);
 					} else if (sValue.indexOf("guid") === 0) {
@@ -941,53 +945,78 @@ sap.ui
 			 */
 			MockServer.prototype._getOdataQuerySelect = function(aDataSet, sODataQueryValue, sEntitySetName) {
 				var that = this;
+				var sPropName, sComplexOrNavProperty;
 				var aProperties = sODataQueryValue.split(',');
 				var aSelectedDataSet = [];
+				var oPushedObject;
 				var oDataEntry = aDataSet[0] ? aDataSet[0][aProperties[0].split('/')[0]] : null;
 				if (!(oDataEntry != null && oDataEntry.results && oDataEntry.results.length > 0)) {
 					var fnCreatePushedEntry = function (aProperties, oData, oPushedObject, sParentName) {
+						// Get for each complex type or navigation property its list of properties
+						var oComplexOrNav = {};
 						jQuery.each(aProperties, function (i, sPropertyName) {
-							// Take over __metadata for complex types or properties
+							var iComplexOrNavProperty = sPropertyName.indexOf("/");
+							// This is a complex type or navigation property
+							if (iComplexOrNavProperty !== -1) {
+								sPropName = sPropertyName.substring(iComplexOrNavProperty + 1);
+								sComplexOrNavProperty = sPropertyName.substring(0, iComplexOrNavProperty);
+								if (oComplexOrNav[sComplexOrNavProperty]) {
+									oComplexOrNav[sComplexOrNavProperty].push(sPropName);
+								} else {
+									oComplexOrNav[sComplexOrNavProperty] = [sPropName];
+								}
+							}
+						});
+						jQuery.each(Object.keys(oComplexOrNav), function (i, sComplexOrNav) {
+							if (!oPushedObject[sComplexOrNav]) {
+								oPushedObject[sComplexOrNav] = {};
+							}
+							// call recursively to get the properties of each complex type or navigation property
+							oPushedObject[sComplexOrNav] = fnCreatePushedEntry(oComplexOrNav[sComplexOrNav], oData[sComplexOrNav], oPushedObject[sComplexOrNav], sComplexOrNav);
+						});
+
+						if (oData.results) {
+							// Navigation property - filter the results for each navigation property based on the properties defined by $select
+							var oFilteredResults = [];
+							jQuery.each(oData.results, function (i, oResult) {
+								var oFilteredResult = {};
+								jQuery.each(aProperties, function (j, sPropertyName) {
+									oFilteredResult[sPropertyName] = oResult[sPropertyName];
+								});
+								oFilteredResults.push(oFilteredResult);
+							});
+							if (oPushedObject) {
+								oPushedObject.results = oFilteredResults;
+							}
+						} else {
+							// Complex types or flat properties
 							if (oData["__metadata"]) {
 								oPushedObject["__metadata"] = oData["__metadata"];
 							}
-							// Resolve complex types (determined by path syntax)
-							if (sPropertyName.indexOf("/") > -1) {
-								var aPropParts = sPropertyName.split("/");
-								var sPropName = aPropParts[0];
-								var sPath = aPropParts.splice(1).join("/");
-								oPushedObject[sPropName] = oPushedObject[sPropName] || {};
-								if (oData[sPropName] && oData[sPropName].results) {
-									// Navigation property - filter the results for each navigation property based on the properties defined by $select
-									var results = oPushedObject[sPropName].results = oPushedObject[sPropName].results || [];
-									jQuery.each(oData[sPropName].results, function (i, oResult) {
-										results[i] = fnCreatePushedEntry([sPath], oResult, results[i] || {}, sPropName);
-									});
-								} else {
-									// call recursively to get the properties of each complex type or navigation property
-									oPushedObject[sPropName] = fnCreatePushedEntry([sPath], oData[sPropName], oPushedObject[sPropName] || {}, sPropName);
-								}
-							} else {
-								if (oData && !oData.hasOwnProperty(sPropertyName)) {
-									var bExist = false;
-									var aTypeProperties = [];
-									if (sParentName) {
-										var sTargetEntitySet = that._mEntitySets[sEntitySetName].navprops[sParentName].to.entitySet;
-										aTypeProperties = that._mEntityTypes[that._mEntitySets[sTargetEntitySet].type].properties;
-										for (var i = 0; i < aTypeProperties.length; i++) {
-											if (aTypeProperties[i].name === sPropertyName) {
-												bExist = true;
-												break;
+							jQuery.each(aProperties, function (i, sPropertyName) {
+								var iComplexType = sPropertyName.indexOf("/");
+								if (iComplexType === -1) { // Complex types were already handled above
+									if (oData && !oData.hasOwnProperty(sPropertyName)) {
+										var bExist = false;
+										var aTypeProperties = [];
+										if (sParentName) {
+											var sTargetEntitySet = that._mEntitySets[sEntitySetName].navprops[sParentName].to.entitySet;
+											aTypeProperties = that._mEntityTypes[that._mEntitySets[sTargetEntitySet].type].properties;
+											for (var i = 0; i < aTypeProperties.length; i++) {
+												if (aTypeProperties[i].name === sPropertyName) {
+													bExist = true;
+													break;
+												}
 											}
 										}
+										if (!bExist) {
+											that._logAndThrowMockServerCustomError(404, that._oErrorMessages.RESOURCE_NOT_FOUND_FOR_SEGMENT, sPropertyName);
+										}
 									}
-									if (!bExist) {
-										that._logAndThrowMockServerCustomError(404, that._oErrorMessages.RESOURCE_NOT_FOUND_FOR_SEGMENT, sPropertyName);
-									}
+									oPushedObject[sPropertyName] = oData[sPropertyName];
 								}
-								oPushedObject[sPropertyName] = oData[sPropertyName];
-							}
-						});
+							});
+						}
 						return oPushedObject;
 					};
 
@@ -1003,7 +1032,8 @@ sap.ui
 
 					// for each entry in the dataset create a new object that contains only the properties in $select clause
 					jQuery.each(aDataSet, function(iIndex, oData) {
-						aSelectedDataSet.push(fnCreatePushedEntry(aProperties, oData, {}));
+						oPushedObject = {};
+						aSelectedDataSet.push(fnCreatePushedEntry(aProperties, oData, oPushedObject));
 					});
 				} else {
 					//Add Support for multiple select return 1...n
@@ -2054,7 +2084,7 @@ sap.ui
 									break;
 								case "Edm.Int16":
 								case "Edm.Int32":
-								//case "Edm.Int64": In ODataModel this type is represented as a string. (https://sdk.openui5.org/api/sap.ui.model.odata.type.Int64)
+								//case "Edm.Int64": In ODataModel this type is represented as a string. (https://openui5.hana.ondemand.com/api/sap.ui.model.odata.type.Int64)
 								// eslint-ignore-next-line no-fallthrough
 								case "Edm.Decimal":
 								case "Edm.Byte":
@@ -3537,11 +3567,7 @@ sap.ui
 			 * @private
 			 */
 			MockServer.prototype._isValidNumber = function(sString) {
-				if (/^([-+]?)0*(\d+)(\.\d+|)([eE][-+]?\d+[d]?|[mldf])?$/i.test(sString)) {
-					var anyNumber = parseFloat(sString);
-					return !isNaN(anyNumber) && isFinite(anyNumber);
-				}
-				return false;
+				return !isNaN(parseFloat(sString)) && isFinite(sString);
 			};
 
 			/**

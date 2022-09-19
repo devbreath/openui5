@@ -16,7 +16,7 @@
 		{
 			"name": "AnalyticalColumn-dbg.js",
 			"module": "sap/ui/table/AnalyticalColumn.js",
-			"size": 14050,
+			"size": 13388,
 			"isDebug": true,
 			"required": [
 				"sap/ui/core/Element.js",
@@ -30,11 +30,16 @@
 				"sap/ui/table/library.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
+		},
+		{
+			"name": "AnalyticalColumn.control",
+			"size": 1982,
+			"designtime": true
 		},
 		{
 			"name": "AnalyticalColumn.js",
 			"module": "sap/ui/table/AnalyticalColumn.js",
-			"size": 5583,
+			"size": 5208,
 			"required": [
 				"sap/ui/core/Element.js",
 				"sap/ui/model/type/Boolean.js",
@@ -49,39 +54,32 @@
 			]
 		},
 		{
-			"name": "AnalyticalColumn.js.map",
-			"size": 6973,
-			"isDebug": true
-		},
-		{
 			"name": "AnalyticalColumnMenu-dbg.js",
 			"module": "sap/ui/table/AnalyticalColumnMenu.js",
-			"size": 3469,
+			"size": 3571,
 			"isDebug": true,
 			"required": [
 				"sap/ui/table/ColumnMenu.js",
 				"sap/ui/table/library.js",
-				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js",
 				"sap/ui/unified/MenuRenderer.js"
 			]
+		},
+		{
+			"name": "AnalyticalColumnMenu.control",
+			"size": 467,
+			"designtime": true
 		},
 		{
 			"name": "AnalyticalColumnMenu.js",
 			"module": "sap/ui/table/AnalyticalColumnMenu.js",
-			"size": 1635,
+			"size": 1637,
 			"required": [
 				"sap/ui/table/ColumnMenu.js",
 				"sap/ui/table/library.js",
-				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js",
 				"sap/ui/unified/MenuRenderer.js"
 			]
-		},
-		{
-			"name": "AnalyticalColumnMenu.js.map",
-			"size": 1975,
-			"isDebug": true
 		},
 		{
 			"name": "AnalyticalColumnMenuRenderer-dbg.js",
@@ -95,15 +93,10 @@
 		{
 			"name": "AnalyticalColumnMenuRenderer.js",
 			"module": "sap/ui/table/AnalyticalColumnMenuRenderer.js",
-			"size": 329,
+			"size": 274,
 			"required": [
 				"sap/ui/table/AnalyticalColumnMenu.js"
 			]
-		},
-		{
-			"name": "AnalyticalColumnMenuRenderer.js.map",
-			"size": 269,
-			"isDebug": true
 		},
 		{
 			"name": "AnalyticalTable-dbg.js",
@@ -128,9 +121,14 @@
 			]
 		},
 		{
+			"name": "AnalyticalTable.control",
+			"size": 12092,
+			"designtime": true
+		},
+		{
 			"name": "AnalyticalTable.js",
 			"module": "sap/ui/table/AnalyticalTable.js",
-			"size": 18633,
+			"size": 18693,
 			"required": [
 				"sap/base/Log.js",
 				"sap/base/assert.js",
@@ -149,11 +147,6 @@
 			]
 		},
 		{
-			"name": "AnalyticalTable.js.map",
-			"size": 22656,
-			"isDebug": true
-		},
-		{
 			"name": "AnalyticalTableRenderer-dbg.js",
 			"module": "sap/ui/table/AnalyticalTableRenderer.js",
 			"size": 490,
@@ -165,26 +158,20 @@
 		{
 			"name": "AnalyticalTableRenderer.js",
 			"module": "sap/ui/table/AnalyticalTableRenderer.js",
-			"size": 319,
+			"size": 269,
 			"required": [
 				"sap/ui/table/AnalyticalTable.js"
 			]
 		},
 		{
-			"name": "AnalyticalTableRenderer.js.map",
-			"size": 260,
-			"isDebug": true
-		},
-		{
 			"name": "Column-dbg.js",
 			"module": "sap/ui/table/Column.js",
-			"size": 49781,
+			"size": 48688,
 			"isDebug": true,
 			"required": [
 				"sap/base/Log.js",
 				"sap/base/util/JSTokenizer.js",
 				"sap/base/util/ObjectPath.js",
-				"sap/ui/core/Core.js",
 				"sap/ui/core/Element.js",
 				"sap/ui/core/Popup.js",
 				"sap/ui/core/library.js",
@@ -196,19 +183,22 @@
 				"sap/ui/model/type/String.js",
 				"sap/ui/table/ColumnMenu.js",
 				"sap/ui/table/library.js",
-				"sap/ui/table/menus/ColumnHeaderMenuAdapter.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
+		},
+		{
+			"name": "Column.control",
+			"size": 14693,
+			"designtime": true
 		},
 		{
 			"name": "Column.js",
 			"module": "sap/ui/table/Column.js",
-			"size": 15716,
+			"size": 15077,
 			"required": [
 				"sap/base/Log.js",
 				"sap/base/util/JSTokenizer.js",
 				"sap/base/util/ObjectPath.js",
-				"sap/ui/core/Core.js",
 				"sap/ui/core/Element.js",
 				"sap/ui/core/Popup.js",
 				"sap/ui/core/library.js",
@@ -220,19 +210,13 @@
 				"sap/ui/model/type/String.js",
 				"sap/ui/table/ColumnMenu.js",
 				"sap/ui/table/library.js",
-				"sap/ui/table/menus/ColumnHeaderMenuAdapter.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
 		},
 		{
-			"name": "Column.js.map",
-			"size": 21020,
-			"isDebug": true
-		},
-		{
 			"name": "ColumnMenu-dbg.js",
 			"module": "sap/ui/table/ColumnMenu.js",
-			"size": 15998,
+			"size": 15505,
 			"isDebug": true,
 			"required": [
 				"sap/base/assert.js",
@@ -246,9 +230,14 @@
 			]
 		},
 		{
+			"name": "ColumnMenu.control",
+			"size": 325,
+			"designtime": true
+		},
+		{
 			"name": "ColumnMenu.js",
 			"module": "sap/ui/table/ColumnMenu.js",
-			"size": 7369,
+			"size": 7124,
 			"required": [
 				"sap/base/assert.js",
 				"sap/ui/table/library.js",
@@ -259,11 +248,6 @@
 				"sap/ui/unified/MenuRenderer.js",
 				"sap/ui/unified/MenuTextFieldItem.js"
 			]
-		},
-		{
-			"name": "ColumnMenu.js.map",
-			"size": 9462,
-			"isDebug": true
 		},
 		{
 			"name": "ColumnMenuRenderer-dbg.js",
@@ -277,15 +261,10 @@
 		{
 			"name": "ColumnMenuRenderer.js",
 			"module": "sap/ui/table/ColumnMenuRenderer.js",
-			"size": 309,
+			"size": 264,
 			"required": [
 				"sap/ui/table/ColumnMenu.js"
 			]
-		},
-		{
-			"name": "ColumnMenuRenderer.js.map",
-			"size": 249,
-			"isDebug": true
 		},
 		{
 			"name": "CreationRow-dbg.js",
@@ -306,7 +285,7 @@
 		{
 			"name": "CreationRow.js",
 			"module": "sap/ui/table/CreationRow.js",
-			"size": 4024,
+			"size": 4028,
 			"required": [
 				"sap/m/Button.js",
 				"sap/m/OverflowToolbar.js",
@@ -317,11 +296,6 @@
 				"sap/ui/table/CreationRowRenderer.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
-		},
-		{
-			"name": "CreationRow.js.map",
-			"size": 5638,
-			"isDebug": true
 		},
 		{
 			"name": "CreationRowRenderer-dbg.js",
@@ -337,7 +311,7 @@
 		{
 			"name": "CreationRowRenderer.js",
 			"module": "sap/ui/table/CreationRowRenderer.js",
-			"size": 3691,
+			"size": 3669,
 			"required": [
 				"sap/ui/core/Renderer.js",
 				"sap/ui/table/TableRenderer.js",
@@ -345,9 +319,9 @@
 			]
 		},
 		{
-			"name": "CreationRowRenderer.js.map",
-			"size": 4877,
-			"isDebug": true
+			"name": "NavigationMode.type",
+			"size": 977,
+			"designtime": true
 		},
 		{
 			"name": "Row-dbg.js",
@@ -361,19 +335,19 @@
 			]
 		},
 		{
+			"name": "Row.control",
+			"size": 1220,
+			"designtime": true
+		},
+		{
 			"name": "Row.js",
 			"module": "sap/ui/table/Row.js",
-			"size": 8286,
+			"size": 8338,
 			"required": [
 				"sap/ui/core/Element.js",
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js"
 			]
-		},
-		{
-			"name": "Row.js.map",
-			"size": 11764,
-			"isDebug": true
 		},
 		{
 			"name": "RowAction-dbg.js",
@@ -391,9 +365,14 @@
 			]
 		},
 		{
+			"name": "RowAction.control",
+			"size": 1395,
+			"designtime": true
+		},
+		{
 			"name": "RowAction.js",
 			"module": "sap/ui/table/RowAction.js",
-			"size": 4055,
+			"size": 4051,
 			"required": [
 				"sap/ui/core/Control.js",
 				"sap/ui/core/Icon.js",
@@ -403,11 +382,6 @@
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/unified/Menu.js"
 			]
-		},
-		{
-			"name": "RowAction.js.map",
-			"size": 5074,
-			"isDebug": true
 		},
 		{
 			"name": "RowActionItem-dbg.js",
@@ -423,9 +397,14 @@
 			]
 		},
 		{
+			"name": "RowActionItem.control",
+			"size": 1738,
+			"designtime": true
+		},
+		{
 			"name": "RowActionItem.js",
 			"module": "sap/ui/table/RowActionItem.js",
-			"size": 2108,
+			"size": 2087,
 			"required": [
 				"sap/ui/core/Element.js",
 				"sap/ui/core/IconPool.js",
@@ -433,11 +412,6 @@
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/unified/MenuItem.js"
 			]
-		},
-		{
-			"name": "RowActionItem.js.map",
-			"size": 2515,
-			"isDebug": true
 		},
 		{
 			"name": "RowActionRenderer-dbg.js",
@@ -448,12 +422,12 @@
 		{
 			"name": "RowActionRenderer.js",
 			"module": "sap/ui/table/RowActionRenderer.js",
-			"size": 602
+			"size": 562
 		},
 		{
-			"name": "RowActionRenderer.js.map",
-			"size": 773,
-			"isDebug": true
+			"name": "RowActionType.type",
+			"size": 610,
+			"designtime": true
 		},
 		{
 			"name": "RowSettings-dbg.js",
@@ -469,9 +443,14 @@
 			]
 		},
 		{
+			"name": "RowSettings.control",
+			"size": 2359,
+			"designtime": true
+		},
+		{
 			"name": "RowSettings.js",
 			"module": "sap/ui/table/RowSettings.js",
-			"size": 2600,
+			"size": 2590,
 			"required": [
 				"sap/ui/base/DataType.js",
 				"sap/ui/core/Element.js",
@@ -481,14 +460,24 @@
 			]
 		},
 		{
-			"name": "RowSettings.js.map",
-			"size": 3207,
-			"isDebug": true
+			"name": "SelectionBehavior.type",
+			"size": 714,
+			"designtime": true
+		},
+		{
+			"name": "SelectionMode.type",
+			"size": 883,
+			"designtime": true
+		},
+		{
+			"name": "SortOrder.type",
+			"size": 502,
+			"designtime": true
 		},
 		{
 			"name": "Table-dbg.js",
 			"module": "sap/ui/table/Table.js",
-			"size": 152180,
+			"size": 151431,
 			"isDebug": true,
 			"required": [
 				"sap/base/Log.js",
@@ -520,14 +509,18 @@
 				"sap/m/table/Util.js",
 				"sap/ui/core/util/Export.js",
 				"sap/ui/core/util/ExportTypeCSV.js",
-				"sap/ui/table/extensions/ScrollingIOS.js",
-				"sap/ui/table/extensions/Synchronization.js"
+				"sap/ui/table/extensions/ScrollingIOS.js"
 			]
+		},
+		{
+			"name": "Table.control",
+			"size": 42473,
+			"designtime": true
 		},
 		{
 			"name": "Table.js",
 			"module": "sap/ui/table/Table.js",
-			"size": 54509,
+			"size": 55087,
 			"required": [
 				"sap/base/Log.js",
 				"sap/ui/Device.js",
@@ -558,14 +551,8 @@
 				"sap/m/table/Util.js",
 				"sap/ui/core/util/Export.js",
 				"sap/ui/core/util/ExportTypeCSV.js",
-				"sap/ui/table/extensions/ScrollingIOS.js",
-				"sap/ui/table/extensions/Synchronization.js"
+				"sap/ui/table/extensions/ScrollingIOS.js"
 			]
-		},
-		{
-			"name": "Table.js.map",
-			"size": 66029,
-			"isDebug": true
 		},
 		{
 			"name": "TablePersoController-dbg.js",
@@ -579,15 +566,12 @@
 				"sap/ui/table/library.js",
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js"
-			],
-			"condRequired": [
-				"sap/m/TablePersoDialog.js"
 			]
 		},
 		{
 			"name": "TablePersoController.js",
 			"module": "sap/ui/table/TablePersoController.js",
-			"size": 7519,
+			"size": 7544,
 			"required": [
 				"sap/base/Log.js",
 				"sap/ui/base/ManagedObject.js",
@@ -595,15 +579,7 @@
 				"sap/ui/table/library.js",
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js"
-			],
-			"condRequired": [
-				"sap/m/TablePersoDialog.js"
 			]
-		},
-		{
-			"name": "TablePersoController.js.map",
-			"size": 9054,
-			"isDebug": true
 		},
 		{
 			"name": "TableRenderer-dbg.js",
@@ -625,7 +601,7 @@
 		{
 			"name": "TableRenderer.js",
 			"module": "sap/ui/table/TableRenderer.js",
-			"size": 23187,
+			"size": 23327,
 			"required": [
 				"sap/base/Log.js",
 				"sap/ui/Device.js",
@@ -637,11 +613,6 @@
 				"sap/ui/table/library.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
-		},
-		{
-			"name": "TableRenderer.js.map",
-			"size": 28774,
-			"isDebug": true
 		},
 		{
 			"name": "TreeTable-dbg.js",
@@ -661,9 +632,14 @@
 			]
 		},
 		{
+			"name": "TreeTable.control",
+			"size": 7966,
+			"designtime": true
+		},
+		{
 			"name": "TreeTable.js",
 			"module": "sap/ui/table/TreeTable.js",
-			"size": 6744,
+			"size": 6780,
 			"required": [
 				"sap/base/Log.js",
 				"sap/base/assert.js",
@@ -677,11 +653,6 @@
 			]
 		},
 		{
-			"name": "TreeTable.js.map",
-			"size": 8951,
-			"isDebug": true
-		},
-		{
 			"name": "TreeTableRenderer-dbg.js",
 			"module": "sap/ui/table/TreeTableRenderer.js",
 			"size": 472,
@@ -693,15 +664,15 @@
 		{
 			"name": "TreeTableRenderer.js",
 			"module": "sap/ui/table/TreeTableRenderer.js",
-			"size": 307,
+			"size": 263,
 			"required": [
 				"sap/ui/table/TreeTable.js"
 			]
 		},
 		{
-			"name": "TreeTableRenderer.js.map",
-			"size": 248,
-			"isDebug": true
+			"name": "VisibleRowCountMode.type",
+			"size": 822,
+			"designtime": true
 		},
 		{
 			"name": "designtime/AnalyticalTable-dbg.designtime.js",
@@ -713,13 +684,7 @@
 		{
 			"name": "designtime/AnalyticalTable.designtime.js",
 			"module": "sap/ui/table/designtime/AnalyticalTable.designtime.js",
-			"size": 442,
-			"designtime": true
-		},
-		{
-			"name": "designtime/AnalyticalTable.designtime.js.map",
-			"size": 472,
-			"isDebug": true,
+			"size": 391,
 			"designtime": true
 		},
 		{
@@ -732,13 +697,7 @@
 		{
 			"name": "designtime/Table.designtime.js",
 			"module": "sap/ui/table/designtime/Table.designtime.js",
-			"size": 615,
-			"designtime": true
-		},
-		{
-			"name": "designtime/Table.designtime.js.map",
-			"size": 648,
-			"isDebug": true,
+			"size": 576,
 			"designtime": true
 		},
 		{
@@ -751,7 +710,7 @@
 		{
 			"name": "designtime/library-preload.designtime.js",
 			"module": "sap/ui/table/designtime/library-preload.designtime.js",
-			"size": 1439,
+			"size": 1142,
 			"merged": true,
 			"designtime": true,
 			"included": [
@@ -762,20 +721,14 @@
 		},
 		{
 			"name": "designtime/library-preload.designtime.js.map",
-			"size": 1456,
+			"size": 1039,
 			"isDebug": true,
 			"designtime": true
 		},
 		{
 			"name": "designtime/library.designtime.js",
 			"module": "sap/ui/table/designtime/library.designtime.js",
-			"size": 250,
-			"designtime": true
-		},
-		{
-			"name": "designtime/library.designtime.js.map",
-			"size": 186,
-			"isDebug": true,
+			"size": 205,
 			"designtime": true
 		},
 		{
@@ -797,7 +750,7 @@
 		{
 			"name": "extensions/Accessibility-dbg.js",
 			"module": "sap/ui/table/extensions/Accessibility.js",
-			"size": 51563,
+			"size": 51534,
 			"isDebug": true,
 			"required": [
 				"sap/ui/core/Control.js",
@@ -811,7 +764,7 @@
 		{
 			"name": "extensions/Accessibility.js",
 			"module": "sap/ui/table/extensions/Accessibility.js",
-			"size": 22329,
+			"size": 22467,
 			"required": [
 				"sap/ui/core/Control.js",
 				"sap/ui/table/extensions/AccessibilityRender.js",
@@ -820,11 +773,6 @@
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js"
 			]
-		},
-		{
-			"name": "extensions/Accessibility.js.map",
-			"size": 29237,
-			"isDebug": true
 		},
 		{
 			"name": "extensions/AccessibilityRender-dbg.js",
@@ -840,17 +788,12 @@
 		{
 			"name": "extensions/AccessibilityRender.js",
 			"module": "sap/ui/table/extensions/AccessibilityRender.js",
-			"size": 3491,
+			"size": 3465,
 			"required": [
 				"sap/ui/table/extensions/ExtensionBase.js",
 				"sap/ui/table/library.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
-		},
-		{
-			"name": "extensions/AccessibilityRender.js.map",
-			"size": 4265,
-			"isDebug": true
 		},
 		{
 			"name": "extensions/DragAndDrop-dbg.js",
@@ -866,17 +809,12 @@
 		{
 			"name": "extensions/DragAndDrop.js",
 			"module": "sap/ui/table/extensions/DragAndDrop.js",
-			"size": 3459,
+			"size": 3454,
 			"required": [
 				"sap/ui/core/library.js",
 				"sap/ui/table/extensions/ExtensionBase.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
-		},
-		{
-			"name": "extensions/DragAndDrop.js.map",
-			"size": 5450,
-			"isDebug": true
 		},
 		{
 			"name": "extensions/ExtensionBase-dbg.js",
@@ -890,15 +828,10 @@
 		{
 			"name": "extensions/ExtensionBase.js",
 			"module": "sap/ui/table/extensions/ExtensionBase.js",
-			"size": 1938,
+			"size": 1919,
 			"required": [
 				"sap/ui/base/Object.js"
 			]
-		},
-		{
-			"name": "extensions/ExtensionBase.js.map",
-			"size": 2506,
-			"isDebug": true
 		},
 		{
 			"name": "extensions/Keyboard-dbg.js",
@@ -918,7 +851,7 @@
 		{
 			"name": "extensions/Keyboard.js",
 			"module": "sap/ui/table/extensions/Keyboard.js",
-			"size": 8792,
+			"size": 8824,
 			"required": [
 				"sap/ui/Device.js",
 				"sap/ui/core/delegate/ItemNavigation.js",
@@ -928,11 +861,6 @@
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js"
 			]
-		},
-		{
-			"name": "extensions/Keyboard.js.map",
-			"size": 11107,
-			"isDebug": true
 		},
 		{
 			"name": "extensions/KeyboardDelegate-dbg.js",
@@ -951,7 +879,7 @@
 		{
 			"name": "extensions/KeyboardDelegate.js",
 			"module": "sap/ui/table/extensions/KeyboardDelegate.js",
-			"size": 27027,
+			"size": 27245,
 			"required": [
 				"sap/ui/Device.js",
 				"sap/ui/base/Object.js",
@@ -962,14 +890,9 @@
 			]
 		},
 		{
-			"name": "extensions/KeyboardDelegate.js.map",
-			"size": 40600,
-			"isDebug": true
-		},
-		{
 			"name": "extensions/Pointer-dbg.js",
 			"module": "sap/ui/table/extensions/Pointer.js",
-			"size": 31061,
+			"size": 30974,
 			"isDebug": true,
 			"required": [
 				"sap/base/Log.js",
@@ -986,7 +909,7 @@
 		{
 			"name": "extensions/Pointer.js",
 			"module": "sap/ui/table/extensions/Pointer.js",
-			"size": 14331,
+			"size": 14299,
 			"required": [
 				"sap/base/Log.js",
 				"sap/ui/Device.js",
@@ -998,11 +921,6 @@
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js"
 			]
-		},
-		{
-			"name": "extensions/Pointer.js.map",
-			"size": 18721,
-			"isDebug": true
 		},
 		{
 			"name": "extensions/Scrolling-dbg.js",
@@ -1023,7 +941,7 @@
 		{
 			"name": "extensions/Scrolling.js",
 			"module": "sap/ui/table/extensions/Scrolling.js",
-			"size": 35780,
+			"size": 36072,
 			"required": [
 				"sap/base/Log.js",
 				"sap/ui/Device.js",
@@ -1034,11 +952,6 @@
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js"
 			]
-		},
-		{
-			"name": "extensions/Scrolling.js.map",
-			"size": 43477,
-			"isDebug": true
 		},
 		{
 			"name": "extensions/ScrollingIOS-dbg.js",
@@ -1053,16 +966,11 @@
 		{
 			"name": "extensions/ScrollingIOS.js",
 			"module": "sap/ui/table/extensions/ScrollingIOS.js",
-			"size": 5422,
+			"size": 5411,
 			"required": [
 				"sap/ui/table/extensions/ExtensionBase.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
-		},
-		{
-			"name": "extensions/ScrollingIOS.js.map",
-			"size": 5966,
-			"isDebug": true
 		},
 		{
 			"name": "extensions/Synchronization-dbg.js",
@@ -1079,18 +987,13 @@
 		{
 			"name": "extensions/Synchronization.js",
 			"module": "sap/ui/table/extensions/Synchronization.js",
-			"size": 3869,
+			"size": 3851,
 			"required": [
 				"sap/base/Log.js",
 				"sap/ui/table/extensions/ExtensionBase.js",
 				"sap/ui/table/library.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
-		},
-		{
-			"name": "extensions/Synchronization.js.map",
-			"size": 4906,
-			"isDebug": true
 		},
 		{
 			"name": "library-dbg.js",
@@ -1105,9 +1008,9 @@
 			]
 		},
 		{
-			"name": "library-preload.js",
-			"module": "sap/ui/table/library-preload.js",
-			"size": 404826,
+			"name": "library-h2-preload.js",
+			"module": "sap/ui/table/library-h2-preload.js",
+			"size": 14950,
 			"merged": true,
 			"required": [
 				"sap/base/Log.js",
@@ -1117,26 +1020,148 @@
 				"sap/base/util/deepClone.js",
 				"sap/base/util/restricted/_throttle.js",
 				"sap/m/Button.js",
-				"sap/m/Input.js",
 				"sap/m/OverflowToolbar.js",
 				"sap/m/ToolbarSpacer.js",
 				"sap/m/library.js",
-				"sap/m/table/columnmenu/ActionItem.js",
-				"sap/m/table/columnmenu/Item.js",
-				"sap/m/table/columnmenu/ItemContainer.js",
-				"sap/m/table/columnmenu/QuickAction.js",
-				"sap/m/table/columnmenu/QuickActionContainer.js",
-				"sap/m/table/columnmenu/QuickGroup.js",
-				"sap/m/table/columnmenu/QuickGroupItem.js",
-				"sap/m/table/columnmenu/QuickSort.js",
-				"sap/m/table/columnmenu/QuickSortItem.js",
-				"sap/m/table/columnmenu/QuickTotal.js",
-				"sap/m/table/columnmenu/QuickTotalItem.js",
 				"sap/ui/Device.js",
 				"sap/ui/base/DataType.js",
-				"sap/ui/base/EventProvider.js",
 				"sap/ui/base/ManagedObject.js",
-				"sap/ui/base/ManagedObjectObserver.js",
+				"sap/ui/base/Object.js",
+				"sap/ui/core/Control.js",
+				"sap/ui/core/Core.js",
+				"sap/ui/core/Element.js",
+				"sap/ui/core/Icon.js",
+				"sap/ui/core/IconPool.js",
+				"sap/ui/core/Popup.js",
+				"sap/ui/core/Renderer.js",
+				"sap/ui/core/ResizeHandler.js",
+				"sap/ui/core/delegate/ItemNavigation.js",
+				"sap/ui/core/library.js",
+				"sap/ui/core/syncStyleClass.js",
+				"sap/ui/core/theming/Parameters.js",
+				"sap/ui/core/util/PasteHelper.js",
+				"sap/ui/dom/containsOrEquals.js",
+				"sap/ui/dom/jquery/control.js",
+				"sap/ui/dom/jquery/scrollLeftRTL.js",
+				"sap/ui/events/KeyCodes.js",
+				"sap/ui/model/BindingMode.js",
+				"sap/ui/model/ChangeReason.js",
+				"sap/ui/model/ClientTreeBindingAdapter.js",
+				"sap/ui/model/Filter.js",
+				"sap/ui/model/FilterOperator.js",
+				"sap/ui/model/FilterType.js",
+				"sap/ui/model/SelectionModel.js",
+				"sap/ui/model/Sorter.js",
+				"sap/ui/model/TreeAutoExpandMode.js",
+				"sap/ui/model/TreeBindingCompatibilityAdapter.js",
+				"sap/ui/model/Type.js",
+				"sap/ui/model/analytics/ODataModelAdapter.js",
+				"sap/ui/model/type/Boolean.js",
+				"sap/ui/model/type/DateTime.js",
+				"sap/ui/model/type/Float.js",
+				"sap/ui/model/type/Integer.js",
+				"sap/ui/model/type/String.js",
+				"sap/ui/model/type/Time.js",
+				"sap/ui/performance/trace/Interaction.js",
+				"sap/ui/support/library.js",
+				"sap/ui/thirdparty/jquery.js",
+				"sap/ui/unified/Menu.js",
+				"sap/ui/unified/MenuItem.js",
+				"sap/ui/unified/MenuRenderer.js",
+				"sap/ui/unified/MenuTextFieldItem.js",
+				"sap/ui/unified/library.js"
+			],
+			"condRequired": [
+				"sap/m/table/Util.js",
+				"sap/ui/core/util/Export.js",
+				"sap/ui/core/util/ExportTypeCSV.js"
+			],
+			"included": [
+				"sap/ui/table/library.js",
+				"sap/ui/table/manifest.json",
+				"sap/ui/table/AnalyticalColumn.js",
+				"sap/ui/table/AnalyticalColumnMenu.js",
+				"sap/ui/table/AnalyticalColumnMenuRenderer.js",
+				"sap/ui/table/AnalyticalTable.js",
+				"sap/ui/table/AnalyticalTableRenderer.js",
+				"sap/ui/table/Column.js",
+				"sap/ui/table/ColumnMenu.js",
+				"sap/ui/table/ColumnMenuRenderer.js",
+				"sap/ui/table/CreationRow.js",
+				"sap/ui/table/CreationRowRenderer.js",
+				"sap/ui/table/Row.js",
+				"sap/ui/table/RowAction.js",
+				"sap/ui/table/RowActionItem.js",
+				"sap/ui/table/RowActionRenderer.js",
+				"sap/ui/table/RowSettings.js",
+				"sap/ui/table/Table.js",
+				"sap/ui/table/TablePersoController.js",
+				"sap/ui/table/TableRenderer.js",
+				"sap/ui/table/TreeTable.js",
+				"sap/ui/table/TreeTableRenderer.js",
+				"sap/ui/table/designtime/AnalyticalTable.designtime.js",
+				"sap/ui/table/designtime/Table.designtime.js",
+				"sap/ui/table/designtime/library.designtime.js",
+				"sap/ui/table/extensions/Accessibility.js",
+				"sap/ui/table/extensions/AccessibilityRender.js",
+				"sap/ui/table/extensions/DragAndDrop.js",
+				"sap/ui/table/extensions/ExtensionBase.js",
+				"sap/ui/table/extensions/Keyboard.js",
+				"sap/ui/table/extensions/KeyboardDelegate.js",
+				"sap/ui/table/extensions/Pointer.js",
+				"sap/ui/table/extensions/Scrolling.js",
+				"sap/ui/table/extensions/ScrollingIOS.js",
+				"sap/ui/table/extensions/Synchronization.js",
+				"sap/ui/table/library.support.js",
+				"sap/ui/table/plugins/BindingSelection.js",
+				"sap/ui/table/plugins/MultiSelectionPlugin.js",
+				"sap/ui/table/plugins/PluginBase.js",
+				"sap/ui/table/plugins/SelectionModelSelection.js",
+				"sap/ui/table/plugins/SelectionPlugin.js",
+				"sap/ui/table/plugins/V4Aggregation.js",
+				"sap/ui/table/rowmodes/AutoRowMode.js",
+				"sap/ui/table/rowmodes/FixedRowMode.js",
+				"sap/ui/table/rowmodes/InteractiveRowMode.js",
+				"sap/ui/table/rowmodes/RowMode.js",
+				"sap/ui/table/rowmodes/VariableRowMode.js",
+				"sap/ui/table/rules/Accessibility.support.js",
+				"sap/ui/table/rules/Binding.support.js",
+				"sap/ui/table/rules/ColumnTemplate.support.js",
+				"sap/ui/table/rules/Plugins.support.js",
+				"sap/ui/table/rules/Rows.support.js",
+				"sap/ui/table/rules/TableHelper.support.js",
+				"sap/ui/table/utils/TableUtils.js",
+				"sap/ui/table/utils/_BindingUtils.js",
+				"sap/ui/table/utils/_ColumnUtils.js",
+				"sap/ui/table/utils/_GroupingUtils.js",
+				"sap/ui/table/utils/_HookUtils.js",
+				"sap/ui/table/utils/_MenuUtils.js"
+			]
+		},
+		{
+			"name": "library-h2-preload.js.map",
+			"size": 1717,
+			"isDebug": true
+		},
+		{
+			"name": "library-preload.js",
+			"module": "sap/ui/table/library-preload.js",
+			"size": 390972,
+			"merged": true,
+			"required": [
+				"sap/base/Log.js",
+				"sap/base/assert.js",
+				"sap/base/util/JSTokenizer.js",
+				"sap/base/util/ObjectPath.js",
+				"sap/base/util/deepClone.js",
+				"sap/base/util/restricted/_throttle.js",
+				"sap/m/Button.js",
+				"sap/m/OverflowToolbar.js",
+				"sap/m/ToolbarSpacer.js",
+				"sap/m/library.js",
+				"sap/ui/Device.js",
+				"sap/ui/base/DataType.js",
+				"sap/ui/base/ManagedObject.js",
 				"sap/ui/base/Object.js",
 				"sap/ui/core/Control.js",
 				"sap/ui/core/Core.js",
@@ -1182,17 +1207,10 @@
 				"sap/ui/unified/library.js"
 			],
 			"condRequired": [
-				"sap/m/Bar.js",
-				"sap/m/HBox.js",
-				"sap/m/Popover.js",
-				"sap/m/TablePersoDialog.js",
-				"sap/m/Text.js",
-				"sap/m/Title.js",
 				"sap/m/table/Util.js",
 				"sap/ui/core/util/Export.js",
 				"sap/ui/core/util/ExportTypeCSV.js"
 			],
-			"dynRequired": true,
 			"included": [
 				"sap/ui/table/AnalyticalColumn.js",
 				"sap/ui/table/AnalyticalColumnMenu.js",
@@ -1225,8 +1243,7 @@
 				"sap/ui/table/extensions/ScrollingIOS.js",
 				"sap/ui/table/extensions/Synchronization.js",
 				"sap/ui/table/library.js",
-				"sap/ui/table/menus/ColumnHeaderMenuAdapter.js",
-				"sap/ui/table/menus/MobileColumnHeaderMenuAdapter.js",
+				"sap/ui/table/manifest.json",
 				"sap/ui/table/plugins/BindingSelection.js",
 				"sap/ui/table/plugins/MultiSelectionPlugin.js",
 				"sap/ui/table/plugins/PluginBase.js",
@@ -1243,19 +1260,18 @@
 				"sap/ui/table/utils/_ColumnUtils.js",
 				"sap/ui/table/utils/_GroupingUtils.js",
 				"sap/ui/table/utils/_HookUtils.js",
-				"sap/ui/table/utils/_MenuUtils.js",
-				"sap/ui/table/manifest.json"
+				"sap/ui/table/utils/_MenuUtils.js"
 			]
 		},
 		{
 			"name": "library-preload.js.map",
-			"size": 525002,
+			"size": 451985,
 			"isDebug": true
 		},
 		{
 			"name": "library-preload.support.js",
 			"module": "sap/ui/table/library-preload.support.js",
-			"size": 25608,
+			"size": 25600,
 			"merged": true,
 			"support": true,
 			"required": [
@@ -1277,24 +1293,19 @@
 		},
 		{
 			"name": "library-preload.support.js.map",
-			"size": 4117,
+			"size": 3378,
 			"isDebug": true
 		},
 		{
 			"name": "library.js",
 			"module": "sap/ui/table/library.js",
-			"size": 2563,
+			"size": 2537,
 			"required": [
 				"sap/ui/core/Core.js",
 				"sap/ui/core/library.js",
 				"sap/ui/model/TreeAutoExpandMode.js",
 				"sap/ui/unified/library.js"
 			]
-		},
-		{
-			"name": "library.js.map",
-			"size": 2170,
-			"isDebug": true
 		},
 		{
 			"name": "library.support.js",
@@ -1313,94 +1324,6 @@
 			"name": "manifest.json",
 			"module": "sap/ui/table/manifest.json",
 			"size": 2900
-		},
-		{
-			"name": "menus/ColumnHeaderMenuAdapter-dbg.js",
-			"module": "sap/ui/table/menus/ColumnHeaderMenuAdapter.js",
-			"size": 7196,
-			"isDebug": true,
-			"required": [
-				"sap/ui/base/EventProvider.js",
-				"sap/ui/base/ManagedObjectObserver.js",
-				"sap/ui/base/Object.js",
-				"sap/ui/table/utils/TableUtils.js"
-			],
-			"dynRequired": true
-		},
-		{
-			"name": "menus/ColumnHeaderMenuAdapter.js",
-			"module": "sap/ui/table/menus/ColumnHeaderMenuAdapter.js",
-			"size": 2437,
-			"required": [
-				"sap/ui/base/EventProvider.js",
-				"sap/ui/base/ManagedObjectObserver.js",
-				"sap/ui/base/Object.js",
-				"sap/ui/table/utils/TableUtils.js"
-			],
-			"dynRequired": true
-		},
-		{
-			"name": "menus/ColumnHeaderMenuAdapter.js.map",
-			"size": 3447,
-			"isDebug": true
-		},
-		{
-			"name": "menus/MobileColumnHeaderMenuAdapter-dbg.js",
-			"module": "sap/ui/table/menus/MobileColumnHeaderMenuAdapter.js",
-			"size": 12382,
-			"isDebug": true,
-			"required": [
-				"sap/m/Button.js",
-				"sap/m/Input.js",
-				"sap/m/library.js",
-				"sap/m/table/columnmenu/ActionItem.js",
-				"sap/m/table/columnmenu/Item.js",
-				"sap/m/table/columnmenu/ItemContainer.js",
-				"sap/m/table/columnmenu/QuickAction.js",
-				"sap/m/table/columnmenu/QuickActionContainer.js",
-				"sap/m/table/columnmenu/QuickGroup.js",
-				"sap/m/table/columnmenu/QuickGroupItem.js",
-				"sap/m/table/columnmenu/QuickSort.js",
-				"sap/m/table/columnmenu/QuickSortItem.js",
-				"sap/m/table/columnmenu/QuickTotal.js",
-				"sap/m/table/columnmenu/QuickTotalItem.js",
-				"sap/ui/Device.js",
-				"sap/ui/core/library.js",
-				"sap/ui/table/library.js",
-				"sap/ui/table/menus/ColumnHeaderMenuAdapter.js",
-				"sap/ui/table/utils/TableUtils.js"
-			]
-		},
-		{
-			"name": "menus/MobileColumnHeaderMenuAdapter.js",
-			"module": "sap/ui/table/menus/MobileColumnHeaderMenuAdapter.js",
-			"size": 7499,
-			"required": [
-				"sap/m/Button.js",
-				"sap/m/Input.js",
-				"sap/m/library.js",
-				"sap/m/table/columnmenu/ActionItem.js",
-				"sap/m/table/columnmenu/Item.js",
-				"sap/m/table/columnmenu/ItemContainer.js",
-				"sap/m/table/columnmenu/QuickAction.js",
-				"sap/m/table/columnmenu/QuickActionContainer.js",
-				"sap/m/table/columnmenu/QuickGroup.js",
-				"sap/m/table/columnmenu/QuickGroupItem.js",
-				"sap/m/table/columnmenu/QuickSort.js",
-				"sap/m/table/columnmenu/QuickSortItem.js",
-				"sap/m/table/columnmenu/QuickTotal.js",
-				"sap/m/table/columnmenu/QuickTotalItem.js",
-				"sap/ui/Device.js",
-				"sap/ui/core/library.js",
-				"sap/ui/table/library.js",
-				"sap/ui/table/menus/ColumnHeaderMenuAdapter.js",
-				"sap/ui/table/utils/TableUtils.js"
-			]
-		},
-		{
-			"name": "menus/MobileColumnHeaderMenuAdapter.js.map",
-			"size": 8449,
-			"isDebug": true
 		},
 		{
 			"name": "messagebundle.properties",
@@ -1759,17 +1682,12 @@
 		{
 			"name": "plugins/BindingSelection.js",
 			"module": "sap/ui/table/plugins/BindingSelection.js",
-			"size": 4164,
+			"size": 4165,
 			"required": [
 				"sap/ui/table/library.js",
 				"sap/ui/table/plugins/SelectionPlugin.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
-		},
-		{
-			"name": "plugins/BindingSelection.js.map",
-			"size": 5225,
-			"isDebug": true
 		},
 		{
 			"name": "plugins/MultiSelectionPlugin-dbg.js",
@@ -1783,21 +1701,12 @@
 				"sap/ui/table/library.js",
 				"sap/ui/table/plugins/SelectionPlugin.js",
 				"sap/ui/table/utils/TableUtils.js"
-			],
-			"condRequired": [
-				"sap/m/Bar.js",
-				"sap/m/HBox.js",
-				"sap/m/Popover.js",
-				"sap/m/Text.js",
-				"sap/m/Title.js",
-				"sap/m/library.js",
-				"sap/ui/core/library.js"
 			]
 		},
 		{
 			"name": "plugins/MultiSelectionPlugin.js",
 			"module": "sap/ui/table/plugins/MultiSelectionPlugin.js",
-			"size": 9411,
+			"size": 9446,
 			"required": [
 				"sap/base/Log.js",
 				"sap/ui/core/Icon.js",
@@ -1805,21 +1714,7 @@
 				"sap/ui/table/library.js",
 				"sap/ui/table/plugins/SelectionPlugin.js",
 				"sap/ui/table/utils/TableUtils.js"
-			],
-			"condRequired": [
-				"sap/m/Bar.js",
-				"sap/m/HBox.js",
-				"sap/m/Popover.js",
-				"sap/m/Text.js",
-				"sap/m/Title.js",
-				"sap/m/library.js",
-				"sap/ui/core/library.js"
 			]
-		},
-		{
-			"name": "plugins/MultiSelectionPlugin.js.map",
-			"size": 11556,
-			"isDebug": true
 		},
 		{
 			"name": "plugins/PluginBase-dbg.js",
@@ -1834,16 +1729,11 @@
 		{
 			"name": "plugins/PluginBase.js",
 			"module": "sap/ui/table/plugins/PluginBase.js",
-			"size": 2035,
+			"size": 2018,
 			"required": [
 				"sap/ui/core/Element.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
-		},
-		{
-			"name": "plugins/PluginBase.js.map",
-			"size": 2577,
-			"isDebug": true
 		},
 		{
 			"name": "plugins/SelectionModelSelection-dbg.js",
@@ -1860,18 +1750,13 @@
 		{
 			"name": "plugins/SelectionModelSelection.js",
 			"module": "sap/ui/table/plugins/SelectionModelSelection.js",
-			"size": 4396,
+			"size": 4388,
 			"required": [
 				"sap/ui/model/SelectionModel.js",
 				"sap/ui/table/library.js",
 				"sap/ui/table/plugins/SelectionPlugin.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
-		},
-		{
-			"name": "plugins/SelectionModelSelection.js.map",
-			"size": 5414,
-			"isDebug": true
 		},
 		{
 			"name": "plugins/SelectionPlugin-dbg.js",
@@ -1885,9 +1770,14 @@
 			]
 		},
 		{
+			"name": "plugins/SelectionPlugin.control",
+			"size": 931,
+			"designtime": true
+		},
+		{
 			"name": "plugins/SelectionPlugin.js",
 			"module": "sap/ui/table/plugins/SelectionPlugin.js",
-			"size": 1860,
+			"size": 1835,
 			"required": [
 				"sap/ui/core/Element.js",
 				"sap/ui/table/library.js",
@@ -1895,14 +1785,9 @@
 			]
 		},
 		{
-			"name": "plugins/SelectionPlugin.js.map",
-			"size": 2355,
-			"isDebug": true
-		},
-		{
 			"name": "plugins/V4Aggregation-dbg.js",
 			"module": "sap/ui/table/plugins/V4Aggregation.js",
-			"size": 18343,
+			"size": 18646,
 			"isDebug": true,
 			"required": [
 				"sap/base/util/deepClone.js",
@@ -1913,7 +1798,7 @@
 		{
 			"name": "plugins/V4Aggregation.js",
 			"module": "sap/ui/table/plugins/V4Aggregation.js",
-			"size": 7578,
+			"size": 7652,
 			"required": [
 				"sap/base/util/deepClone.js",
 				"sap/ui/table/plugins/PluginBase.js",
@@ -1921,13 +1806,8 @@
 			]
 		},
 		{
-			"name": "plugins/V4Aggregation.js.map",
-			"size": 10844,
-			"isDebug": true
-		},
-		{
 			"name": "resources.json",
-			"size": 63865
+			"size": 32026
 		},
 		{
 			"name": "rowmodes/AutoRowMode-dbg.js",
@@ -1945,7 +1825,7 @@
 		{
 			"name": "rowmodes/AutoRowMode.js",
 			"module": "sap/ui/table/rowmodes/AutoRowMode.js",
-			"size": 9373,
+			"size": 9402,
 			"required": [
 				"sap/ui/Device.js",
 				"sap/ui/table/library.js",
@@ -1953,11 +1833,6 @@
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js"
 			]
-		},
-		{
-			"name": "rowmodes/AutoRowMode.js.map",
-			"size": 12410,
-			"isDebug": true
 		},
 		{
 			"name": "rowmodes/FixedRowMode-dbg.js",
@@ -1973,17 +1848,12 @@
 		{
 			"name": "rowmodes/FixedRowMode.js",
 			"module": "sap/ui/table/rowmodes/FixedRowMode.js",
-			"size": 4107,
+			"size": 4102,
 			"required": [
 				"sap/ui/table/library.js",
 				"sap/ui/table/rowmodes/RowMode.js",
 				"sap/ui/table/utils/TableUtils.js"
 			]
-		},
-		{
-			"name": "rowmodes/FixedRowMode.js.map",
-			"size": 5145,
-			"isDebug": true
 		},
 		{
 			"name": "rowmodes/InteractiveRowMode-dbg.js",
@@ -2001,7 +1871,7 @@
 		{
 			"name": "rowmodes/InteractiveRowMode.js",
 			"module": "sap/ui/table/rowmodes/InteractiveRowMode.js",
-			"size": 6057,
+			"size": 6034,
 			"required": [
 				"sap/base/Log.js",
 				"sap/ui/table/library.js",
@@ -2009,11 +1879,6 @@
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js"
 			]
-		},
-		{
-			"name": "rowmodes/InteractiveRowMode.js.map",
-			"size": 7937,
-			"isDebug": true
 		},
 		{
 			"name": "rowmodes/RowMode-dbg.js",
@@ -2030,18 +1895,13 @@
 		{
 			"name": "rowmodes/RowMode.js",
 			"module": "sap/ui/table/rowmodes/RowMode.js",
-			"size": 8217,
+			"size": 8246,
 			"required": [
 				"sap/ui/core/Element.js",
 				"sap/ui/table/library.js",
 				"sap/ui/table/utils/TableUtils.js",
 				"sap/ui/thirdparty/jquery.js"
 			]
-		},
-		{
-			"name": "rowmodes/RowMode.js.map",
-			"size": 10898,
-			"isDebug": true
 		},
 		{
 			"name": "rowmodes/VariableRowMode-dbg.js",
@@ -2056,16 +1916,11 @@
 		{
 			"name": "rowmodes/VariableRowMode.js",
 			"module": "sap/ui/table/rowmodes/VariableRowMode.js",
-			"size": 1351,
+			"size": 1315,
 			"required": [
 				"sap/ui/table/library.js",
 				"sap/ui/table/rowmodes/RowMode.js"
 			]
-		},
-		{
-			"name": "rowmodes/VariableRowMode.js.map",
-			"size": 1540,
-			"isDebug": true
 		},
 		{
 			"name": "rules/Accessibility.support.js",
@@ -2232,7 +2087,6 @@
 		},
 		{
 			"name": "themes/base/library-parameters.json",
-			"module": "sap/ui/table/themes/base/library-parameters.json",
 			"size": 5344,
 			"theme": "base"
 		},
@@ -2334,7 +2188,6 @@
 		},
 		{
 			"name": "themes/sap_hcb/library-parameters.json",
-			"module": "sap/ui/table/themes/sap_hcb/library-parameters.json",
 			"size": 5271,
 			"theme": "sap_hcb"
 		},
@@ -2389,7 +2242,7 @@
 		{
 			"name": "utils/TableUtils.js",
 			"module": "sap/ui/table/utils/TableUtils.js",
-			"size": 13849,
+			"size": 13931,
 			"required": [
 				"sap/base/util/restricted/_throttle.js",
 				"sap/ui/base/Object.js",
@@ -2407,11 +2260,6 @@
 			]
 		},
 		{
-			"name": "utils/TableUtils.js.map",
-			"size": 20346,
-			"isDebug": true
-		},
-		{
 			"name": "utils/_BindingUtils-dbg.js",
 			"module": "sap/ui/table/utils/_BindingUtils.js",
 			"size": 1806,
@@ -2420,12 +2268,7 @@
 		{
 			"name": "utils/_BindingUtils.js",
 			"module": "sap/ui/table/utils/_BindingUtils.js",
-			"size": 626
-		},
-		{
-			"name": "utils/_BindingUtils.js.map",
-			"size": 870,
-			"isDebug": true
+			"size": 594
 		},
 		{
 			"name": "utils/_ColumnUtils-dbg.js",
@@ -2441,17 +2284,12 @@
 		{
 			"name": "utils/_ColumnUtils.js",
 			"module": "sap/ui/table/utils/_ColumnUtils.js",
-			"size": 6295,
+			"size": 6338,
 			"required": [
 				"sap/base/Log.js",
 				"sap/ui/Device.js",
 				"sap/ui/table/library.js"
 			]
-		},
-		{
-			"name": "utils/_ColumnUtils.js.map",
-			"size": 11114,
-			"isDebug": true
 		},
 		{
 			"name": "utils/_GroupingUtils-dbg.js",
@@ -2467,17 +2305,12 @@
 		{
 			"name": "utils/_GroupingUtils.js",
 			"module": "sap/ui/table/utils/_GroupingUtils.js",
-			"size": 7637,
+			"size": 7645,
 			"required": [
 				"sap/ui/Device.js",
 				"sap/ui/model/Sorter.js",
 				"sap/ui/thirdparty/jquery.js"
 			]
-		},
-		{
-			"name": "utils/_GroupingUtils.js.map",
-			"size": 9654,
-			"isDebug": true
 		},
 		{
 			"name": "utils/_HookUtils-dbg.js",
@@ -2491,20 +2324,15 @@
 		{
 			"name": "utils/_HookUtils.js",
 			"module": "sap/ui/table/utils/_HookUtils.js",
-			"size": 3947,
+			"size": 3960,
 			"required": [
 				"sap/ui/base/DataType.js"
 			]
 		},
 		{
-			"name": "utils/_HookUtils.js.map",
-			"size": 6457,
-			"isDebug": true
-		},
-		{
 			"name": "utils/_MenuUtils-dbg.js",
 			"module": "sap/ui/table/utils/_MenuUtils.js",
-			"size": 18139,
+			"size": 18231,
 			"isDebug": true,
 			"required": [
 				"sap/ui/Device.js",
@@ -2516,18 +2344,13 @@
 		{
 			"name": "utils/_MenuUtils.js",
 			"module": "sap/ui/table/utils/_MenuUtils.js",
-			"size": 5729,
+			"size": 5748,
 			"required": [
 				"sap/ui/Device.js",
 				"sap/ui/core/Popup.js",
 				"sap/ui/unified/Menu.js",
 				"sap/ui/unified/MenuItem.js"
 			]
-		},
-		{
-			"name": "utils/_MenuUtils.js.map",
-			"size": 8339,
-			"isDebug": true
 		}
 	]
 }

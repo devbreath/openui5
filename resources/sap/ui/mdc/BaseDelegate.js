@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/ui/mdc/util/TypeUtil"],function(t){"use strict";var i={getTypeUtil:function(i){return t}};return i});
-//# sourceMappingURL=BaseDelegate.js.map
+sap.ui.define(['sap/ui/mdc/util/TypeUtil'],function(T){"use strict";var B={getTypeUtil:function(p){return T;}};return B;});

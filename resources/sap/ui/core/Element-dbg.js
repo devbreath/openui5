@@ -126,7 +126,7 @@ sap.ui.define([
 	 *
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @public
 	 * @alias sap.ui.core.Element
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
@@ -946,7 +946,7 @@ sap.ui.define([
 	 * matter where it comes from (be it a string tooltip or the text from a TooltipBase
 	 * instance) then they could call {@link #getTooltip_Text} instead.
 	 *
-	 * @returns {string|sap.ui.core.TooltipBase|null} The tooltip for this Element or <code>null</code>.
+	 * @return {string|sap.ui.core.TooltipBase} The tooltip for this Element.
 	 * @public
 	 */
 	Element.prototype.getTooltip = function() {
@@ -977,7 +977,7 @@ sap.ui.define([
 	 * of that object is returned. Otherwise the object itself is returned (either a string
 	 * or <code>undefined</code> or <code>null</code>).
 	 *
-	 * @returns {string|undefined|null} Text of the current tooltip or <code>undefined</code> or <code>null</code>
+	 * @returns {string|undefined} Text of the current tooltip or <code>undefined</code> or <code>null</code>
 	 * @public
 	 */
 	Element.prototype.getTooltip_Text = function() {
@@ -1456,7 +1456,7 @@ sap.ui.define([
 	 * refers to the default model.
 	 *
 	 * @param {string} [sModelName=undefined] Name of the model or <code>undefined</code>
-	 * @return {sap.ui.model.ContextBinding|undefined} Context binding for the given model name or <code>undefined</code>
+	 * @return {sap.ui.model.ContextBinding} Context binding for the given model name or <code>undefined</code>
 	 * @public
 	 * @function
 	 */
@@ -1669,62 +1669,6 @@ sap.ui.define([
 		if (FocusHandler) {
 			FocusHandler.updateControlFocusInfo(oElement);
 		}
-	};
-
-	/**
-	 * Returns the nearest [UI5 Element]{@link sap.ui.core.Element} that wraps the given DOM element.
-	 *
-	 * A DOM element or a CSS selector is accepted as a given parameter. When a CSS selector is given as parameter, only
-	 * the first DOM element that matches the CSS selector is taken to find the nearest UI5 Element that wraps it. When
-	 * no UI5 Element can be found, <code>undefined</code> is returned.
-	 *
-	 * @param {HTMLElement|string} vParam A DOM Element or a CSS selector from which to start the search for the nearest
-	 *  UI5 Element by traversing up the DOM tree
-	 * @param {boolean} [bIncludeRelated=false] Whether the <code>data-sap-ui-related</code> attribute is also accepted
-	 *  as a selector for a UI5 Element, in addition to <code>data-sap-ui</code>
-	 * @returns {sap.ui.core.Element} The UI5 Element that wraps the given DOM element. <code>undefined</code> is
-	 *  returned when no UI5 Element can be found.
-	 * @public
-	 * @since 1.106
-	 * @throws {DOMException} when an invalid CSS selector is given
-	 *
-	 */
-	Element.closestTo = function(vParam, bIncludeRelated) {
-		var sSelector = "[data-sap-ui]",
-			oDomRef, sId;
-
-		if (vParam === undefined || vParam === null) {
-			return undefined;
-		}
-
-		if (typeof vParam === "string") {
-			oDomRef = document.querySelector(vParam);
-		} else if (vParam instanceof window.Element){
-			oDomRef = vParam;
-		} else if (vParam.jquery) {
-			oDomRef = vParam[0];
-			Log.error("[FUTURE] Do not call Element.closestTo() with jQuery object as parameter. \
-				The function should be called with either a DOM Element or a CSS selector. \
-				(future error, ignored for now)");
-		} else {
-			throw new TypeError("Element.closestTo accepts either a DOM element or a CSS selector string as parameter, but not '" + vParam + "'");
-		}
-
-		if (bIncludeRelated) {
-			sSelector += ",[data-sap-ui-related]";
-		}
-
-		oDomRef = oDomRef && oDomRef.closest(sSelector);
-
-		if (oDomRef) {
-			if (bIncludeRelated) {
-				sId = oDomRef.getAttribute("data-sap-ui-related");
-			}
-
-			sId = sId || oDomRef.getAttribute("id");
-		}
-
-		return Element.registry.get(sId);
 	};
 
 	/**

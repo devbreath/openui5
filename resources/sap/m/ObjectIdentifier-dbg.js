@@ -52,7 +52,7 @@ function(
 	 *
      * <b>Note:</b> This control should not be used with {@link sap.m.Label} or in Forms along with {@link sap.m.Label}.
 	 * @extends sap.ui.core.Control
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -271,19 +271,16 @@ function(
 	ObjectIdentifier.prototype._getTitleControl = function() {
 		var oTitleControl = this.getAggregation("_titleControl"),
 			sId = this.getId(),
-			sTitle = ManagedObject.escapeSettingsValue(this.getProperty("title")),
-			addAriaLabelledBy;
+			sTitle = ManagedObject.escapeSettingsValue(this.getProperty("title"));
 
 		if (!oTitleControl) {
 			// Lazy initialization
 			if (this.getProperty("titleActive")) {
-				addAriaLabelledBy = this.getAriaLabelledBy().slice();
-				addAriaLabelledBy.push(InvisibleText.getStaticId("sap.m", "OI_ARIA_ROLE"));
 				oTitleControl = new Link({
 					id : sId + "-link",
 					text: sTitle,
 					//Add a custom hidden role "ObjectIdentifier" with hidden text
-					ariaLabelledBy: addAriaLabelledBy
+					ariaLabelledBy: InvisibleText.getStaticId("sap.m", "OI_ARIA_ROLE")
 				});
 				oTitleControl.addAriaLabelledBy(sId + "-text");
 			} else {

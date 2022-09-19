@@ -282,15 +282,10 @@ sap.ui.define([
 		 * value <code>true</code>, unless a (complex) parent property is also selected.
 		 *
 		 * @param {string[]} aSelect - The list of selected paths
-		 * @returns {object|boolean} - An object marking the selected properties or
-		 *    <code>true</code> if all properties are selected ("*")
+		 * @returns {object} - An object marking the selected properties
 		 */
 		buildSelect : function (aSelect) {
 			var oSelect = {};
-
-			if (!aSelect || aSelect.includes("*")) {
-				return true;
-			}
 
 			aSelect.forEach(function (sPath) {
 				var aSegments = sPath.split("/"),
@@ -298,7 +293,7 @@ sap.ui.define([
 					oSubSelect = oSelect;
 
 				aSegments.some(function (sSegment, i) {
-					if (i === iLast || aSegments[i + 1] === "*") {
+					if (i === iLast) {
 						oSubSelect[sSegment] = true;
 						return true;
 					}
@@ -371,7 +366,7 @@ sap.ui.define([
 		 *     <li> <code>statusText</code>: (optional) HTTP status text
 		 *   </ul>
 		 * @see <a href=
-		 * "http://docs.oasis-open.org/odata/odata-json-format/v4.0/os/odata-json-format-v4.0-os.html#_Representing_Errors_in"
+		 * "http://docs.oasis-open.org/odata/odata-json-format/v4.0/os/odata-json-format-v4.0-os.html"
 		 * >"19 Error Response"</a>
 		 */
 		createError : function (jqXHR, sMessage, sRequestUrl, sResourcePath) {
@@ -849,15 +844,14 @@ sap.ui.define([
 		 * @param {object} mChangeListeners A map of change listeners by path
 		 * @param {string} sPropertyPath The path
 		 * @param {any} vValue The value to report to the listeners
-		 * @param {boolean} bForceUpdate Whether a listener should force an update
 		 */
-		fireChange : function (mChangeListeners, sPropertyPath, vValue, bForceUpdate) {
+		fireChange : function (mChangeListeners, sPropertyPath, vValue) {
 			var aListeners = mChangeListeners[sPropertyPath],
 				i;
 
 			if (aListeners) {
 				for (i = 0; i < aListeners.length; i += 1) {
-					aListeners[i].onChange(vValue, bForceUpdate);
+					aListeners[i].onChange(vValue);
 				}
 			}
 		},
@@ -1984,25 +1978,38 @@ sap.ui.define([
 		 * @param {string} sPath The path of the old object in mChangeListeners
 		 * @param {object} oTarget The target object
 		 * @param {object} oSource The source object
+		 * @param {function} [fnCheckKeyPredicate] Callback function which tells whether the key
+		 *   predicate for the given path is checked for equality instead of just being copied
+		 *   from source to target
 		 * @returns {object} The target object
 		 * @throws {Error} If a key predicate check fails
 		 */
-		updateAll : function (mChangeListeners, sPath, oTarget, oSource) {
+		updateAll : function (mChangeListeners, sPath, oTarget, oSource, fnCheckKeyPredicate) {
 			Object.keys(oSource).forEach(function (sProperty) {
 				var sPropertyPath = _Helper.buildPath(sPath, sProperty),
+					sSourcePredicate,
 					vSourceProperty = oSource[sProperty],
+					sTargetPredicate,
 					vTargetProperty = oTarget[sProperty];
 
 				if (sProperty === "@$ui5._") {
-					_Helper.setPrivateAnnotation(oTarget, "predicate",
-						_Helper.getPrivateAnnotation(oSource, "predicate"));
+					sSourcePredicate = _Helper.getPrivateAnnotation(oSource, "predicate");
+					if (fnCheckKeyPredicate && fnCheckKeyPredicate(sPath)) {
+						sTargetPredicate = _Helper.getPrivateAnnotation(oTarget, "predicate");
+						if (sSourcePredicate !== sTargetPredicate) {
+							throw new Error("Key predicate of '" + sPath + "' changed from "
+								+ sTargetPredicate + " to " + sSourcePredicate);
+						}
+					} else {
+						_Helper.setPrivateAnnotation(oTarget, "predicate", sSourcePredicate);
+					}
 				} else if (Array.isArray(vSourceProperty)) {
 					// copy complete collection w/o firing change events
 					oTarget[sProperty] = vSourceProperty;
 				} else if (vSourceProperty && typeof vSourceProperty === "object") {
 					oTarget[sProperty]
 						= _Helper.updateAll(mChangeListeners, sPropertyPath, vTargetProperty || {},
-								vSourceProperty);
+								vSourceProperty, fnCheckKeyPredicate);
 				} else if (vTargetProperty !== vSourceProperty) {
 					oTarget[sProperty] = vSourceProperty;
 					if (vTargetProperty && typeof vTargetProperty === "object") {
@@ -2149,14 +2156,8 @@ sap.ui.define([
 		 * @param {string[]} [aSelect]
 		 *   The relative paths to properties to be updated in oOldValue; default is all properties
 		 *   from oNewValue
-		 * @param {function} [fnCheckKeyPredicate]
-		 *   Callback function which tells whether the key predicate for the given path is checked
-		 *   for equality instead of just being copied from source to target
-		 *  @param {boolean} [bOkIfMissing]
-		 *   Whether this should not check for selected properties missing in the response
 		 */
-		updateSelected : function (mChangeListeners, sBasePath, oOldValue, oNewValue, aSelect,
-			fnCheckKeyPredicate, bOkIfMissing) {
+		updateSelected : function (mChangeListeners, sBasePath, oOldValue, oNewValue, aSelect) {
 			/*
 			 * Gets the property's value in vSelect. Instance annotations are always selected,
 			 * property annotations only if the property is selected.
@@ -2196,8 +2197,7 @@ sap.ui.define([
 				// annotations
 				Object.keys(oTarget).forEach(function (sProperty) {
 					if (!(sProperty in oSource) && sProperty.includes("@")
-							&& !sProperty.startsWith("@$ui5.")
-							&& getSelect(vSelect, sProperty)) {
+							&& !sProperty.startsWith("@$ui5.") && getSelect(vSelect, sProperty)) {
 						delete oTarget[sProperty];
 						_Helper.fireChange(mChangeListeners, _Helper.buildPath(sPath, sProperty),
 							undefined);
@@ -2208,25 +2208,17 @@ sap.ui.define([
 				Object.keys(oSource).forEach(function (sProperty) {
 					var sPropertyPath = _Helper.buildPath(sPath, sProperty),
 						vSelected = getSelect(vSelect, sProperty),
-						sSourcePredicate,
 						vSourceProperty = oSource[sProperty],
-						sTargetPredicate,
 						vTargetProperty = oTarget[sProperty];
 
 					if (!vSelected) {
 						return;
 					}
 					if (sProperty === "@$ui5._") {
-						sSourcePredicate = _Helper.getPrivateAnnotation(oSource, "predicate");
-						if (fnCheckKeyPredicate && fnCheckKeyPredicate(sPath)) {
-							sTargetPredicate = _Helper.getPrivateAnnotation(oTarget, "predicate");
-							if (sSourcePredicate !== sTargetPredicate) {
-								throw new Error("Key predicate of '" + sPath + "' changed from "
-									+ sTargetPredicate + " to " + sSourcePredicate);
-							}
-						} else {
-							_Helper.setPrivateAnnotation(oTarget, "predicate", sSourcePredicate);
-						}
+						_Helper.setPrivateAnnotation(oTarget, "predicate",
+							_Helper.getPrivateAnnotation(oSource, "predicate"));
+						// There should be nothing else, but we must avoid calling fireChanges on
+						// the target because it may contain non-JSON annotations
 					} else if (Array.isArray(vSourceProperty)) {
 						// copy complete collection; no change events as long as collection-valued
 						// properties are not supported
@@ -2247,25 +2239,21 @@ sap.ui.define([
 					}
 				});
 
-				if (bOkIfMissing) {
-					return oTarget;
-				}
-
 				// Create annotations for a property which was selected but no data was received
 				Object.keys(vSelect).forEach(function (sProperty) {
-					if (!(sProperty in oTarget) && sProperty !== "*") {
+					if (!(sProperty in oTarget)) {
 						oTarget[sProperty + "@$ui5.noData"] = true;
-						// Fire change event (useful for Edm.Stream in case of the URL stays the
-						// same, but the content was changed)
-						_Helper.fireChange(mChangeListeners, _Helper.buildPath(sPath, sProperty),
-							undefined, true);
 					}
 				});
 
 				return oTarget;
 			}
 
-			update(sBasePath, _Helper.buildSelect(aSelect), oOldValue, oNewValue);
+			if (aSelect && !aSelect.includes("*")) {
+				update(sBasePath, _Helper.buildSelect(aSelect), oOldValue, oNewValue);
+			} else { // no individual properties selected, fetch all properties of the new value
+				_Helper.updateAll(mChangeListeners, sBasePath, oOldValue, oNewValue);
+			}
 		},
 
 		/**

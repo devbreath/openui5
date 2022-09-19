@@ -20,7 +20,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.apply._internal.changes.Utils
 	 * @since 1.70
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @private
 	 * @ui5-restricted sap.ui.fl.apply._internal, sap.ui.fl.write._internal
 	 */
@@ -49,10 +49,11 @@ sap.ui.define([
 		 */
 		getControlIfTemplateAffected: function (oChange, oControl, mPropertyBag) {
 			var oModifier = mPropertyBag.modifier;
+			var oChangeDefinition = oChange.getDefinition();
 			var mControl = {
 				originalControl: oControl
 			};
-			var oOriginalDependentSelector = oChange.getOriginalSelector();
+			var oOriginalDependentSelector = oChangeDefinition.dependentSelector && oChangeDefinition.dependentSelector.originalSelector;
 			if (oChange.getContent().boundAggregation && oOriginalDependentSelector) {
 				mControl.control = oModifier.bySelector(oOriginalDependentSelector, mPropertyBag.appComponent, mPropertyBag.view);
 				mControl.controlType = oModifier.getControlType(mControl.control);

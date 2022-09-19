@@ -100,7 +100,7 @@ sap.ui.define([
 		if (mPropertyBag.parentVersion) {
 			mParameters.parentVersion = mPropertyBag.parentVersion;
 		}
-		InitialUtils.addSAPLogonLanguageInfo(mParameters);
+		InitialUtils.addLanguageInfo(mParameters);
 		InitialConnector._addClientInfo(mParameters);
 		//single update --> fileName needs to be in the url
 		if (mPropertyBag.flexObject && !mPropertyBag.isAppVariant) {
@@ -164,7 +164,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.write._internal.connectors.LrepConnector
 	 * @since 1.67
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @private
 	 * @ui5-restricted sap.ui.fl.write._internal.Storage
 	 */
@@ -270,7 +270,7 @@ sap.ui.define([
 				BusyIndicator.hide();
 				var sMessage = oResourceBundle.getText("MSG_TRANSPORT_ERROR", oError ? [oError.message || oError] : undefined);
 				var sTitle = oResourceBundle.getText("HEADER_TRANSPORT_ERROR");
-				Log.error("transport error: " + oError);
+				Log.error("transport error" + oError);
 				MessageBox.show(sMessage, {
 					icon: MessageBox.Icon.ERROR,
 					title: sTitle,
@@ -634,7 +634,7 @@ sap.ui.define([
 					InitialUtils.getUrl(ROUTES.TOKEN, mPropertyBag)
 				);
 				var mParameters = {};
-				InitialUtils.addSAPLogonLanguageInfo(mParameters);
+				InitialUtils.addLanguageInfo(mParameters);
 				mParameters.limit = mPropertyBag.limit;
 				var sVersionsUrl = InitialUtils.getUrl(ROUTES.VERSIONS.GET, mPropertyBag, mParameters);
 				return WriteUtils.sendRequest(sVersionsUrl, "GET", oRequestOption).then(function (oResult) {
@@ -652,7 +652,7 @@ sap.ui.define([
 					"json"
 				);
 				var mParameters = {version: mPropertyBag.version};
-				InitialUtils.addSAPLogonLanguageInfo(mParameters);
+				InitialUtils.addLanguageInfo(mParameters);
 				var sVersionsUrl = InitialUtils.getUrl(ROUTES.VERSIONS.ACTIVATE, mPropertyBag, mParameters);
 				return WriteUtils.sendRequest(sVersionsUrl, "POST", oRequestOption).then(function (oResult) {
 					var oVersion = oResult.response;

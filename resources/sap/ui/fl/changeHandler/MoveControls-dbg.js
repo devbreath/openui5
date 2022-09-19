@@ -21,7 +21,7 @@ function(
 	 *
 	 * @alias sap.ui.fl.changeHandler.MoveControls
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @experimental Since 1.46
 	 */
 	var MoveControls = { };
@@ -297,7 +297,7 @@ function(
 			.then(function(oRetrievedTargetParent) {
 				oTargetParent = oRetrievedTargetParent;
 				var aRevertData = oChange.getRevertData();
-				oChangeContent.movedElements.reverse();
+				oChange.getContent().movedElements.reverse();
 				var aPromises = [];
 				oChangeContent.movedElements.forEach(function(mMovedElement, iElementIndex) {
 					var fnPromise = function() {
@@ -412,9 +412,7 @@ function(
 			sourceAggregation: oRevertData.aggregation,
 			targetAggregation: oChangeContent.target.selector.aggregation,
 			setTargetIndex: function(oChange, iNewTargetIndex) {
-				var oChangeContent = oChange.getContent();
-				oChangeContent.movedElements[0].targetIndex = iNewTargetIndex;
-				oChange.setContent(oChangeContent);
+				oChange.getContent().movedElements[0].targetIndex = iNewTargetIndex;
 			},
 			getTargetIndex: function(oChange) {
 				return oChange.getContent().movedElements[0].targetIndex;

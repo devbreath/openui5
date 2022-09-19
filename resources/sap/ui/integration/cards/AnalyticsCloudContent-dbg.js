@@ -30,7 +30,7 @@ sap.ui.define([
 	 * @extends sap.ui.integration.cards.BaseContent
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @private
@@ -186,7 +186,7 @@ sap.ui.define([
 			deps: ["highcharts/highstock"]
 		},
 		"highcharts/solid-gauge": {
-			deps: ["highcharts/highstock", "highcharts/highcharts-more"]
+			deps: ["highcharts/highstock"]
 		},
 		"highcharts/histogram-bellcurve": {
 			deps: ["highcharts/highstock"]

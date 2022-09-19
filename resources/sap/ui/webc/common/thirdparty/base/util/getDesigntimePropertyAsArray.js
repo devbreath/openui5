@@ -1,2 +1,1 @@
-sap.ui.define(["exports"],function(e){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;var t=e=>{const t=/\$([-a-z0-9A-Z._]+)(?::([^$]*))?\$/.exec(e);return t&&t[2]?t[2].split(/,/):null};e.default=t});
-//# sourceMappingURL=getDesigntimePropertyAsArray.js.map
+sap.ui.define(function(){"use strict";var e=e=>{const n=/\$([-a-z0-9A-Z._]+)(?::([^$]*))?\$/.exec(e);return n&&n[2]?n[2].split(/,/):null};return e});

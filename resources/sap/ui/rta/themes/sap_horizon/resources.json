@@ -84,7 +84,6 @@
 		},
 		{
 			"name": "library-parameters.json",
-			"module": "sap/ui/rta/themes/sap_horizon/library-parameters.json",
 			"size": 4690,
 			"theme": "sap_horizon"
 		},
@@ -114,10 +113,6 @@
 			"name": "library_skeleton.css",
 			"size": 34611,
 			"theme": "sap_horizon"
-		},
-		{
-			"name": "resources.json",
-			"size": 2164
 		}
 	]
 }

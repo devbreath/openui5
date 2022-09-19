@@ -41,7 +41,7 @@ sap.ui.define([
 	 * @namespace sap.ui.fl.apply._internal.flexState.controlVariants.VariantManagementState
 	 * @experimental Since 1.74
 	 * @since 1.74
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 * @private
 	 * @ui5-restricted
 	 */
@@ -361,11 +361,11 @@ sap.ui.define([
 	 */
 	VariantManagementState.addChangeToVariant = function(mPropertyBag) {
 		var aExistingChanges = VariantManagementState.getControlChangesForVariant(mPropertyBag);
-		var aChangeIds = aExistingChanges.map(function(oChange) {
-			return oChange.getId();
+		var aChangeFileNames = aExistingChanges.map(function(oChange) {
+			return oChange.getDefinition().fileName;
 		});
 
-		if (!includes(aChangeIds, mPropertyBag.change.getId())) {
+		if (!includes(aChangeFileNames, mPropertyBag.change.getDefinition().fileName)) {
 			var oVariant = VariantManagementState.getVariant(mPropertyBag);
 			oVariant.controlChanges = aExistingChanges.concat([mPropertyBag.change]);
 			return true;

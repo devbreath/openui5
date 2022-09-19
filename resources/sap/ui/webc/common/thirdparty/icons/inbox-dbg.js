@@ -1,25 +1,13 @@
-sap.ui.define(["exports", "sap/ui/webc/common/thirdparty/base/config/Theme", "./v5/inbox", "./v4/inbox"], function (_exports, _Theme, _inbox, _inbox2) {
-  "use strict";
+sap.ui.define(['exports', 'sap/ui/webc/common/thirdparty/base/config/Theme', './v5/inbox', './v4/inbox'], function (exports, Theme, inbox$1, inbox$2) { 'use strict';
 
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(_exports, "accData", {
-    enumerable: true,
-    get: function () {
-      return _inbox.accData;
-    }
-  });
-  _exports.default = void 0;
-  Object.defineProperty(_exports, "ltr", {
-    enumerable: true,
-    get: function () {
-      return _inbox.ltr;
-    }
-  });
-  _exports.pathData = void 0;
-  const pathData = (0, _Theme.isThemeFamily)("sap_horizon") ? _inbox.pathData : _inbox2.pathData;
-  _exports.pathData = pathData;
-  var _default = "inbox";
-  _exports.default = _default;
+	const pathData = Theme.isThemeFamily("sap_horizon") ? inbox$1.pathData : inbox$2.pathData;
+	var inbox = "inbox";
+
+	exports.accData = inbox$1.accData;
+	exports.ltr = inbox$1.ltr;
+	exports.default = inbox;
+	exports.pathData = pathData;
+
+	Object.defineProperty(exports, '__esModule', { value: true });
+
 });

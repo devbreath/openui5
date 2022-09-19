@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(function(){"use strict";var t={NotValidated:"NotValidated",Validated:"Validated"};return t},true);
-//# sourceMappingURL=ConditionValidated.js.map
+sap.ui.define(function(){"use strict";var C={NotValidated:"NotValidated",Validated:"Validated"};return C;},true);

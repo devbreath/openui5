@@ -18,13 +18,20 @@ sap.ui.define([
 	'sap/base/util/extend',
 	'sap/base/util/syncFetch',
 	'sap/ui/core/ThemeCheck',
-	'./ThemeHelper',
-	'sap/ui/core/Configuration'
+	'./ThemeHelper'
 ],
-	function(URI, Element, UriParameters, Log, extend, syncFetch, ThemeCheck, ThemeHelper, Configuration) {
+	function(URI, Element, UriParameters, Log, extend, syncFetch, ThemeCheck, ThemeHelper) {
 	"use strict";
 
-	var syncCallBehavior = Configuration.getSyncCallBehavior();
+	var oCfgData = window["sap-ui-config"] || {};
+
+	var syncCallBehavior = 0; // ignore
+	if (oCfgData['xx-nosync'] === 'warn' || /(?:\?|&)sap-ui-xx-nosync=(?:warn)/.exec(window.location.search)) {
+		syncCallBehavior = 1;
+	}
+	if (oCfgData['xx-nosync'] === true || oCfgData['xx-nosync'] === 'true' || /(?:\?|&)sap-ui-xx-nosync=(?:x|X|true)/.exec(window.location.search)) {
+		syncCallBehavior = 2;
+	}
 
 		/**
 		 * A helper used for (read-only) access to CSS parameters at runtime.
@@ -608,7 +615,7 @@ sap.ui.define([
 			}
 
 			if (!sTheme) {
-				sTheme = Configuration.getTheme();
+				sTheme = sap.ui.getCore().getConfiguration().getTheme();
 			}
 			// Parameters.get() without arguments returns
 			// copy of complete default parameter set
@@ -738,7 +745,7 @@ sap.ui.define([
 				"default": {},
 				"scopes": {}
 			};
-			sTheme = Configuration.getTheme();
+			sTheme = sap.ui.getCore().getConfiguration().getTheme();
 			forEachStyleSheet(function(sId) {
 				var sLibname = sId.substr(13); // length of sap-ui-theme-
 				if (mLibraryParameters[sLibname]) {
@@ -761,8 +768,8 @@ sap.ui.define([
 		Parameters.reset = function() {
 			// hidden parameter {boolean} bOnlyWhenNecessary
 			var bOnlyWhenNecessary = arguments[0] === true;
-			if ( !bOnlyWhenNecessary || Configuration.getTheme() !== sTheme ) {
-				sTheme = Configuration.getTheme();
+			if ( !bOnlyWhenNecessary || sap.ui.getCore().getConfiguration().getTheme() !== sTheme ) {
+				sTheme = sap.ui.getCore().getConfiguration().getTheme();
 				aParametersToLoad = [];
 				mParameters = null;
 				ThemeHelper.reset();

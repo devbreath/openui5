@@ -1,2 +1,1 @@
-(function(){ace.require(["ace/snippets/ftl"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
-//# sourceMappingURL=ftl.js.map
+;(function(){ace.require(["ace/snippets/ftl"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();

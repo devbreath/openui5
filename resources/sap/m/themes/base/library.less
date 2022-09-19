@@ -2398,7 +2398,7 @@ html.sap-desktop .sapMFooter-CTX .sapMBtnInner :not(.sapMBtnDisabled) {
 }
 
 //show the left and right arrows when the carousel is focused
-.sapMCrsl:focus .sapMCrslHud .sapMCrslArrow {
+.sapMCrsl:focus .sapMCrslHud a {
 	opacity: 0.3;
 }
 
@@ -2531,7 +2531,7 @@ html[data-sap-ui-animation='off'] .sapMCrslInner {
 	width: 100%;
 }
 
-.sapMCrslHud .sapMCrslArrow {
+.sapMCrslHud a {
 	z-index: 2;
 	opacity: 0;
 	display: none;
@@ -2581,15 +2581,15 @@ html[data-sap-ui-animation='off'] .sapMCrslInner {
 	}
 }
 
-.sapMCrslHudMiddle .sapMCrslArrow {
+.sapMCrslHudMiddle a {
 	top:  calc(~"50% - 1rem");
 }
 
-.sapMCrslHudTop .sapMCrslArrow {
+.sapMCrslHudTop a {
 	top: 50%;
 }
 
-.sapMCrslHudBottom .sapMCrslArrow {
+.sapMCrslHudBottom a {
 	top: calc(~"50% - 2rem");
 }
 
@@ -2826,8 +2826,8 @@ html[data-sap-ui-animation='off'] {
 	background: @sapUiBaseBG;
 }
 
-.sapMCrsl .sapMCrslHud.sapMCrslLeftmost .sapMCrslArrow.sapMCrslPrev,
-.sapMCrsl .sapMCrslHud.sapMCrslRightmost .sapMCrslArrow.sapMCrslNext {
+.sapMCrsl .sapMCrslHud.sapMCrslLeftmost a.sapMCrslPrev,
+.sapMCrsl .sapMCrslHud.sapMCrslRightmost a.sapMCrslNext {
 	opacity: 0;
 	display: none;
 }
@@ -2870,7 +2870,7 @@ html[data-sap-ui-animation='off'] {
 	overflow: hidden;
 }
 
-.sapMCrsl:hover .sapMCrslHud .sapMCrslArrow {
+.sapMCrsl:hover .sapMCrslHud a {
 	opacity: 1;
 	display: block;
 }
@@ -4638,7 +4638,7 @@ html[data-sap-ui-animation='off'] .sapMDialog {
 	text-overflow: ellipsis;
 	min-width: 3rem;
 	display: block;
-	font-size: @sapFontLargeSize;
+	font-size: 1.125rem;
 	-webkit-box-align: center;
 	align-items: center;
 	color: @sapUiListTextColor;
@@ -4655,7 +4655,7 @@ html[data-sap-ui-animation='off'] .sapMDialog {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	min-width: 3rem;
-	font-size: @sapMFontMediumSize;
+	font-size: 0.875rem;
 	margin-left: 1rem;
 	text-align: right;
 	color: @sapUiContentLabelColor;
@@ -4691,7 +4691,7 @@ html[dir=rtl] .sapMDLIValue {
 }
 
 .sapUiSizeCompact .sapMDLILabel {
-	font-size: @sapFontSize;
+	font-size: @sapMFontMediumSize;
 }
 /* END "DisplayListItem.less" */
 
@@ -7300,13 +7300,6 @@ html.sap-desktop .sapMGT:focus:not([tabindex]) {
 		}
 	}
 }
-
-.sapMGT.sapMGTIconMode {
-	.sapUiIcon.sapMGTTileIcon {
-		text-shadow: @sapContent_ContrastTextShadow;
-	}
-}
-
 .sapMGT.sapMGTScopeActions.sapMGTIconMode{
 	.sapMBtn.sapMGTMoreIcon{
 		&:before{

@@ -3,5 +3,4 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["./_Cache","./_ConcatHelper"],function(e,n){"use strict";return{createCache:function(r,t,u,a){var c={},i,o,f=new Promise(function(e){o=e});function s(e){var n,r={};function t(e){r[e]=r[e]||{};return r[e]}for(n in c){t(c[n].measure)[c[n].method]=e[n]}o(r)}i=e.create(r,t,a,true);n.enhanceCache(i,u,[s],c);i.getMeasureRangePromise=function(){return f};return i}}},false);
-//# sourceMappingURL=_MinMaxHelper.js.map
+sap.ui.define(["./_Cache","./_ConcatHelper"],function(_,a){"use strict";return{createCache:function(r,R,A,q){var m={},c,M,o=new Promise(function(b){M=b;});function h(b){var s,d={};function g(e){d[e]=d[e]||{};return d[e];}for(s in m){g(m[s].measure)[m[s].method]=b[s];}M(d);}c=_.create(r,R,q,true);a.enhanceCache(c,A,[h],m);c.getMeasureRangePromise=function(){return o;};return c;}};},false);

@@ -1,2 +1,1 @@
-sap.ui.define(["exports","sap/ui/webc/common/thirdparty/base/types/DataType"],function(e,t){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;t=a(t);function a(e){return e&&e.__esModule?e:{default:e}}const n={Inline:"Inline",Standard:"Standard"};class s extends t.default{static isValid(e){return!!n[e]}}s.generateTypeAccessors(n);var d=s;e.default=d});
-//# sourceMappingURL=TabLayout.js.map
+sap.ui.define(["sap/ui/webc/common/thirdparty/base/types/DataType"],function(e){"use strict";function t(e){return e&&typeof e==="object"&&"default"in e?e["default"]:e}var n=t(e);const a={Inline:"Inline",Standard:"Standard"};class s extends n{static isValid(e){return!!a[e]}}s.generateTypeAccessors(a);return s});

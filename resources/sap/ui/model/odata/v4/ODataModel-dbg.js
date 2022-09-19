@@ -66,8 +66,6 @@ sap.ui.define([
 			MessageType.Error
 		],
 		mSupportedEvents = {
-			dataReceived : true,
-			dataRequested : true,
 			messageChange : true,
 			sessionTimeout : true
 		},
@@ -148,10 +146,9 @@ sap.ui.define([
 		 *   Root URL of the service to request data from. The path part of the URL must end with a
 		 *   forward slash according to OData V4 specification ABNF, rule "serviceRoot". You may
 		 *   append OData custom query options to the service root URL separated with a "?", for
-		 *   example "/MyService/?custom=foo". See specification <a href=
-		 *   "https://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part2-url-conventions.html#_Custom_Query_Options"
-		 *   >"OData Version 4.0 Part 2: URL Conventions", "5.2 Custom Query Options"</a>. OData
-		 *   system query options and OData parameter aliases lead to an error.
+		 *   example "/MyService/?custom=foo". See specification "OData Version 4.0 Part 2: URL
+		 *   Conventions", "5.2 Custom Query Options". OData system query options and OData
+		 *   parameter aliases lead to an error.
 		 * @param {boolean} [mParameters.sharedRequests]
 		 *   Whether all list bindings for the same resource path share their data, so that it is
 		 *   requested only once; only the value <code>true</code> is allowed; see parameter
@@ -185,9 +182,7 @@ sap.ui.define([
 		 *   This model is not prepared to be inherited from.
 		 *
 		 *   Every resource path (relative to the service root URL, no query options) according to
-		 *   <a href=
-		 *   "https://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part2-url-conventions.html#resource-pathurl4"
-		 *   >"4 Resource Path"</a> in specification "OData Version 4.0 Part 2: URL Conventions" is
+		 *   "4 Resource Path" in specification "OData Version 4.0 Part 2: URL Conventions" is
 		 *   a valid data binding path within this model if a leading slash is added; for example
 		 *   "/" + "SalesOrderList('A%2FB%26C')" to access an entity instance with key "A/B&C". Note
 		 *   that appropriate URI encoding is necessary, see the example of
@@ -219,7 +214,7 @@ sap.ui.define([
 		 * @extends sap.ui.model.Model
 		 * @public
 		 * @since 1.37.0
-		 * @version 1.106.0
+		 * @version 1.105.1
 		 */
 		ODataModel = Model.extend("sap.ui.model.odata.v4.ODataModel",
 			/** @lends sap.ui.model.odata.v4.ODataModel.prototype */{
@@ -336,8 +331,6 @@ sap.ui.define([
 		this.oInterface = {
 			fetchEntityContainer : this.oMetaModel.fetchEntityContainer.bind(this.oMetaModel),
 			fetchMetadata : this.oMetaModel.fetchObject.bind(this.oMetaModel),
-			fireDataReceived : this.fireDataReceived.bind(this),
-			fireDataRequested : this.fireDataRequested.bind(this),
 			fireSessionTimeout : function () {
 				that.fireEvent("sessionTimeout");
 			},
@@ -377,9 +370,6 @@ sap.ui.define([
 		}
 		this.aPrerenderingTasks = null; // @see #addPrerenderingTask
 		this.fnOptimisticBatchEnabler = null;
-		this.oDataReceivedError = undefined; // the error for the next dataReceived event
-		// counts the fireDataRequested calls for which one event was fired
-		this.iDataRequestedCount = 0;
 	}
 
 	/**
@@ -406,58 +396,6 @@ sap.ui.define([
 			}
 		});
 	};
-
-	/**
-	 * The 'dataReceived' event is fired when the back-end data has been received on the client. It
-	 * is only fired for GET requests and is to be used by applications to process an error.
-	 *
-	 * If back-end requests are successful, the event has almost no parameters. For compatibility
-	 * with {@link sap.ui.model.Binding#event:dataReceived}, an event parameter
-	 * <code>data : {}</code> is provided: "In error cases it will be undefined", but otherwise it
-	 * is not.
-	 *
-	 * If a back-end request fails, the 'dataReceived' event provides an <code>Error</code> in the
-	 * 'error' event parameter.
-	 *
-	 * @param {sap.ui.base.Event} oEvent
-	 * @param {object} oEvent.getParameters()
-	 * @param {object} [oEvent.getParameters().data]
-	 *   An empty data object if a back-end request succeeds
-	 * @param {Error} [oEvent.getParameters().error]
-	 *   The error object if a back-end request failed. If there are multiple failed back-end
-	 *   requests, the error of the first one is provided.
-	 *
-	 * @event sap.ui.model.odata.v4.ODataModel#dataReceived
-	 * @public
-	 * @see sap.ui.model.odata.v4.ODataContextBinding#event:dataReceived
-	 * @see sap.ui.model.odata.v4.ODataListBinding#event:dataReceived
-	 * @see sap.ui.model.odata.v4.ODataModel#event:dataRequested
-	 * @since 1.106.0
-	 */
-
-	/**
-	 * The 'dataRequested' event is fired directly after data has been requested from a back end.
-	 * It is only fired for GET requests. Registered event handlers are called without parameters.
-	 *
-	 * There are two kinds of requests leading to such an event:
-	 * <ul>
-	 *   <li> When a binding requests initial data, or a list binding requests data for additional
-	 *     rows, the event is fired at the binding and may be bubbled up to the model. This includes
-	 *     refreshes except those triggered by
-	 *     {@link sap.ui.model.odata.v4.Context#requestSideEffects}.
-	 *   <li> For additional property requests for an entity that already has been requested, the
-	 *     event is only fired at the model.
-	 * </ul>
-	 *
-	 * @param {sap.ui.base.Event} oEvent
-	 *
-	 * @event sap.ui.model.odata.v4.ODataModel#dataRequested
-	 * @public
-	 * @see sap.ui.model.odata.v4.ODataContextBinding#event:dataRequested
-	 * @see sap.ui.model.odata.v4.ODataListBinding#event:dataRequested
-	 * @see sap.ui.model.odata.v4.ODataModel#event:dataReceived
-	 * @since 1.106.0
-	 */
 
 	/**
 	 * The 'parseError' event is not supported by this model.
@@ -553,34 +491,6 @@ sap.ui.define([
 	};
 
 	/**
-	 * Attach event handler <code>fnFunction</code> to the 'dataReceived' event of this binding.
-	 *
-	 * @param {function} fnFunction The function to call when the event occurs
-	 * @param {object} [oListener] Object on which to call the given function
-	 * @returns {this} <code>this</code> to allow method chaining
-	 *
-	 * @public
-	 * @since 1.105.0
-	 */
-	ODataModel.prototype.attachDataReceived = function (fnFunction, oListener) {
-		return this.attachEvent("dataReceived", fnFunction, oListener);
-	};
-
-	/**
-	 * Attach event handler <code>fnFunction</code> to the 'dataRequested' event of this binding.
-	 *
-	 * @param {function} fnFunction The function to call when the event occurs
-	 * @param {object} [oListener] Object on which to call the given function
-	 * @returns {this} <code>this</code> to allow method chaining
-	 *
-	 * @public
-	 * @since 1.106.0
-	 */
-	ODataModel.prototype.attachDataRequested = function (fnFunction, oListener) {
-		return this.attachEvent("dataRequested", fnFunction, oListener);
-	};
-
-	/**
 	 * See {@link sap.ui.base.EventProvider#attachEvent}
 	 *
 	 * @param {string} sEventId The identifier of the event to listen for
@@ -596,7 +506,8 @@ sap.ui.define([
 	// @override sap.ui.base.EventProvider#attachEvent
 	ODataModel.prototype.attachEvent = function (sEventId, _oData, _fnFunction, _oListener) {
 		if (!(sEventId in mSupportedEvents)) {
-			throw new Error("Unsupported event '" + sEventId + "': v4.ODataModel#attachEvent");
+			throw new Error("Unsupported event '" + sEventId
+				+ "': v4.ODataModel#attachEvent");
 		}
 		return Model.prototype.attachEvent.apply(this, arguments);
 	};
@@ -623,10 +534,9 @@ sap.ui.define([
 	 * @param {sap.ui.model.odata.v4.Context} [oContext]
 	 *   The context which is required as base for a relative path
 	 * @param {object} [mParameters]
-	 *   Map of binding parameters which can be OData query options as specified in <a href=
-	 *   "https://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part2-url-conventions.html"
-	 *   >"OData Version 4.0 Part 2: URL Conventions"</a> or the binding-specific parameters as
-	 *   specified below.
+	 *   Map of binding parameters which can be OData query options as specified in
+	 *   "OData Version 4.0 Part 2: URL Conventions" or the binding-specific parameters as specified
+	 *   below.
 	 *   Note: The binding creates its own data service request if it is absolute or if it has any
 	 *   parameters or if it is relative and has a context created via
 	 *   {@link #createBindingContext}.
@@ -641,19 +551,6 @@ sap.ui.define([
 	 *   </ul>
 	 *   All other query options lead to an error.
 	 *   Query options specified for the binding overwrite model query options.
-	 * @param {string|object} [mParameters.$expand]
-	 *   The value for the "5.1.2 System Query Option $expand" or an object which determines that
-	 *   value. The object is a map from expand path to expand options, where the options are again
-	 *   maps of system query options, typically with string values. $count can also be given as a
-	 *   <code>boolean</code> value, $expand can recursively be given as a map, $levels can also be
-	 *   given as a <code>number</code> value, and $select can also be given as an array (but
-	 *   without navigation paths). An empty map can also be given as <code>null</code> or
-	 *   <code>true</code>. See also {@link topic:1ab4f62de6ab467096a2a98b363a1373 Parameters}.
-	 * @param {string|string[]} [mParameters.$select]
-	 *   A comma separated list or an array of items which determine the value for the
-	 *   "5.1.3 System Query Option $select". Since 1.75.0, when using the "autoExpandSelect" model
-	 *   parameter (see {@link sap.ui.model.odata.v4.ODataModel#constructor}), paths with navigation
-	 *   properties can be included and will contribute to the "5.1.2 System Query Option $expand".
 	 * @param {boolean} [mParameters.$$canonicalPath]
 	 *   Whether a binding relative to a {@link sap.ui.model.odata.v4.Context} uses the canonical
 	 *   path computed from its context's path for data service requests; only the value
@@ -750,10 +647,9 @@ sap.ui.define([
 	 *   using a logical <code>AND</code>.
 	 *   Supported since 1.39.0.
 	 * @param {object} [mParameters]
-	 *   Map of binding parameters which can be OData query options as specified in <a href=
-	 *   "https://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part2-url-conventions.html"
-	 *   >"OData Version 4.0 Part 2: URL Conventions"</a> or binding-specific parameters as
-	 *   specified below.
+	 *   Map of binding parameters which can be OData query options as specified in
+	 *   "OData Version 4.0 Part 2: URL Conventions" or binding-specific parameters as specified
+	 *   below.
 	 *   Note: The binding creates its own data service request if it is absolute or if it has any
 	 *   parameters or if it is relative and has a context created via {@link #createBindingContext}
 	 *   or if it has sorters or filters.
@@ -762,41 +658,10 @@ sap.ui.define([
 	 *     <li> All "5.2 Custom Query Options" except for those with a name starting with "sap-"
 	 *       (unless starting with "sap-valid-")
 	 *     <li> The $apply, $count, $expand, $filter, $levels, $orderby, $search, and $select
-	 *       "5.1 System Query Options"; OData V4 only allows $levels inside $expand.
+	 *       "5.1 System Query Options"
 	 *   </ul>
 	 *   All other query options lead to an error.
 	 *   Query options specified for the binding overwrite model query options.
-	 * @param {string} [mParameters.$apply]
-	 *   The value for the "3 System Query Option $apply" (see also
-	 *   <a href="https://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/">OData
-	 *   Extension for Data Aggregation Version 4.0</a>) as an alternative to
-	 *   <code>$$aggregation</code>
-	 * @param {string|boolean} [mParameters.$count]
-	 *   The value for the "5.1.6 System Query Option $count", useful for creation at the end and
-	 *   {@link sap.ui.model.odata.v4.ODataListBinding#getCount}
-	 * @param {string|object} [mParameters.$expand]
-	 *   The value for the "5.1.2 System Query Option $expand" or an object which determines that
-	 *   value. The object is a map from expand path to expand options, where the options are again
-	 *   maps of system query options, typically with string values. $count can also be given as a
-	 *   <code>boolean</code> value, $expand can recursively be given as a map, $levels can also be
-	 *   given as a <code>number</code> value, and $select can also be given as an array (but
-	 *   without navigation paths). An empty map can also be given as <code>null</code> or
-	 *   <code>true</code>. See also {@link topic:1ab4f62de6ab467096a2a98b363a1373 Parameters}.
-	 * @param {string} [mParameters.$filter]
-	 *   The value for the "5.1.1 System Query Option $filter" used in addition to
-	 *   <code>vFilters</code>
-	 * @param {string|number} [mParameters.$orderby]
-	 *   The value for the "5.1.4 System Query Option $orderby" used in addition to
-	 *   <code>vSorters</code>
-	 * @param {string} [mParameters.$search]
-	 *   The value for the "5.1.7 System Query Option $search"; see also
-	 *   <code>oAggregation.search</code> at
-	 *   {@link sap.ui.model.odata.v4.ODataListBinding#setAggregation} and the note there!
-	 * @param {string|string[]} [mParameters.$select]
-	 *   A comma separated list or an array of items which determine the value for the
-	 *   "5.1.3 System Query Option $select". Since 1.75.0, when using the "autoExpandSelect" model
-	 *   parameter (see {@link sap.ui.model.odata.v4.ODataModel#constructor}), paths with navigation
-	 *   properties can be included and will contribute to the "5.1.2 System Query Option $expand".
 	 * @param {object} [mParameters.$$aggregation]
 	 *   An object holding the information needed for data aggregation, see
 	 *   {@link sap.ui.model.odata.v4.ODataListBinding#setAggregation} for details.
@@ -903,10 +768,9 @@ sap.ui.define([
 	 * @param {sap.ui.model.Context} [oContext]
 	 *   The context which is required as base for a relative path
 	 * @param {object} [mParameters]
-	 *   Map of binding parameters which can be OData query options as specified in <a href=
-	 *   "https://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part2-url-conventions.html"
-	 *   >"OData Version 4.0 Part 2: URL Conventions"</a> or the binding-specific parameters as
-	 *   specified below. The following OData query options are allowed:
+	 *   Map of binding parameters which can be OData query options as specified in
+	 *   "OData Version 4.0 Part 2: URL Conventions" or the binding-specific parameters as specified
+	 *   below. The following OData query options are allowed:
 	 *   <ul>
 	 *     <li> All "5.2 Custom Query Options" except for those with a name starting with "sap-"
 	 *       (unless starting with "sap-valid-")
@@ -919,16 +783,6 @@ sap.ui.define([
 	 *   relative to a context created via {@link #createBindingContext}. The binding parameters are
 	 *   ignored in case the binding creates no own data service request or in case the binding
 	 *   points to metadata.
-	 * @param {string} [mParameters.$apply]
-	 *   The value for the "3 System Query Option $apply" (see also
-	 *   <a href="https://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/">OData
-	 *   Extension for Data Aggregation Version 4.0</a>), if the path ends with a "$count" segment
-	 * @param {string} [mParameters.$filter]
-	 *   The value for the "5.1.1 System Query Option $filter", if the path ends with a "$count"
-	 *   segment
-	 * @param {string} [mParameters.$search]
-	 *   The value for the "5.1.7 System Query Option $search", if the path ends with a "$count"
-	 *   segment
 	 * @param {string} [mParameters.$$groupId]
 	 *   The group ID to be used for <b>read</b> requests triggered by this binding; if not
 	 *   specified, either the parent binding's group ID (if the binding is relative) or the
@@ -1102,10 +956,8 @@ sap.ui.define([
 	 * headers: Headers with an <code>undefined</code> value are removed, the other headers are set,
 	 * and missing headers remain unchanged. The following headers must not be used:
 	 * <ul>
-	 *   <li> OData V4 requests headers as specified in <a href=
-	 *     "https://docs.oasis-open.org/odata/odata/v4.0/os/part1-protocol/odata-v4.0-os-part1-protocol.html#_Common_Headers"
-	 *     >"8.1 Common Headers"</a> and "8.2 Request Headers" of the specification "OData Version
-	 *     4.0 Part 1: Protocol"
+	 *   <li> OData V4 requests headers as specified in "8.1 Common Headers" and
+	 *     "8.2 Request Headers" of the specification "OData Version 4.0 Part 1: Protocol"
 	 *   <li> OData V2 request headers as specified in "2.2.5 HTTP Header Fields" of the
 	 *     specification "OData Version 2 v10.1"
 	 *   <li> The headers "Content-Id" and "Content-Transfer-Encoding"
@@ -1497,34 +1349,6 @@ sap.ui.define([
 	};
 
 	/**
-	 * Detach event handler <code>fnFunction</code> from the 'dataReceived' event of this model.
-	 *
-	 * @param {function} fnFunction The function to call when the event occurs
-	 * @param {object} [oListener] Object on which to call the given function
-	 * @returns {this} <code>this</code> to allow method chaining
-	 *
-	 * @public
-	 * @since 1.105.0
-	 */
-	ODataModel.prototype.detachDataReceived = function (fnFunction, oListener) {
-		return this.detachEvent("dataReceived", fnFunction, oListener);
-	};
-
-	/**
-	 * Detach event handler <code>fnFunction</code> from the 'dataRequested' event of this model.
-	 *
-	 * @param {function} fnFunction The function to call when the event occurs
-	 * @param {object} [oListener] Object on which to call the given function
-	 * @returns {this} <code>this</code> to allow method chaining
-	 *
-	 * @public
-	 * @since 1.106.0
-	 */
-	ODataModel.prototype.detachDataRequested = function (fnFunction, oListener) {
-		return this.detachEvent("dataRequested", fnFunction, oListener);
-	};
-
-	/**
 	 * Detach event handler <code>fnFunction</code> from the 'sessionTimeout' event of this model.
 	 *
 	 * @param {function} fnFunction The function to call when the event occurs
@@ -1546,47 +1370,6 @@ sap.ui.define([
 		return _Helper.hasPathPrefix(sMessageTarget, sPathPrefix)
 			? this.mMessages[sMessageTarget]
 			: [];
-	};
-
-	/**
-	 * Fires the 'dataReceived' event. This function is only called from the property bindings for
-	 * late property requests. Bubbling up from the binding goes directly to fireEvent.
-	 *
-	 * Fire only one event, even when many late properties are requested (and each request calls
-	 * this function). Use the first response error.
-	 *
-	 * @param {Error} [oError]
-	 *   The error if the request failed
-	 *
-	 * @private
-	 */
-	ODataModel.prototype.fireDataReceived = function (oError) {
-		if (this.iDataRequestedCount === 0) {
-			throw new Error("Received more data than requested");
-		}
-		this.iDataRequestedCount -= 1;
-		this.oDataReceivedError = this.oDataReceivedError || oError; // first error wins
-		if (this.iDataRequestedCount === 0) {
-			this.fireEvent("dataReceived",
-				this.oDataReceivedError ? {error : this.oDataReceivedError} : {data : {}});
-			this.oDataReceivedError = undefined;
-		}
-	};
-
-	/**
-	 * Fires the 'dataRequested' event. This function is only called from the property bindings for
-	 * late property requests. Bubbling up from the binding goes directly to fireEvent.
-	 *
-	 * Fire only one event, even when many late properties are requested (and each request calls
-	 * this function).
-	 *
-	 * @private
-	 */
-	ODataModel.prototype.fireDataRequested = function () {
-		this.iDataRequestedCount += 1;
-		if (this.iDataRequestedCount === 1) {
-			this.fireEvent("dataRequested");
-		}
 	};
 
 	/**
@@ -1887,14 +1670,12 @@ sap.ui.define([
 	 *
 	 * @param {string} sPath - The path
 	 * @returns {number} The index of the key predicate
-	 * @throws {Error} If no path is given or the last segment contains no key predicate
+	 * @throws {Error} If the last segment contains no key predicate
 	 *
 	 * @private
 	 */
 	ODataModel.prototype.getPredicateIndex = function (sPath) {
-		var iPredicateIndex = sPath
-				? sPath.indexOf("(", sPath.lastIndexOf("/"))
-				: -1;
+		var iPredicateIndex = sPath.indexOf("(", sPath.lastIndexOf("/"));
 
 		if (iPredicateIndex < 0 || !sPath.endsWith(")")) {
 			throw new Error("Not a list context path to an entity: " + sPath);
@@ -2339,12 +2120,11 @@ sap.ui.define([
 
 	/**
 	 * Returns a promise for the "canonical path" of the entity for the given context.
-	 * According to <a href=
-	 * "https://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part2-url-conventions.html#canonical-urlurl4.1.1"
-	 * >"4.3.1 Canonical URL"</a> of the specification "OData Version 4.0 Part 2: URL Conventions",
-	 * this is the "name of the entity set associated with the entity followed by the key predicate
-	 * identifying the entity within the collection". Use the canonical path in
-	 * {@link sap.ui.core.Element#bindElement} to create an element binding.
+	 * According to "4.3.1 Canonical URL" of the specification "OData Version 4.0 Part 2: URL
+	 * Conventions", this is the "name of the entity set associated with the entity followed by the
+	 * key predicate identifying the entity within the collection".
+	 * Use the canonical path in {@link sap.ui.core.Element#bindElement} to create an element
+	 * binding.
 	 *
 	 * @param {sap.ui.model.odata.v4.Context} oEntityContext
 	 *   A context in this model which must point to a non-contained OData entity
@@ -2569,7 +2349,7 @@ sap.ui.define([
 	 *
 	 * @param {string} sGroupId
 	 *   A valid group ID as specified in {@link sap.ui.model.odata.v4.ODataModel}.
-	 * @returns {Promise<undefined>}
+	 * @returns {Promise}
 	 *   A promise on the outcome of the HTTP request resolving with <code>undefined</code>; it is
 	 *   rejected with an error if the batch request itself fails
 	 * @throws {Error}

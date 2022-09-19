@@ -7,6 +7,7 @@
 sap.ui.define([
 	"sap/base/util/isPlainObject",
 	"sap/base/util/ObjectPath",
+	"sap/base/Log",
 	"sap/ui/core/util/reflection/JsControlTreeModifier",
 	"sap/ui/dt/ElementUtil",
 	"sap/ui/fl/apply/api/DelegateMediatorAPI",
@@ -14,6 +15,7 @@ sap.ui.define([
 ], function(
 	isPlainObject,
 	ObjectPath,
+	Log,
 	JsControlTreeModifier,
 	ElementUtil,
 	DelegateMediatorAPI,
@@ -262,11 +264,9 @@ sap.ui.define([
 		var aBindingPaths = [];
 
 		aRelevantElements.forEach(function(oElement) {
-			aBindingPaths = aBindingPaths.concat(BindingsExtractor.getBindings({
-				element: oElement,
-				model: oModel,
-				parent: oElement.getParent()
-			}).map(_vBindingToPath));
+			aBindingPaths = aBindingPaths.concat(BindingsExtractor.getBindings(oElement, oModel)
+				.map(_vBindingToPath)
+			);
 		});
 		return aBindingPaths;
 	}
@@ -399,10 +399,7 @@ sap.ui.define([
 		// BCP: 1880498671
 		} else if (_getBindingContextPath(oElement, sAggregationName, sModelName) === _getBindingContextPath(oInvisibleElement, sAggregationName, sModelName)) {
 			aBindingPaths = BindingsExtractor.collectBindingPaths(oInvisibleElement, oModel).bindingPaths;
-		} else if (mAddViaDelegate && BindingsExtractor.getBindings({
-			element: oInvisibleElement,
-			model: oModel
-		}).length > 0) {
+		} else if (mAddViaDelegate && BindingsExtractor.getBindings(oInvisibleElement, oModel).length > 0) {
 			bIncludeElement = false;
 		}
 

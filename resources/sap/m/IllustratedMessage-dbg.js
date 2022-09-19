@@ -82,7 +82,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.106.0
+	 * @version 1.105.1
 	 *
 	 * @constructor
 	 * @public
@@ -201,13 +201,6 @@ sap.ui.define([
 				 * @since 1.98
 				 */
 				_title: {type: "sap.m.Title", multiple: false, visibility: "hidden"}
-			},
-			associations : {
-				/**
-				 * Association to controls / IDs which label those controls (see WAI-ARIA attribute aria-labelledBy).
-	 			 * @since 1.106.0
-				 */
-				 illustrationAriaLabelledBy: {type : "sap.ui.core.Control", multiple : true, singularName : "illustrationAriaLabelledBy"}
 			},
 			dnd: { draggable: false, droppable: true }
 		}
@@ -678,33 +671,6 @@ sap.ui.define([
 			focusable: !!aAdditionalContent.length,
 			children: aAdditionalContent
 		};
-	};
-
-	IllustratedMessage.prototype.addIllustrationAriaLabelledBy = function(sID) {
-		this.addAssociation("ariaLabelledBy", sID, true);
-
-		var oIllustratedMessageIllustration = this._getIllustration();
-		oIllustratedMessageIllustration.addAriaLabelledBy(sID);
-
-		return this;
-	};
-
-	IllustratedMessage.prototype.removeIllustrationAriaLabelledBy = function(sID) {
-		this.removeAssociation("ariaLabelledBy", sID, true);
-
-		var oIllustratedMessageIllustration = this._getIllustration();
-		oIllustratedMessageIllustration.removeAriaLabelledBy(sID);
-
-		return this;
-	};
-
-	IllustratedMessage.prototype.removeAllAriaLabelledBy = function(sID) {
-		this.removeAssociation("ariaLabelledBy", sID, true);
-
-		var oIllustratedMessageIllustration = this._getIllustration();
-		oIllustratedMessageIllustration.removeAllAriaLabelledBy(sID);
-
-		return this;
 	};
 
 
