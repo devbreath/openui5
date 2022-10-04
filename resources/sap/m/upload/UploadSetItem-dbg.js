@@ -34,12 +34,11 @@ sap.ui.define([
 	 * @class Item that represents one file to be uploaded using the {@link sap.m.upload.UploadSet} control.
 	 * @extends sap.ui.core.Element
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @public
 	 * @since 1.63
 	 * @alias sap.m.upload.UploadSetItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel.
 	 */
 	var UploadSetItem = Element.extend("sap.m.upload.UploadSetItem", {
 		metadata: {

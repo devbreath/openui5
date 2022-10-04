@@ -22,7 +22,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new element
 	 * @class Content for the {@link sap.ui.mdc.valuehelp.base.Container Container} element to provide a value help for boolean fields.
 	 * @extends sap.ui.mdc.valuehelp.content.FixedList
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -30,7 +30,6 @@ sap.ui.define([
 	 * @since 1.95.0
 	 * @experimental As of version 1.95
 	 * @alias sap.ui.mdc.valuehelp.content.Bool
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Bool = FixedList.extend("sap.ui.mdc.valuehelp.content.Bool", /** @lends sap.ui.mdc.valuehelp.content.Bool.prototype */
 	{

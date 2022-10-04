@@ -1,1 +1,2 @@
-sap.ui.define(function(){"use strict";function e(e){return e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}return e});
+sap.ui.define(["exports"],function(e){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;function t(e){return e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}var u=t;e.default=u});
+//# sourceMappingURL=escapeRegex.js.map

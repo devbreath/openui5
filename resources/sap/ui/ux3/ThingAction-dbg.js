@@ -20,13 +20,12 @@ sap.ui.define(['sap/ui/core/Element', './library'],
 	 * @class
 	 * Thing Action for Swatch, QuickView, Thinginspector
 	 * @extends sap.ui.core.Element
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38.
 	 * @alias sap.ui.ux3.ThingAction
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ThingAction = Element.extend("sap.ui.ux3.ThingAction", /** @lends sap.ui.ux3.ThingAction.prototype */ { metadata : {
 

@@ -39,7 +39,7 @@ function (Log, Version, library, storage, constants) {
 	 * @name sap.ui.support.RuleSet
 	 * @memberof sap.ui.support
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @param {object} oSettings Name of the initiated
 	 * @returns {void}
 	 */

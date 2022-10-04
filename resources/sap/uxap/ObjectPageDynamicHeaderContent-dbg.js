@@ -40,19 +40,22 @@ sap.ui.define([
 		 * @implements sap.uxap.IHeaderContent
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
 		 * @alias sap.uxap.ObjectPageDynamicHeaderContent
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 * @since 1.52
 		 */
-		var ObjectPageDynamicHeaderContent = DynamicPageHeader.extend("sap.uxap.ObjectPageDynamicHeaderContent", /** @lends sap.uxap.ObjectPageDynamicHeaderContent.prototype */ { metadata : {
+		var ObjectPageDynamicHeaderContent = DynamicPageHeader.extend("sap.uxap.ObjectPageDynamicHeaderContent", /** @lends sap.uxap.ObjectPageDynamicHeaderContent.prototype */ {
+			metadata : {
 
-			interfaces : ["sap.uxap.IHeaderContent"],
-			library : "sap.uxap"
-		}});
+				interfaces : ["sap.uxap.IHeaderContent"],
+				library : "sap.uxap"
+			},
+
+			renderer: ObjectPageDynamicHeaderContentRenderer
+		});
 
 		/**
 		 * Required by the {@link sap.uxap.IHeaderContent} interface.

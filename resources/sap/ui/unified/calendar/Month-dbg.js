@@ -22,7 +22,8 @@ sap.ui.define([
 	"sap/ui/dom/containsOrEquals",
 	"sap/ui/events/KeyCodes",
 	"sap/ui/thirdparty/jquery",
-	'sap/ui/core/InvisibleMessage'
+	'sap/ui/core/InvisibleMessage',
+	"sap/ui/core/Configuration"
 ], function(
 	Control,
 	Device,
@@ -40,7 +41,8 @@ sap.ui.define([
 	containsOrEquals,
 	KeyCodes,
 	jQuery,
-	InvisibleMessage
+	InvisibleMessage,
+	Configuration
 ) {
 	"use strict";
 
@@ -69,13 +71,12 @@ sap.ui.define([
 	 * If used inside the calendar the properties and aggregation are directly taken from the parent
 	 * (To not duplicate and sync DateRanges and so on...)
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.28.0
 	 * @alias sap.ui.unified.calendar.Month
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Month = Control.extend("sap.ui.unified.calendar.Month", /** @lends sap.ui.unified.calendar.Month.prototype */ { metadata : {
 
@@ -255,7 +256,7 @@ sap.ui.define([
 	Month.prototype.init = function(){
 
 		// set default calendar type from configuration
-		var sCalendarType = sap.ui.getCore().getConfiguration().getCalendarType();
+		var sCalendarType = Configuration.getCalendarType();
 		this.setProperty("primaryCalendarType", sCalendarType);
 		this.setProperty("secondaryCalendarType", sCalendarType);
 
@@ -486,7 +487,6 @@ sap.ui.define([
 	 * @param {object} oDate JavaScript date object for focused date.
 	 * @returns {this} <code>this</code> to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Month.prototype.displayDate = function(oDate){
 		var oCalDate = CalendarDate.fromLocalJSDate(oDate, this.getPrimaryCalendarType());
@@ -548,7 +548,7 @@ sap.ui.define([
 		if (oParent && oParent.getLocale) {
 			return oParent.getLocale();
 		} else if (!this._sLocale) {
-			this._sLocale = sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale().toString();
+			this._sLocale = Configuration.getFormatSettings().getFormatLocale().toString();
 		}
 
 		return this._sLocale;
@@ -1339,7 +1339,6 @@ sap.ui.define([
 	 * @param {object} oDate JavaScript date object for focused date.
 	 * @returns {boolean} flag if focusable
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Month.prototype.checkDateFocusable = function(oDate){
 
@@ -1530,19 +1529,21 @@ sap.ui.define([
 		var iSelectedWeekNumber = this._calculateWeekNumber(oStartDate),
 			oEndDate = this._getLastWeekDate(oStartDate),
 			bSingleSelection = this.getSingleSelection(),
-			bIntervalSelection = this.getIntervalSelection();
+			bIntervalSelection = this.getIntervalSelection(),
+			oFirstEnabledDateOfWeek = this._checkDateEnabled(oStartDate) ? oStartDate : new CalendarDate(this._oMinDate),
+			oLastEnabledDateOfweek = this._checkDateEnabled(oEndDate) ? oEndDate : new CalendarDate(this._oMaxDate);
 
 		if (!bSingleSelection && !bIntervalSelection) {
 			// Selecting each day separately
-			this._handleWeekSelectionByMultipleDays(iSelectedWeekNumber, oStartDate, oEndDate);
+			this._handleWeekSelectionByMultipleDays(iSelectedWeekNumber, oFirstEnabledDateOfWeek, oLastEnabledDateOfweek);
 		} else if (bSingleSelection && bIntervalSelection) {
 			// Selecting the week as a whole interval
-			this._handleWeekSelectionBySingleInterval(iSelectedWeekNumber, oStartDate, oEndDate);
+			this._handleWeekSelectionBySingleInterval(iSelectedWeekNumber, oFirstEnabledDateOfWeek, oLastEnabledDateOfweek);
 		}
 
 		// When this method is called due to a week number's press, then focus
 		// should be moved to the first date, since the week number itself isn't focusable
-		bFocusStartDate && this._focusDate(oStartDate);
+		bFocusStartDate && this._focusDate(oFirstEnabledDateOfWeek);
 
 		return this;
 	};
@@ -1973,7 +1974,7 @@ sap.ui.define([
 		}
 
 		if (!this._oItemNavigation) {
-			this._oItemNavigation = new ItemNavigation();
+			this._oItemNavigation = new ItemNavigation(undefined, undefined, this._bNotInTabChain);
 			this._oItemNavigation.attachEvent(ItemNavigation.Events.AfterFocus, _handleAfterFocus, this);
 			this._oItemNavigation.attachEvent(ItemNavigation.Events.FocusAgain, _handleFocusAgain, this);
 			this._oItemNavigation.attachEvent(ItemNavigation.Events.BorderReached, this._handleBorderReached, this);

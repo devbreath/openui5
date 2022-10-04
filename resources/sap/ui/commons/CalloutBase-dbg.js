@@ -14,10 +14,13 @@ sap.ui.define([
     'sap/ui/core/Popup',
     'sap/ui/events/ControlEvents',
     'sap/ui/events/KeyCodes',
-    'sap/ui/dom/jquery/control', // jQuery.fn.control
-    'sap/ui/dom/jquery/Focusable' // jQuery.fn.firstFocusableDomRef, jQuery.fn.lastFocusableDomRef,
+    "sap/ui/core/Configuration",
+    // jQuery.fn.control
+    'sap/ui/dom/jquery/control',
+    // jQuery.fn.firstFocusableDomRef, jQuery.fn.lastFocusableDomRef,
+    'sap/ui/dom/jquery/Focusable'
 ],
-	function(jQuery, library, TooltipBase, CalloutBaseRenderer, Popup, ControlEvents, KeyCodes) {
+	function(jQuery, library, TooltipBase, CalloutBaseRenderer, Popup, ControlEvents, KeyCodes, Configuration) {
 	"use strict";
 
 
@@ -38,13 +41,12 @@ sap.ui.define([
 	 * @extends sap.ui.core.TooltipBase
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38.
 	 * @alias sap.ui.commons.CalloutBase
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var CalloutBase = TooltipBase.extend("sap.ui.commons.CalloutBase", /** @lends sap.ui.commons.CalloutBase.prototype */ { metadata : {
 
@@ -262,7 +264,7 @@ sap.ui.define([
 
 		if (dock.y) { // pointer on the top or bottom border
 			// switch right to left in case of RTL for the relevant docking (begin & end):
-			var bRtl = sap.ui.getCore().getConfiguration().getRTL();
+			var bRtl = Configuration.getRTL();
 			if (bRtl) { myPosition.replace("begin", "right").replace("end", "left"); }
 			var hPos = 0;
 
@@ -306,7 +308,6 @@ sap.ui.define([
 	 *
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	CalloutBase.prototype.adjustPosition = function() {
 
@@ -384,7 +385,6 @@ sap.ui.define([
 	 *
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	CalloutBase.prototype.close = function() {
 		if (this.oPopup && this.oPopup.isOpen() && !this.sCloseNowTimeout) {
@@ -613,7 +613,6 @@ sap.ui.define([
 	 * @param {sap.ui.core.Dock} atPosition docking position of the parent control
 	 * @return {this} <code>this</code> to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	CalloutBase.prototype.setPosition = function(myPosition, atPosition){
 

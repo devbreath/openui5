@@ -20,7 +20,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class Content for the <code>sap.ui.mdc.valuehelp.content.Dialog</code> element.
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -28,7 +28,6 @@ sap.ui.define([
 	 * @since 1.95.0
 	 * @experimental As of version 1.95
 	 * @alias sap.ui.mdc.valuehelp.base.DialogTab
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var DialogTab = Control.extend("sap.ui.mdc.valuehelp.base.DialogTab", /** @lends sap.ui.mdc.valuehelp.base.DialogTab.prototype */
 	{

@@ -23,13 +23,12 @@ sap.ui.define(['sap/ui/core/Control', 'sap/f/shellBar/ControlSpacerRenderer'],
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
 	 * @since 1.63
 	 * @alias sap.f.shellBar.ControlSpacer
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ControlSpacer = Control.extend("sap.f.shellBar.ControlSpacer", /** @lends sap.f.shellBar.ControlSpacer.prototype */ { metadata : {
 			library : "sap.f",

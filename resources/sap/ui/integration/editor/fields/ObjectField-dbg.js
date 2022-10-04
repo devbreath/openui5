@@ -84,7 +84,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.editor.fields.ObjectField
 	 * @author SAP SE
 	 * @since 1.100.0
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @experimental since 1.100.0
 	 * @ui5-restricted
@@ -1276,7 +1276,10 @@ sap.ui.define([
 		var oResourceBundle = that.getResourceBundle();
 		var oItemCloned = deepClone(oItem, 500);
 		var oModel;
-		var sPlacement = sMode === "add" && that.getPreviewPosition() !== "right" ? "Left" : "Right";
+		var sPlacement = "Right";
+		if (sMode === "add") {
+			sPlacement = this.getPopoverPlacement(oControl);
+		}
 		if (!that._oObjectDetailsPopover) {
 			var oAddButton = new Button({
 				text: oResourceBundle.getText("EDITOR_FIELD_OBJECT_DETAILS_POPOVER_BUTTON_ADD"),
@@ -1699,10 +1702,10 @@ sap.ui.define([
 		}
 		var oTranslatedValues = that.buildTranslationsData(sKey, sType, oNewObject._dt._uuid, sProperty);
 		var oTranslatonsModel;
+		var sPlacement = this.getPopoverPlacement(oControl._oValueHelpIcon);
 		if (!that._oTranslationPopover) {
 			var oList = that.buildTranslationsList();
 			var oTranslationsFooter = that.buildTranslationsFooter(oList, true);
-			var sPlacement = that.getPreviewPosition() === "right" ? "Right" : "Left";
 			that._oTranslationPopover = new Popover({
 				placement: sPlacement,
 				contentWidth: "300px",
@@ -1714,6 +1717,7 @@ sap.ui.define([
 			oTranslatonsModel = that.buildTranslationsModel(oTranslatedValues);
 			that._oTranslationPopover.setModel(oTranslatonsModel, "languages");
 		} else {
+			that._oTranslationPopover.setPlacement(sPlacement);
 			oTranslatonsModel = that._oTranslationPopover.getModel("languages");
 			oTranslatonsModel.setData(oTranslatedValues);
 			oTranslatonsModel.checkUpdate(true);

@@ -30,14 +30,13 @@ sap.ui.define([
 	 * @extends sap.m.Illustration
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.98. Use the {@link sap.m.Illustration} instead.
 	 * @since 1.88
 	 * @alias sap.f.Illustration
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Illustration = sapMIllustration.extend("sap.f.Illustration", /** @lends sap.f.Illustration.prototype */ {
 		metadata: {

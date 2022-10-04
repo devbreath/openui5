@@ -26,7 +26,7 @@ sap.ui.define([
 	 * <h3>Overview</h3> A component to be used within the <code>sap.ui.webc.fiori.UploadCollection</code>.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -34,7 +34,6 @@ sap.ui.define([
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.fiori.UploadCollectionItem
 	 * @implements sap.ui.webc.fiori.IUploadCollectionItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var UploadCollectionItem = WebComponent.extend("sap.ui.webc.fiori.UploadCollectionItem", {
 		metadata: {

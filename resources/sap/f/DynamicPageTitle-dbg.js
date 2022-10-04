@@ -89,13 +89,12 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.42
 	 * @alias sap.f.DynamicPageTitle
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var DynamicPageTitle = Control.extend("sap.f.DynamicPageTitle", /** @lends sap.f.DynamicPageTitle.prototype */ {
 		metadata: {
@@ -341,7 +340,9 @@ sap.ui.define([
 				}
 			},
 			designtime: "sap/f/designtime/DynamicPageTitle.designtime"
-		}
+		},
+
+		renderer: DynamicPageTitleRenderer
 	});
 
 	function exists(vObject) {

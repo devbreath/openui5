@@ -23,14 +23,14 @@ function (
 	 * @namespace
 	 * @alias sap.ui.dt
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.30
 	 * @experimental This class is experimental and provides only limited functionality. Also the API might be changed in future.
 	 * @private
 	 */
 	var thisLib = sap.ui.getCore().initLibrary({
 		name: "sap.ui.dt",
-		version: "1.105.1",
+		version: "1.107.0",
 		dependencies: ["sap.ui.core"],
 		types: [
 			"sap.ui.dt.SelectionMode"

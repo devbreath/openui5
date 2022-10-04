@@ -31,7 +31,7 @@ sap.ui.define([
 	 * <code>sap.ui.webc.main.MenuItem</code> is an abstract element, representing a node in a <code>sap.ui.webc.main.Menu</code>. The menu itself is rendered as a list, and each <code>sap.ui.webc.main.MenuItem</code> is represented by a list item (<code>sap.ui.webc.main.StandardListItem</code>) in that list. Therefore, you should only use <code>sap.ui.webc.main.MenuItem</code> directly in your apps. The <code>sap.ui.webc.main.StandardListItem</code> list item is internal for the list, and not intended for public use.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -39,7 +39,6 @@ sap.ui.define([
 	 * @experimental Since 1.102.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.MenuItem
 	 * @implements sap.ui.webc.main.IMenuItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var MenuItem = WebComponent.extend("sap.ui.webc.main.MenuItem", {
 		metadata: {
@@ -66,7 +65,7 @@ sap.ui.define([
 				/**
 				 * Defines the icon to be displayed as graphical element within the component. The SAP-icons font provides numerous options. <br>
 				 * <br>
-				 * <b>* Example:</b> See all the available icons in the <ui5-link target="_blank" href="https://openui5.hana.ondemand.com/test-resources/sap/m/demokit/iconExplorer/webapp/index.html" class="api-table-content-cell-link">Icon Explorer</ui5-link>.
+				 * <b>* Example:</b> See all the available icons in the {@link demo:sap/m/demokit/iconExplorer/webapp/index.html Icon Explorer}.
 				 */
 				icon: {
 					type: "string",

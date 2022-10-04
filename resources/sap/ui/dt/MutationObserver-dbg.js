@@ -30,7 +30,7 @@ sap.ui.define([
 	 * @class The MutationObserver observes changes of a ManagedObject and propagates them via events.
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.30
@@ -70,7 +70,7 @@ sap.ui.define([
 		jQuery(window).on("resize", this._mutationOnResize);
 
 		this._aIgnoredMutations = [];
-		this._bHandlerRegistred = false;
+		this._bHandlerRegistered = false;
 		this._mMutationHandlers = {};
 		this._aRootIds = [];
 		this._startMutationObserver();
@@ -90,7 +90,7 @@ sap.ui.define([
 		jQuery(window).off("resize", this._mutationOnResize);
 
 		this._aIgnoredMutations = [];
-		this._bHandlerRegistred = false;
+		this._bHandlerRegistered = false;
 		this._mMutationHandlers = {};
 	};
 
@@ -114,7 +114,7 @@ sap.ui.define([
 	MutationObserver.prototype.registerHandler = function (sId, fnDomChangedHandler, bIsRoot) {
 		if (!this._mMutationHandlers[sId]) {
 			this._mMutationHandlers[sId] = [];
-			this._bHandlerRegistred = true;
+			this._bHandlerRegistered = true;
 		}
 		this._mMutationHandlers[sId].push(fnDomChangedHandler);
 		if (bIsRoot && this._aRootIds.indexOf(sId) === -1) {
@@ -129,10 +129,10 @@ sap.ui.define([
 	MutationObserver.prototype.deregisterHandler = function (sId) {
 		delete this._mMutationHandlers[sId];
 		if (Object.keys(this._mMutationHandlers).length === 0) {
-			this._bHandlerRegistred = false;
+			this._bHandlerRegistered = false;
 		}
-		this._aRootIds = this._aRootIds.filter(function(sRegiteredRootId) {
-			return sRegiteredRootId !== sId;
+		this._aRootIds = this._aRootIds.filter(function(sRegisteredRootId) {
+			return sRegisteredRootId !== sId;
 		});
 	};
 
@@ -281,11 +281,19 @@ sap.ui.define([
 
 	MutationObserver.prototype._getTargetNode = function (oMutation) {
 		// text mutations have no class list, so we use a parent node as a target
-		return (
-			oMutation.type === "characterData"
-				? oMutation.target.parentNode
-				: oMutation.target
-		);
+		var oMutationTarget = oMutation.type === "characterData"
+			? oMutation.target.parentNode
+			: oMutation.target;
+
+		// If the node is inside a shadow root, the host is the target
+		if (
+			oMutationTarget
+			&& oMutationTarget.getRootNode()
+			&& oMutationTarget.getRootNode().host
+		) {
+			return oMutationTarget.getRootNode().host;
+		}
+		return oMutationTarget;
 	};
 
 	MutationObserver.prototype._callRelevantCallbackFunctions = function (aTargetElementId, sType) {
@@ -297,15 +305,25 @@ sap.ui.define([
 		}.bind(this));
 	};
 
+	function observeRelevantMutations(oTarget) {
+		this._oMutationObserver.observe(oTarget, {
+			childList: true,
+			subtree: true,
+			attributes: true,
+			attributeFilter: ["style", "class", "width", "height", "border"],
+			characterData: true // also observe text node changes, see https://dom.spec.whatwg.org/#characterdata
+		});
+	}
+
 	MutationObserver.prototype._startMutationObserver = function () {
 		this._oMutationObserver = new window.MutationObserver(function(aMutations) {
-			if (this._bHandlerRegistred) {
+			if (this._bHandlerRegistered) {
 				var aOverallTargetElementIds = aMutations.reduce(function (aOverallTargetElementIds, oMutation) {
 					var aTargetElementIds = [];
 					var oTargetNode = this._getTargetNode(oMutation);
-					var oTargetElementId = this._getRelevantElementId(oTargetNode, oMutation);
-					if (oTargetElementId) {
-						aTargetElementIds.push(oTargetElementId);
+					var sTargetElementId = this._getRelevantElementId(oTargetNode, oMutation);
+					if (sTargetElementId) {
+						aTargetElementIds.push(sTargetElementId);
 					} else {
 						aTargetElementIds = this._getRelevantElementIdsFromStaticArea(oMutation);
 					}
@@ -324,15 +342,21 @@ sap.ui.define([
 			}
 		}.bind(this));
 
-		// we should observe whole DOM, otherwise position change of elements can be triggered via outter changes
+		// we should observe whole DOM, otherwise position change of elements can be triggered via outer changes
 		// (like change of body size, container insertions etc.)
-		this._oMutationObserver.observe(window.document, {
-			childList: true,
-			subtree: true,
-			attributes: true,
-			attributeFilter: ["style", "class", "width", "height", "border"],
-			characterData: true // also observe text node changes, see https://dom.spec.whatwg.org/#characterdata
-		});
+		observeRelevantMutations.call(this, window.document);
+	};
+
+	/**
+	 * Adds another DOM node to be observed. For example an open shadow root.
+	 * Shadow roots are not part of the "normal" document tree and need to be observed
+	 * separately. The observer callback is the same as for the document tree, and the
+	 * host elements are also registered/deregistered to avoid unnecessary calls.
+	 *
+	 * @param {Node} oNode - DOM node to be added to the observer
+	 */
+	MutationObserver.prototype.addNode = function(oNode) {
+		observeRelevantMutations.call(this, oNode);
 	};
 
 	MutationObserver.prototype._stopMutationObserver = function() {
@@ -344,7 +368,7 @@ sap.ui.define([
 
 	MutationObserver.prototype._callDomChangedCallback = function (sMutationType, oEvent) {
 		var oTarget = oEvent.target;
-		if (this._bHandlerRegistred && oTarget !== window) {
+		if (this._bHandlerRegistered && oTarget !== window) {
 			var sTargetElementId = this._getRelevantElementId(oTarget);
 			if (sTargetElementId) {
 				this._callRelevantCallbackFunctions([sTargetElementId], sMutationType);
@@ -369,7 +393,7 @@ sap.ui.define([
 		var aTargetElementIds = [];
 		// The line below is required to avoid double scrollbars on the browser
 		// when the document is scrolled to negative values (relevant for Mac)
-		if (this._bHandlerRegistred && oTarget !== document) {
+		if (this._bHandlerRegistered && oTarget !== document) {
 			// Target Node is inside one of the registered element
 			var sTargetElementId = this._getRelevantElementId(oTarget);
 			if (sTargetElementId) {

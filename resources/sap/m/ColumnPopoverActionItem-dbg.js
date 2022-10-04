@@ -16,13 +16,12 @@ sap.ui.define(['./ColumnPopoverItem', 'sap/m/Button'], function(ColumnPopoverIte
 	 * @extends sap.m.ColumnPopoverItem
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @since 1.63
 	 * @private
 	 * @alias sap.m.ColumnPopoverActionItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ColumnPopoverActionItem = ColumnPopoverItem.extend("sap.m.ColumnPopoverActionItem", /** @lends sap.m.ColumnPopoverActionItem.prototype */
 	{

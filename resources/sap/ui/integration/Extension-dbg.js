@@ -24,13 +24,12 @@ sap.ui.define([
 	 * @extends sap.ui.base.ManagedObject
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.75
 	 * @alias sap.ui.integration.Extension
-	 * @ui5-metamodel This control/element will also be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Extension = ManagedObject.extend("sap.ui.integration.Extension", {
 		metadata: {
@@ -146,6 +145,17 @@ sap.ui.define([
 	 * @public
 	 */
 	Extension.prototype.onCardReady = function () { };
+
+	/**
+	 * Override this method to lazy load dependencies for the extension.
+	 *
+	 * @private
+	 * @ui5-restricted sap/insights
+	 * @returns {Promise} Returns a promise. The card will wait for this promise to be resolved before continuing with the initialization.
+	 */
+	Extension.prototype.loadDependencies = function () {
+		return Promise.resolve();
+	};
 
 	/**
 	 * Returns an interface to the card, which uses this extension.

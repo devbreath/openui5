@@ -39,7 +39,7 @@ sap.ui.define([
 	 * @constructor
 	 * @alias sap.ui.fl.changeHandler.BaseAddViaDelegate
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 */
 	var BaseAddViaDelegate = {
@@ -186,7 +186,6 @@ sap.ui.define([
 					//revert data will be enhanced later on, but should be attached to the change so that the addProperty-hook can access it and enhance it
 					oChange.setRevertData(oRevertData);
 
-
 					var sModelType = getModelType(oChangeContent);
 
 					return DelegateMediatorAPI.getDelegateForControl({
@@ -215,7 +214,9 @@ sap.ui.define([
 							.then(function() {
 								if (mInnerControls.valueHelp) {
 									var oValueHelpSelector = mPropertyBag.modifier.getSelector(mPropertyBag.modifier.getId(mInnerControls.valueHelp), oAppComponent);
+									var oRevertData = oChange.getRevertData();
 									oRevertData.valueHelpSelector = oValueHelpSelector;
+									oChange.setRevertData(oRevertData);
 								}
 							});
 					});
@@ -373,7 +374,9 @@ sap.ui.define([
 								targetContainer: oChange.getContent().parentId,
 								targetAggregation: mAddViaDelegateSettings.aggregationName,
 								setTargetIndex: function (oChange, iNewTargetIndex) {
-									oChange.getContent().newFieldIndex = iNewTargetIndex;
+									var oChangeContent = oChange.getContent();
+									oChangeContent.newFieldIndex = iNewTargetIndex;
+									oChange.setContent(oChangeContent);
 								},
 								getTargetIndex: function(oChange) {
 									return oChange.getContent().newFieldIndex;

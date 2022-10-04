@@ -30,13 +30,12 @@ sap.ui.define([
 	 * @extends sap.ui.core.TooltipBase
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. Tf you want to achieve a similar behavior, use a <code>sap.m.Popover</code> control and open it next to your control.
 	 * @alias sap.ui.commons.RichTooltip
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var RichTooltip = TooltipBase.extend("sap.ui.commons.RichTooltip", /** @lends sap.ui.commons.RichTooltip.prototype */ { metadata : {
 

@@ -39,7 +39,7 @@ sap.ui.define([
 	 *
 	 * If a time is entered by typing it into the input field, it must fit to the used time format. <br>
 	 * <br>
-	 * Supported format options are pattern-based on Unicode LDML Date Format notation. For more information, see <ui5-link target="_blank" href="http://unicode.org/reports/tr35/#Date_Field_Symbol_Table" class="api-table-content-cell-link">UTS #35: Unicode Locale Data Markup Language</ui5-link>. <br>
+	 * Supported format options are pattern-based on Unicode LDML Date Format notation. For more information, see {@link http://unicode.org/reports/tr35/#Date_Field_Symbol_Table UTS #35: Unicode Locale Data Markup Language}. <br>
 	 * <br>
 	 * For example, if the <code>format-pattern</code> is "HH:mm:ss", a valid value string is "11:42:35" and the same is displayed in the input.
 	 *
@@ -63,7 +63,7 @@ sap.ui.define([
 	 * </ul>
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -71,7 +71,6 @@ sap.ui.define([
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.TimePicker
 	 * @implements sap.ui.core.IFormContent
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var TimePicker = WebComponent.extend("sap.ui.webc.main.TimePicker", {
 		metadata: {

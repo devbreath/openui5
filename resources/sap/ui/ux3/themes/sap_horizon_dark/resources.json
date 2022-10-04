@@ -675,6 +675,7 @@
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/ux3/themes/sap_horizon_dark/library-parameters.json",
 			"size": 345,
 			"theme": "sap_horizon_dark"
 		},
@@ -704,6 +705,10 @@
 			"name": "library_skeleton.css",
 			"size": 105711,
 			"theme": "sap_horizon_dark"
+		},
+		{
+			"name": "resources.json",
+			"size": 14469
 		}
 	]
 }

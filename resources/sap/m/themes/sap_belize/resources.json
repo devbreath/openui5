@@ -110,7 +110,7 @@
 		},
 		{
 			"name": "IconTabBar.less",
-			"size": 4953,
+			"size": 4995,
 			"designtime": true,
 			"theme": "sap_belize"
 		},
@@ -488,39 +488,40 @@
 		},
 		{
 			"name": "css_variables.css",
-			"size": 65965,
+			"size": 68320,
 			"theme": "sap_belize"
 		},
 		{
 			"name": "css_variables.less",
-			"size": 184163,
+			"size": 186227,
 			"designtime": true,
 			"theme": "sap_belize"
 		},
 		{
 			"name": "css_variables.source.less",
-			"size": 183803,
+			"size": 185867,
 			"designtime": true,
 			"theme": "sap_belize"
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 1147476,
+			"size": 1159420,
 			"theme": "sap_belize"
 		},
 		{
 			"name": "library-parameters.json",
-			"size": 29965,
+			"module": "sap/m/themes/sap_belize/library-parameters.json",
+			"size": 31108,
 			"theme": "sap_belize"
 		},
 		{
 			"name": "library.css",
-			"size": 1147468,
+			"size": 1159412,
 			"theme": "sap_belize"
 		},
 		{
 			"name": "library.less",
-			"size": 92768,
+			"size": 92810,
 			"designtime": true,
 			"theme": "sap_belize"
 		},
@@ -532,13 +533,17 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 1215151,
+			"size": 1226614,
 			"theme": "sap_belize"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 1215143,
+			"size": 1226606,
 			"theme": "sap_belize"
+		},
+		{
+			"name": "resources.json",
+			"size": 9690
 		},
 		{
 			"name": "shared.less",

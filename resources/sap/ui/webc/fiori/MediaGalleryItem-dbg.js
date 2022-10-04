@@ -37,7 +37,7 @@ sap.ui.define([
 	 * </ul>
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -45,7 +45,6 @@ sap.ui.define([
 	 * @experimental Since 1.99.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.fiori.MediaGalleryItem
 	 * @implements sap.ui.webc.fiori.IMediaGalleryItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var MediaGalleryItem = WebComponent.extend("sap.ui.webc.fiori.MediaGalleryItem", {
 		metadata: {

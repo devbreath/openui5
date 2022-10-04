@@ -5,15 +5,9 @@
  */
 
 sap.ui.define([
-    "../../ChartDelegate",
-    "../../util/loadModules",
-    "../../library",
-    "sap/ui/core/Core"
+    "../../ChartDelegate"
 ], function (
-    ChartDelegate,
-    loadModules,
-    library,
-    Core
+    ChartDelegate
 ) {
     "use strict";
     /**

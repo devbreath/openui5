@@ -78,6 +78,7 @@
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/table/themes/sap_belize_hcw/library-parameters.json",
 			"size": 5372,
 			"theme": "sap_belize_hcw"
 		},
@@ -107,6 +108,10 @@
 			"name": "library_skeleton.css",
 			"size": 67100,
 			"theme": "sap_belize_hcw"
+		},
+		{
+			"name": "resources.json",
+			"size": 2069
 		}
 	]
 }

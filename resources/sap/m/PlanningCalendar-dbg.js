@@ -46,8 +46,7 @@ sap.ui.define([
 	"sap/base/util/deepEqual",
 	"sap/base/Log",
 	"sap/ui/thirdparty/jquery",
-	// jQuery Plugin "control"
-	"sap/ui/dom/jquery/control"
+	"sap/ui/dom/jquery/control" // jQuery Plugin "control"
 ], function(
 	DateNavigation,
 	Control,
@@ -186,14 +185,13 @@ sap.ui.define([
 	 * {@link sap.m.PlanningCalendarView PlanningCalendarView}'s properties.
 	 *
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.34
 	 * @alias sap.m.PlanningCalendar
 	 * @see {@link fiori:https://experience.sap.com/fiori-design-web/planning-calendar/ Planning Calendar}
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var PlanningCalendar = Control.extend("sap.m.PlanningCalendar", /** @lends sap.m.PlanningCalendar.prototype */ {
 		metadata : {
@@ -563,6 +561,7 @@ sap.ui.define([
 			},
 			designtime: "sap/m/designtime/PlanningCalendar.designtime"
 		},
+
 		constructor: function(vId, mSettings) {
 			Control.prototype.constructor.apply(this, arguments);
 
@@ -573,7 +572,9 @@ sap.ui.define([
 			if (mSettings && typeof mSettings.customAppointmentsSorterCallback === "function") {
 				this._fnCustomSortedAppointments = mSettings.customAppointmentsSorterCallback;
 			}
-		}
+		},
+
+		renderer: PlanningCalendarRenderer
 	});
 
 	//List of private properties controlling different intervals
@@ -2527,7 +2528,6 @@ sap.ui.define([
 	 *
 	 * @returns {sap.m.PlanningCalendarRow[]} selected rows
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	PlanningCalendar.prototype.getSelectedRows = function() {
 
@@ -2546,7 +2546,6 @@ sap.ui.define([
 	 * @param {boolean} bSelect Indicator showing whether <code>PlanningCalendarRows</code> should be selected or deselected
 	 * @returns {this} <code>this</code> to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	PlanningCalendar.prototype.selectAllRows = function(bSelect) {
 

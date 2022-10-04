@@ -6,8 +6,9 @@
 
 sap.ui.define([
 	'sap/ui/base/Object',
-	'sap/base/util/isEmptyObject'
-], function(BaseObject, isEmptyObject) {
+	'sap/base/util/isEmptyObject',
+	"sap/ui/core/Configuration"
+], function(BaseObject, isEmptyObject, Configuration) {
 	"use strict";
 
 	/**
@@ -21,7 +22,6 @@ sap.ui.define([
 	 * @private
 	 * @since 1.58.0
 	 * @alias sap.ui.mdc.link.Log
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Log = BaseObject.extend("sap.ui.mdc.link.Log", /** @lends sap.ui.mdc.link.Log.prototype */
 	{
@@ -156,7 +156,7 @@ sap.ui.define([
 		};
 		var fnSortByText = function(aArray) {
 			try {
-				var sLanguage = sap.ui.getCore().getConfiguration().getLocale().toString();
+				var sLanguage = Configuration.getLocale().toString();
 				if (typeof window.Intl !== 'undefined') {
 					var oCollator = window.Intl.Collator(sLanguage, {
 						numeric: true

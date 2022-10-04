@@ -50,14 +50,13 @@ sap.ui.define([
 	 * </ul>
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.99.0
 	 * @experimental Since 1.99.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.SplitButton
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var SplitButton = WebComponent.extend("sap.ui.webc.main.SplitButton", {
 		metadata: {
@@ -120,7 +119,7 @@ sap.ui.define([
 				 * <br>
 				 * Example:
 				 *
-				 * See all the available icons in the <ui5-link target="_blank" href="https://openui5.hana.ondemand.com/test-resources/sap/m/demokit/iconExplorer/webapp/index.html" class="api-table-content-cell-link">Icon Explorer</ui5-link>.
+				 * See all the available icons in the {@link demo:sap/m/demokit/iconExplorer/webapp/index.html Icon Explorer}.
 				 */
 				icon: {
 					type: "string",

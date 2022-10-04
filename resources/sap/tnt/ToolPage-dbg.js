@@ -36,13 +36,12 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.34
 	 * @alias sap.tnt.ToolPage
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ToolPage = Control.extend("sap.tnt.ToolPage", /** @lends sap.tnt.ToolPage.prototype */ {
 		metadata: {
@@ -75,7 +74,9 @@ sap.ui.define([
 				mainContents: {type: "sap.ui.core.Control", multiple: true, singularName: "mainContent"}
 			},
 			events: {}
-		}
+		},
+
+		renderer: ToolPageRenderer
 	});
 
 	ToolPage.prototype.init = function () {

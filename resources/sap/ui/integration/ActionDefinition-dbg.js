@@ -28,14 +28,13 @@ sap.ui.define([
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @experimental Since 1.85. Disclaimer: this class is in a beta state - incompatible API changes may be done before its official public release. Use at your own discretion.
 	 * @since 1.85
 	 * @alias sap.ui.integration.ActionDefinition
-	 * @ui5-metamodel This control/element will also be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ActionDefinition = Element.extend("sap.ui.integration.ActionDefinition", {
 		metadata: {

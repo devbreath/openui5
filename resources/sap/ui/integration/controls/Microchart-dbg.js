@@ -58,7 +58,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -96,9 +96,15 @@ sap.ui.define([
 				// chart
 				oRm.openStart("div")
 					.class("sapUiIntMicrochartChart")
+					.openEnd();
+
+				oRm.openStart("div")
+					.class("sapUiIntMicrochartChartInner")
 					.openEnd()
 					.renderControl(oMicrochart.getChart())
 					.close("div");
+
+				oRm.close("div");
 
 				// value
 				oRm.openStart("div")

@@ -1,1 +1,2 @@
-sap.ui.define(["./SlotsHelper"],function(e){"use strict";const t=t=>Array.from(t.childNodes).filter(t=>t.nodeType!==Node.COMMENT_NODE&&e.getSlotName(t)==="default"&&(t.nodeType!==Node.TEXT_NODE||t.nodeValue.trim().length!==0)).length>0;return t});
+sap.ui.define(["exports","./SlotsHelper"],function(e,t){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;const o=e=>Array.from(e.childNodes).filter(e=>e.nodeType!==Node.COMMENT_NODE&&(0,t.getSlotName)(e)==="default"&&(e.nodeType!==Node.TEXT_NODE||e.nodeValue.trim().length!==0)).length>0;var d=o;e.default=d});
+//# sourceMappingURL=isDefaultSlotProvided.js.map

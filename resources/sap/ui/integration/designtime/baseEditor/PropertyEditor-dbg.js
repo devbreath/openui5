@@ -35,7 +35,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.designtime.baseEditor.PropertyEditor
 	 * @author SAP SE
 	 * @since 1.73.0
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @experimental since 1.73.0
 	 * @ui5-restricted
@@ -305,15 +305,18 @@ sap.ui.define([
 			this._initPropertyEditor();
 		},
 
-		renderer: function (oRm, oControl) {
-			oRm.openStart("div", oControl);
-			oRm.addStyle("display", "inline-block");
-			oRm.addStyle("width", "100%");
-			oRm.openEnd();
+		renderer: {
+			apiVersion: 2,
+			render: function (oRm, oControl) {
+				oRm.openStart("div", oControl);
+				oRm.style("display", "inline-block");
+				oRm.style("width", "100%");
+				oRm.openEnd();
 
-			oRm.renderControl(oControl.getAggregation("propertyEditor"));
+				oRm.renderControl(oControl.getAggregation("propertyEditor"));
 
-			oRm.close("div");
+				oRm.close("div");
+			}
 		}
 	});
 

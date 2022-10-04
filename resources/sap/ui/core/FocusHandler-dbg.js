@@ -6,19 +6,22 @@
 
 // Provides class sap.ui.core.FocusHandler
 sap.ui.define([
+	"../base/EventProvider",
 	"../base/Object",
 	"sap/base/Log",
 	"sap/ui/thirdparty/jquery",
-	"sap/ui/dom/_ready",
-	// jQuery Plugin "control"
-	"sap/ui/dom/jquery/control"
+	"sap/ui/dom/_ready"
 ],
-	function(BaseObject, Log, jQuery, _ready) {
+	function(EventProvider, BaseObject, Log, jQuery, _ready) {
 	"use strict";
 
 		// Element, Core module references, lazily probed when needed
 		var Element;
 		var Core;
+
+		var oFocusInfoEventProvider = new EventProvider();
+		var FOCUS_INFO_EVENT = "focusInfo";
+		var oEventData = {};
 
 		/**
 		 * Constructs an instance of an sap.ui.core.FocusHandler.
@@ -63,16 +66,19 @@ sap.ui.define([
 		 * @public
 		 */
 		FocusHandler.prototype.getCurrentFocusedControlId = function(){
-			var aCtrls = null;
+			var oControl;
 			try {
 				var $Act = jQuery(document.activeElement);
 				if ($Act.is(":focus")) {
-					aCtrls = $Act.control();
+					if (!Element) {
+						Element = sap.ui.require("sap/ui/core/Element");
+					}
+					oControl = Element && Element.closestTo($Act[0]);
 				}
 			} catch (err) {
 				//escape eslint check for empty block
 			}
-			return aCtrls && aCtrls.length > 0 ? aCtrls[0].getId() : null;
+			return oControl ? oControl.getId() : null;
 		};
 
 		/**
@@ -154,6 +160,36 @@ sap.ui.define([
 		};
 
 		/**
+		 * Adds the given function as an extender of the focus info. The given function will be called within the
+		 * <code>restoreFocus</code> function before the focus info is forwarded to the corresponding control.
+		 *
+		 * @see sap.ui.core.FocusHandler#restoreFocus
+		 * @param {function} fnFunction The function that will be called to extend the focus info
+		 * @param {object} oListener An object which is set as "this" context when callin the "fnFunction"
+		 * @return {sap.ui.core.FocusHandler} The object itself to allow function chaining
+		 * @private
+		 */
+		FocusHandler.prototype.addFocusInfoExtender = function(fnFunction, oListener) {
+			oFocusInfoEventProvider.attachEvent(FOCUS_INFO_EVENT, oEventData, fnFunction, oListener);
+			return this;
+		};
+
+		/**
+		 * Removes the given function from being an extender of the focus info.
+		 *
+		 * @param {function} fnFunction The function that will be removed
+		 * @param {object} oListener An object which is set as "this" context when callin the "fnFunction". Only when
+		 *  the same "oListener" is given as the one that is used to call <code>addFocusInfoExtender</code>, the function
+		 *  can be removed correctly.
+		 * @return {sap.ui.core.FocusHandler} The object itself to allow function chaining
+		 * @private
+		 */
+		FocusHandler.prototype.removeFocusInfoExtender = function(fnFunction, oListener) {
+			oFocusInfoEventProvider.detachEvent(FOCUS_INFO_EVENT, fnFunction, oListener);
+			return this;
+		};
+
+		/**
 		 * Restores the focus to the last known focused control or to the given focusInfo, if possible.
 		 *
 		 * @see sap.ui.core.FocusHandler#getControlFocusInfo
@@ -175,13 +211,26 @@ sap.ui.define([
 				&& oControl.getMetadata().getName() == oInfo.type
 				&& (oInfo.patching
 					|| (oControl.getFocusDomRef() != oFocusRef
-						&& (oControlFocusInfo || /*!oControlFocusInfo &&*/ oControl !== oInfo.control)))) {
+						&& (oControlFocusInfo || /*!oControlFocusInfo &&*/ oControl !== oInfo.control || oInfo.preserved)))) {
 				Log.debug("Apply focus info of control " + oInfo.id, null, "sap.ui.core.FocusHandler");
 				oInfo.control = oControl;
 				this.oLastFocusedControlInfo = oInfo;
 				// Do not store dom patch info in the last focused control info
 				delete this.oLastFocusedControlInfo.patching;
-				oControl.applyFocusInfo(oInfo.info);
+
+				// expose focus info into the oEventData which is forwarded to the focus info extender
+				oEventData.info = oInfo.info;
+				oFocusInfoEventProvider.fireEvent(FOCUS_INFO_EVENT, {
+					domRef: oControl.getDomRef()
+				});
+
+				oControl.applyFocusInfo(oEventData.info);
+
+				// oEventData is given to the event handler as event data, thus we can't assign it with a new empty
+				// object. We need to clear it by deleting all of its own properties
+				Object.keys(oEventData).forEach(function(sKey) {
+					delete oEventData[sKey];
+				});
 			} else {
 				Log.debug("Apply focus info of control " + oInfo.id + " not possible", null, "sap.ui.core.FocusHandler");
 			}
@@ -300,6 +349,27 @@ sap.ui.define([
 				triggerFocusleave(this.oLast, null);
 			}
 			this.oLast = null;
+		};
+
+		/**
+		 * Tracks the focus before it is lost during DOM preserving.
+		 * Called by the RenderManager when a DOM element is moved to the preserved area.
+		 *
+		 * If the preserved Element contains the activeElement, the focus is set to the body.
+		 *
+		 * In case the currently activeElement is also the last known focus-ref, we need to track
+		 * this information, so the Focus can correctly restored later on.
+		 *
+		 * @param {Element} oCandidate the DOM element that will be preserved
+		 * @private
+		 * @ui5-restricted sap.ui.core.RenderManager
+		 */
+		FocusHandler.prototype.trackFocusForPreservedElement = function(oCandidate) {
+			if (oCandidate.contains(document.activeElement) &&
+				this.oLastFocusedControlInfo && document.activeElement === this.oLastFocusedControlInfo.focusref) {
+				// the 'preserved' flag will be read during restoreFocus
+				this.oLastFocusedControlInfo.preserved = true;
+			}
 		};
 
 

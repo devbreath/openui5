@@ -9,13 +9,15 @@ sap.ui.define([
 	"sap/base/Log",
 	"sap/ui/fl/Layer",
 	"sap/ui/fl/LayerUtils",
-	"sap/base/util/isEmptyObject"
+	"sap/base/util/isEmptyObject",
+	"sap/ui/core/Configuration"
 ], function (
 	encodeURLParameters,
 	Log,
 	Layer,
 	LayerUtils,
-	isEmptyObject
+	isEmptyObject,
+	Configuration
 ) {
 	"use strict";
 
@@ -25,7 +27,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.initial._internal.StorageUtils
 	 * @since 1.74
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @ui5-restricted sap.ui.fl.initial._internal.Storage, sap.ui.fl.write._internal.Storage,
 	 * 	sap.ui.fl.initial._internal.connectors.ObjectStorageConnector, sap.ui.fl.initial._internal.connectors.ObjectPathConnector
@@ -125,7 +127,7 @@ sap.ui.define([
 		 * @returns {Promise<map[]>} Resolving with a list of maps for all configured connectors and their requested modules
 		 */
 		getConnectors: function (sNameSpace, bLoadConnectors) {
-			var aConfiguredConnectors = sap.ui.getCore().getConfiguration().getFlexibilityServices();
+			var aConfiguredConnectors = Configuration.getFlexibilityServices();
 			var mConnectors = [];
 			if (bLoadConnectors) {
 				mConnectors = [STATIC_FILE_CONNECTOR_CONFIGURATION];
@@ -314,7 +316,7 @@ sap.ui.define([
 			if (!mParameters) {
 				mParameters = {};
 			}
-			mParameters["sap-language"] = sap.ui.getCore().getConfiguration().getLanguage();
+			mParameters["sap-language"] = Configuration.getLanguage();
 		}
 	};
 });

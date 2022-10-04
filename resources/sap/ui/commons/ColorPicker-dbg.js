@@ -22,13 +22,12 @@ sap.ui.define(['./library', 'sap/ui/unified/ColorPicker', "sap/base/Log"],
 	 * @extends sap.ui.unified.ColorPicker
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.38, replaced by {@link sap.ui.unified.ColorPicker}
 	 * @alias sap.ui.commons.ColorPicker
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ColorPicker = UnifiedColorPicker.extend("sap.ui.commons.ColorPicker", /** @lends sap.ui.commons.ColorPicker.prototype */ {
 		metadata : {

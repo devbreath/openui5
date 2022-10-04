@@ -51,14 +51,13 @@ sap.ui.define([
 		 * @extends sap.m.DynamicDateOption
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @private
 		 * @ui5-restricted sap.ui.mdc
 		 * @experimental As of version 1.96
 		 * @since 1.96
 		 * @alias sap.ui.mdc.condition.OperatorDynamicDateOption
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var OperatorDynamicDateOption = DynamicDateOption.extend("sap.ui.mdc.condition.OperatorDynamicDateOption", /** @lends sap.ui.mdc.condition.OperatorDynamicDateOption.prototype */ {
 			metadata: {

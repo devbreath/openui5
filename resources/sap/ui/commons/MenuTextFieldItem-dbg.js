@@ -23,14 +23,13 @@ sap.ui.define(['./MenuItemBase', './library', 'sap/ui/unified/MenuTextFieldItem'
 	 * @extends sap.ui.unified.MenuTextFieldItem
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.21.0.
 	 * Please use the control <code>sap.ui.unified.MenuTextFieldItem</code> of the library <code>sap.ui.unified</code> instead.
 	 * @alias sap.ui.commons.MenuTextFieldItem
-	 * @ui5-metamodel This control/element will also be described in the UI5 (legacy) design time meta model
 	 */
 	var MenuTextFieldItem = UnifiedMenuTextFieldItem.extend("sap.ui.commons.MenuTextFieldItem", /** @lends sap.ui.commons.MenuTextFieldItem.prototype */ { metadata : {
 

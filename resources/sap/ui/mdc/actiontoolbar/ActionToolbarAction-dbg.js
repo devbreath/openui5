@@ -21,14 +21,13 @@ sap.ui.define([
 	 * @class The action for an {@link sap.ui.mdc.ActionToolbar ActionToolbar}) control
 	 * @extends sap.ui.core.Control
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.58
 	 * @experimental As of version 1.58
 	 * @ui5-restricted sap.ui.mdc
 	 * @alias sap.ui.mdc.actiontoolbar.ActionToolbarAction
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
     var ActionToolbarAction = Control.extend("sap.ui.mdc.actiontoolbar.ActionToolbarAction", {
         metadata: {
@@ -59,9 +58,9 @@ sap.ui.define([
                     type: "sap.ui.core.Control",
 					multiple: false
                 }
-            },
-            renderer: ActionToolbarActionRenderer
-        }
+            }
+        },
+        renderer: ActionToolbarActionRenderer
     });
 
     /**

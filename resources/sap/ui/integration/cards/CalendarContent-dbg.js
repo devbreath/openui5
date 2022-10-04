@@ -25,7 +25,8 @@ sap.ui.define([
 		"sap/ui/unified/calendar/CalendarUtils",
 		"sap/ui/unified/DateTypeRange",
 		"sap/ui/core/date/UniversalDate",
-		"sap/ui/unified/CalendarLegendItem"
+		"sap/ui/unified/CalendarLegendItem",
+		"sap/ui/core/Configuration"
 	],
 	function (CalendarContentRenderer,
 		ResizeHandler,
@@ -48,7 +49,8 @@ sap.ui.define([
 		CalendarUtils,
 		DateTypeRange,
 		UniversalDate,
-		CalendarLegendItem) {
+		CalendarLegendItem,
+		Configuration) {
 		"use strict";
 
 		var ActionArea = library.CardActionArea;
@@ -68,7 +70,7 @@ sap.ui.define([
 		 * @extends sap.ui.integration.cards.BaseContent
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @private
@@ -712,7 +714,7 @@ sap.ui.define([
 		function _getLocale() {
 
 			if (!this._sLocale) {
-				this._sLocale = sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale().toString();
+				this._sLocale = Configuration.getFormatSettings().getFormatLocale().toString();
 			}
 
 			return this._sLocale;

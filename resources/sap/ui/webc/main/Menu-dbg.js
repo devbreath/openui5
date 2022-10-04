@@ -39,14 +39,13 @@ sap.ui.define([
 	 * </ul> Note: if the text ditrection is set to Right-to-left (RTL), <code>Arrow Right</code> and <code>Arrow Left</code> functionality is swapped. <br>
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.102.0
 	 * @experimental Since 1.102.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.Menu
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Menu = WebComponent.extend("sap.ui.webc.main.Menu", {
 		metadata: {

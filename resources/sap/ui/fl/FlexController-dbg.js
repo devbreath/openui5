@@ -6,7 +6,6 @@
 
 sap.ui.define([
 	"sap/ui/fl/initial/_internal/changeHandlers/ChangeHandlerStorage",
-	"sap/ui/fl/write/api/Version",
 	"sap/ui/fl/Utils",
 	"sap/ui/fl/Layer",
 	"sap/ui/fl/Change",
@@ -21,7 +20,6 @@ sap.ui.define([
 	"sap/base/Log"
 ], function(
 	ChangeHandlerStorage,
-	Version,
 	Utils,
 	Layer,
 	Change,
@@ -86,7 +84,7 @@ sap.ui.define([
 	 * @alias sap.ui.fl.FlexController
 	 * @experimental Since 1.27.0
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 */
 	var FlexController = function(sComponentName) {
 		this._oChangePersistence = undefined;
@@ -465,10 +463,11 @@ sap.ui.define([
 	 * @param {boolean} [bDraft=false] - Indicates if changes should be written as a draft
 	 * @param {string} [sLayer] - Layer for which the changes should be saved
 	 * @param {boolean} [bRemoveOtherLayerChanges=false] - Whether to remove changes on other layers before saving
+	 * @param {boolean} [bCondenseAnyLayer] - This will enable condensing regardless of the current layer
 	 * @returns {Promise} resolving with an array of responses or rejecting with the first error
 	 * @public
 	 */
-	FlexController.prototype.saveAll = function(oAppComponent, bSkipUpdateCache, bDraft, sLayer, bRemoveOtherLayerChanges) {
+	FlexController.prototype.saveAll = function(oAppComponent, bSkipUpdateCache, bDraft, sLayer, bRemoveOtherLayerChanges, bCondenseAnyLayer) {
 		var sParentVersion;
 		var aDraftFilenames;
 		if (bDraft) {
@@ -480,7 +479,7 @@ sap.ui.define([
 			aDraftFilenames = oVersionModel.getProperty("/draftFilenames");
 		}
 		return this._removeOtherLayerChanges(oAppComponent, sLayer, bRemoveOtherLayerChanges)
-			.then(this._oChangePersistence.saveDirtyChanges.bind(this._oChangePersistence, oAppComponent, bSkipUpdateCache, undefined, sParentVersion, aDraftFilenames))
+			.then(this._oChangePersistence.saveDirtyChanges.bind(this._oChangePersistence, oAppComponent, bSkipUpdateCache, undefined, sParentVersion, aDraftFilenames, bCondenseAnyLayer, sLayer))
 			.then(function(oResult) {
 				if (bDraft && oResult && oResult.response) {
 					var vChangeDefinition = oResult.response;
@@ -546,10 +545,10 @@ sap.ui.define([
 	 *
 	 * @param {object} oSelector selector of the control
 	 * @param {sap.ui.core.Component} oComponent - component instance that is currently loading
-	 * @returns {boolean} Returns true if there are open dependencies
+	 * @returns {sap.ui.fl.Change[]} Array of all open dependent changes for the control
 	 */
-	FlexController.prototype.checkForOpenDependenciesForControl = function(oSelector, oComponent) {
-		return this._oChangePersistence.checkForOpenDependenciesForControl(oSelector, oComponent);
+	FlexController.prototype.getOpenDependentChangesForControl = function(oSelector, oComponent) {
+		return this._oChangePersistence.getOpenDependentChangesForControl(oSelector, oComponent);
 	};
 
 	/**

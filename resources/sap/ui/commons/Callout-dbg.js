@@ -22,13 +22,12 @@ sap.ui.define(['./CalloutBase', './library', './CalloutRenderer'],
 	 * @extends sap.ui.commons.CalloutBase
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. If you want to achieve a similar behavior, use a <code>sap.m.Popover</code> control and open it next to your control.
 	 * @alias sap.ui.commons.Callout
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Callout = CalloutBase.extend("sap.ui.commons.Callout", /** @lends sap.ui.commons.Callout.prototype */ { metadata : {
 

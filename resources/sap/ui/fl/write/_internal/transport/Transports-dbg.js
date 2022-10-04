@@ -27,7 +27,7 @@ sap.ui.define([
 	 * Entity that handles ABAP transport related information.
 	 * @alias sap.ui.fl.write._internal.transport.Transports
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.74.0
 	 * @private
 	 * @ui5-restricted sap.ui.fl.write._internal.transport
@@ -142,7 +142,7 @@ sap.ui.define([
 				var oData = {};
 				oData.namespace = oCurrentChange.getNamespace();
 				oData.fileName = oCurrentChange.getId();
-				oData.fileType = oCurrentChange.getDefinition().fileType;
+				oData.fileType = oCurrentChange.getFileType();
 				aTransportData.push(oData);
 			}
 			return aTransportData;

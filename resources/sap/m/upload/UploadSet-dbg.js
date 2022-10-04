@@ -29,10 +29,11 @@ sap.ui.define([
 	"sap/m/upload/UploadSetToolbarPlaceholder",
 	"sap/m/IllustratedMessage",
 	"sap/m/IllustratedMessageType",
-	"sap/m/IllustratedMessageSize"
+	"sap/m/IllustratedMessageSize",
+	"sap/ui/core/Core"
 ], function (Control, KeyCodes, Log, deepEqual, MobileLibrary, Button, Dialog, List, MessageBox, OverflowToolbar,
 			 StandardListItem, Text, ToolbarSpacer, FileUploader, UploadSetItem, Uploader, Renderer, UploaderHttpRequestMethod,
-			DragDropInfo, DropInfo, Library, UploadSetToolbarPlaceholder, IllustratedMessage,IllustratedMessageType, IllustratedMessageSize) {
+			DragDropInfo, DropInfo, Library, UploadSetToolbarPlaceholder, IllustratedMessage,IllustratedMessageType, IllustratedMessageSize, Core) {
 	"use strict";
 
 	/**
@@ -46,12 +47,11 @@ sap.ui.define([
 	 * and requests, unified behavior of instant and deferred uploads, as well as improved progress indication.
 	 * @extends sap.ui.core.Control
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @public
 	 * @since 1.63
 	 * @alias sap.m.upload.UploadSet
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel.
 	 */
 	var UploadSet = Control.extend("sap.m.upload.UploadSet", {
 		metadata: {
@@ -144,7 +144,27 @@ sap.ui.define([
 				 * In addition, if instant upload is set to false the mode sap.m.ListMode.MultiSelect is not supported and will be automatically set to sap.m.ListMode.None.
 				 * @since 1.100.0
 				 */
-				mode: {type: "sap.m.ListMode", group: "Behavior", defaultValue: Library.ListMode.MultiSelect}
+				mode: {type: "sap.m.ListMode", group: "Behavior", defaultValue: Library.ListMode.MultiSelect},
+				/**
+				  * Enables CloudFile picker feature to upload files from cloud.
+				  * @experimental Since 1.106.
+				  */
+				 cloudFilePickerEnabled: {type: "boolean", group: "Behavior", defaultValue: false},
+				/**
+				  * Url of the FileShare OData V4 service supplied for CloudFile picker control.
+				  * @experimental Since 1.106.
+				  */
+				 cloudFilePickerServiceUrl: {type: "sap.ui.core.URI", group: "Data", defaultValue: ""},
+				/**
+				  * The text of the CloudFile picker button. The default text is "Upload from cloud" (translated to the respective language).
+				  * @experimental Since 1.106.
+				  */
+				 cloudFilePickerButtonText: {type: 'string', defaultValue: ""},
+				 /**
+				  * Lets the user upload entire files from directories and sub directories.
+				  * @since 1.107.
+				  */
+				 directory: {type: "boolean", group: "Behavior", defaultValue: false}
 				},
 			defaultAggregation: "items",
 			aggregations: {
@@ -500,6 +520,7 @@ sap.ui.define([
 				description: this.getNoDataDescription()
 			});
 		this.setAggregation("_illustratedMessage", illustratedMessage);
+		this._cloudFilePickerControl = null;
 	};
 
 	UploadSet.prototype.exit = function () {
@@ -602,7 +623,7 @@ sap.ui.define([
 			this._oToolbar = this.getAggregation("toolbar");
 			if (!this._oToolbar) {
 				this._oToolbar = new OverflowToolbar(this.getId() + "-toolbar", {
-					content: [this._oNumberOfAttachmentsTitle, new ToolbarSpacer(), this.getDefaultFileUploader()]
+					content: [this._oNumberOfAttachmentsTitle, new ToolbarSpacer(), this.getDefaultFileUploader(), this._getCloudFilePicker()]
 				});
 				this._iFileUploaderPH = 2;
 				this.addDependent(this._oToolbar);
@@ -614,6 +635,7 @@ sap.ui.define([
 					// fallback position to add file uploader control if UploadSetToolbarPlaceHolder instance not found
 					this._oToolbar.addContent(this.getDefaultFileUploader());
 				}
+				this._oToolbar.addContent(this._getCloudFilePicker());
 			}
 		}
 
@@ -809,6 +831,17 @@ sap.ui.define([
 		return this;
 	};
 
+	UploadSet.prototype.setDirectory = function (bDirectory) {
+		if (this.getDirectory() !== bDirectory) {
+			this.setProperty("directory", bDirectory);
+			this.getDefaultFileUploader().setDirectory(bDirectory);
+			if (bDirectory) {
+				this.setProperty("multiple", false); // disable multiple files selection when directory selection is enabled.
+			}
+		}
+		return this;
+	};
+
 	UploadSet.prototype.setMode = function(sMode) {
 		if (sMode === Library.ListMode.Delete) {
 			this.setProperty("mode", Library.ListMode.None);
@@ -859,6 +892,14 @@ sap.ui.define([
 		}
 
 		return this._oUploadButton;
+	};
+
+	UploadSet.prototype.setUploadUrl = function (sUploadUrl) {
+		this.setProperty("uploadUrl", sUploadUrl);
+		if (this._oUploader) {
+			this._oUploader.setUploadUrl(sUploadUrl);
+		}
+		return this;
 	};
 
 	/* ============== */
@@ -926,22 +967,100 @@ sap.ui.define([
 	};
 
 	UploadSet.prototype._onDropFile = function (oEvent) {
-		var oFiles;
 		this._oDragIndicator = false;
 		this._getIllustratedMessage();
 		oEvent.preventDefault();
 		if (this.getUploadEnabled()) {
-			oFiles = oEvent.getParameter("browserEvent").dataTransfer.files;
-			// Handling drag and drop of multiple files to upload with multiple property set
-			if (oFiles && oFiles.length > 1 && !this.getMultiple()) {
+			var oItems = oEvent.getParameter("browserEvent").dataTransfer.items;
+			var aEntryTypes = Array.from(oItems).map(function (oEntry) {
+				var oWebKitEntry = oEntry.webkitGetAsEntry();
+				return {
+					entryType: oWebKitEntry && oWebKitEntry.isFile ? 'File' : 'Directory'
+				};
+			});
+			// handlding multiple property drag & drop scenarios
+			if (oItems && oItems.length > 1 && !this.getMultiple() && !this.getDirectory()) {
+				// Handling drag and drop of multiple files to upload with multiple property set
 				var sMessage = this._oRb.getText("UPLOADCOLLECTION_MULTIPLE_FALSE");
 				Log.warning("Multiple files upload is retsricted for this multiple property set");
 				MessageBox.error(sMessage);
 				return;
+			} else if (oItems && oItems.length > 1 && this.getMultiple() && !isFileOrFolderEntry('File', aEntryTypes)) {
+				var sMessageDropFilesOnly = this._oRb.getText("UPLOAD_SET_DIRECTORY_FALSE");
+				Log.warning("Multiple files upload is retsricted, drag & drop only files");
+				MessageBox.error(sMessageDropFilesOnly);
+				return;
 			}
-			this._processNewFileObjects(oFiles);
+
+			// handling directory property drag & drop scenarios
+			if (oItems && !this.getDirectory() && isFileOrFolderEntry('Directory', aEntryTypes)) {
+				var sMessageDirectory = this._oRb.getText("UPLOAD_SET_DIRECTORY_FALSE");
+				Log.warning("Directory of files upload is retsricted for this directory property set");
+				MessageBox.error(sMessageDirectory);
+				return;
+			} else if (oItems && this.getDirectory() && !isFileOrFolderEntry('Directory', aEntryTypes)) {
+				var sMessageDragDropDirectory = this._oRb.getText("UPLOAD_SET_DROP_DIRECTORY");
+				Log.warning("Directory of files upload is retsricted, drag & drop only directories here.");
+				MessageBox.error(sMessageDragDropDirectory);
+				return;
+			}
+			if (oItems && oItems.length) {
+				this._getFilesFromDataTransferItems(oItems).then(function (oFiles) {
+					if (oFiles && oFiles.length) {
+						var oFileUploaderInstance = this.getDefaultFileUploader();
+						if (oFileUploaderInstance && oFileUploaderInstance._areFilesAllowed && oFileUploaderInstance._areFilesAllowed(oFiles)) {
+							this._processNewFileObjects(oFiles);
+						}
+					}
+				}.bind(this));
+			}
+		}
+
+		function isFileOrFolderEntry(sType, aEntries) {
+			return aEntries.every(function (oEntry) {
+				return oEntry.entryType === sType;
+			});
 		}
 	};
+
+	UploadSet.prototype._getFilesFromDataTransferItems = function (dataTransferItems) {
+		var aFiles = [];
+		return new Promise(function (resolve, reject) {
+			var aEntriesPromises = [];
+			for (var i = 0; i < dataTransferItems.length; i++) {
+				aEntriesPromises.push(traverseFileTreePromise(dataTransferItems[i].webkitGetAsEntry()));
+			}
+			Promise.all(aEntriesPromises)
+				.then(function (entries) {
+					resolve(aFiles);
+				}, function(err) {
+					reject(err);
+				});
+		});
+
+		function traverseFileTreePromise(item) {
+			return new Promise(function (resolve, reject) {
+				if (item.isFile) {
+					item.file(function (oFile) {
+						aFiles.push(oFile);
+						resolve(oFile);
+					}, function(err){
+						reject(err);
+					});
+				} else if (item.isDirectory) {
+					var dirReader = item.createReader();
+					dirReader.readEntries(function (entries) {
+						var aEntriesPromises = [];
+						for (var i = 0; i < entries.length; i++) {
+							aEntriesPromises.push(traverseFileTreePromise(entries[i]));
+						}
+						resolve(Promise.all(aEntriesPromises));
+					});
+				}
+			});
+		}
+	};
+
 
 	UploadSet.prototype._getDragIndicator = function () {
 		return this._oDragIndicator;
@@ -995,7 +1114,7 @@ sap.ui.define([
 				mimeType: this.getMediaTypes(),
 				icon: "",
 				iconFirst: false,
-				multiple: this.getMultiple(),
+				multiple: this.getDirectory() ? false : this.getMultiple(),
 				style: "Transparent",
 				name: "uploadSetFileUploader",
 				sameFilenameAllowed: true,
@@ -1009,7 +1128,8 @@ sap.ui.define([
 				typeMissmatch: [this._fireFileTypeMismatch, this],
 				fileSizeExceed: [this._fireFileSizeExceed, this],
 				filenameLengthExceed: [this._fireFilenameLengthExceed, this],
-				visible: !this.getUploadButtonInvisible()
+				visible: !this.getUploadButtonInvisible(),
+				directory: this.getDirectory()
 			});
 		}
 
@@ -1723,5 +1843,167 @@ sap.ui.define([
 		this._oToolbar.getContent()[this._iFileUploaderPH].setVisible(false);
 		this._oToolbar.insertContent(fileUploader, this._iFileUploaderPH);
 	};
+
+	/**
+	 * Returns CloudFile picker button
+	 * @return {sap.m.Button} CloudPicker button
+	 * @private
+	 */
+	 UploadSet.prototype._getCloudFilePicker = function() {
+		if (this.getCloudFilePickerEnabled()) {
+			return new Button({
+				text:  this.getCloudFilePickerButtonText() ? this.getCloudFilePickerButtonText() :  this._oRb.getText("UPLOAD_SET_DEFAULT_CFP_BUTTON_TEXT"),
+				press: [this._invokeCloudFilePicker, this]
+			});
+		}
+		return null;
+	};
+
+	/**
+	 * Creates and invokes CloudFilePicker control instance
+	 * @private
+	 * @returns {Object} cloudFile picker instance
+	 */
+	 UploadSet.prototype._invokeCloudFilePicker = function() {
+		 var oCloudFilePickerInstance = null;
+		 if (this._cloudFilePickerControl) {
+			oCloudFilePickerInstance = this._getCloudFilePickerInstance();
+			oCloudFilePickerInstance.open();
+		 } else {
+			 // Dynamically load and cache CloudFilePicker control for first time
+			 this._loadCloudFilePickerDependency()
+			 .then(function(cloudFilePicker){
+				this._cloudFilePickerControl = cloudFilePicker;
+				oCloudFilePickerInstance = this._getCloudFilePickerInstance();
+				oCloudFilePickerInstance.open();
+			 }.bind(this))
+			 .catch(function(error) {
+				 Log.error(error);
+			 });
+		 }
+		return oCloudFilePickerInstance;
+	};
+
+	/**
+	 * Event handler for CloudFile picker selector
+	 * @param {Object} oEvent CloudFile picker file selection DOM change event
+	 * @private
+	 */
+	UploadSet.prototype._onCloudPickerFileChange = function(oEvent) {
+
+		var mParameters = oEvent.getParameters();
+		var aFiles = [];
+		if (mParameters && mParameters.selectedFiles) {
+			mParameters.selectedFiles.forEach(function (file) {
+				aFiles.push(this._createFileFromCloudPickerFile(file));
+			}.bind(this));
+		}
+
+		// invoking this method to handle file uploads
+		this._processNewCloudPickerFileObjects(aFiles);
+	};
+
+	/**
+	 * Creates file object that is to be uploaded from the CloudFilePicker file object
+	 * @param {sap.suite.ui.commons.CloudFileInfo} oCloudFile CloudFilepicker file object
+	 * @returns {Object} file metadata with file object and fileshare properties
+	 * @private
+	 */
+	UploadSet.prototype._createFileFromCloudPickerFile = function(oCloudFile) {
+		var parts = [new Blob([])];
+		var oFileMetaData = {
+			type: oCloudFile.getFileShareItemContentType(),
+			size: oCloudFile.getFileShareItemContentSize(),
+			webkitRelativePath: '',
+			name: oCloudFile.getFileShareItemName()
+		};
+		var oFile = new File(parts, oCloudFile.getFileShareItemName(), oFileMetaData);
+		return {
+			file: oFile,
+			fileShareProperties: oCloudFile.mProperties
+		};
+	};
+
+	/**
+	 * Maps the UploadSetItem with fileShare properties from the CloudFilePicker
+	 * @param {sap.m.UploadSetItem} oItem UploadSetItem to be mapped
+	 * @param {Object} oFileShareItem fileshare properties used for mapping
+	 * @private
+	 */
+	UploadSet.prototype._mapFileShareItemToUploadSetItem = function(oItem, oFileShareItem) {
+		oItem.setFileName(oFileShareItem.fileShareItemName);
+		oItem.setUrl(oFileShareItem.fileShareItemContentLink);
+	};
+
+	/**
+	 * Processing and uploading of file objects selected from the CloudFilePicker
+	 * @param {Array} oFiles File metadata list containing file to be uploaded and fileshare properties used for mapping
+	 * @private
+	 */
+	UploadSet.prototype._processNewCloudPickerFileObjects = function (oFiles) {
+		var	oItem;
+
+		oFiles.forEach(function (oFileMetaData) {
+			var oFile = oFileMetaData.file,
+			oFileShareProperties = oFileMetaData.fileShareProperties;
+			oItem = new UploadSetItem({
+				uploadState: UploadState.Ready
+			});
+			if (oFileShareProperties && oFileShareProperties !== null) {
+				// invoked and each selected file to map the fileshare properties to uploadsetItem to be uploaded
+				this._mapFileShareItemToUploadSetItem(oItem, oFileShareProperties);
+			}
+			oItem._setFileObject(oFile);
+			oItem.setFileName(oFile.name);//For handling curly braces in file name we have to use setter.Otherwise it will be treated as binding.
+
+			if (!this.fireBeforeItemAdded({item: oItem})) {
+				return;
+			}
+			this.insertIncompleteItem(oItem);
+			this.fireAfterItemAdded({item: oItem});
+
+			if (this.getInstantUpload()) {
+				this._uploadItemIfGoodToGo(oItem);
+			}
+		}.bind(this));
+	};
+
+	/**
+	 * Dynamically require CloudFilePicker Control
+	 * @returns {Promise} Promise that resolves on sucessful load of CloudFilePicker control
+	 * @private
+	 */
+	UploadSet.prototype._loadCloudFilePickerDependency = function() {
+		return new Promise(function (resolve, reject) {
+			Core.loadLibrary("sap.suite.ui.commons", { async: true })
+				.then(function() {
+					sap.ui.require(["sap/suite/ui/commons/CloudFilePicker"], function(cloudFilePicker) {
+						resolve(cloudFilePicker);
+					}, function (error) {
+						reject(error);
+					});
+				})
+				.catch(function () {
+					reject("CloudFilePicker Control not available.");
+				});
+		});
+	};
+
+	/**
+	 * Creates CloudFilePicker Instance
+	 * @returns {sap.suite.ui.commons.CloudFilePicker} CloudFilePicker instance
+	 * @private
+	 */
+	UploadSet.prototype._getCloudFilePickerInstance = function() {
+		return new this._cloudFilePickerControl({
+			serviceUrl: this.getCloudFilePickerServiceUrl(),
+			confirmButtonText: this._oRb.getText("SELECT_PICKER_TITLE_TEXT"),
+			title: this._oRb.getText("SELECT_PICKER_TITLE_TEXT"),
+			fileNameMandatory: true,
+			enableDuplicateCheck:this.getSameFilenameAllowed(),
+			select: this._onCloudPickerFileChange.bind(this)
+		});
+	};
+
 	return UploadSet;
 });

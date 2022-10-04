@@ -57,7 +57,7 @@ sap.ui.define([
 	 * Provides Rename handling functionality
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -227,7 +227,7 @@ sap.ui.define([
 
 			this._$oEditableControlDomRef.css("visibility", "hidden");
 			_$oWrapper.offset({left: this._$oEditableControlDomRef.offset().left});
-			RenameHandler._setEditableFieldPosition();
+			RenameHandler._setEditableFieldPosition.apply(this);
 			this._$editableField.css("visibility", "");
 			this._$editableField.trigger("focus");
 

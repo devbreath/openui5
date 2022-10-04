@@ -29,6 +29,7 @@ sap.ui.define([
     'sap/ui/Device',
     'sap/base/Log',
     'sap/base/assert',
+    'sap/ui/core/Configuration',
     // jQuery Plugin 'firstFocusableDomRef'
 	'sap/ui/dom/jquery/Focusable'
 ],
@@ -55,7 +56,8 @@ sap.ui.define([
 		BaseObject,
 		Device,
 		Log,
-		assert
+		assert,
+		Configuration
 	) {
 	"use strict";
 
@@ -88,13 +90,12 @@ sap.ui.define([
 	 * The Ux3 GoldReflection Shell, which is an application frame with navigation capabilities.
 	 * It is supposed to be added to a direct child of the BODY tag of a page and there should be no other parts of the page consuming space outside the Shell.
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.38, replaced by {@link sap.m.Shell}
 	 * @alias sap.ui.ux3.Shell
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Shell = Control.extend("sap.ui.ux3.Shell", /** @lends sap.ui.ux3.Shell.prototype */ { metadata : {
 
@@ -453,7 +454,7 @@ sap.ui.define([
 		this._adaptContentHeight();
 
 		// remember RTL mode to avoid repeated checks
-		this._bRtl = sap.ui.getCore().getConfiguration().getRTL();
+		this._bRtl = Configuration.getRTL();
 
 		if (this._getPersonalization().hasChanges()) {
 			this._getPersonalization().applySettings(this._getPersonalization().oSettings);
@@ -1148,7 +1149,6 @@ sap.ui.define([
 	 *
 	 * @type sap.ui.commons.SearchField
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Shell.prototype.getSearchField = function() {
 		if (!this._oSearchField) {
@@ -1203,7 +1203,6 @@ sap.ui.define([
 	 *         The ID of the PaneBarItem which should be marked as selected.
 	 * @type this
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Shell.prototype.openPane = function(sPaneId) {
 		var that = this;
@@ -1253,7 +1252,6 @@ sap.ui.define([
 	 *
 	 * @type this
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Shell.prototype.closePane = function() {
 		this._closePane();
@@ -1266,7 +1264,6 @@ sap.ui.define([
 	 *
 	 * @type boolean
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Shell.prototype.isPaneOpen = function() {
 		return (this._sOpenPaneId != null);
@@ -2372,7 +2369,6 @@ sap.ui.define([
 	 *         If set, the controls previously contained in the Shell will be destroyed, to avoid memory leaks.
 	 * @type sap.ui.core.Control[]
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Shell.prototype.setContent = function(vContent, bDestruct) {
 		assert(vContent === null
@@ -2425,7 +2421,6 @@ sap.ui.define([
 	 *         If set, the controls previously contained in the pane will be destroyed, to avoid memory leaks.
 	 * @type sap.ui.core.Control[]
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Shell.prototype.setPaneContent = function(vContent, bDestruct) {
 		assert((vContent instanceof Control)
@@ -2678,7 +2673,6 @@ sap.ui.define([
 	 *
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Shell.prototype.openPersonalizationDialog = function() {
 		this._getPersonalization().openDialog();
@@ -2694,7 +2688,6 @@ sap.ui.define([
 	 *         Personalization settings object
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Shell.prototype.initializePersonalization = function(oSettings) {
 		this._getPersonalization().initializeSettings(oSettings);

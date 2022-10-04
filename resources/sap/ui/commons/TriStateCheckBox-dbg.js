@@ -34,14 +34,13 @@ sap.ui.define([
 	 * TriStateCheckBox to reflect mixed state for checkboxes. The control can display three states, namely checked, unchecked and mixed. However, mixed state cannot be directly reached by user interaction on the particular control.
 	 * It can be only set by the control's public toggle function, to make a behaviour possible which is e.g. required in checkbox trees.
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.7.2
 	 * @deprecated Since version 1.38.
 	 * @alias sap.ui.commons.TriStateCheckBox
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var TriStateCheckBox = Control.extend("sap.ui.commons.TriStateCheckBox", /** @lends sap.ui.commons.TriStateCheckBox.prototype */ { metadata : {
 
@@ -175,7 +174,6 @@ sap.ui.define([
 	 * @param {sap.ui.commons.TriStateCheckBoxState} destState
 	 *         destined selection state of checkbox
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	TriStateCheckBox.prototype.toggle = function(destState) {
 		if (destState in TriStateCheckBoxState) {

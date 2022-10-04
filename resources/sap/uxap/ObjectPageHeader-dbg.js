@@ -94,7 +94,6 @@ sap.ui.define([
 	 * @public
 	 * @alias sap.uxap.ObjectPageHeader
 	 * @since 1.26
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ObjectPageHeader = Control.extend("sap.uxap.ObjectPageHeader", /** @lends sap.uxap.ObjectPageHeader.prototype */ {
 		metadata: {
@@ -350,7 +349,9 @@ sap.ui.define([
 				}
 			},
 			designtime: "sap/uxap/designtime/ObjectPageHeader.designtime"
-		}
+		},
+
+		renderer: ObjectPageHeaderRenderer
 	});
 
 	ObjectPageHeader.prototype._iAvailablePercentageForActions = 0.3;

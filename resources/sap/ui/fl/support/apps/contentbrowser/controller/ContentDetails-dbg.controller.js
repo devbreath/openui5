@@ -13,7 +13,9 @@ sap.ui.define([
 	"sap/ui/fl/support/apps/contentbrowser/lrepConnector/LRepConnector",
 	"sap/ui/fl/support/apps/contentbrowser/utils/DataUtils",
 	"sap/ui/fl/Layer",
-	"sap/m/library"
+	"sap/m/library",
+	"sap/ui/model/json/JSONModel",
+	"sap/ui/core/UIComponent"
 ], function (
 	Controller,
 	Dialog,
@@ -23,7 +25,9 @@ sap.ui.define([
 	LRepConnector,
 	DataUtils,
 	Layer,
-	mobileLibrary
+	mobileLibrary,
+	JSONModel,
+	UIComponent
 ) {
 	"use strict";
 
@@ -36,7 +40,7 @@ sap.ui.define([
 	 * @constructor
 	 * @alias sap.ui.fl.support.apps.contentbrowser.controller.ContentDetails
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @experimental Since 1.45
 	 */
 	return Controller.extend("sap.ui.fl.support.apps.contentbrowser.controller.ContentDetails", {
@@ -51,7 +55,7 @@ sap.ui.define([
 		 */
 		onInit: function () {
 			this._initAndBindSelectedContentModel();
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			var oRouter = UIComponent.getRouterFor(this);
 			oRouter.getRoute("ContentDetails").attachMatched(this._onRouteMatched, this);
 			oRouter.getRoute("ContentDetailsFlip").attachMatched(this._onRouteMatched, this);
 		},
@@ -61,7 +65,7 @@ sap.ui.define([
 		 * @private
 		 */
 		_initAndBindSelectedContentModel: function () {
-			this.oSelectedContentModel = new sap.ui.model.json.JSONModel();
+			this.oSelectedContentModel = new JSONModel();
 			this.getView().setModel(this.oSelectedContentModel, "selectedContent");
 		},
 
@@ -164,7 +168,7 @@ sap.ui.define([
 		onEditClicked: function () {
 			var oSelectedContentModel = this.getView().getModel("selectedContent");
 			var oContentData = oSelectedContentModel.getData();
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			var oRouter = UIComponent.getRouterFor(this);
 
 			oRouter.navTo("ContentDetailsEdit", {
 				layer: oContentData.layer,
@@ -298,7 +302,7 @@ sap.ui.define([
 		 */
 		_deleteFile: function (sLayer, sNamespace, sFileName, sFileType, sTransportId, sSelectedLayer, bSupport) {
 			return LRepConnector.deleteFile(sLayer, sNamespace, sFileName, sFileType, sTransportId, bSupport).then(function () {
-				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+				var oRouter = UIComponent.getRouterFor(this);
 				oRouter.navTo("LayerContentMaster", {
 					layer: sSelectedLayer,
 					namespace: encodeURIComponent(sNamespace)

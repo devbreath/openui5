@@ -179,6 +179,7 @@
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/core/themes/base/library-parameters.json",
 			"size": 73522,
 			"theme": "base"
 		},
@@ -220,6 +221,10 @@
 			"size": 1849,
 			"designtime": true,
 			"theme": "base"
+		},
+		{
+			"name": "resources.json",
+			"size": 3962
 		},
 		{
 			"name": "shared.less",

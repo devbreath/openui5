@@ -32,13 +32,12 @@ sap.ui.define([
 	 * @class
 	 * Provides navigation between pages within a list of numbered pages.
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38.
 	 * @alias sap.ui.commons.Paginator
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Paginator = Control.extend("sap.ui.commons.Paginator", /** @lends sap.ui.commons.Paginator.prototype */ { metadata : {
 

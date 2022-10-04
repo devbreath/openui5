@@ -55,17 +55,18 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 30449,
+			"size": 30511,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/tnt/themes/sap_horizon_dark/library-parameters.json",
 			"size": 2420,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library.css",
-			"size": 30445,
+			"size": 30507,
 			"theme": "sap_horizon_dark"
 		},
 		{
@@ -82,13 +83,17 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 31988,
+			"size": 32050,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 31984,
+			"size": 32046,
 			"theme": "sap_horizon_dark"
+		},
+		{
+			"name": "resources.json",
+			"size": 1804
 		}
 	]
 }

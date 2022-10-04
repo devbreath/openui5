@@ -41,13 +41,12 @@ sap.ui.define([
 	 * @implements sap.ui.commons.ToolbarItem, sap.ui.core.Label
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. Instead, use the <code>sap.m.Label</code> control.
 	 * @alias sap.ui.commons.Label
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Label = Control.extend("sap.ui.commons.Label", /** @lends sap.ui.commons.Label.prototype */ { metadata : {
 

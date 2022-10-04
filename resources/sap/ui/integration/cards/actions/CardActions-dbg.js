@@ -59,7 +59,7 @@ sap.ui.define([
 	 * @extends sap.ui.base.ManagedObject
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -102,10 +102,10 @@ sap.ui.define([
 		var oControl = oConfig.control,
 			sActionArea = oConfig.area;
 
-			oConfig.actionControl = oConfig.actionControl || oConfig.control;
-			oConfig.enabledPropertyValue = oConfig.enabledPropertyValue || true;
-			oConfig.disabledPropertyValue = oConfig.disabledPropertyValue || false;
-			oConfig.eventName = oConfig.eventName || "press";
+		oConfig.actionControl = oConfig.actionControl || oConfig.control;
+		oConfig.enabledPropertyValue = oConfig.enabledPropertyValue !== undefined ? oConfig.enabledPropertyValue : true;
+		oConfig.disabledPropertyValue = oConfig.disabledPropertyValue || false;
+		oConfig.eventName = oConfig.eventName || "press";
 
 		if (!oConfig.actions) {
 			// For now firing the event here, after refactor need to think
@@ -131,10 +131,7 @@ sap.ui.define([
 		var oAction = oConfig.action,
 			sActionArea = oConfig.area,
 			oAreaControl = oConfig.control,
-			oActionControl = oConfig.actionControl,
 			sEnabledPropertyName = oConfig.enabledPropertyName,
-			vEnabled = oConfig.enabledPropertyValue,
-			vDisabled = oConfig.disabledPropertyValue,
 			bCheckEnabledState = true,
 			bSingleAction = this._isSingleAction(sActionArea),
 			bActionEnabled = true;
@@ -144,15 +141,14 @@ sap.ui.define([
 
 			if (oAction.service && !bSingleAction) {
 				// When there is a service let it handle the "enabled" state.
-				this._setControlEnabledStateUsingService(oAction, oAreaControl, oActionControl, sEnabledPropertyName, vEnabled, vDisabled);
+				this._setControlEnabledStateUsingService(oConfig);
 			} else {
 				// Or when there is a list item template, handle the "enabled" state with bindProperty + formatter
-				this._setControlEnabledState(oAction, oActionControl, sEnabledPropertyName, vEnabled, vDisabled);
+				this._setControlEnabledState(oConfig);
 			}
 		}
 
 		if (oAction.service && bSingleAction) {
-
 			this._getSingleActionEnabledState(oAction, oAreaControl).then(function (bEnabled) {
 				if (bEnabled) {
 					this._attachEventListener(oConfig);
@@ -176,8 +172,14 @@ sap.ui.define([
 		this._fireActionReady(oAreaControl, sActionArea);
 	};
 
-	CardActions.prototype._setControlEnabledStateUsingService = function (oAction, oAreaControl, oActionControl, sPropertyName, vEnabled, vDisabled) {
-		var oBindingInfo = ManagedObject.bindingParser("{path:''}");
+	CardActions.prototype._setControlEnabledStateUsingService = function (oConfig) {
+		var oAction = oConfig.action,
+			oAreaControl = oConfig.control,
+			oActionControl = oConfig.actionControl,
+			sEnabledPropertyName = oConfig.enabledPropertyName,
+			vEnabled = oConfig.enabledPropertyValue,
+			vDisabled = oConfig.disabledPropertyValue,
+			oBindingInfo = ManagedObject.bindingParser("{path:''}");
 
 		// Async formatter to set oActionControl's property depending
 		// if the list item context is a correct navigation target (decided by the navigation service).
@@ -230,19 +232,25 @@ sap.ui.define([
 			return vDisabled;
 		};
 
-		oActionControl.bindProperty(sPropertyName, oBindingInfo);
+		oActionControl.bindProperty(sEnabledPropertyName, oBindingInfo);
 	};
 
 	/**
 	 * Binds property to the control using a formatter.
-	 * @param {object} oAction The action object which contains binding infos.
-	 * @param {sap.ui.core.Control} oControl The control instance.
-	 * @param {string} sPropertyName The property name of the control to be bound.
-	 * @param {*} vEnabled The value to be set if the property should be enabled.
-	 * @param {*} vDisabled The value to be set if the property should be disabled.
+	 * @param {object} oConfig Object containing configuration for the action
+	 * @param {object} oConfig.action The action object which contains binding infos.
+	 * @param {sap.ui.core.Control} oConfig.actionControl The control instance.
+	 * @param {string} oConfig.enabledPropertyName The property name of the control to be bound.
+	 * @param {*} oConfig.enabledPropertyValue The value to be set if the property should be enabled.
+	 * @param {*} oConfig.disabledPropertyValue The value to be set if the property should be disabled.
 	 */
-	CardActions.prototype._setControlEnabledState = function (oAction, oControl, sPropertyName, vEnabled, vDisabled) {
-		var oBindingInfo,
+	CardActions.prototype._setControlEnabledState = function (oConfig) {
+		var oAction = oConfig.action,
+			oActionControl = oConfig.actionControl,
+			sEnabledPropertyName = oConfig.enabledPropertyName,
+			vEnabled = oConfig.enabledPropertyValue,
+			vDisabled = oConfig.disabledPropertyValue,
+			oBindingInfo,
 			bVal;
 
 		if (typeof oAction.enabled === "object") {
@@ -256,10 +264,10 @@ sap.ui.define([
 		}
 
 		if (oBindingInfo) {
-			oControl.bindProperty(sPropertyName, oBindingInfo);
+			oActionControl.bindProperty(sEnabledPropertyName, oBindingInfo);
 		} else {
 			bVal = (oAction.enabled === false || oAction.enabled === "false") ? vDisabled : vEnabled;
-			oControl.setProperty(sPropertyName, bVal);
+			oActionControl.setProperty(sEnabledPropertyName, bVal);
 		}
 	};
 

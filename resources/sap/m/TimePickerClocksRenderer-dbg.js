@@ -45,6 +45,7 @@ sap.ui.define([], function() {
 			oSegButton = oControl.getAggregation("_buttonAmPm"),
 			aSeparators = oControl._getTimeSeparators(oControl._getDisplayFormatPattern()),
 			sSeparator,
+			iSepearatorsIndex,
 			iIndex;
 
 		if (aButtons) {
@@ -61,7 +62,8 @@ sap.ui.define([], function() {
 			for (iIndex = 0; iIndex < aButtons.length; iIndex++) {
 				oRm.renderControl(aButtons[iIndex]);
 				if (iIndex < aButtons.length - 1) {
-					sSeparator = aSeparators.shift();
+					iSepearatorsIndex = aSeparators.length - (aButtons.length - 1)  + iIndex;
+					sSeparator = aSeparators[iSepearatorsIndex];
 					if (!sSeparator) {
 						sSeparator = " ";
 					}

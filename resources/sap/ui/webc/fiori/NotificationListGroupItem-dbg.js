@@ -40,14 +40,14 @@ sap.ui.define([
 	 *
 	 * <h3>CSS Shadow Parts</h3>
 	 *
-	 * <ui5-link target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/::part">CSS Shadow Parts</ui5-link> allow developers to style elements inside the Shadow DOM. <br>
+	 * {@link https://developer.mozilla.org/en-US/docs/Web/CSS/::part CSS Shadow Parts} allow developers to style elements inside the Shadow DOM. <br>
 	 * The <code>sap.ui.webc.fiori.NotificationListGroupItem</code> exposes the following CSS Shadow Parts:
 	 * <ul>
 	 *     <li>title-text - Used to style the titleText of the notification list group item</li>
 	 * </ul>
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -55,7 +55,6 @@ sap.ui.define([
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.fiori.NotificationListGroupItem
 	 * @implements sap.ui.webc.main.IListItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var NotificationListGroupItem = WebComponent.extend("sap.ui.webc.fiori.NotificationListGroupItem", {
 		metadata: {

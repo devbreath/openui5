@@ -84,7 +84,7 @@ sap.ui.define([
 		 * @param {string} [oConfiguration.additionalInfo] additionalInfo text for the operator. Will be shown in the operator suggest as second column. If not used (undefined) the Include or Exclude information of the operator is used.
 		 * @constructor
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 * @private
 		 * @ui5-restricted sap.fe
 		 * @MDC_PUBLIC_CANDIDATE
@@ -216,7 +216,6 @@ sap.ui.define([
 		 * @enum {string}
 		 * @private
 		 * @since 1.75
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		Operator.ValueType = {
 				/**
@@ -291,7 +290,7 @@ sap.ui.define([
 		 * @param {sap.ui.mdc.enum.BaseType} [sBaseType] Basic type
 		 * @returns {sap.ui.model.Filter} filter object
 		 * @private
-		 * @ui5-restricted sap.ui.mdc
+		 * @ui5-restricted sap.ui.mdc, sap.fe
 		 */
 		Operator.prototype.getModelFilter = function(oCondition, sFieldPath, oType, bCaseSensitive, sBaseType) {
 
@@ -549,12 +548,13 @@ sap.ui.define([
 		 * @param {any} aValues Values
 		 * @param {sap.ui.model.Type} oType Data type
 		 * @param {sap.ui.model.Type[]} [aCompositeTypes] additional Types used for parts of a <code>CompositeType</code>
+		 * @param {int} [iCompositePart] part of the composite type that needs to be validated against it's type
 		 * @throws {sap.ui.model.ValidateException} if the values are invalid
 		 *
 		 * @private
 		 * @ui5-restricted sap.ui.mdc
 		 */
-		Operator.prototype.validate = function(aValues, oType, aCompositeTypes) {
+		Operator.prototype.validate = function(aValues, oType, aCompositeTypes, iCompositePart) {
 
 			var iCount = this.valueTypes.length;
 
@@ -577,7 +577,9 @@ sap.ui.define([
 							vValue = merge([], vValue); // use copy to not change original array
 							for (var j = 0; j < vValue.length; j++) {
 								if (aCompositeTypes[j]) {
-									aCompositeTypes[j].validateValue(vValue[j]);
+									if (iCompositePart === undefined || j === iCompositePart) { // validate only the part that has changed. (if number has changed but not unit, no validation for units type is needed)
+										aCompositeTypes[j].validateValue(vValue[j]);
+									}
 
 									if (oType.getUseInternalValues()) {
 										// use internal format for validation on CompositeType
@@ -842,8 +844,7 @@ sap.ui.define([
 					oCheckValue2.outParameters = oCondition2.outParameters;
 				}
 
-				if (oCondition1.payload && oCondition2.payload) {
-					// TODO: check payload also if only set on one condition?
+				if (oCondition1.payload || oCondition2.payload) { // check payload also if only set on one condition
 					oCheckValue1.payload = oCondition1.payload;
 					oCheckValue2.payload = oCondition2.payload;
 				}

@@ -4,8 +4,8 @@
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-sap.ui.define(["sap/m/library", "sap/base/security/encodeCSS"],
-	function(library, encodeCSS) {
+sap.ui.define(["sap/m/library", "sap/base/security/encodeCSS", "sap/ui/core/Configuration"],
+	function(library, encodeCSS, Configuration) {
 	"use strict";
 
 	// shortcut for sap.m.GenericTileMode
@@ -48,6 +48,7 @@ sap.ui.define(["sap/m/library", "sap/base/security/encodeCSS"],
 		var sAriaRoleDescription = oControl.getAriaRoleDescription();
 		var sAriaRole = oControl.getAriaRole();
 		var isHalfFrame = frameType === frameTypes.OneByHalf || frameType === frameTypes.TwoByHalf;
+		var sBGColor = oControl._sBGColor;
 
 		// Render a link when URL is provided, not in action scope and the state is enabled
 		var bRenderLink = oControl.getUrl() && (!oControl._isInActionScope() || oControl.getMode() === GenericTileMode.IconMode) && sState !== LoadState.Disabled && !oControl._isNavigateActionEnabled() && !oControl._isActionMode();
@@ -62,7 +63,9 @@ sap.ui.define(["sap/m/library", "sap/base/security/encodeCSS"],
 			oRm.openStart("a", oControl);
 			oRm.attr("href", oControl.getUrl());
 			oRm.attr("rel", "noopener noreferrer");
-			oRm.attr("draggable", "false"); // <a> elements are draggable per default, use UI5 DnD instead
+			if (!this._isDragabble(oControl)) {
+				oRm.attr("draggable", "false"); // <a> elements are draggable per default, use UI5 DnD instead
+			}
 		} else {
 			oRm.openStart("div",oControl );
 		}
@@ -112,10 +115,10 @@ sap.ui.define(["sap/m/library", "sap/base/security/encodeCSS"],
 				oRm.class("sapMGTTwoByHalf");
 			} else if (frameType === frameTypes.OneByOne) {
 				if (!this._isThemeHighContrast()) {
-					oRm.style("background-color", oControl.getBackgroundColor());
+					oRm.style("background-color", sBGColor);
 				} else {
-					oRm.style("border-color", oControl.getBackgroundColor());
-					oRm.style("box-shadow", "0 0 0 1px" + oControl.getBackgroundColor());
+					oRm.style("border-color", sBGColor);
+					oRm.style("box-shadow", "0 0 0 1px" + sBGColor);
 				}
 			}
 		}
@@ -256,11 +259,11 @@ sap.ui.define(["sap/m/library", "sap/base/security/encodeCSS"],
 					} else {
 						oRm.class("sapMGTTwoByHalfIcon");
 						if (!this._isThemeHighContrast()) {
-							oRm.style("background-color", oControl.getBackgroundColor());
+							oRm.style("background-color", sBGColor);
 						} else {
 							oRm.class("HighContrastTile");
-							oRm.style("border-color", oControl.getBackgroundColor());
-							oRm.style("box-shadow", "0 0 0 1px" + oControl.getBackgroundColor());
+							oRm.style("border-color", sBGColor);
+							oRm.style("box-shadow", "0 0 0 1px" + sBGColor);
 						}
 					}
 					oRm.openEnd();
@@ -389,6 +392,29 @@ sap.ui.define(["sap/m/library", "sap/base/security/encodeCSS"],
 		} else {
 			oRm.close("div");
 		}
+	};
+
+	/**
+	 * Checks if the GenericTile should be draggable or not.
+	 * @param {sap.m.GenericTile} oControl The GenericTile control
+	 * @returns {boolean} True if the GenericTile is draggable, false otherwise
+	 * @private
+	 */
+	 GenericTileRenderer._isDragabble = function(oControl) {
+		var bDraggable = oControl.getDragDropConfig().some(function(vDragDropInfo){
+			return vDragDropInfo.isDraggable(oControl);
+		});
+
+		if (!bDraggable) {
+			// also check parent config
+			var oParent = oControl.getParent();
+			if (oParent && oParent.getDragDropConfig) {
+				bDraggable = oParent.getDragDropConfig().some(function(vDragDropInfo){
+					return vDragDropInfo.isDraggable(oControl);
+				});
+			}
+		}
+		return bDraggable;
 	};
 
 	/**
@@ -559,7 +585,7 @@ sap.ui.define(["sap/m/library", "sap/base/security/encodeCSS"],
 	 * @private
 	 */
 	GenericTileRenderer._isThemeHighContrast = function() {
-		return /(hcw|hcb)/g.test(sap.ui.getCore().getConfiguration().getTheme());
+		return /(hcw|hcb)/g.test(Configuration.getTheme());
 	};
 
 	GenericTileRenderer._isNewsContentPresent = function(aTileContent,iLength) {

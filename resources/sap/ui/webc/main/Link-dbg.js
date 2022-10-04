@@ -40,14 +40,13 @@ sap.ui.define([
 	 * If there is not enough space, the text of the <code>sap.ui.webc.main.Link</code> becomes truncated. If the <code>wrappingType</code> property is set to <code>"Normal"</code>, the text is displayed on several lines instead of being truncated.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.92.0
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.Link
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Link = WebComponent.extend("sap.ui.webc.main.Link", {
 		metadata: {

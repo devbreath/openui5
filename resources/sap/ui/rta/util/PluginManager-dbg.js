@@ -68,7 +68,7 @@ sap.ui.define([
 	 * Constructor for a new sap.ui.rta.util.PluginManager
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.86

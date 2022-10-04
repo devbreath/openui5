@@ -30,14 +30,13 @@ sap.ui.define([
 		 * @class
 		 * The FormattedTextView control allows the usage of a limited set of HTML tags for display.
 		 * @extends sap.ui.core.Control
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
 		 * @since 1.9.0
 		 * @deprecated Since version 1.38. Instead, use the <code>sap.ui.core.HTML</code> control.
 		 * @alias sap.ui.commons.FormattedTextView
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var FormattedTextView = Control.extend("sap.ui.commons.FormattedTextView", /** @lends sap.ui.commons.FormattedTextView.prototype */ {
 			metadata: {
@@ -248,7 +247,6 @@ sap.ui.define([
 		 *
 		 * @param {string} sHtmlText Contains the corresponding HTML text
 		 * @param {sap.ui.commons.FormattedTextViewControl} aControls Array of controls that should be used within given HTML text
-		 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 		 * @public
 		 */
 		FormattedTextView.prototype.setContent = function (sHtmlText, aControls) {

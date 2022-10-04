@@ -33,12 +33,12 @@ sap.ui.define([
 	 * @extends sap.ui.mdc.field.FieldBase
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @alias sap.ui.mdc.FilterField
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.48.0
 	 *
 	 * @experimental As of version 1.48

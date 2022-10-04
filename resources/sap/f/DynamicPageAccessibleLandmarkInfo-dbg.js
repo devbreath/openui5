@@ -23,13 +23,12 @@ sap.ui.define(['sap/ui/core/Element', './library'],
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @alias sap.f.DynamicPageAccessibleLandmarkInfo
 	 * @since 1.61
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var DynamicPageAccessibleLandmarkInfo = Element.extend("sap.f.DynamicPageAccessibleLandmarkInfo", /** @lends sap.f.DynamicAccessibleLandmarkInfo.prototype */ { metadata : {
 

@@ -18,13 +18,13 @@ sap.ui.define(['sap/ui/core/Core', 'sap/ui/core/library'], // library dependency
 	 * @namespace
 	 * @alias sap.ui.suite
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.1
 	 * @public
 	 */
 	var thisLibrary = sap.ui.getCore().initLibrary({
 		name : "sap.ui.suite",
-		version: "1.105.1",
+		version: "1.107.0",
 		dependencies : ["sap.ui.core"],
 		types: [
 			"sap.ui.suite.TaskCircleColor"
@@ -40,10 +40,9 @@ sap.ui.define(['sap/ui/core/Core', 'sap/ui/core/library'], // library dependency
 	/**
 	 * Defined color values for the Task Circle Control
 	 *
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @enum {string}
 	 * @public
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLibrary.TaskCircleColor = {
 

@@ -42,7 +42,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class Wrapper to use a <code>sap.m.Table</code> control as content of a <code>FieldValueHelp</code> element
 	 * @extends sap.ui.mdc.field.FieldValueHelpTableWrapperBase
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @ui5-restricted sap.fe
@@ -50,7 +50,6 @@ sap.ui.define([
  	 * @experimental
 	 * @since 1.88.0
 	 * @alias sap.ui.mdc.field.FieldValueHelpMdcTableWrapper
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var FieldValueHelpMdcTableWrapper = FieldValueHelpTableWrapperBase.extend("sap.ui.mdc.field.FieldValueHelpMdcTableWrapper", /** @lends sap.ui.mdc.field.FieldValueHelpMdcTableWrapper.prototype */
 	{

@@ -9,17 +9,16 @@ sap.ui.define([
 	'jquery.sap.global',
 	'sap/ui/Device',
 	'sap/ui/Global',
-	'sap/ui/base/BindingParser',
 	'sap/ui/base/DataType',
 	'sap/ui/base/EventProvider',
 	'sap/ui/base/Interface',
 	'sap/ui/base/Object',
 	'sap/ui/base/ManagedObject',
-	'sap/ui/performance/trace/Interaction',
 	'./Component',
 	'./Configuration',
 	'./Element',
 	'./ElementMetadata',
+	'./Rendering',
 	'./RenderManager',
 	'./ThemeCheck',
 	'./UIArea',
@@ -34,7 +33,6 @@ sap.ui.define([
 	"sap/base/util/ObjectPath",
 	"sap/base/util/Version",
 	"sap/base/util/array/uniqueSort",
-	"sap/base/util/uid",
 	'sap/ui/performance/trace/initTraces',
 	'sap/base/util/LoaderExtensions',
 	'sap/base/util/isEmptyObject',
@@ -47,17 +45,16 @@ sap.ui.define([
 		jQuery,
 		Device,
 		Global,
-		BindingParser,
 		DataType,
 		EventProvider,
 		Interface,
 		BaseObject,
 		ManagedObject,
-		Interaction,
 		Component,
 		Configuration,
 		Element,
 		ElementMetadata,
+		Rendering,
 		RenderManager,
 		ThemeCheck,
 		UIArea,
@@ -72,7 +69,6 @@ sap.ui.define([
 		ObjectPath,
 		Version,
 		uniqueSort,
-		uid,
 		initTraces,
 		LoaderExtensions,
 		isEmptyObject,
@@ -83,8 +79,6 @@ sap.ui.define([
 	) {
 
 	"use strict";
-
-	/*global Map, Promise */
 
 	// when the Core module has been executed before, don't execute it again
 	if (sap.ui.getCore && sap.ui.getCore()) {
@@ -98,9 +92,6 @@ sap.ui.define([
 
 	// Initialize SAP Passport or FESR
 	initTraces();
-
-	// share the rendering log with the UIArea
-	var oRenderLog = UIArea._oRenderLog;
 
 	/**
 	 * Set of libraries that have been loaded and initialized already.
@@ -211,7 +202,7 @@ sap.ui.define([
 	 * @extends sap.ui.base.Object
 	 * @final
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @alias sap.ui.core.Core
 	 * @public
 	 * @hideconstructor
@@ -251,12 +242,6 @@ sap.ui.define([
 			this.bInitialized = false;
 
 			/**
-			 * Whether the DOM is ready (document.ready)
-			 * @private
-			 */
-			this.bDomReady = false;
-
-			/**
 			 * Available plugins in the order of registration.
 			 * @private
 			 */
@@ -274,13 +259,6 @@ sap.ui.define([
 			 * @see sap.ui.core.Core.getLibraryResourceBundle
 			 */
 			this.mResourceBundles = {};
-
-			/**
-			 * Currently created UIAreas keyed by their id.
-			 * @private
-			 * @todo FIXME how can a UI area ever be removed?
-			 */
-			this.mUIAreas = {};
 
 			/**
 			 * Default model used for databinding
@@ -335,56 +313,26 @@ sap.ui.define([
 			 */
 			this.bInitLegacyLib = false;
 
-			/**
-			 * The ID of a timer that will execute the next rendering.
-			 *
-			 * A non-falsy value indicates that a timer exists already, or at least that no
-			 * new timer needs to be created as. During the boot phase, this member is set
-			 * to the special value <code>this</code> which is non-falsy and which should never
-			 * represent a valid timer ID (no chance of misinterpretation).
-			 */
-			this._sRerenderTimer = this;
-
-			/**
-			 * Tasks that are called just before the rendering starts.
-			 * @private
-			 */
-			this.aPrerenderingTasks = [];
-
 			Log.info("Creating Core",null,METHOD);
 
 			Measurement.start("coreComplete", "Core.js - complete");
 			Measurement.start("coreBoot", "Core.js - boot");
 			Measurement.start("coreInit", "Core.js - init");
 
-			/**
-			 * Object holding the interpreted configuration
-			 * Initialized from the global "sap-ui-config" object and from URL parameters
-			 * @private
-			 */
-			this.oConfiguration = new Configuration(this);
-
+			// freeze Config
+			Configuration.setCore(this);
 			// initialize frameOptions script (anti-clickjacking, etc.)
-			var oFrameOptionsConfig = this.oConfiguration["frameOptionsConfig"] || {};
-			oFrameOptionsConfig.mode = this.oConfiguration.getFrameOptions();
-			oFrameOptionsConfig.allowlistService = this.oConfiguration.getAllowlistService();
+			var oFrameOptionsConfig = Configuration.getValue("frameOptionsConfig") || {};
+			oFrameOptionsConfig.mode = Configuration.getFrameOptions();
+			oFrameOptionsConfig.allowlistService = Configuration.getAllowlistService();
 			this.oFrameOptions = new FrameOptions(oFrameOptionsConfig);
-
-			// enable complex bindings if configured
-			if ( this.oConfiguration["bindingSyntax"] === "complex" ) {
-				ManagedObject.bindingParser = BindingParser.complexParser;
-			}
-			// switch bindingParser to designTime mode if configured
-			if (this.oConfiguration["xx-designMode"] == true ) {
-				BindingParser._keepBindingStrings = true;
-			}
 
 			// let Element and Component get friend access to the respective register/deregister methods
 			this._grantFriendAccess();
 
 			// handle modules
-			var aModules = this.oConfiguration.modules;
-			if ( this.oConfiguration.getDebug() ) {
+			var aModules = this.aModules = Configuration.getValue("modules");
+			if ( Configuration.getDebug() ) {
 				// add debug module if configured
 				aModules.unshift("sap.ui.debug.DebugEnv");
 			}
@@ -398,29 +346,12 @@ sap.ui.define([
 			}
 
 			// enable LessSupport if specified in configuration
-			if (this.oConfiguration["xx-lesssupport"] && aModules.indexOf("sap.ui.core.plugin.LessSupport") == -1) {
+			if (Configuration.getValue("xx-lesssupport") && aModules.indexOf("sap.ui.core.plugin.LessSupport") == -1) {
 				Log.info("Including LessSupport into declared modules");
 				aModules.push("sap.ui.core.plugin.LessSupport");
 			}
 
-			// determine preload mode (e.g. resolve default or auto)
-			var sPreloadMode = this.oConfiguration.preload;
-			// if debug sources are requested, then the preload feature must be deactivated
-			if ( window["sap-ui-debug"] === true ) {
-				sPreloadMode = "";
-			}
-			// when the preload mode is 'auto', it will be set to 'async' or 'sync' for optimized sources
-			// depending on whether the ui5loader is configured async
-			if ( sPreloadMode === "auto" ) {
-				if (window["sap-ui-optimized"]) {
-					sPreloadMode = sap.ui.loader.config().async ? "async" : "sync";
-				} else {
-					sPreloadMode = "";
-				}
-			}
-			// write back the determined mode for later evaluation (e.g. loadLibrary)
-			this.oConfiguration.preload = sPreloadMode;
-
+			var sPreloadMode = Configuration.getPreload();
 			// This flag controls the core initialization flow.
 			// We can switch to async when an async preload is used or the ui5loader
 			// is in async mode. The latter might also happen for debug scenarios
@@ -428,7 +359,7 @@ sap.ui.define([
 			var bAsync = sPreloadMode === "async" || sap.ui.loader.config().async;
 
 			// evaluate configuration for library preload file types
-			this.oConfiguration['xx-libraryPreloadFiles'].forEach(function(v){
+			Configuration.getValue("xx-libraryPreloadFiles").forEach(function(v){
 				var fields = String(v).trim().split(/\s*:\s*/),
 					name = fields[0],
 					fileType = fields[1];
@@ -467,12 +398,8 @@ sap.ui.define([
 				return that.getInterface();
 			};
 
-			// create the RenderManager so it can be used already
-			this.oRenderManager = new RenderManager();
-
 			// sync point 1 synchronizes document ready and rest of UI5 boot
 			var oSyncPoint1 = new SyncPoint("UI5 Document Ready", function(iOpenTasks, iFailures) {
-				that.bDomReady = true;
 				that.init();
 			});
 			var iDocumentReadyTask = oSyncPoint1.startTask("document.ready");
@@ -506,7 +433,7 @@ sap.ui.define([
 
 			// load the version info file in case of a custom theme to determine
 			// the distribution version which should be provided in library.css requests.
-			if (this.oConfiguration["versionedLibCss"]) {
+			if (Configuration.getValue("versionedLibCss")) {
 				var iVersionInfoTask = oSyncPoint2.startTask("load version info");
 
 				var fnCallback = function(oVersionInfo) {
@@ -544,7 +471,7 @@ sap.ui.define([
 
 			function postConstructorTasks() {
 				// when a boot task is configured, add it to syncpoint2
-				var fnCustomBootTask = this.oConfiguration["xx-bootTask"];
+				var fnCustomBootTask = Configuration.getValue("xx-bootTask");
 				if ( fnCustomBootTask ) {
 					var iCustomBootTask = oSyncPoint2.startTask("custom boot task");
 					fnCustomBootTask( function(bSuccess) {
@@ -554,7 +481,7 @@ sap.ui.define([
 
 				if ( sPreloadMode === "sync" || sPreloadMode === "async" ) {
 					// determine set of libraries
-					var aLibs = aModules.reduce(function(aResult, sModule) {
+					var aLibs = that.aModules.reduce(function(aResult, sModule) {
 						var iPos = sModule.search(/\.library$/);
 						if ( iPos >= 0 ) {
 							aResult.push(sModule.slice(0, iPos));
@@ -577,7 +504,7 @@ sap.ui.define([
 				}
 
 				// initializes the application cachebuster mechanism if configured
-				var aACBConfig = this.oConfiguration.getAppCacheBuster();
+				var aACBConfig = Configuration.getAppCacheBuster();
 				if (aACBConfig && aACBConfig.length > 0) {
 					if ( bAsync ) {
 						var iLoadACBTask = oSyncPoint2.startTask("require AppCachebuster");
@@ -593,13 +520,13 @@ sap.ui.define([
 				}
 
 				// Initialize support info stack
-				if (this.oConfiguration.getSupportMode() !== null) {
+				if (Configuration.getSupportMode() !== null) {
 					var iSupportInfoTask = oSyncPoint2.startTask("support info script");
 
 					var fnCallbackSupportBootstrapInfo = function(Support, Bootstrap) {
-						Support.initializeSupportMode(that.oConfiguration.getSupportMode(), bAsync);
+						Support.initializeSupportMode(Configuration.getSupportMode(), bAsync);
 
-						Bootstrap.initSupportRules(that.oConfiguration.getSupportMode());
+						Bootstrap.initSupportRules(Configuration.getSupportMode());
 
 						oSyncPoint2.finishTask(iSupportInfoTask);
 					};
@@ -623,11 +550,11 @@ sap.ui.define([
 				}
 
 				// Initialize test tools
-				if (this.oConfiguration.getTestRecorderMode() !== null) {
+				if (Configuration.getTestRecorderMode() !== null) {
 					var iTestRecorderTask = oSyncPoint2.startTask("test recorder script");
 
 					var fnCallbackTestRecorder = function (Bootstrap) {
-						Bootstrap.init(that.oConfiguration.getTestRecorderMode());
+						Bootstrap.init(Configuration.getTestRecorderMode());
 						oSyncPoint2.finishTask(iTestRecorderTask);
 					};
 
@@ -698,7 +625,6 @@ sap.ui.define([
 				//  - Init
 				"boot",
 				//  - UIArea & Rendering
-				"_createUIArea",
 				"addPrerenderingTask",
 				//  - Messaging
 				"setMessageManager",
@@ -736,13 +662,6 @@ sap.ui.define([
 			LibraryChanged : "libraryChanged",
 			ValidationError : "validationError", ParseError : "parseError", FormatError : "formatError", ValidationSuccess : "validationSuccess"};
 
-
-	// Id of the static UIArea
-	var STATIC_UIAREA_ID = "sap-ui-static";
-
-	// to protect against nested rendering we use an array of Steps instead of a single one
-	Core.aFnDone = [];
-
 	/**
 	 * The core allows some friend components to register/deregister themselves
 	 * @private
@@ -763,27 +682,19 @@ sap.ui.define([
 	Core.prototype._setupThemes = function() {
 		var METHOD = "sap.ui.core.Core";
 
-		var oCfgData = window["sap-ui-config"];
-		// Configuration might have a themeRoot, if so integrate it in themeroots
-		if ( this.oConfiguration.themeRoot ) {
-			oCfgData = oCfgData || {};
-			oCfgData.themeroots = oCfgData.themeroots || {};
-			oCfgData.themeroots[this.oConfiguration.getTheme()] = this.oConfiguration.themeRoot;
-		}
-		if (oCfgData) {
-			// read themeRoots configuration
-			if (oCfgData.themeroots) {
-				for (var themeName in oCfgData.themeroots) {
-					var themeRoot = oCfgData.themeroots[themeName];
-					if (typeof themeRoot === "string") {
-						this.setThemeRoot(themeName, themeRoot);
-					} else {
-						for (var lib in themeRoot) {
-							if (lib.length > 0) {
-								this.setThemeRoot(themeName, [lib], themeRoot[lib]);
-							} else {
-								this.setThemeRoot(themeName, themeRoot[lib]);
-							}
+		// read themeRoots configuration
+		var themeRoots = Configuration.getValue("themeRoots");
+		if (themeRoots) {
+			for (var themeName in themeRoots) {
+				var themeRoot = themeRoots[themeName];
+				if (typeof themeRoot === "string") {
+					this.setThemeRoot(themeName, themeRoot);
+				} else {
+					for (var lib in themeRoot) {
+						if (lib.length > 0) {
+							this.setThemeRoot(themeName, [lib], themeRoot[lib]);
+						} else {
+							this.setThemeRoot(themeName, themeRoot[lib]);
 						}
 					}
 				}
@@ -791,7 +702,7 @@ sap.ui.define([
 		}
 
 		// set CSS class for the theme name
-		this.sTheme = this.oConfiguration.getTheme();
+		this.sTheme = Configuration.getTheme();
 		document.documentElement.classList.add("sapUiTheme-" + this.sTheme);
 		Log.info("Declared theme " + this.sTheme,null,METHOD);
 	};
@@ -802,7 +713,7 @@ sap.ui.define([
 	 */
 	Core.prototype._setupContentDirection = function() {
 		var METHOD = "sap.ui.core.Core",
-			sDir = this.oConfiguration.getRTL() ? "rtl" : "ltr";
+			sDir = Configuration.getRTL() ? "rtl" : "ltr";
 
 		document.documentElement.setAttribute("dir", sDir); // webkit does not allow setting document.dir before the body exists
 		Log.info("Content direction set to '" + sDir + "'",null,METHOD);
@@ -864,7 +775,7 @@ sap.ui.define([
 
 		// append the lang info to the document (required for ARIA support)
 		var fnUpdateLangAttr = function() {
-			var oLocale = this.oConfiguration.getLocale();
+			var oLocale = Configuration.getLocale();
 			oLocale ? html.setAttribute("lang", oLocale.toString()) : html.removeAttribute("lang");
 		};
 		fnUpdateLangAttr.call(this);
@@ -878,18 +789,13 @@ sap.ui.define([
 	 * @private
 	 */
 	Core.prototype._setupAnimation = function() {
-		// We check for the existence of the configuration object, because the _setupAnimation function
-		// will first be called from the Configuration constructor within the Core constructor.
-		// During this first call, the configuration object is not yet set on the Core instance.
-		if (this.oConfiguration) {
-			var html = document.documentElement;
-			var sAnimationMode = this.oConfiguration.getAnimationMode();
-			html.dataset.sapUiAnimationMode = sAnimationMode;
-			var bAnimation = (sAnimationMode !== Configuration.AnimationMode.minimal && sAnimationMode !== Configuration.AnimationMode.none);
-			html.dataset.sapUiAnimation = bAnimation ? "on" : "off";
-			if (typeof jQuery !== "undefined") {
-				jQuery.fx.off = !bAnimation;
-			}
+		var html = document.documentElement;
+		var sAnimationMode = Configuration.getAnimationMode();
+		html.dataset.sapUiAnimationMode = sAnimationMode;
+		var bAnimation = (sAnimationMode !== Configuration.AnimationMode.minimal && sAnimationMode !== Configuration.AnimationMode.none);
+		html.dataset.sapUiAnimation = bAnimation ? "on" : "off";
+		if (typeof jQuery !== "undefined") {
+			jQuery.fx.off = !bAnimation;
 		}
 	};
 
@@ -925,13 +831,13 @@ sap.ui.define([
 	Core.prototype._boot = function(bAsync, fnCallback) {
 
 		// if a list of preloaded library CSS is configured, request a merged CSS (if application did not already do it)
-		var aCSSLibs = this.oConfiguration['preloadLibCss'];
-		if (aCSSLibs && aCSSLibs.length > 0 && !aCSSLibs.appManaged) {
+		var aCSSLibs = Configuration.getValue("preloadLibCss");
+		if (aCSSLibs && aCSSLibs.length > 0 && !Configuration.getCssAppManaged()) {
 			this.includeLibraryTheme("sap-ui-merged", undefined, "?l=" + aCSSLibs.join(","));
 		}
 
 		// add CalendarClass to list of modules
-		this.oConfiguration.modules.push("sap/ui/core/date/" + this.oConfiguration.getCalendarType());
+		this.aModules.push("sap/ui/core/date/" + Configuration.getCalendarType());
 
 		// load all modules now
 		if ( bAsync ) {
@@ -948,7 +854,7 @@ sap.ui.define([
 			};
 		});
 
-		this.oConfiguration.modules.forEach( function(mod) {
+		this.aModules.forEach( function(mod) {
 			var m = mod.match(/^(.*)\.library$/);
 			if ( m ) {
 				this.loadLibrary(m[1]);
@@ -966,7 +872,7 @@ sap.ui.define([
 		var aLibs = [],
 			aModules = [];
 
-		this.oConfiguration.modules.forEach(function(sModule) {
+		this.aModules.forEach(function(sModule) {
 			var m = sModule.match(/^(.*)\.library$/);
 			if (m) {
 				aLibs.push(m[1]);
@@ -1013,7 +919,7 @@ sap.ui.define([
 		assert(typeof sThemeName === "string", "sThemeName must be a string");
 		assert(typeof sThemeBaseUrl === "string" || typeof sThemeBaseUrl === "undefined", "sThemeBaseUrl must be a string or undefined");
 
-		sThemeName = this.oConfiguration._normalizeTheme(sThemeName, sThemeBaseUrl);
+		sThemeName = Configuration.normalizeTheme(sThemeName, sThemeBaseUrl);
 
 		if (sThemeBaseUrl) {
 			this.setThemeRoot(sThemeName, sThemeBaseUrl);
@@ -1025,7 +931,7 @@ sap.ui.define([
 			var html = document.documentElement;
 			this._updateThemeUrls(sThemeName, /* bSuppressFOUC */ true);
 			this.sTheme = sThemeName;
-			this.oConfiguration._setTheme(sThemeName);
+			Configuration.setTheme(sThemeName);
 
 			// modify the <html> tag's CSS class with the theme name
 			html.classList.remove("sapUiTheme-" + sCurrentTheme);
@@ -1045,7 +951,7 @@ sap.ui.define([
 		    sLibFileName,
 		    sQuery,
 		    sStandardLibFilePrefix = "library",
-		    sRTL = this.oConfiguration.getRTL() ? "-RTL" : "",
+		    sRTL = Configuration.getRTL() ? "-RTL" : "",
 		    sHref,
 		    pos;
 
@@ -1176,9 +1082,9 @@ sap.ui.define([
 	 * Resources for styling the <code>my.own.library</code> controls will be loaded from the configured
 	 * location:
 	 * <pre>
-	 *   https://openui5.hana.ondemand.com/resources/sap/ui/core/themes/sap_belize/library.css
-	 *   https://openui5.hana.ondemand.com/resources/sap/ui/layout/themes/sap_belize/library.css
-	 *   https://openui5.hana.ondemand.com/resources/sap/m/themes/sap_belize/library.css
+	 *   https://sdk.openui5.org/resources/sap/ui/core/themes/sap_belize/library.css
+	 *   https://sdk.openui5.org/resources/sap/ui/layout/themes/sap_belize/library.css
+	 *   https://sdk.openui5.org/resources/sap/m/themes/sap_belize/library.css
 	 *   https://mythemeserver.com/allThemes/my/own/library/themes/sap_belize/library.css
 	 * </pre>
 	 *
@@ -1241,6 +1147,9 @@ sap.ui.define([
 			return;
 		}
 
+		// provide core for event handling and UIArea creation
+		UIArea.setCore(this);
+
 		var METHOD = "sap.ui.core.Core.init()";
 
 		Log.info("Initializing",null,METHOD);
@@ -1255,64 +1164,39 @@ sap.ui.define([
 		this.startPlugins();
 		Log.info("Plugins started",null,METHOD);
 
-		this._createUIAreas();
-
 		this._setBodyAccessibilityRole();
 
 		this.oThemeCheck.fireThemeChangedEvent(true);
 
-		var sWaitForTheme = this.oConfiguration['xx-waitForTheme'];
+		var sWaitForTheme = Configuration.getValue("xx-waitForTheme");
 		if ( this.isThemeApplied() || !sWaitForTheme ) {
-			Core.aFnDone.push(Interaction.notifyAsyncStep());
 			this._executeInitialization();
-			this.renderPendingUIUpdates("during Core init"); // directly render without setTimeout, so rendering is guaranteed to be finished when init() ends
+			Rendering.renderPendingUIUpdates("during Core init"); // directly render without setTimeout, so rendering is guaranteed to be finished when init() ends
 			Measurement.end("coreComplete");
 
 		} else if (sWaitForTheme === "rendering") {
-			Core.aFnDone.push(Interaction.notifyAsyncStep());
+			Rendering.notifyInteractionStep();
 			this._executeInitialization();
-
-			oRenderLog.debug("delay initial rendering until theme has been loaded");
+			Rendering.getLogger().debug("delay initial rendering until theme has been loaded");
 			_oEventProvider.attachEventOnce(Core.M_EVENTS.ThemeChanged, function() {
-					setTimeout(
-					this.renderPendingUIUpdates.bind(this, "after theme has been loaded"),
-					Device.browser.safari ? 50 : 0
-				);
+				Rendering.renderPendingUIUpdates("after theme has been loaded", 0);
 			}, this);
-
 			Measurement.end("coreComplete");
 
 		} else if (sWaitForTheme === "init") {
-			oRenderLog.debug("delay init event and initial rendering until theme has been loaded");
-			Core.aFnDone.push(Interaction.notifyAsyncStep());
+			Rendering.getLogger().debug("delay init event and initial rendering until theme has been loaded");
+			Rendering.notifyInteractionStep();
 			_oEventProvider.attachEventOnce(Core.M_EVENTS.ThemeChanged, function() {
 				this._executeInitialization();
-				setTimeout(
-					this.renderPendingUIUpdates.bind(this, "after theme has been loaded"),
-					Device.browser.safari ? 50 : 0
-				);
-
+				Rendering.renderPendingUIUpdates("after theme has been loaded", 0);
 				Measurement.end("coreComplete");
-
 			}, this);
 
-		}
-	};
-
-	Core.prototype._createUIAreas = function() {
-		var oConfig = this.oConfiguration;
-
-		// create any pre-configured UIAreas
-		if ( oConfig.areas ) {
-			for (var i = 0, l = oConfig.areas.length; i < l; i++) {
-				this._createUIArea(oConfig.areas[i]);
-			}
-			oConfig.areas = undefined;
 		}
 	};
 
 	Core.prototype._executeOnInit = function() {
-		var vOnInit = this.oConfiguration.onInit;
+		var vOnInit = Configuration.getValue("onInit");
 
 		// execute a configured init hook
 		if ( vOnInit ) {
@@ -1342,7 +1226,6 @@ sap.ui.define([
 					}
 				}
 			}
-			this.oConfiguration.onInit = undefined;
 		}
 	};
 
@@ -1354,12 +1237,11 @@ sap.ui.define([
 	 * @private
 	 */
 	Core.prototype._setupRootComponent = function() {
-		var METHOD = "sap.ui.core.Core.init()",
-			oConfig = this.oConfiguration;
+		var METHOD = "sap.ui.core.Core.init()";
 
 		// load the root component
 		// @deprecated concept, superseded by "sap/ui/core/ComponentSupport"
-		var sRootComponent = oConfig.getRootComponent();
+		var sRootComponent = Configuration.getRootComponent();
 		if (sRootComponent) {
 
 			Log.info("Loading Root Component: " + sRootComponent,null,METHOD);
@@ -1368,7 +1250,7 @@ sap.ui.define([
 			});
 			this.oRootComponent = oComponent;
 
-			var sRootNode = oConfig["xx-rootComponentNode"];
+			var sRootNode = Configuration.getValue("xx-rootComponentNode");
 			if (sRootNode && oComponent.isA('sap.ui.core.UIComponent')) {
 				var oRootNode = document.getElementById(sRootNode);
 				if (oRootNode) {
@@ -1385,7 +1267,7 @@ sap.ui.define([
 		} else {
 
 			// @deprecated concept, superseded by "sap/ui/core/Component"
-			var sApplication = oConfig.getApplication();
+			var sApplication = Configuration.getApplication();
 			if (sApplication) {
 
 				Log.warning("The configuration 'application' is deprecated. Please use the configuration 'component' instead! " +
@@ -1409,11 +1291,10 @@ sap.ui.define([
 	};
 
 	Core.prototype._setBodyAccessibilityRole = function() {
-		var oConfig = this.oConfiguration,
-			body = document.body;
+		var body = document.body;
 
 		//Add ARIA role 'application'
-		if (oConfig.getAccessibility() && oConfig.getAutoAriaBodyRole() && !body.getAttribute("role")) {
+		if (Configuration.getAccessibility() && Configuration.getAutoAriaBodyRole() && !body.getAttribute("role")) {
 			body.setAttribute("role", "application");
 		}
 	};
@@ -1552,7 +1433,7 @@ sap.ui.define([
 	 * @public
 	 */
 	Core.prototype.getConfiguration = function () {
-		return this.oConfiguration;
+		return Configuration;
 	};
 
 	/**
@@ -1666,7 +1547,7 @@ sap.ui.define([
 		var lib = libConfig.name,
 			fileType = libConfig.fileType,
 			libPackage = lib.replace(/\./g, '/'),
-			http2 = this.oConfiguration.getDepCache();
+			http2 = Configuration.getDepCache();
 
 		if ( fileType === 'none' || sap.ui.loader._.getModuleState(libPackage + '/library.js') ) {
 			return Promise.resolve(true);
@@ -2121,7 +2002,7 @@ sap.ui.define([
 				registerModulePath(sLibrary, vUrl);
 			}
 
-			if ( this.oConfiguration.preload === 'sync' || this.oConfiguration.preload === 'async' ) {
+			if ( Configuration.getPreload() === 'sync' || Configuration.getPreload() === 'async' ) {
 				preloadLibrarySync(sLibrary);
 			}
 
@@ -2169,7 +2050,7 @@ sap.ui.define([
 		// default values for options
 		mOptions = Object.assign({ async : true, preloadOnly : false }, mOptions);
 
-		var bPreload = this.oConfiguration.preload === 'sync' || this.oConfiguration.preload === 'async',
+		var bPreload = Configuration.getPreload() === 'sync' || Configuration.getPreload() === 'async',
 			bAsync = mOptions.async,
 			bRequire = !mOptions.preloadOnly;
 
@@ -2483,7 +2364,7 @@ sap.ui.define([
 			// (e.g. IconPool which includes font files from sap.ui.core base theme)
 			this._ensureThemeRoot(sLibName, "base");
 
-			if (this.oConfiguration['preloadLibCss'].indexOf(sLibName) < 0) {
+			if (!Configuration.getValue("preloadLibCss").includes(sLibName)) {
 				// check for configured query parameters and use them
 				var sQuery = this._getLibraryCssQueryParams(oLibInfo);
 
@@ -2538,8 +2419,8 @@ sap.ui.define([
 			}
 
 			// determine CSS Variables / RTL
-			var sCssVars = (/^(true|x)$/i.test(this.oConfiguration['xx-cssVariables']) ? "_skeleton" : "");
-			var sRtl = (this.oConfiguration.getRTL() ? "-RTL" : "");
+			var sCssVars = (/^(true|x)$/i.test(Configuration.getValue("xx-cssVariables")) ? "_skeleton" : "");
+			var sRtl = (Configuration.getRTL() ? "-RTL" : "");
 
 			// create the library file name
 			var sLibFileName,
@@ -2559,7 +2440,7 @@ sap.ui.define([
 
 			// include the css variables
 			var cssPathAndName;
-			if (/^(true|x|additional)$/i.test(this.oConfiguration['xx-cssVariables'])) {
+			if (/^(true|x|additional)$/i.test(Configuration.getValue("xx-cssVariables"))) {
 				cssPathAndName = this._getThemePath(sLibName, this.sTheme) + "css_variables.css" + (sQuery ? sQuery : "");
 				Log.info("Including " + cssPathAndName + " -  sap.ui.core.Core.includeLibraryTheme()");
 				includeStylesheet(cssPathAndName, sLinkId);
@@ -2593,7 +2474,7 @@ sap.ui.define([
 	 */
 	Core.prototype._getLibraryCssQueryParams = function(oLibInfo) {
 		var sQuery;
-		if (this.oConfiguration["versionedLibCss"] && oLibInfo) {
+		if (Configuration.getValue("versionedLibCss") && oLibInfo) {
 			sQuery = "?version=" + oLibInfo.version;
 
 			// distribution version may not be available (will be loaded in Core constructor syncpoint2)
@@ -2664,7 +2545,7 @@ sap.ui.define([
 	 * @param {string} [sLibraryName='sap.ui.core'] Name of the library to retrieve the bundle for
 	 * @param {string} [sLocale] Locale to retrieve the resource bundle for
 	 * @param {boolean} [bAsync=false] Whether the resource bundle is loaded asynchronously
-	 * @return {module:sap/base/i18n/ResourceBundle|Promise} The best matching resource bundle for the given
+	 * @returns {module:sap/base/i18n/ResourceBundle|undefined|Promise<module:sap/base/i18n/ResourceBundle|undefined>} The best matching resource bundle for the given
 	 *   parameters or <code>undefined</code>; in asynchronous case a Promise on that bundle is returned
 	 * @public
 	 */
@@ -2790,63 +2671,7 @@ sap.ui.define([
 	 * @deprecated As of version 1.1, use {@link sap.ui.core.Control#placeAt Control#placeAt} instead!
 	 */
 	Core.prototype.createUIArea = function(oDomRef) {
-		return this._createUIArea(oDomRef);
-	};
-
-	/**
-	 * Creates a new {@link sap.ui.core.UIArea UIArea}.
-	 * Must only be used by sap.ui.core functionality.
-	 *
-	 * @param {Element|string} oDomRef a DOM Element or ID string of the UIArea
-	 * @return {sap.ui.core.UIArea} a new UIArea
-	 * @private
-	 * @ui5-restricted sap.ui.core
-	 */
-	Core.prototype._createUIArea = function(oDomRef) {
-		var that = this;
-		assert(typeof oDomRef === "string" || typeof oDomRef === "object", "oDomRef must be a string or object");
-
-		if (!oDomRef) {
-			throw new Error("oDomRef must not be null");
-		}
-
-		// oDomRef might be (and actually IS in most cases!) a string (the ID of a DOM element)
-		if (typeof (oDomRef) === "string") {
-			var id = oDomRef;
-
-			if (id == STATIC_UIAREA_ID) {
-				oDomRef = this.getStaticAreaRef();
-			} else {
-				oDomRef = document.getElementById(oDomRef);
-				if (!oDomRef) {
-					throw new Error("DOM element with ID '" + id + "' not found in page, but application tries to insert content.");
-				}
-			}
-		}
-
-		// if the domref does not have an ID or empty ID => generate one
-		if (!oDomRef.id || oDomRef.id.length == 0) {
-			oDomRef.id = uid();
-		}
-
-		// create a new or fetch an existing UIArea
-		var sId = oDomRef.id;
-		if (!this.mUIAreas[sId]) {
-			this.mUIAreas[sId] = new UIArea(this, oDomRef);
-			if (!isEmptyObject(this.oModels)) {
-				var oProperties = {
-					oModels: Object.assign({}, this.oModels),
-					oBindingContexts: {},
-					aPropagationListeners: []
-				};
-				that.mUIAreas[sId]._propagateProperties(true, that.mUIAreas[sId], oProperties, true);
-			}
-		} else {
-			// this should solve the issue of 'recreation' of a UIArea
-			// e.g. via setRoot with a new domRef
-			this.mUIAreas[sId].setRootNode(oDomRef);
-		}
-		return this.mUIAreas[sId];
+		return UIArea.create(oDomRef);
 	};
 
 	/**
@@ -2854,7 +2679,8 @@ sap.ui.define([
 	 *
 	 * @public
 	 * @param {string|Element} o DOM element or ID of the UIArea
-	 * @return {sap.ui.core.UIArea} UIArea with the given ID or DOM element or <code>null</code> or <code>undefined</code>.
+	 * @return {sap.ui.core.UIArea|null|undefined} UIArea with the given ID or DOM element or <code>null</code> or <code>undefined</code>.
+	 * @deprecated As of version 1.107, use {@link sap.ui.core.UIArea.registry#get UIArea.registry#get} instead!
 	 */
 	Core.prototype.getUIArea = function(o) {
 		assert(typeof o === "string" || typeof o === "object", "o must be a string or object");
@@ -2867,108 +2693,11 @@ sap.ui.define([
 		}
 
 		if (sId) {
-			return this.mUIAreas[sId];
+			return UIArea.registry.get(sId);
 		}
 
 		return null;
 	};
-
-	/**
-	 * Informs the core about a UIArea that just became invalid.
-	 *
-	 * The core might use this information to minimize the set of
-	 * re-rendered UIAreas. But for the time being it just registers
-	 * a timer to trigger a re-rendering after the current event
-	 * has been processed.
-	 *
-	 * @param {sap.ui.core.UIArea} oUIArea UIArea that just became invalid
-	 * @private
-	 */
-	Core.prototype.addInvalidatedUIArea = function(oUIArea) {
-		if ( !this._sRerenderTimer ) {
-			oRenderLog.debug("Registering timer for delayed re-rendering");
-			// start async interaction step
-			Core.aFnDone.push(Interaction.notifyAsyncStep());
-			this._sRerenderTimer = setTimeout(this["renderPendingUIUpdates"].bind(this), 0); // decoupled for collecting several invalidations into one redraw
-		}
-	};
-
-	Core.MAX_RENDERING_ITERATIONS = 20;
-
-	/**
-	 * Asks all UIAreas to execute any pending rendering tasks.
-	 *
-	 * The execution of rendering tasks might require multiple iterations
-	 * until either no more rendering tasks are produced or until
-	 * MAX_RENDERING_ITERATIONS are reached.
-	 *
-	 * With a value of MAX_RENDERING_ITERATIONS=0 the loop can be avoided
-	 * and the remaining tasks are executed after another timeout.
-	 *
-	 * @private
-	 */
-	Core.prototype.renderPendingUIUpdates = function(sCaller) {
-		// start performance measurement
-		oRenderLog.debug("Render pending UI updates: start (" + (sCaller || "by timer" ) + ")");
-
-		Measurement.start("renderPendingUIUpdates","Render pending UI updates in all UIAreas");
-
-		var bUIUpdated = false,
-			bLooped = Core.MAX_RENDERING_ITERATIONS > 0,
-			iLoopCount = 0;
-
-		this._bRendering = true;
-
-		do {
-
-			if ( bLooped ) {
-				// try to detect long running ('endless') rendering loops
-				iLoopCount++;
-				// if we run another iteration despite the tracking mode, we complain ourselves
-				if ( iLoopCount > Core.MAX_RENDERING_ITERATIONS ) {
-					this._bRendering = false;
-					throw new Error("Rendering has been re-started too many times (" + iLoopCount + "). Add URL parameter sap-ui-xx-debugRendering=true for a detailed analysis.");
-				}
-
-				if ( iLoopCount > 1 ) {
-					oRenderLog.debug("Render pending UI updates: iteration " + iLoopCount);
-				}
-			}
-
-			// clear a pending timer so that the next call to re-render will create a new timer
-			if (this._sRerenderTimer) {
-				if ( this._sRerenderTimer !== this ) { // 'this' is used as a marker for a delayed initial rendering, no timer to cleanup then
-					clearTimeout(this._sRerenderTimer); // explicitly stop the timer, as this call might be a synchronous call (applyChanges) while still a timer is running
-				}
-				this._sRerenderTimer = undefined;
-				if (Core.aFnDone.length > 0) {
-					Core.aFnDone.pop()();
-				}
-			}
-
-			this.runPrerenderingTasks();
-
-			var mUIAreas = this.mUIAreas;
-			for (var sId in mUIAreas) {
-				bUIUpdated = mUIAreas[sId].rerender() || bUIUpdated;
-			}
-
-		// eslint-disable-next-line no-unmodified-loop-condition
-		} while ( bLooped && this._sRerenderTimer ); // iterate if there are new rendering tasks
-
-		this._bRendering = false;
-
-		// TODO: Provide information on what actually was re-rendered...
-		if (bUIUpdated) {
-			this.fireUIUpdated();
-		}
-
-		oRenderLog.debug("Render pending UI updates: finished");
-
-		// end performance measurement
-		Measurement.end("renderPendingUIUpdates");
-	};
-
 
 	/**
 	 * Returns <code>true</code> if there are any pending rendering tasks or when
@@ -2978,7 +2707,7 @@ sap.ui.define([
 	 * @public
 	 */
 	Core.prototype.getUIDirty = function() {
-		return !!(this._sRerenderTimer || this._bRendering);
+		return Rendering.getUIDirty();
 	};
 
 	/**
@@ -2996,9 +2725,9 @@ sap.ui.define([
 		_oEventProvider.detachEvent(Core.M_EVENTS.UIUpdated, fnFunction, oListener);
 	};
 
-	Core.prototype.fireUIUpdated = function(mParameters) {
-		_oEventProvider.fireEvent(Core.M_EVENTS.UIUpdated, mParameters);
-	};
+	Rendering.attachUIUpdated(function(oEvent) {
+		_oEventProvider.fireEvent(Core.M_EVENTS.UIUpdated, oEvent.getParameters());
+	});
 
 	/**
 	 * Triggers a realignment of controls
@@ -3216,7 +2945,7 @@ sap.ui.define([
 		 * and then to update their bindings and corresponding data types (phase 2)
 		 */
 		function notifyAll(iPhase) {
-			each(this.mUIAreas, function(prop, oUIArea) {
+			UIArea.registry.forEach(function(oUIArea) {
 				fnAdapt.call(oUIArea, iPhase);
 			});
 			Component.registry.forEach(function(oComponent) {
@@ -3237,7 +2966,7 @@ sap.ui.define([
 			// modify style sheet URLs
 			this._updateThemeUrls(this.sTheme);
 			// invalidate all UIAreas
-			each(this.mUIAreas, function(prop, oUIArea) {
+			UIArea.registry.forEach(function(oUIArea) {
 				oUIArea.invalidate();
 			});
 			Log.info("RTL mode " + mChanges.rtl ? "activated" : "deactivated");
@@ -3311,7 +3040,7 @@ sap.ui.define([
 	 * @public
 	 */
 	Core.prototype.applyChanges = function() {
-		this.renderPendingUIUpdates("forced by applyChanges");
+		Rendering.renderPendingUIUpdates("forced by applyChanges");
 	};
 
 	/**
@@ -3474,40 +3203,7 @@ sap.ui.define([
 	 * @public
 	 */
 	Core.prototype.getStaticAreaRef = function() {
-		var oStaticArea = document.getElementById(STATIC_UIAREA_ID),
-			oConfig, oFirstFocusElement;
-
-		if (!oStaticArea) {
-
-			oStaticArea = document.createElement("div");
-			oFirstFocusElement = document.createElement("span");
-			oConfig = this.getConfiguration();
-
-			if (!this.bDomReady) {
-				throw new Error("DOM is not ready yet. Static UIArea cannot be created.");
-			}
-
-			oStaticArea.setAttribute("id", STATIC_UIAREA_ID);
-
-			Object.assign(oStaticArea.style, {
-				"height": "0",
-				"width": "0",
-				"overflow": "hidden",
-				"float":  oConfig.getRTL() ? "right" : "left"
-			});
-
-			oFirstFocusElement.setAttribute("id", STATIC_UIAREA_ID + "-firstfe");
-			oFirstFocusElement.setAttribute("tabindex", -1);
-			oFirstFocusElement.style.fontSize = 0;
-
-			oStaticArea.appendChild(oFirstFocusElement);
-
-			document.body.insertBefore(oStaticArea, document.body.firstChild);
-
-			this._createUIArea(oStaticArea).bInitial = false;
-		}
-		return oStaticArea;
-
+		return UIArea.getStaticAreaRef();
 	};
 
 	/**
@@ -3518,7 +3214,7 @@ sap.ui.define([
 	 * @protected
 	 */
 	Core.prototype.isStaticAreaRef = function(oDomRef) {
-		return oDomRef && (oDomRef.id === STATIC_UIAREA_ID);
+		return UIArea.isStaticAreaRef(oDomRef);
 	};
 
 	/**
@@ -3801,7 +3497,7 @@ sap.ui.define([
 			}
 			// propagate Models to all UI areas
 
-			each(this.mUIAreas, function (prop, oUIArea){
+			UIArea.registry.forEach(function (oUIArea){
 				if (oModel != oUIArea.getModel(sName)) {
 					oUIArea._propagateProperties(sName, oUIArea, oProperties, false, sName);
 				}
@@ -3809,7 +3505,7 @@ sap.ui.define([
 		} else if (oModel && oModel !== this.oModels[sName] ) {
 			this.oModels[sName] = oModel;
 			// propagate Models to all UI areas
-			each(this.mUIAreas, function (prop, oUIArea){
+			UIArea.registry.forEach(function (oUIArea){
 				if (oModel != oUIArea.getModel(sName)) {
 					var oProperties = {
 						oModels: Object.assign({}, this.oModels),
@@ -4279,26 +3975,10 @@ sap.ui.define([
 	 * @param {boolean} [bFirst=false]
 	 *   Whether the task should become the first one, not the last one
 	 * @private
+	 * @ui5-restricted sap.ui.model.odata.v4
 	 */
-	Core.prototype.addPrerenderingTask = function (fnPrerenderingTask, bFirst) {
-		if (bFirst) {
-			this.aPrerenderingTasks.unshift(fnPrerenderingTask);
-		} else {
-			this.aPrerenderingTasks.push(fnPrerenderingTask);
-		}
-	};
-
-	/**
-	 * Runs all prerendering tasks and resets the list.
-	 * @private
-	 */
-	Core.prototype.runPrerenderingTasks = function () {
-		var aTasks = this.aPrerenderingTasks.slice();
-
-		this.aPrerenderingTasks = [];
-		aTasks.forEach(function (fnPrerenderingTask) {
-			fnPrerenderingTask();
-		});
+	 Core.prototype.addPrerenderingTask = function (fnPrerenderingTask, bFirst) {
+		Rendering.addPrerenderingTask(fnPrerenderingTask, bFirst);
 	};
 
 	Core.prototype.destroy = function() {

@@ -12,7 +12,6 @@ sap.ui.define([
 	"sap/m/HBox",
 	"sap/m/VBox",
 	"sap/m/Text",
-	"sap/m/Title",
 	"sap/m/Avatar",
 	"sap/m/Link",
 	"sap/m/Label",
@@ -21,12 +20,15 @@ sap.ui.define([
 	"sap/m/TextArea",
 	"sap/base/Log",
 	"sap/base/util/isEmptyObject",
+	"sap/base/util/isPlainObject",
+	"sap/base/util/merge",
 	"sap/ui/core/ResizeHandler",
 	"sap/ui/layout/AlignedFlowLayout",
 	"sap/ui/dom/units/Rem",
 	"sap/ui/integration/util/BindingHelper",
 	"sap/ui/integration/util/BindingResolver",
 	"sap/ui/integration/util/Utils",
+	"sap/ui/integration/util/Forms",
 	"sap/f/AvatarGroup",
 	"sap/f/AvatarGroupItem",
 	"sap/f/cards/NumericIndicators",
@@ -44,7 +46,6 @@ sap.ui.define([
 	HBox,
 	VBox,
 	Text,
-	Title,
 	Avatar,
 	Link,
 	Label,
@@ -53,12 +54,15 @@ sap.ui.define([
 	TextArea,
 	Log,
 	isEmptyObject,
+	isPlainObject,
+	merge,
 	ResizeHandler,
 	AlignedFlowLayout,
 	Rem,
 	BindingHelper,
 	BindingResolver,
 	Utils,
+	Forms,
 	AvatarGroup,
 	AvatarGroupItem,
 	NumericIndicators,
@@ -100,7 +104,7 @@ sap.ui.define([
 	 *
 	 * @extends sap.ui.integration.cards.BaseContent
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @since 1.64
@@ -116,6 +120,8 @@ sap.ui.define([
 	ObjectContent.prototype.exit = function() {
 		BaseContent.prototype.exit.apply(this, arguments);
 
+		delete this._aValidationControls;
+
 		if (this._sResizeListenerId) {
 			ResizeHandler.deregister(this._sResizeListenerId);
 			this._sResizeListenerId = "";
@@ -126,26 +132,48 @@ sap.ui.define([
 	 * Handler for when data is changed.
 	 */
 	ObjectContent.prototype.onDataChanged = function () {
-		this._handleNoItemsError(this.getParsedConfiguration().hasData);
-	};
-
-	/**
-	 * Used to show the illustrated message when there is empty data retrieved.
-	 *
-	 * @protected
-	 * @param {String} sValue value to resolve data.
-	 */
-	ObjectContent.prototype._handleNoItemsError = function (sValue) {
-		if (!sValue) {
-			return;
-		}
-
-		var oResolvedValue = BindingResolver.resolveValue(sValue, this, this.getBindingContext().getPath());
-
-		// check for falsy value, empty array or an empty object
-		if (!oResolvedValue || Array.isArray(oResolvedValue) && !oResolvedValue.length || isEmptyObject(oResolvedValue)) {
+		if (!this._hasData()) {
 			this.getParent()._handleError("No items available", true);
 		}
+
+		this._validateInputFields(false);
+	};
+
+	ObjectContent.prototype.validateControls = function () {
+		this._validateInputFields(true);
+	};
+
+	ObjectContent.prototype._validationControlChanged = function (oEvent) {
+		Forms.validateControl(oEvent.getSource(), this.getCardInstance(), true);
+	};
+
+	ObjectContent.prototype._validateInputFields = function (bShowValueState) {
+		(this._aValidationControls || []).forEach(function (oControl) {
+			Forms.validateControl(oControl, this.getCardInstance(), bShowValueState);
+		}.bind(this));
+	};
+
+	ObjectContent.prototype._prepareValidationControl = function (oControl, oItem, sChangeFunction) {
+		oControl.attachEvent(sChangeFunction, this._validationControlChanged.bind(this));
+		this._aValidationControls.push(oControl);
+		oControl._oItem = oItem;
+	};
+
+	ObjectContent.prototype._hasData = function () {
+		var oConfiguration = this.getConfiguration();
+
+		if (!oConfiguration.hasOwnProperty("hasData")) {
+			return true;
+		}
+
+		var vResolvedValue = BindingResolver.resolveValue(oConfiguration.hasData, this, this.getBindingContext().getPath());
+
+		// check for empty array or an empty object
+		if (Array.isArray(vResolvedValue) && !vResolvedValue.length || isPlainObject(vResolvedValue) && isEmptyObject(vResolvedValue)) {
+			return false;
+		}
+
+		return !!vResolvedValue;
 	};
 
 	ObjectContent.prototype.setConfiguration = function (oConfiguration) {
@@ -156,11 +184,70 @@ sap.ui.define([
 			return this;
 		}
 
+		this._aValidationControls = [];
+
 		if (oConfiguration.groups) {
 			this._addGroups(oConfiguration);
 		}
 
 		return this;
+	};
+
+	/**
+	 * @override
+	 */
+	ObjectContent.prototype.getStaticConfiguration = function () {
+		var oConfiguration = this.getParsedConfiguration(),
+			sObjectContentPath;
+
+		if (!this.getBindingContext()) {
+			return oConfiguration;
+		} else {
+			sObjectContentPath = this.getBindingContext().getPath();
+		}
+
+		if (oConfiguration.groups) {
+			oConfiguration.groups.forEach(function (oGroup) {
+				var aResolvedGroupItems = [];
+
+				if (oGroup.items) {
+					oGroup.items.forEach(function (oItem) {
+						var sFullPath = sObjectContentPath + oItem.path,
+							oResolvedGroupItem = this._resolveGroupItem(oItem, sFullPath);
+
+						aResolvedGroupItems.push(oResolvedGroupItem);
+					}.bind(this));
+				}
+
+				oGroup.items = aResolvedGroupItems;
+			}.bind(this));
+		}
+
+		return oConfiguration;
+	};
+
+	ObjectContent.prototype._resolveGroupItem = function (oItem, sFullPath) {
+		var oResolvedGroupItem = {},
+			aResolvedItems = [];
+
+		if (oItem.type === "ButtonGroup" || oItem.type === "IconGroup") {
+			var oTemplate = oItem.template,
+				aData = this.getModel().getProperty(sFullPath);
+
+			aData.forEach(function (oItemData, iIndex) {
+				var oResolvedItem = BindingResolver.resolveValue(oTemplate, this, sFullPath + "/" + iIndex + "/");
+				aResolvedItems.push(oResolvedItem);
+			}.bind(this));
+			oResolvedGroupItem = merge({}, oItem);
+			oResolvedGroupItem.items = aResolvedItems;
+
+			delete oResolvedGroupItem.path;
+			delete oResolvedGroupItem.template;
+
+			return oResolvedGroupItem;
+		} else {
+			return oItem;
+		}
 	};
 
 	ObjectContent.prototype._getRootContainer = function () {
@@ -183,6 +270,7 @@ sap.ui.define([
 			oAFLayout,
 			bNextAFLayout = true,
 			aGroups = oConfiguration.groups || [];
+		this._formElementsIds = new Set();
 
 		aGroups.forEach(function (oGroupConfiguration, i) {
 			var oGroup = this._createGroup(oGroupConfiguration);
@@ -231,14 +319,16 @@ sap.ui.define([
 		}).addStyleClass("sapFCardObjectGroup");
 
 		if (oGroupConfiguration.title) {
-			oGroup.addItem(new Title({
-				text: oGroupConfiguration.title
-			}).addStyleClass("sapFCardObjectItemTitle"));
+			oGroup.addItem(new Text({
+				text: oGroupConfiguration.title,
+				maxLines: oGroupConfiguration.titleMaxLines || 1
+			}).addStyleClass("sapFCardObjectItemTitle sapMTitle sapMTitleStyleAuto"));
 
 			oGroup.addStyleClass("sapFCardObjectGroupWithTitle");
 		}
 
 		oGroupConfiguration.items.forEach(function (oItem) {
+			oItem.labelWrapping = oGroupConfiguration.labelWrapping;
 			this._createGroupItems(oItem).forEach(oGroup.addItem, oGroup);
 		}, this);
 
@@ -265,7 +355,8 @@ sap.ui.define([
 
 			oLabel = new Label({
 				text: vLabel,
-				visible: vVisible
+				visible: vVisible,
+				wrapping: oItem.labelWrapping
 			}).addStyleClass("sapFCardObjectItemLabel");
 
 			oLabel.addEventDelegate({
@@ -289,7 +380,8 @@ sap.ui.define([
 					oLabel,
 					oControl
 				]
-			});
+			}).addStyleClass("sapFCardObjectItemPairContainer");
+
 			var oHBox = new HBox({
 				visible: vVisible,
 				renderType: FlexRendertype.Bare,
@@ -308,14 +400,14 @@ sap.ui.define([
 		var vSrc = BindingHelper.formattedProperty(oIconConfiguration.src, function (sValue) {
 			return this._oIconFormatter.formatSrc(sValue);
 		}.bind(this));
-
+		var vInitials = oIconConfiguration.initials || oIconConfiguration.text;
 		var oAvatar = new Avatar({
 			displaySize: oIconConfiguration.size || AvatarSize.XS,
 			src: vSrc,
-			initials: oIconConfiguration.text,
+			initials: vInitials,
 			displayShape: oIconConfiguration.shape,
 			tooltip: oIconConfiguration.alt,
-			backgroundColor: oIconConfiguration.backgroundColor || (oIconConfiguration.text ? undefined : AvatarColor.Transparent)
+			backgroundColor: oIconConfiguration.backgroundColor || (vInitials ? undefined : AvatarColor.Transparent)
 		}).addStyleClass("sapFCardObjectItemAvatar sapFCardIcon");
 
 		return oAvatar;
@@ -567,7 +659,7 @@ sap.ui.define([
 			src: BindingHelper.formattedProperty(oTemplateConfig.icon.src, function (sValue) {
 				return this._oIconFormatter.formatSrc(sValue);
 			}.bind(this)),
-			initials: oTemplateConfig.icon.text,
+			initials: oTemplateConfig.icon.initials || oTemplateConfig.icon.text,
 			tooltip: oTemplateConfig.icon.alt
 		});
 
@@ -596,7 +688,8 @@ sap.ui.define([
 			oFormModel = oCard.getModel("form"),
 			oSettings = {
 				visible: BindingHelper.reuse(vVisible),
-				placeholder: oItem.placeholder
+				placeholder: oItem.placeholder,
+				required: Forms.getRequiredValidationValue(oItem)
 			},
 			oControl,
 			oItemTemplate,
@@ -630,7 +723,11 @@ sap.ui.define([
 		if (!oItem.id) {
 			Log.error("Each input element must have an ID.", "sap.ui.integration.widgets.Card");
 			return oControl;
+		} else if (this._formElementsIds.has(oItem.id)) {
+			Log.error("Duplicate form element ID - " + "'" + oItem.id + "'" , "sap.ui.integration.widgets.Card");
 		}
+
+		this._formElementsIds.add(oItem.id);
 
 		fnUpdateValue = function () {
 			oFormModel.setProperty("/" + oItem.id, {
@@ -643,6 +740,7 @@ sap.ui.define([
 		oControl.addEventDelegate({
 			onAfterRendering: fnUpdateValue
 		});
+		this._prepareValidationControl(oControl, oItem, "change");
 
 		return oControl;
 	};
@@ -651,6 +749,7 @@ sap.ui.define([
 		var oCard = this.getCardInstance(),
 			oFormModel = oCard.getModel("form"),
 			oControl = new TextArea({
+				required: Forms.getRequiredValidationValue(oItem),
 				value: oItem.value,
 				visible: BindingHelper.reuse(vVisible),
 				rows: oItem.rows,
@@ -665,7 +764,11 @@ sap.ui.define([
 		if (!oItem.id) {
 			Log.error("Each input element must have an ID.", "sap.ui.integration.widgets.Card");
 			return oControl;
+		} else if (this._formElementsIds.has(oItem.id)) {
+			Log.error("Duplicate form element ID - " + "'" + oItem.id + "'" , "sap.ui.integration.widgets.Card");
 		}
+
+		this._formElementsIds.add(oItem.id);
 
 		fnUpdateValue = function () {
 			oFormModel.setProperty("/" + oItem.id, oControl.getValue());
@@ -675,6 +778,7 @@ sap.ui.define([
 		oControl.addEventDelegate({
 			onAfterRendering: fnUpdateValue
 		});
+		this._prepareValidationControl(oControl, oItem, "liveChange");
 
 		return oControl;
 	};

@@ -56,14 +56,13 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.7.0
 	 * @deprecated Since version 1.38. Instead, use the <code>sap.m.MessagePopover</code> control.
 	 * @alias sap.ui.ux3.NotificationBar
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var NotificationBar = Control.extend("sap.ui.ux3.NotificationBar", /** @lends sap.ui.ux3.NotificationBar.prototype */ { metadata : {
 
@@ -1062,7 +1061,6 @@ sap.ui.define([
 		 *
 		 * @type boolean
 		 * @public
-		 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		NotificationBar.prototype.hasItems = function() {
 			// Checking all notifiers if any has items

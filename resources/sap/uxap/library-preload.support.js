@@ -7,7 +7,7 @@
 /**
  * Adds support rules of the sap.uxap library to the support infrastructure.
  */
-sap.ui.predefine('sap/uxap/library.support',["./rules/ObjectPageLayout.support"],
+sap.ui.predefine("sap/uxap/library.support", ["./rules/ObjectPageLayout.support"],
 	function(ObjectPageLayoutSupport) {
 	"use strict";
 
@@ -26,7 +26,7 @@ sap.ui.predefine('sap/uxap/library.support',["./rules/ObjectPageLayout.support"]
 /**
  * Defines support rules of the ObjectPageHeader control of sap.uxap library.
  */
-sap.ui.predefine('sap/uxap/rules/ObjectPageLayout.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/uxap/rules/ObjectPageLayout.support", ["sap/ui/support/library"],
 	function (SupportLib) {
 		"use strict";
 

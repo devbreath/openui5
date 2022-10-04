@@ -27,7 +27,8 @@ sap.ui.define([
 		"sap/ui/thirdparty/jquery",
 		'./PlanningCalendarLegend',
 		'sap/ui/core/InvisibleMessage',
-		'sap/ui/core/library'
+		'sap/ui/core/library',
+		"sap/ui/core/Configuration"
 	],
 	function (
 		SinglePlanningCalendarUtilities,
@@ -51,7 +52,8 @@ sap.ui.define([
 		jQuery,
 		PlanningCalendarLegend,
 		InvisibleMessage,
-		coreLibrary
+		coreLibrary,
+		Configuration
 	) {
 		"use strict";
 
@@ -100,7 +102,7 @@ sap.ui.define([
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @private
@@ -337,7 +339,9 @@ sap.ui.define([
 						}
 					}
 				}
-			}
+			},
+
+			renderer: SinglePlanningCalendarGridRenderer
 		});
 
 		SinglePlanningCalendarGrid.prototype.init = function () {
@@ -834,11 +838,11 @@ sap.ui.define([
 				drop: function (oEvent) {
 					var oDragSession = oEvent.getParameter("dragSession"),
 						oDropControl = oDragSession.getDropControl(),
-						iМillisecondsStep = (60 / (this.getScaleFactor() * 2)) * 60 * 1000, // calculating the duration of the appointment in milliseconds relative to the current scaleFactor
+						iMillisecondsStep = (60 / (this.getScaleFactor() * 2)) * 60 * 1000, // calculating the duration of the appointment in milliseconds relative to the current scaleFactor
 						oStartDate = oDragSession.getComplexData("startingDropDate").getTime(),
 						oEndDate = oDropControl.getDate().getJSDate().getTime(),
 						iStartTime = Math.min(oStartDate, oEndDate),
-						iEndTime = Math.max(oStartDate, oEndDate) + iМillisecondsStep;
+						iEndTime = Math.max(oStartDate, oEndDate) + iMillisecondsStep;
 
 					this.fireAppointmentCreate({
 						startDate: new Date(iStartTime),
@@ -875,7 +879,12 @@ sap.ui.define([
 				bAppStartIsOutsideVisibleStartHour,
 				bAppEndIsOutsideVisibleEndHour,
 				iRowHeight = this._getRowHeight(),
-				iRow = 0;
+				iRow = 0,
+				iVerticalPaddingBetweenAppointments = 0.125,
+				iAppointmentBottomPadding = 0.125,
+				iAppointmentTopPadding = 0.0625,
+				iScaleFactor = this.getScaleFactor(),
+				iDivider = 2 * iScaleFactor;
 
 			if (this._oAppointmentsToRender[sDate]) {
 				this._oAppointmentsToRender[sDate].oAppointmentsList.getIterator().forEach(function(oAppNode) {
@@ -891,7 +900,9 @@ sap.ui.define([
 
 					oAppDomRef.style["top"] = iAppTop + "rem";
 					oAppDomRef.style["bottom"] = iAppBottom  + "rem";
-					oAppDomRef.querySelector(".sapUiCalendarApp").style["minHeight"] = (iRowHeight / 2 - 0.1875) + "rem";
+
+					oAppDomRef.querySelector(".sapUiCalendarApp").style["minHeight"] = (iRowHeight - ((iVerticalPaddingBetweenAppointments + iAppointmentBottomPadding + iAppointmentTopPadding) * iScaleFactor)) / iDivider + "rem";
+
 					++iRow;
 				}.bind(this));
 			}
@@ -927,6 +938,10 @@ sap.ui.define([
 			}
 		};
 
+		SinglePlanningCalendarGrid.prototype._adjustRowHigth = function () {
+			this.$().find(".sapMSinglePCRow").css("height", this._getRowHeight() + "rem");
+		};
+
 		SinglePlanningCalendarGrid.prototype.onAfterRendering = function () {
 			var iColumns = this._getColumns(),
 				oStartDate = this.getStartDate(),
@@ -944,7 +959,7 @@ sap.ui.define([
 			} else {
 				this._adjustBlockersHeightforCozy();
 			}
-
+			this._adjustRowHigth();
 			this._updateRowHeaderAndNowMarker();
 			_initItemNavigation.call(this);
 		};
@@ -1921,7 +1936,7 @@ sap.ui.define([
 		 */
 		SinglePlanningCalendarGrid.prototype._getCoreLocaleId = function () {
 			if (!this._sLocale) {
-				this._sLocale = sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale().toString();
+				this._sLocale = Configuration.getFormatSettings().getFormatLocale().toString();
 			}
 
 			return this._sLocale;

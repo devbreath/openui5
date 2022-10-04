@@ -20,7 +20,7 @@
 		},
 		{
 			"name": "Card.less",
-			"size": 11644,
+			"size": 11642,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -74,13 +74,13 @@
 		},
 		{
 			"name": "GridList.less",
-			"size": 2455,
+			"size": 2457,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "GridListItem.less",
-			"size": 2663,
+			"size": 2665,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -121,14 +121,26 @@
 			"theme": "base"
 		},
 		{
+			"name": "SidePanel.less",
+			"size": 12110,
+			"designtime": true,
+			"theme": "base"
+		},
+		{
 			"name": "TablePlaceholder.less",
 			"size": 767,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
+			"name": "TimelinePlaceholder.less",
+			"size": 1439,
+			"designtime": true,
+			"theme": "base"
+		},
+		{
 			"name": "css_variables.css",
-			"size": 4267,
+			"size": 4310,
 			"theme": "base"
 		},
 		{
@@ -139,46 +151,51 @@
 		},
 		{
 			"name": "css_variables.source.less",
-			"size": 118666,
+			"size": 118784,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 70879,
+			"size": 85384,
 			"theme": "base"
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/f/themes/base/library-parameters.json",
 			"size": 1735,
 			"theme": "base"
 		},
 		{
 			"name": "library.css",
-			"size": 70879,
+			"size": 85388,
 			"theme": "base"
 		},
 		{
 			"name": "library.less",
-			"size": 68730,
+			"size": 82417,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "library.source.less",
-			"size": 885,
+			"size": 947,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 73090,
+			"size": 88394,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 73091,
+			"size": 88399,
 			"theme": "base"
+		},
+		{
+			"name": "resources.json",
+			"size": 3337
 		}
 	]
 }

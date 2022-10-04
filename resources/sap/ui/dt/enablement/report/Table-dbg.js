@@ -27,7 +27,8 @@ sap.ui.define([
 	Button,
 	SearchField,
 	Text,
-	RatingIndicator
+	RatingIndicator,
+	TableRenderer
 ) {
 	"use strict";
 
@@ -42,14 +43,13 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
 	 * @since 1.38
 	 * @alias sap.ui.dt.enablement.report.Table
 	 * @experimental Since 1.38. This class is experimental and provides only limited functionality. Also the API might be changed in future.
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var oTable = Control.extend("sap.ui.dt.enablement.report.Table", /** @lends sap.ui.dt.enablement.report.Table.prototype */ {
 		metadata: {
@@ -256,7 +256,9 @@ sap.ui.define([
 		_onExpandSecondLevel: function() {
 			var oTable = this._getTable();
 			oTable.expandToLevel(2);
-		}
+		},
+
+		renderer: TableRenderer
 	});
 
 	return oTable;

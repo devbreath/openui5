@@ -56,14 +56,13 @@ sap.ui.define(
 		 * The metadata information is provided via the {@link sap.ui.mdc.FilterBarDelegate FilterBarDelegate} implementation. This implementation has to be provided by the application.
 		 * @extends sap.ui.mdc.filterbar.FilterBarBase
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 * @constructor
 		 * @private
 		 * @ui5-restricted sap.fe
 		 * @MDC_PUBLIC_CANDIDATE
 		 * @since 1.84.0
 		 * @alias sap.ui.mdc.filterbar.vh.FilterBar
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var FilterBar = FilterBarBase.extend(
 			"sap.ui.mdc.filterbar.vh.FilterBar",

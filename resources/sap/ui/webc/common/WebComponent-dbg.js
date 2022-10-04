@@ -106,12 +106,11 @@ sap.ui.define([
 		 *
 		 * @extends sap.ui.core.Control
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 * @public
 		 * @since 1.92.0
 		 * @alias sap.ui.webc.common.WebComponent
 		 * @experimental Since 1.92.0 The API might change. It is not intended for productive usage yet!
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var WebComponent = Control.extend("sap.ui.webc.common.WebComponent", {
 

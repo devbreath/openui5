@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/ui/core/Core"],function(C){"use strict";var Q={apiVersion:2};Q.render=function(r,q){r.openStart("div",q).class("sapMQuickViewCard").accessibilityState({label:{value:C.getLibraryResourceBundle("sap.m").getText("ARIA_ROLEDESCRIPTION_CARD"),append:true}});if(!q.getShowVerticalScrollBar()){r.class("sapMQuickViewCardNoScroll");}r.openEnd();r.renderControl(q.getNavContainer());r.close("div");};return Q;},true);
+sap.ui.define(["sap/ui/core/Core"],function(e){"use strict";var r={apiVersion:2};r.render=function(r,a){r.openStart("div",a).class("sapMQuickViewCard").accessibilityState({label:{value:e.getLibraryResourceBundle("sap.m").getText("ARIA_ROLEDESCRIPTION_CARD"),append:true}});if(!a.getShowVerticalScrollBar()){r.class("sapMQuickViewCardNoScroll")}r.openEnd();r.renderControl(a.getNavContainer());r.close("div")};return r},true);
+//# sourceMappingURL=QuickViewCardRenderer.js.map

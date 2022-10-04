@@ -20,7 +20,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class Base type for <code>MultiValueFieldItem</code> control.
 	 * @extends sap.ui.core.Element
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -29,7 +29,6 @@ sap.ui.define([
 	 * @ui5-restricted sap.fe
 	 * @MDC_PUBLIC_CANDIDATE
 	 * @alias sap.ui.mdc.field.MultiValueFieldItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var MultiValueFieldItem = Element.extend("sap.ui.mdc.field.MultiValueFieldItem", /** @lends sap.ui.mdc.field.MultiValueFieldItem.prototype */
 	{

@@ -39,14 +39,13 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class A field help used in the <code>FieldHelp</code> association of controls based on {@link sap.ui.mdc.field.FieldBase FieldBase} that shows a list of items.
 	 * @extends sap.ui.mdc.field.FieldHelpBase
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @ui5-restricted sap.fe
 	 * @MDC_PUBLIC_CANDIDATE
 	 * @since 1.54.0
 	 * @alias sap.ui.mdc.field.ListFieldHelp
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ListFieldHelp = FieldHelpBase.extend("sap.ui.mdc.field.ListFieldHelp", /** @lends sap.ui.mdc.field.ListFieldHelp.prototype */
 	{

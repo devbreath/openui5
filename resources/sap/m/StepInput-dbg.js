@@ -119,14 +119,13 @@ function(
 		 * @implements sap.ui.core.IFormContent
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
 		 * @since 1.40
 		 * @alias sap.m.StepInput
 		 * @see {@link fiori:https://experience.sap.com/fiori-design-web/step-input/ Step Input}
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var StepInput = Control.extend("sap.m.StepInput", /** @lends sap.m.StepInput.prototype */ {
 			metadata: {
@@ -294,7 +293,9 @@ function(
 				if (mSettings && mSettings.value === undefined){
 					this.setValue(this._getDefaultValue(undefined, mSettings.max, mSettings.min));
 				}
-			}
+			},
+
+			renderer: StepInputRenderer
 		});
 
 		// get resource translation bundle;

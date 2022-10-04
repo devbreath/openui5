@@ -20,14 +20,14 @@ sap.ui.define([
 	 * @namespace
 	 * @alias sap.ui.ux3
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @public
 	 * @since 0.13
 	 * @deprecated Since 1.38
 	 */
 	var thisLib = sap.ui.getCore().initLibrary({
 		name : "sap.ui.ux3",
-		version: "1.105.1",
+		version: "1.107.0",
 		dependencies : ["sap.ui.core","sap.ui.commons"],
 		types: [
 			"sap.ui.ux3.ActionBarSocialActions",
@@ -87,7 +87,6 @@ sap.ui.define([
 	 * @public
 	 * @experimental Since version 1.2.
 	 * API is not yet finished and might change completely
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 * @deprecated Since 1.38
 	 */
 	thisLib.ActionBarSocialActions = {
@@ -132,7 +131,6 @@ sap.ui.define([
 	 * @name sap.ui.ux3.DataSetView
 	 * @interface
 	 * @public
-	 * @ui5-metamodel This interface also will be described in the UI5 (legacy) designtime metamodel
 	 * @deprecated Since 1.38
 	 */
 
@@ -144,7 +142,6 @@ sap.ui.define([
 	 * @enum {string}
 	 * @public
 	 * @since 1.7.1
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 * @deprecated Since 1.38
 	 */
 	thisLib.ExactOrder = {
@@ -171,7 +168,6 @@ sap.ui.define([
 	 * @public
 	 * @experimental Since version 1.2.
 	 * The whole Feed/Feeder API is still under discussion, significant changes are likely. Especially text presentation (e.g. @-references and formatted text) is not final. Also the Feed model topic is still open.
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 * @deprecated Since 1.38
 	 */
 	thisLib.FeederType = {
@@ -202,7 +198,6 @@ sap.ui.define([
 	 *
 	 * @enum {string}
 	 * @public
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 * @deprecated Since 1.38
 	 */
 	thisLib.FollowActionState = {
@@ -234,7 +229,6 @@ sap.ui.define([
 	 * @author SAP
 	 * @enum {string}
 	 * @public
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 * @deprecated Since 1.38
 	 */
 	thisLib.NotificationBarStatus = {
@@ -273,7 +267,6 @@ sap.ui.define([
 	 * @enum {string}
 	 * @public
 	 * @since 1.12.0
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 * @deprecated Since 1.38
 	 */
 	thisLib.ShellDesignType = {
@@ -312,7 +305,6 @@ sap.ui.define([
 	 * @author SAP SE
 	 * @enum {string}
 	 * @public
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 * @deprecated Since 1.38
 	 */
 	thisLib.ShellHeaderType = {
@@ -351,7 +343,6 @@ sap.ui.define([
 	 * @enum {string}
 	 * @public
 	 * @since 1.16.3
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 * @deprecated Since 1.38
 	 */
 	thisLib.ThingViewerHeaderType = {
@@ -376,7 +367,6 @@ sap.ui.define([
 	 *
 	 * @enum {string}
 	 * @public
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 * @deprecated Since 1.38
 	 */
 	thisLib.VisibleItemCountMode = {

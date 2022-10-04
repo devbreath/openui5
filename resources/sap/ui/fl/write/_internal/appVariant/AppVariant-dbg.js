@@ -5,19 +5,19 @@
  */
 
 sap.ui.define([
-	"sap/ui/thirdparty/jquery",
 	"sap/ui/base/ManagedObject",
 	"sap/ui/fl/descriptorRelated/internal/Utils",
 	"sap/ui/fl/write/_internal/connectors/LrepConnector",
 	"sap/base/util/merge",
-	"sap/base/Log"
+	"sap/base/Log",
+	"sap/base/util/isPlainObject"
 ], function (
-	jQuery,
 	ManagedObject,
 	Utils,
 	LrepConnector,
 	merge,
-	Log
+	Log,
+	isPlainObject
 ) {
 	"use strict";
 
@@ -35,14 +35,14 @@ sap.ui.define([
 	 * @constructor
 	 * @alias sap.ui.fl.write._internal.appVariant.AppVariant
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @ui5-restricted sap.ui.rta, smart business
 	 */
 	var AppVariant = ManagedObject.extend("sap.ui.fl.write._internal.appVariant.AppVariant", /** @lends sap.ui.fl.write._internal.appVariant.AppVariant */ {
 		constructor: function(mPropertyBag) {
 			ManagedObject.apply(this);
-			if (!jQuery.isPlainObject(mPropertyBag)) {
+			if (!isPlainObject(mPropertyBag)) {
 				Log.error("Constructor : sap.ui.fl.write._internal.appVariant.AppVariant: mPropertyBag is not defined");
 			}
 			this._oDefinition = mPropertyBag;

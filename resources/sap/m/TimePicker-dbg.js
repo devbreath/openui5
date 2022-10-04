@@ -30,7 +30,8 @@ sap.ui.define([
 	"sap/base/Log",
 	"sap/ui/core/InvisibleText",
 	'./Button',
-	"sap/ui/thirdparty/jquery"
+	"sap/ui/thirdparty/jquery",
+	"sap/ui/core/Configuration"
 ],
 function(
 	InputBase,
@@ -57,7 +58,8 @@ function(
 	Log,
 	InvisibleText,
 	Button,
-	jQuery
+	jQuery,
+	Configuration
 ) {
 		"use strict";
 
@@ -142,7 +144,7 @@ function(
 		 * @extends sap.m.DateTimeField
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
@@ -312,7 +314,10 @@ function(
 				},
 
 				dnd: { draggable: false, droppable: true }
-		}});
+		},
+
+			renderer: TimePickerRenderer
+		});
 
 		/**
 		 * Determines the format, displayed in the input field and the picker clocks/numeric inputs.
@@ -391,11 +396,11 @@ function(
 			this._bValid = false;
 
 			/*  stores the type of the used locale (e.g. 'medium', 'long') for the display
-			 see https://openui5.hana.ondemand.com/api/sap.ui.core.LocaleData#methods/getTimePattern */
+			 see https://sdk.openui5.org/api/sap.ui.core.LocaleData/methods/getTimePattern */
 			this._sUsedDisplayPattern = null;
 
 			/*  stores the type of the used locale (e.g. 'medium', 'long') for inputting
-				 see https://openui5.hana.ondemand.com/api/sap.ui.core.LocaleData#methods/getTimePattern */
+				 see https://sdk.openui5.org/api/sap.ui.core.LocaleData/methods/getTimePattern */
 			this._sUsedValuePattern = null;
 
 			this._oDisplayFormat = null;
@@ -620,7 +625,7 @@ function(
 			oClocks.setValue(sDisplayFormattedValue);
 
 			sFormattedDate = this._getPickerParser().format(oDateValue || new Date(),
-				sap.ui.getCore().getConfiguration().getTimezone());
+				Configuration.getTimezone());
 			oDateValue = this._getPickerParser().parse(sFormattedDate, TimezoneUtil.getLocalTimezone())[ 0 ];
 			oDateValue.setMilliseconds(iDateValueMilliseconds);
 
@@ -1165,7 +1170,7 @@ function(
 		TimePicker.prototype._getLocale = function () {
 			var sLocaleId = this.getLocaleId();
 
-			return sLocaleId ? new Locale(sLocaleId) : sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale();
+			return sLocaleId ? new Locale(sLocaleId) : Configuration.getFormatSettings().getFormatLocale();
 		};
 
 		/**
@@ -1691,7 +1696,7 @@ function(
 				sFormattedDate = this._getPickerParser().format(oDate, TimezoneUtil.getLocalTimezone());
 
 			oDate = this._getPickerParser()
-				.parse(sFormattedDate, sap.ui.getCore().getConfiguration().getTimezone())[0];
+				.parse(sFormattedDate, Configuration.getTimezone())[0];
 
 			this._isClockPicker = true;
 			this._isNumericPicker = false;
@@ -1725,7 +1730,7 @@ function(
 				sFormattedDate = this._getPickerParser().format(oDate, TimezoneUtil.getLocalTimezone());
 
 			oDate = this._getPickerParser()
-				.parse(sFormattedDate, sap.ui.getCore().getConfiguration().getTimezone())[0];
+				.parse(sFormattedDate, Configuration.getTimezone())[0];
 
 			this._isClockPicker = false;
 			this._isNumericPicker = true;
@@ -1753,7 +1758,7 @@ function(
 		 */
 		 TimePicker.prototype._getLocaleBasedPattern = function (sPlaceholder) {
 			return LocaleData.getInstance(
-				sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale()
+				Configuration.getFormatSettings().getFormatLocale()
 			).getTimePattern(sPlaceholder);
 		};
 
@@ -2300,7 +2305,7 @@ function(
 		};
 
 		function getDefaultDisplayFormat() {
-			var oLocale = sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale(),
+			var oLocale = Configuration.getFormatSettings().getFormatLocale(),
 				oLocaleData = LocaleData.getInstance(oLocale);
 
 			return oLocaleData.getTimePattern(TimeFormatStyles.Medium);

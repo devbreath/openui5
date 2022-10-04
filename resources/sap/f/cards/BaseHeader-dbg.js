@@ -38,13 +38,12 @@ sap.ui.define([
 	 * @abstract
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.86
 	 * @alias sap.f.cards.BaseHeader
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var BaseHeader = Control.extend("sap.f.cards.BaseHeader", {
 		metadata: {
@@ -69,7 +68,7 @@ sap.ui.define([
 				dataTimestampUpdating: { type: "boolean", defaultValue: false, visibility: "hidden" },
 
 				/**
-				 * Set to true to false if header shouldn't be focusable.
+				 * Set to false if header shouldn't be focusable.
 				 * @private
 				 */
 				focusable: { type: "boolean", defaultValue: true, visibility: "hidden" }

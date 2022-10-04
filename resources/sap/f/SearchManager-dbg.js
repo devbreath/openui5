@@ -23,13 +23,12 @@ sap.ui.define(['sap/ui/core/Element', 'sap/ui/base/ManagedObjectObserver', './sh
 		 * @extends sap.ui.core.Element
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
 		 * @since 1.67
 		 * @alias sap.f.SearchManager
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		var SearchManager = Element.extend("sap.f.SearchManager", /** @lends sap.f.SearchManager.prototype */ {

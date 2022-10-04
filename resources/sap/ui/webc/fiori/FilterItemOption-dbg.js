@@ -26,7 +26,7 @@ sap.ui.define([
 	 * <h3>Usage</h3>
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -34,7 +34,6 @@ sap.ui.define([
 	 * @experimental Since 1.97.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.fiori.FilterItemOption
 	 * @implements sap.ui.webc.fiori.IFilterItemOption
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var FilterItemOption = WebComponent.extend("sap.ui.webc.fiori.FilterItemOption", {
 		metadata: {

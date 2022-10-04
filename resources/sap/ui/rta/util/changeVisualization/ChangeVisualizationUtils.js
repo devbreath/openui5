@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define([],function(){"use strict";var C={};C.shortenString=function(s){if(!s){return null;}var S=s.length;if(S>60){var f=s.substring(0,27);var l=s.substring(S-27);s=f+"(...)"+l;}return s;};return C;});
+sap.ui.define([],function(){"use strict";var r={};r.shortenString=function(r){if(!r){return null}var n=r.length;if(n>60){var t=r.substring(0,27);var i=r.substring(n-27);r=t+"(...)"+i}return r};return r});
+//# sourceMappingURL=ChangeVisualizationUtils.js.map

@@ -41,17 +41,20 @@ sap.ui.define([
 	 * <code>sap.m.Toolbar</code> with <code>sap.m.Buttons</code>.
 	 *
 	 * @extends sap.ui.unified.Calendar
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
 	 * @since 1.84.0
 	 * @alias sap.f.CalendarInCard
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
-	var CalendarInCard = Calendar.extend("sap.f.CalendarInCard", /** @lends sap.f.CalendarInCard.prototype */ { metadata : {
-			library : "sap.f"
-		}});
+	var CalendarInCard = Calendar.extend("sap.f.CalendarInCard", /** @lends sap.f.CalendarInCard.prototype */ {
+		metadata : {
+				library : "sap.f"
+			},
+
+		renderer: CalendarRenderer
+	});
 
 	/*
 	 * There are different modes (stored in this._iMode)

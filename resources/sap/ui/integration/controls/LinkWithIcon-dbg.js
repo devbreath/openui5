@@ -29,7 +29,7 @@ sap.ui.define([
 	 * @extends sap.m.Link
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -47,7 +47,9 @@ sap.ui.define([
 			aggregations: {
 				_icon: { type: "sap.ui.core.Icon", multiple: false, visibility: "hidden" }
 			}
-		}
+		},
+
+		renderer: LinkWithIconRenderer
 	});
 
 	/**

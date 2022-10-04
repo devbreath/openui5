@@ -3735,16 +3735,6 @@ html[data-sap-ui-animation='on'] .sapMPageWithFloatingFooter {
 		top: 2rem;
 	}
 
-	.sapMPageWithHeader.sapMPageWithSubHeader {
-		> section {
-			top: 4.5rem;
-		}
-
-		.sapMPageSubHeader.sapMPageSubHeaderInfoBar + section {
-			top: 4.5rem;
-		}
-	}
-
 	.sapMPageWithHeader {
 		&.sapFShellBar-CTX > section {
 			top: 2.75rem;
@@ -4671,6 +4661,10 @@ html.sap-desktop .sapUiSizeCompact .sapMSliderProgress:focus:before {
 /* ====================================== */
 
 .sapMRI {
+	& {
+		margin: 0.75rem 0;
+	}
+
 	&:not(.sapMRIDisabled):not(.sapMRIDisplayOnly):not(.sapMRIReadOnly):hover {
 		opacity: 0.9;
 	}
@@ -5625,7 +5619,7 @@ html.sap-desktop .sapMSPCMonthDay.sapMSPCMonthDayToday:focus .sapMSPCMonthNowMar
 
 .sapMSliderInner .sapMSliderHandle:not(.sapMSliderHandlePressed):not(.sapMRangeSlider.sapMSlider .sapMSliderInner:not(.sapMSliderInnerDisabled) .sapMSliderHandle:focus):after {
 	font-family: SAP-icons;
-	content: "\e244";
+	content: "\e29c";
 	position: absolute;
 	top: 4px;
 	right: 0.5rem;
@@ -5711,7 +5705,7 @@ html.sap-desktop .sapMSPCMonthDay.sapMSPCMonthDayToday:focus .sapMSPCMonthNowMar
 	width: 0.5rem;
 	height: 0.5rem;
 	left: -14px;
-	top: -2px;
+	top: -3px;
 }
 
 .sapMSlider::after {
@@ -5724,7 +5718,7 @@ html.sap-desktop .sapMSPCMonthDay.sapMSPCMonthDayToday:focus .sapMSPCMonthNowMar
 	width: 0.5rem;
 	height: 0.5rem;
 	right: 2px;
-	top: 21px;
+	top: 20px;
 }
 
 .sapMSliderInner {

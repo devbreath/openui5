@@ -32,9 +32,8 @@ sap.ui.define([
 	 * @param {string} sResourcePath
 	 *   A resource path relative to the service URL
 	 * @param {object} oAggregation
-	 *   An object holding the information needed for data aggregation; see also
-	 *   <a href="http://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/">OData
-	 *   Extension for Data Aggregation Version 4.0</a>; must already be normalized by
+	 *   An object holding the information needed for data aggregation; see also "OData Extension
+	 *   for Data Aggregation Version 4.0"; must already be normalized by
 	 *   {@link _AggregationHelper.buildApply}
 	 * @param {object} mQueryOptions
 	 *   A map of key-value pairs representing the query string
@@ -869,9 +868,8 @@ sap.ui.define([
 	 * @param {string} sDeepResourcePath
 	 *   The deep resource path to be used to build the target path for bound messages
 	 * @param {object} [oAggregation]
-	 *   An object holding the information needed for data aggregation; see also
-	 *   <a href="http://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/">OData
-	 *   Extension for Data Aggregation Version 4.0</a>; must already be normalized by
+	 *   An object holding the information needed for data aggregation; see also "OData Extension
+	 *   for Data Aggregation Version 4.0"; must already be normalized by
 	 *   {@link _AggregationHelper.buildApply}
 	 * @param {object} mQueryOptions
 	 *   A map of key-value pairs representing the query string, the value in this pair has to
@@ -887,57 +885,71 @@ sap.ui.define([
 	 *   If this parameter is set, multiple requests for a cache using the same resource path will
 	 *   always return the same, shared cache. This cache is read-only, modifying calls lead to an
 	 *   error.
+	 * @param {boolean} [bIsGrouped]
+	 *   Whether the list binding is grouped via its first sorter
 	 * @returns {sap.ui.model.odata.v4.lib._Cache}
 	 *   The cache
 	 * @throws {Error}
 	 *   If the system query option "$filter" is combined with group levels or with grand totals
-	 *   (unless "grandTotal like 1.84"), or if grand totals or group levels are combined with
-	 *   min/max, or if the system query options "$expand" or "$select" are combined with pure data
-	 *   aggregation (no recursive hierarchy)
+	 *   (unless "grandTotal like 1.84"), or if grand totals or group levels or recursive hierarchy
+	 *   are combined with min/max or with grouping via sorter, or if the system query options
+	 *   "$expand" or "$select" are combined with pure data aggregation (no recursive hierarchy), or
+	 *   if the system query option "$search" is combined with grand totals or group levels or a
+	 *   recursive hierarchy
 	 *
 	 * @public
 	 */
 	_AggregationCache.create = function (oRequestor, sResourcePath, sDeepResourcePath, oAggregation,
-			mQueryOptions, bSortExpandSelect, bSharedRequest) {
-		var bHasGrandTotal, bHasGroupLevels, bHasMinOrMax;
+			mQueryOptions, bSortExpandSelect, bSharedRequest, bIsGrouped) {
+		var bHasGrandTotal, bHasGroupLevels;
+
+		function checkExpandSelect() {
+			if ("$expand" in mQueryOptions) {
+				throw new Error("Unsupported system query option: $expand");
+			}
+			if ("$select" in mQueryOptions) {
+				throw new Error("Unsupported system query option: $select");
+			}
+		}
 
 		if (oAggregation) {
 			bHasGrandTotal = _AggregationHelper.hasGrandTotal(oAggregation.aggregate);
 			bHasGroupLevels = oAggregation.groupLevels && !!oAggregation.groupLevels.length;
-			bHasMinOrMax = _AggregationHelper.hasMinOrMax(oAggregation.aggregate);
 
-			if (mQueryOptions.$filter
-				&& (bHasGrandTotal && !oAggregation["grandTotal like 1.84"]
-					|| bHasGroupLevels)) {
-				throw new Error("Unsupported system query option: $filter");
-			}
-			if (mQueryOptions.$search && (bHasGrandTotal || bHasGroupLevels)) {
-				throw new Error("Unsupported system query option: $search");
-			}
-			if (bHasMinOrMax) {
+			if (_AggregationHelper.hasMinOrMax(oAggregation.aggregate)) {
 				if (bHasGrandTotal) {
 					throw new Error("Unsupported grand totals together with min/max");
 				}
 				if (bHasGroupLevels) {
 					throw new Error("Unsupported group levels together with min/max");
 				}
+				if (oAggregation.hierarchyQualifier) {
+					throw new Error("Unsupported recursive hierarchy together with min/max");
+				}
+				checkExpandSelect();
+
+				return _MinMaxHelper.createCache(oRequestor, sResourcePath, oAggregation,
+					mQueryOptions);
 			}
 
-			if (bHasGrandTotal || bHasGroupLevels || bHasMinOrMax
-					|| oAggregation.hierarchyQualifier) {
+			if (mQueryOptions.$filter
+				&& (bHasGrandTotal && !oAggregation["grandTotal like 1.84"]
+					|| bHasGroupLevels)) {
+				throw new Error("Unsupported system query option: $filter");
+			}
+
+			if (bHasGrandTotal || bHasGroupLevels || oAggregation.hierarchyQualifier) {
+				if (mQueryOptions.$search) {
+					throw new Error("Unsupported system query option: $search");
+				}
 				if (!oAggregation.hierarchyQualifier) {
-					if ("$expand" in mQueryOptions) {
-						throw new Error("Unsupported system query option: $expand");
-					}
-					if ("$select" in mQueryOptions) {
-						throw new Error("Unsupported system query option: $select");
-					}
+					checkExpandSelect();
+				}
+				if (bIsGrouped) {
+					throw new Error("Unsupported grouping via sorter");
 				}
 
-				return bHasMinOrMax
-					? _MinMaxHelper.createCache(oRequestor, sResourcePath, oAggregation,
-						mQueryOptions)
-					: new _AggregationCache(oRequestor, sResourcePath, oAggregation, mQueryOptions,
+				return new _AggregationCache(oRequestor, sResourcePath, oAggregation, mQueryOptions,
 						bHasGrandTotal);
 			}
 		}

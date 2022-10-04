@@ -29,14 +29,13 @@ sap.ui.define([
 	 * The <code>sap.ui.webc.main.Title</code> component is used to display titles inside a page. It is a simple, large-sized text with explicit header/title semantics.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.92.0
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.Title
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Title = WebComponent.extend("sap.ui.webc.main.Title", {
 		metadata: {

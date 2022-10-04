@@ -63,7 +63,7 @@ sap.ui.define([
          * @class The Chart control creates a chart based on metadata and the configuration specified.
          * @extends sap.ui.mdc.Control
          * @author SAP SE
-         * @version 1.105.1
+         * @version 1.107.0
          * @constructor
          * @experimental As of version ...
          * @private
@@ -302,6 +302,19 @@ sap.ui.define([
                     variant: {
                         type: "sap.ui.fl.variants.VariantManagement",
                         multiple: false
+                    },
+                    /**
+                     * Defines the custom visualization if there is no data available.
+                     * <b>Note:</b> If both a <code>noDataText</code> property and a <code>noData</code> aggregation are provided, the <code>noData</code> aggregation takes priority.
+                     * If the <code>noData</code> aggregation is undefined or set to null, the <code>noDataText</code> property is used instead.
+                     * @since 1.107
+                     * @experimental
+                    * @private
+                    * @ui5-restricted sap.ui.mdc, sap-fe
+                     */
+                    noData: {
+                        type: "sap.ui.core.Control",
+                        multiple: false
                     }
                 },
                 associations: {
@@ -347,25 +360,14 @@ sap.ui.define([
                                 type: "sap.m.SelectionDetailsActionLevel"
                             }
                         }
-                    },
-                    /**
-                     * This event is fired when a data load on the inner chart completes
-                     */
-                    innerChartLoadedData: {
-                        parameters: {
-                            /**
-                             * Reference to the inner chart
-                             */
-                            innerChart: {
-                                type: "sap.ui.core.Control"
-                            }
-                        }
                     }
                 }
             },
 
             renderer: ChartRenderer
         });
+
+        var MDCRb = sap.ui.getCore().getLibraryResourceBundle("sap.ui.mdc");
 
         FilterIntegrationMixin.call(Chart.prototype);
 
@@ -993,10 +995,14 @@ sap.ui.define([
                 mInfo = this.getControlDelegate().getChartTypeInfo(this);
             } catch (error) {
                 //Inner chart is not yet ready
+                var oChartResourceBundle = Core.getLibraryResourceBundle("sap.chart.messages");
+
                 if (!mInfo) {
                     mInfo = {
                         icon: "sap-icon://vertical-bar-chart",
-                        text: "Selected Chart Type: Bar Chart"
+                        text: MDCRb.getText("chart.CHART_TYPE_TOOLTIP", [
+                            oChartResourceBundle.getText("info/bar")
+                        ])
                     };
                 }
             }
@@ -1036,6 +1042,30 @@ sap.ui.define([
         };
 
         /**
+         * Sets a new noData control for the chart.
+         * This control will be displayed on top of the chart when no data is visible inside the chart.
+         * @param {sap.ui.core.Control} oControl control to show
+         * @returns {sap.ui.mdc.Chart} reference to <code>this</code> for method chaining
+         *
+         * @experimental
+         * @private
+         * @ui5-restricted Fiori Elements
+         */
+        Chart.prototype.setNoData = function(oControl) {
+            this.setAggregation("noData", oControl);
+
+            try {
+                this.getControlDelegate().changedNoDataStruct(this);
+            } catch (err) {
+                //This fails when the delegate instance is not yet available.
+                //It is not a problem as the delegate will use getNoData() on init of the chart, thus using the correct noData struct.
+                //This error merely happens as the setter is calle don init of the MDC CHart from framework side.
+            }
+
+            return this;
+        };
+
+        /**
          * Gets the managed object model.
          * @returns {sap.ui.model.base.ManagedObjectModel} the managed object model
          *
@@ -1060,10 +1090,6 @@ sap.ui.define([
             this._renderOverlay(false);
 
             this.getControlDelegate().requestToolbarUpdate(this);
-
-            this.fireEvent("innerChartLoadedData ", {
-                innerChart: this.getControlDelegate().getInnerChart(this)
-            });
         };
 
         Chart.prototype._checkStyleClassesForDimensions = function() {
@@ -1210,7 +1236,7 @@ sap.ui.define([
         };
 
         /**
-		 * Adds/Removes the overlay shown above the inner chart
+		 * Adds/Removes the overlay shown above the inner chart.
 		 * @param {boolean} bShow true to show overlay, false to hide
 		 *
 		 * @experimental
@@ -1218,17 +1244,13 @@ sap.ui.define([
 		 * @ui5-restricted Fiori Elements, sap.ui.mdc
 		 */
 		Chart.prototype._renderOverlay = function(bShow) {
-
-			if (this.getControlDelegate().getInnerChart(this)) {
-
-				var $this = this.getControlDelegate().getInnerChart(this).$(), $overlay = $this.find(".sapUiMdcChartOverlay");
-				if (bShow && $overlay.length === 0) {
-					$overlay = jQuery("<div>").addClass("sapUiOverlay sapUiMdcChartOverlay").css("z-index", "1");
-					$this.append($overlay);
-				} else if (!bShow) {
-					$overlay.remove();
-				}
-			}
+			try {
+                this.getControlDelegate().showOverlay(this, bShow);
+            } catch (err) {
+                //If this is called too early, no delegate is availabloe.
+                //This should never happen!
+                Log.error("sap.ui.mdc.Chart: Tried to render overlay on not initiailized chart. This will not work!");
+            }
 		};
 
         /**

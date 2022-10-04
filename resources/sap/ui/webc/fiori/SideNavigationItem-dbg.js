@@ -26,7 +26,7 @@ sap.ui.define([
 	 * The <code>sap.ui.webc.fiori.SideNavigationItem</code> is used within <code>sap.ui.webc.fiori.SideNavigation</code> only. Via the <code>sap.ui.webc.fiori.SideNavigationItem</code> you control the content of the <code>SideNavigation</code>.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -34,7 +34,6 @@ sap.ui.define([
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.fiori.SideNavigationItem
 	 * @implements sap.ui.webc.fiori.ISideNavigationItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var SideNavigationItem = WebComponent.extend("sap.ui.webc.fiori.SideNavigationItem", {
 		metadata: {
@@ -59,7 +58,7 @@ sap.ui.define([
 				 *
 				 *
 				 * The SAP-icons font provides numerous options. <br>
-				 * See all the available icons in the <ui5-link target="_blank" href="https://openui5.hana.ondemand.com/test-resources/sap/m/demokit/iconExplorer/webapp/index.html" class="api-table-content-cell-link">Icon Explorer</ui5-link>.
+				 * See all the available icons in the {@link demo:sap/m/demokit/iconExplorer/webapp/index.html Icon Explorer}.
 				 */
 				icon: {
 					type: "string",

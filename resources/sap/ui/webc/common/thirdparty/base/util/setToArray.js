@@ -1,1 +1,2 @@
-sap.ui.define(function(){"use strict";const n=n=>{const t=[];n.forEach(n=>{t.push(n)});return t};return n});
+sap.ui.define(["exports"],function(e){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;const t=e=>{const t=[];e.forEach(e=>{t.push(e)});return t};var u=t;e.default=u});
+//# sourceMappingURL=setToArray.js.map

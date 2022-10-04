@@ -33,14 +33,13 @@ sap.ui.define([
 	 * ThingViewer: Same as ThingInspector but decoupled from the Overlay and the ActionBar.
 	 * The control can be added to a Parent container that has a defined width. The ThingViewer fill the whole container. If the parent container has no width defined the control will not work properly.
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.9.1
 	 * @deprecated as of version 1.38. There is not an exact replacement.
 	 * @alias sap.ui.ux3.ThingViewer
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ThingViewer = Control.extend("sap.ui.ux3.ThingViewer", /** @lends sap.ui.ux3.ThingViewer.prototype */ { metadata : {
 

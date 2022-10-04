@@ -22,7 +22,7 @@ sap.ui.define([
 	 *
 	 * @alias sap.ui.fl.changeHandler.BaseAddXml
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.75
 	 * @private
 	 * @experimental Since 1.75. This class is experimental and provides only limited functionality. Also the API might be changed in future.
@@ -134,7 +134,7 @@ sap.ui.define([
 	BaseAddXml.revertChange = revertAddedControls;
 
 	BaseAddXml._throwMissingAttributeError = function(sAttribute) {
-		throw new Error("Attribute missing from the change specific content'" + sAttribute + "'");
+		throw new Error("Attribute missing from the change specific content '" + sAttribute + "'");
 	};
 
 	BaseAddXml._destroyArrayOfControls = function(aControls) {
@@ -165,7 +165,7 @@ sap.ui.define([
 		oChange.setContent(oContent);
 
 		//Calculate the moduleName for the fragment
-		var sModuleName = oChange.getDefinition().reference.replace(/\.Component/g, "").replace(/\./g, "/");
+		var sModuleName = oChange.getComponent().replace(/\.Component/g, "").replace(/\./g, "/");
 		sModuleName += "/changes/";
 		sModuleName += oContent.fragmentPath;
 		oChange.setModuleName(sModuleName);

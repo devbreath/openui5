@@ -58,13 +58,12 @@ sap.ui.define([
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
 		 * @since 1.42
 		 * @alias sap.f.DynamicPageHeader
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var DynamicPageHeader = Control.extend("sap.f.DynamicPageHeader", /** @lends sap.f.DynamicPageHeader.prototype */ {
 			metadata: {
@@ -104,7 +103,9 @@ sap.ui.define([
 					_collapseButton: {type: "sap.m.Button", multiple: false,  visibility: "hidden"}
 				},
 				designtime: "sap/f/designtime/DynamicPageHeader.designtime"
-			}
+			},
+
+			renderer: DynamicPageHeaderRenderer
 		});
 
 		/*************************************** Static members ******************************************/

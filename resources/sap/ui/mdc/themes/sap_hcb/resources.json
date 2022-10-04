@@ -25,12 +25,6 @@
 			"theme": "base"
 		},
 		{
-			"name": "CollectiveSearchSelect.less",
-			"size": 1368,
-			"designtime": true,
-			"theme": "base"
-		},
-		{
 			"name": "FieldBase.less",
 			"size": 1945,
 			"designtime": true,
@@ -127,40 +121,45 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 16204,
+			"size": 15255,
 			"theme": "base"
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/mdc/themes/base/library-parameters.json",
 			"size": 382,
 			"theme": "base"
 		},
 		{
 			"name": "library.css",
-			"size": 16203,
+			"size": 15253,
 			"theme": "base"
 		},
 		{
 			"name": "library.less",
-			"size": 26015,
+			"size": 24563,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "library.source.less",
-			"size": 770,
+			"size": 731,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 17083,
+			"size": 16056,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 17082,
+			"size": 16054,
 			"theme": "base"
+		},
+		{
+			"name": "resources.json",
+			"size": 2689
 		}
 	]
 }

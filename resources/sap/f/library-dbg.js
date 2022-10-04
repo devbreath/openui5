@@ -36,13 +36,13 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @namespace
 	 * @alias sap.f
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.44
 	 * @public
 	 */
 	var thisLib = sap.ui.getCore().initLibrary({
 		name : "sap.f",
-		version: "1.105.1",
+		version: "1.107.0",
 		dependencies : ["sap.ui.core", "sap.m", "sap.ui.layout"],
 		designtime: "sap/f/designtime/library.designtime",
 		interfaces: [
@@ -90,6 +90,7 @@ sap.ui.define(["sap/ui/base/DataType",
 			"sap.f.ProductSwitch",
 			"sap.f.ProductSwitchItem",
 			"sap.f.ShellBar",
+			"sap.f.SidePanel",
 			"sap.f.Illustration"
 		],
 		elements: [
@@ -119,7 +120,8 @@ sap.ui.define(["sap/ui/base/DataType",
 			"sap.f.semantic.SendMessageAction",
 			"sap.f.semantic.ShareInJamAction",
 			"sap.f.semantic.TitleMainAction",
-			"sap.f.SearchManager"
+			"sap.f.SearchManager",
+			"sap.f.SidePanelItem"
 		],
 		extensions: {
 			flChangeHandlers: {
@@ -150,7 +152,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	* @since 1.50
 	* @deprecated Since version 1.54. Consumers of the {@link sap.f.DynamicPageTitle} control should now use
 	*   the <code>areaShrinkRatio</code> property instead of the <code>primaryArea</code> property.
-	* @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	*/
 	thisLib.DynamicPageTitleArea = {
 		/**
@@ -176,7 +177,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	* @namespace
 	* @public
 	* @since 1.54
-	* @ui5-metamodel This simple type also will be described in the UI5 (legacy) designtime metamodel
 	*/
 	thisLib.DynamicPageTitleShrinkRatio = DataType.createType('sap.f.DynamicPageTitleShrinkRatio', {
 		isValid : function(vValue) {
@@ -201,7 +201,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @enum {string}
 	 * @public
 	 * @since 1.46
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.LayoutType = {
 
@@ -334,7 +333,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @public
 	 * @since 1.46
 	 * @deprecated as of version 1.73. Use the {@link sap.m.AvatarShape} instead.
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.AvatarShape = AvatarShape;
 
@@ -347,7 +345,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @public
 	 * @deprecated as of version 1.73. Use the {@link sap.m.AvatarSize} instead.
 	 * @since 1.46
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.AvatarSize = AvatarSize;
 
@@ -372,7 +369,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @name sap.f.IDynamicPageStickyContent
 	 * @interface
 	 * @public
-	 * @ui5-metamodel This interface also will be described in the UI5 (legacy) designtime metamodel
 	 */
 
 	/**
@@ -384,7 +380,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @public
 	 * @deprecated as of version 1.73. Use the {@link sap.m.AvatarType} instead.
 	 * @since 1.46
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.AvatarType = AvatarType;
 
@@ -405,7 +400,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @public
 	 * @deprecated as of version 1.73. Use the {@link sap.m.AvatarColor} instead.
 	 * @since 1.69
-	 * @ui5-metamodel This simple type also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.AvatarColor = AvatarColor;
 
@@ -418,7 +412,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @public
 	 * @deprecated as of version 1.73. Use the {@link sap.m.AvatarImageFitType} instead.
 	 * @since 1.46
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.AvatarImageFitType = AvatarImageFitType;
 
@@ -429,7 +422,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @public
 	 * @experimental Since 1.73.
 	 * @since 1.73
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.AvatarGroupType = {
 		/**
@@ -461,7 +453,8 @@ sap.ui.define(["sap/ui/base/DataType",
 	 *
 	 * @returns {sap.f.cards.IHeader} The header of the card
 	 * @since 1.62
-	 * @public
+	 * @ui5-restricted
+	 * @private
 	 * @function
 	 * @name sap.f.ICard.getCardHeader
 	 */
@@ -471,7 +464,8 @@ sap.ui.define(["sap/ui/base/DataType",
 	 *
 	 * @returns {sap.ui.core.Control} The content of the card
 	 * @since 1.62
-	 * @public
+	 * @ui5-restricted
+	 * @private
 	 * @function
 	 * @name sap.f.ICard.getCardContent
 	 */
@@ -481,7 +475,8 @@ sap.ui.define(["sap/ui/base/DataType",
 	 *
 	 * @returns {sap.f.cards.HeaderPosition} The position of the header of the card
 	 * @since 1.65
-	 * @public
+	 * @ui5-restricted
+	 * @private
 	 * @function
 	 * @name sap.f.ICard.getCardHeaderPosition
 	 */
@@ -493,7 +488,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @public
 	 * @interface
 	 * @name sap.f.cards.IHeader
-	 * @ui5-metamodel This interface also will be described in the UI5 (legacy) designtime metamodel
 	 */
 
 	/**
@@ -504,7 +498,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @experimental Since 1.63, that provides only limited functionality. Also, it can be removed in future versions.
 	 * @public
 	 * @interface
-	 * @ui5-metamodel This interface also will be described in the UI5 (legacy) designtime metamodel
 	 */
 
 	 /**
@@ -527,7 +520,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @enum {string}
 	 * @public
 	 * @since 1.65
-	 * @ui5-metamodel This interface also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.cards.HeaderPosition = {
 		/**
@@ -550,7 +542,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @enum {string}
 	 * @public
 	 * @since 1.96
-	 * @ui5-metamodel This interface also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.cards.NumericHeaderSideIndicatorsAlignment = {
 		/**
@@ -573,7 +564,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @enum {string}
 	 * @public
 	 * @since 1.85
-	 * @ui5-metamodel This interface also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.NavigationDirection = {
 		/**
@@ -611,7 +601,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @public
 	 * @deprecated as of version 1.98. Use the {@link sap.m.IllustratedMessageType} instead.
 	 * @since 1.88
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.IllustratedMessageType = IllustratedMessageType;
 
@@ -624,7 +613,6 @@ sap.ui.define(["sap/ui/base/DataType",
 	 * @public
 	 * @deprecated as of version 1.98. Use the {@link sap.m.IllustratedMessageSize} instead.
 	 * @since 1.88
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.IllustratedMessageSize = IllustratedMessageSize;
 

@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/m/inputUtils/ListHelpers"],function(L){"use strict";var f=function(i,s){var I=i.item;var l=I.data(L.CSS_CLASS+"ListItem");var a;var p;var S;var d={text:"title",enabled:"visible",tooltip:"tooltip"};var b=i.propName;var c=i.propValue;if(!l){return;}if(I.isA("sap.ui.core.Item")&&b==="enabled"){I._bSelectable=!!c;}if(d[b]){p=d[b];S="set"+p.charAt(0).toUpperCase()+p.slice(1);l[S](c);}if(b==="additionalText"){a=s?c:"";l.setInfo(a);}};return f;});
+sap.ui.define(["sap/m/inputUtils/ListHelpers"],function(e){"use strict";var t=function(t,i){var a=t.item;var r=a.data(e.CSS_CLASS+"ListItem");var s;var l;var p;var n={text:"title",enabled:"visible",tooltip:"tooltip"};var o=t.propName;var v=t.propValue;if(!r){return}if(a.isA("sap.ui.core.Item")&&o==="enabled"){a._bSelectable=!!v}if(n[o]){l=n[o];p="set"+l.charAt(0).toUpperCase()+l.slice(1);r[p](v)}if(o==="additionalText"){s=i?v:"";r.setInfo(s)}};return t});
+//# sourceMappingURL=forwardItemProperties.js.map

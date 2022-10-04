@@ -57,13 +57,12 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. Instead, use the <code>sap.ui.layout.Grid</code> control.
 	 * @alias sap.ui.commons.layout.MatrixLayout
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var MatrixLayout = Control.extend("sap.ui.commons.layout.MatrixLayout", /** @lends sap.ui.commons.layout.MatrixLayout.prototype */ { metadata : {
 
@@ -123,7 +122,6 @@ sap.ui.define([
 	 *
 	 * @return {this} <code>this</code> to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	MatrixLayout.prototype.createRow = function() {
 

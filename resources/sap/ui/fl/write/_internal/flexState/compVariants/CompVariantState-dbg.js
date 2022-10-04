@@ -8,6 +8,7 @@ sap.ui.define([
 	"sap/base/util/restricted/_omit",
 	"sap/base/util/restricted/_pick",
 	"sap/base/util/UriParameters",
+	"sap/ui/core/Core",
 	"sap/ui/fl/Change",
 	"sap/ui/fl/Layer",
 	"sap/ui/fl/Utils",
@@ -27,6 +28,7 @@ sap.ui.define([
 	_omit,
 	_pick,
 	UriParameters,
+	Core,
 	Change,
 	Layer,
 	Utils,
@@ -136,7 +138,7 @@ sap.ui.define([
 			//aObjectArray can come from either back end response or flex state
 			//In the first case, the fileName is a direct property of object
 			//In the second case, it can be obtained from getId() function
-			var sFileName = aObjectArray[i].fileName || (aObjectArray[i].getId());
+			var sFileName = aObjectArray[i].fileName || (aObjectArray[i].getId() && aObjectArray[i].getId());
 			if ((sFileName || aObjectArray[i].getId()) === sObjectId) {
 				aObjectArray.splice(i, 1);
 				break;
@@ -259,7 +261,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.write._internal.flexState.compVariants.CompVariantState
 	 * @since 1.83
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @ui5-restricted sap.ui.fl
 	 */
@@ -304,8 +306,7 @@ sap.ui.define([
 				support: mPropertyBag.support || {}
 			};
 			oChangeParameter.support.generator = oChangeParameter.support.generator || "CompVariantState." + sChangeType;
-			oChangeParameter.support.sapui5Version = sap.ui.version;
-
+			oChangeParameter.support.sapui5Version = Core.getConfiguration().getVersion().toString();
 			oChange = new UpdatableChange(oChangeParameter);
 			mCompVariantsMap.defaultVariants.push(oChange);
 			mCompVariantsMap.byId[oChange.getId()] = oChange;
@@ -488,12 +489,7 @@ sap.ui.define([
 				oChangeContent.variantContent = mPropertyBag.content;
 			}
 			if (mPropertyBag.name) {
-				oChangeContent.texts = {
-					variantName: {
-						value: mPropertyBag.name,
-						type: "XFLD"
-					}
-				};
+				oChange.setText("variantName", mPropertyBag.name);
 			}
 			oChange.setContent(oChangeContent);
 			if (mPropertyBag.transportId) {
@@ -505,12 +501,10 @@ sap.ui.define([
 
 		function createChange(mPropertyBag, oVariant) {
 			function addChange(oChange) {
-				var oChangeContent = oChange.getDefinition();
 				var mCompVariantsMap = FlexState.getCompVariantsMap(oChange.getComponent());
 				var sPersistencyKey = oChange.getSelector().persistencyKey;
 				mCompVariantsMap[sPersistencyKey].changes.push(oChange);
 				mCompVariantsMap[sPersistencyKey].byId[oChange.getId()] = oChange;
-				return oChangeContent;
 			}
 
 			var oChangeDefinition = Change.createInitialFileContent({

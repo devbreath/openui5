@@ -103,7 +103,7 @@ sap.ui.define([
 	/**
 	 * @const A list of model names which are used internally by the card.
 	 */
-	var INTERNAL_MODEL_NAMES = ["parameters", "filters", "paginator", "form", "context", "i18n"];
+	var INTERNAL_MODEL_NAMES = ["parameters", "filters", "paginator", "form", "messages", "context", "i18n"];
 
 	var RESERVED_PARAMETER_NAMES = ["visibleItems", "allItems"];
 
@@ -188,13 +188,12 @@ sap.ui.define([
 	 * @extends sap.f.CardBase
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @public
 	 * @constructor
 	 * @see {@link topic:5b46b03f024542ba802d99d67bc1a3f4 Cards}
 	 * @since 1.62
 	 * @alias sap.ui.integration.widgets.Card
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Card = CardBase.extend("sap.ui.integration.widgets.Card", /** @lends sap.ui.integration.widgets.Card.prototype */ {
 		metadata: {
@@ -203,6 +202,7 @@ sap.ui.define([
 
 				/**
 				 * Optional property which can be used by the host to reference the card.
+				 * It will be forwarded to any children cards.
 				 * Does not affect the card behavior.
 				 */
 				referenceId : {
@@ -255,12 +255,15 @@ sap.ui.define([
 				 *
 				 * This can be a list of flexibility changes generated during designtime.
 				 *
-				 * Each level of changes is an item in the list. The change has property "content" which contains the configuration, which will be merged on top of the original <code>sap.card</code> section.
+				 * Each item in the array represents a separate level of changes. For example, the first item might be created by an administrator, the second by a page administrator and the third by the end user.
+				 *
+				 * The order of the items is the order in which the changes will be merged on top of each other. So the last item will overwrite the previous items where the paths match.
 				 *
 				 * Example:
 				 * <pre>
 				 * [
 				 * 	{
+				 * 		// Administrator
 				 * 		"/sap.card/header/title": "My Configured Title in Default Language",
 				 * 		"/sap.card/content/maxItems": 10,
 				 * 		"texts": {
@@ -270,13 +273,13 @@ sap.ui.define([
 				 * 		}
 				 * 	},
 				 * 	{
-				 * 		"/sap.card/header/title": "My Configured Title in Default Language",
-				 * 		"/sap.card/content/maxItems": 10,
-				 * 		"texts": {
-				 * 			"en-US": {
-				 * 				"/sap.card/header/title": "My Configured Title in US-English"
-				 * 			}
-				 * 		}
+				 * 		// Page administrator
+				 * 		"/sap.card/content/maxItems": 5
+				 * 	},
+				 * 	{
+				 * 		// End user
+				 *      "/sap.card/header/title": "Title by End User",
+				 * 		"/sap.card/content/maxItems": 8
 				 * 	}
 				 * ]
 				 * </pre>
@@ -439,7 +442,14 @@ sap.ui.define([
 				 *
 				 * @ui5-restricted
 				 */
-				manifestApplied: {}
+				manifestApplied: {},
+
+				/**
+				 * Fired when the state of the card is changed.
+				 * For example - the card is ready, new page is selected, a filter is changed or data is refreshed.
+				 * @experimental since 1.107
+				 */
+				stateChanged: {}
 			},
 			associations: {
 
@@ -477,8 +487,9 @@ sap.ui.define([
 		this._bFirstRendering = true;
 		this._aFundamentalErrors = [];
 		this._sPerformanceId = "UI5 Integration Cards - " + this.getId() + "---";
-		this._fnOnCardReady = function () {
-			this._bCardReady = true;
+		this._aActiveLoadingProviders = [];
+		this._fnOnDataReady = function () {
+			this._bDataReady = true;
 		}.bind(this);
 
 		/**
@@ -488,7 +499,7 @@ sap.ui.define([
 		 * @experimental since 1.79
 		 * @public
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 * @borrows sap.ui.integration.widgets.Card#getDomRef as getDomRef
 		 * @borrows sap.ui.integration.widgets.Card#setVisible as setVisible
 		 * @borrows sap.ui.integration.widgets.Card#getParameters as getParameters
@@ -515,6 +526,7 @@ sap.ui.define([
 		 * @borrows sap.ui.integration.widgets.Card#showCard as showCard
 		 * @borrows sap.ui.integration.widgets.Card#hide as hide
 		 * @borrows sap.ui.integration.widgets.Card#getOpener as getOpener
+		 * @borrows sap.ui.integration.widgets.Card#validateControls as validateControls
 		 */
 		this._oLimitedInterface = new Interface(this, [
 			"getDomRef",
@@ -542,7 +554,8 @@ sap.ui.define([
 			"hideLoadingPlaceholders",
 			"showCard",
 			"hide",
-			"getOpener"
+			"getOpener",
+			"validateControls"
 		]);
 	};
 
@@ -569,6 +582,13 @@ sap.ui.define([
 						ParameterMap.getParamsForModel()
 					);
 				break;
+				case "messages":
+					oModel = new JSONModel({
+						hasErrors: false,
+						hasWarnings: false,
+						records: []
+					});
+					break;
 				default:
 					oModel = new JSONModel();
 				break;
@@ -600,17 +620,17 @@ sap.ui.define([
 	Card.prototype._initReadyState = function () {
 		this._aReadyPromises = [];
 
+		this._awaitEvent("_dataReady");
+		this._awaitEvent("_dataPassedToContent");
 		this._awaitEvent("_headerReady");
 		this._awaitEvent("_filterBarReady");
 		this._awaitEvent("_contentReady");
-		this._awaitEvent("_cardReady");
 
 		Promise.all(this._aReadyPromises).then(function () {
-			this._bReady = true;
-			this.fireEvent("_ready");
+			this._onReady();
 		}.bind(this));
 
-		this.attachEventOnce("_cardReady", this._fnOnCardReady);
+		this.attachEventOnce("_dataReady", this._fnOnDataReady);
 	};
 
 	/**
@@ -620,9 +640,9 @@ sap.ui.define([
 	 */
 	Card.prototype._clearReadyState = function () {
 		this._bReady = false;
-		this._bCardReady = false;
+		this._bDataReady = false;
 		this._aReadyPromises = [];
-		this.detachEvent("_cardReady", this._fnOnCardReady);
+		this.detachEvent("_dataReady", this._fnOnDataReady);
 	};
 
 	/**
@@ -648,7 +668,7 @@ sap.ui.define([
 				Measurement.end(this._sPerformanceId + "firstRenderingWithStaticData");
 			}
 
-			if (this._bCardReady && !Measurement.getMeasurement(this._sPerformanceId + "firstRenderingWithDynamicData").end) {
+			if (this._bDataReady && !Measurement.getMeasurement(this._sPerformanceId + "firstRenderingWithDynamicData").end) {
 				Measurement.end(this._sPerformanceId + "firstRenderingWithDynamicData");
 			}
 		}
@@ -816,12 +836,12 @@ sap.ui.define([
 			}.bind(this))
 			.then(this._applyManifest.bind(this))
 			.catch(function (e) {
-				if (e.message !== CARD_DESTROYED_ERROR) {
-					this._applyManifest();
+				if (e.message === CARD_DESTROYED_ERROR) {
 					return;
 				}
 
 				this._logFundamentalError(e.message);
+				this._applyManifest();
 			}.bind(this));
 	};
 
@@ -875,6 +895,22 @@ sap.ui.define([
 	 */
 	Card.prototype.getFundamentalErrors = function () {
 		return this._aFundamentalErrors;
+	};
+
+	/**
+	 * Causes all of the controls within the Card
+	 * that support validation to validate their data.
+	 * @public
+	 * @experimental
+	 * @returns {boolean} if all of the controls validated successfully; otherwise, false
+	 */
+	Card.prototype.validateControls = function () {
+		var oCardContent = this.getCardContent();
+		if (oCardContent) {
+			oCardContent.validateControls();
+		}
+
+		return !this.getModel("messages").getProperty("/hasErrors");
 	};
 
 	/**
@@ -1073,6 +1109,8 @@ sap.ui.define([
 		if (oFilterBar) {
 			oFilterBar.refreshData();
 		}
+
+		this.resetPaginator();
 	};
 
 	/**
@@ -1115,6 +1153,7 @@ sap.ui.define([
 		this._oContentFactory = null;
 		this._bFirstRendering = null;
 		this._oIntegrationRb = null;
+		this._aActiveLoadingProviders = null;
 
 		if (this._oActionsToolbar) {
 			this._oActionsToolbar.destroy();
@@ -1519,7 +1558,8 @@ sap.ui.define([
 			oModel;
 
 		if (!oDataSettings) {
-			this.fireEvent("_cardReady");
+			this.fireEvent("_dataReady");
+			this.fireEvent("_dataPassedToContent");
 			return;
 		}
 
@@ -1541,7 +1581,8 @@ sap.ui.define([
 		}
 
 		if (!oModel) {
-			this.fireEvent("_cardReady");
+			this.fireEvent("_dataReady");
+			this.fireEvent("_dataPassedToContent");
 			return;
 		}
 
@@ -1556,9 +1597,11 @@ sap.ui.define([
 			if (this._createContentPromise) {
 				this._createContentPromise.then(function (oContent) {
 					oContent.onDataChanged();
+					this.fireEvent("_dataPassedToContent");
 					this.onDataRequestComplete();
 				}.bind(this));
 			} else {
+				this.fireEvent("_dataPassedToContent");
 				this.onDataRequestComplete();
 			}
 
@@ -1566,21 +1609,25 @@ sap.ui.define([
 
 		if (this._oDataProvider) {
 			this._oDataProvider.attachDataRequested(function () {
-				this._showLoadingPlaceholders();
+				this._setLoadingProviderState(true);
 			}.bind(this));
 
 			this._oDataProvider.attachDataChanged(function (oEvent) {
+				this.fireEvent("_dataReady");
 				oModel.setData(oEvent.getParameter("data"));
-			});
+			}.bind(this));
 
 			this._oDataProvider.attachError(function (oEvent) {
+				this.fireEvent("_dataReady");
+				this.fireEvent("_dataPassedToContent");
 				this._handleError("Data service unavailable. " + oEvent.getParameter("message"));
 				this.onDataRequestComplete();
 			}.bind(this));
 
 			this._oDataProvider.triggerDataUpdate();
 		} else {
-			this.fireEvent("_cardReady");
+			this.fireEvent("_dataReady");
+			this.fireEvent("_dataPassedToContent");
 		}
 	};
 
@@ -1603,8 +1650,9 @@ sap.ui.define([
 	/**
 	 * Implements sap.f.ICard interface.
 	 *
+	 * @ui5-restricted
+	 * @private
 	 * @returns {sap.f.cards.IHeader} The header of the card
-	 * @protected
 	 */
 	Card.prototype.getCardHeader = function () {
 		return this.getAggregation("_header");
@@ -1613,8 +1661,9 @@ sap.ui.define([
 	/**
 	 * Implements sap.f.ICard interface.
 	 *
+	 * @ui5-restricted
+	 * @private
 	 * @returns {sap.f.cards.HeaderPosition} The position of the header of the card.
-	 * @protected
 	 */
 	Card.prototype.getCardHeaderPosition = function () {
 		if (!this._oCardManifest) {
@@ -1626,11 +1675,21 @@ sap.ui.define([
 	/**
 	 * Implements sap.f.ICard interface.
 	 *
+	 * @ui5-restricted
+	 * @private
 	 * @returns {sap.ui.core.Control} The content of the card
-	 * @protected
 	 */
 	Card.prototype.getCardContent = function () {
 		return this.getAggregation("_content");
+	};
+
+	/**
+	 * @ui5-restricted
+	 * @private
+	 * @returns {sap.ui.integration.cards.Footer} The footer of the card
+	 */
+	 Card.prototype.getCardFooter = function () {
+		return this.getAggregation("_footer");
 	};
 
 	/**
@@ -1643,6 +1702,7 @@ sap.ui.define([
 		if (!this._oActionsToolbar) {
 			this._oActionsToolbar = new ActionsToolbar();
 			this._oActionsToolbar.setCard(this);
+			this._oActionsToolbar.setEnabled(false);
 		}
 
 		return this._oActionsToolbar;
@@ -1654,9 +1714,13 @@ sap.ui.define([
 	 * @private
 	 */
 	Card.prototype._applyHeaderManifestSettings = function () {
+		var oPrevHeader = this.getAggregation("_header");
 		var oHeader = this.createHeader();
 
-		this.destroyAggregation("_header");
+		if (oPrevHeader) {
+			oPrevHeader.setToolbar(null); // ensure that actionsToolbar won't be destroyed
+			this.destroyAggregation("_header");
+		}
 
 		if (!oHeader) {
 			this.fireEvent("_headerReady");
@@ -1703,6 +1767,8 @@ sap.ui.define([
 		if (oFooter) {
 			this.setAggregation("_footer", oFooter);
 		}
+
+		this.fireEvent("_footerReady");
 	};
 
 	/**
@@ -1932,9 +1998,8 @@ sap.ui.define([
 	Card.prototype._handleError = function (sLogMessage, bNoItems) {
 		if (!bNoItems) {
 			Log.error(sLogMessage, null, "sap.ui.integration.widgets.Card");
+			this.fireEvent("_error", { message: sLogMessage });
 		}
-
-		this.fireEvent("_error", { message: sLogMessage });
 
 		var oErrorConfiguration = this._oCardManifest.get(MANIFEST_PATHS.ERROR_MESSAGES),
 			oError = this._getIllustratedMessage(oErrorConfiguration, bNoItems),
@@ -1950,7 +2015,6 @@ sap.ui.define([
 		} else {
 			this.getCardHeader().setAggregation("_error", oError);
 		}
-
 	};
 
 	/**
@@ -2194,7 +2258,7 @@ sap.ui.define([
 				this.showLoadingPlaceholders(CardArea.Header);
 				this.showLoadingPlaceholders(CardArea.Filters);
 				this.showLoadingPlaceholders(CardArea.Content);
-				this.getAggregation("_loadingProvider").setLoading(true);
+				this._setLoadingProviderState(true);
 		}
 
 		return this;
@@ -2237,7 +2301,7 @@ sap.ui.define([
 				this.hideLoadingPlaceholders(CardArea.Header);
 				this.hideLoadingPlaceholders(CardArea.Filters);
 				this.hideLoadingPlaceholders(CardArea.Content);
-				this.getAggregation("_loadingProvider").setLoading(false);
+				this._setLoadingProviderState(false);
 		}
 
 		return this;
@@ -2270,15 +2334,9 @@ sap.ui.define([
 		return this.getDomRef();
 	};
 
-	Card.prototype._showLoadingPlaceholders = function () {
-		this.getAggregation("_loadingProvider").setLoading(true);
-	};
-
 	Card.prototype.onDataRequestComplete = function () {
-		var oContent = this.getCardContent(),
-			oLoadingProvider = this.getAggregation("_loadingProvider");
+		var oContent = this.getCardContent();
 
-		this.fireEvent("_cardReady");
 		this.hideLoadingPlaceholders(CardArea.Header);
 		this.hideLoadingPlaceholders(CardArea.Filters);
 
@@ -2286,9 +2344,7 @@ sap.ui.define([
 			this.hideLoadingPlaceholders(CardArea.Content);
 		}
 
-		if (oLoadingProvider) {
-			oLoadingProvider.setLoading(false);
-		}
+		this._setLoadingProviderState(false);
 
 		this._fireContentDataChange();
 	};
@@ -2446,7 +2502,7 @@ sap.ui.define([
 	Card.prototype._fireConfigurationChange = function (mChanges) {
 		var oHostInstance = this.getHostInstance();
 
-		if (!this._bReady) {
+		if (!this.isReady()) {
 			return;
 		}
 
@@ -2462,8 +2518,108 @@ sap.ui.define([
 		}
 	};
 
+	Card.prototype._fireStateChanged = function () {
+		var oHostInstance = this.getHostInstance();
+
+		if (!this.isReady()) {
+			return;
+		}
+
+		this.fireStateChanged();
+
+		if (oHostInstance) {
+			oHostInstance.fireCardStateChanged({
+				card: this
+			});
+		}
+	};
+
+	Card.prototype._fireDataChange = function () {
+		this.fireEvent("_dataChange");
+		this._fireStateChanged();
+	};
+
 	Card.prototype._fireContentDataChange = function () {
 		this.fireEvent("_contentDataChange");
+		this._fireDataChange();
+	};
+
+	Card.prototype._onReady = function () {
+		this._bReady = true;
+		this._setActionButtonsEnabled(true);
+		this.fireEvent("_ready");
+		this._fireStateChanged();
+	};
+
+	/**
+	 * @private
+	 */
+	Card.prototype._setLoadingProviderState = function (bLoading) {
+		var oLoadingProvider = this.getAggregation("_loadingProvider");
+		if (!oLoadingProvider) {
+			return;
+		}
+
+		oLoadingProvider.setLoading(bLoading);
+
+		if (bLoading) {
+			this.addActiveLoadingProvider(oLoadingProvider);
+		} else {
+			this.removeActiveLoadingProvider(oLoadingProvider);
+		}
+	};
+
+	/**
+	 * @private
+	 */
+	Card.prototype.addActiveLoadingProvider = function (oLoadingProvider) {
+		if (!this.isReady()) {
+			return;
+		}
+
+		if (!this.hasActiveLoadingProvider()) {
+			this._setActionButtonsEnabled(false);
+		}
+
+		if (this._aActiveLoadingProviders.indexOf(oLoadingProvider) === -1) {
+			this._aActiveLoadingProviders.push(oLoadingProvider);
+		}
+	};
+
+	/**
+	 * @private
+	 */
+	Card.prototype.removeActiveLoadingProvider = function (oLoadingProvider) {
+		if (!this.isReady()) {
+			return;
+		}
+
+		var aActiveLoadingProviders = this._aActiveLoadingProviders,
+			iIndexOf = aActiveLoadingProviders.indexOf(oLoadingProvider);
+
+		aActiveLoadingProviders.splice(iIndexOf, 1);
+
+		if (!this.hasActiveLoadingProvider()) {
+			this._setActionButtonsEnabled(true);
+		}
+	};
+
+	Card.prototype._setActionButtonsEnabled = function (bValue) {
+		var oFooter = this.getAggregation("_footer");
+		if (oFooter) {
+			oFooter.setEnabled(bValue);
+		}
+
+		if (this._oActionsToolbar) {
+			this._oActionsToolbar.setEnabled(bValue);
+		}
+	};
+
+	/**
+	 * @private
+	 */
+	Card.prototype.hasActiveLoadingProvider = function () {
+		return this._aActiveLoadingProviders.length > 0;
 	};
 
 	/**
@@ -2477,9 +2633,17 @@ sap.ui.define([
 	 * @private
 	 */
 	Card.prototype.getContentPageSize = function (oContentConfig) {
-		var iMaxItems = parseInt(BindingResolver.resolveValue(oContentConfig, this).maxItems) || 0,
+		var iMaxItems = 0,
 			oFooter = this.getAggregation("_footer"),
 			oPaginator;
+
+		if (oContentConfig.maxItems !== undefined) {
+			if (typeof oContentConfig.maxItems === "number") {
+				iMaxItems = oContentConfig.maxItems;
+			} else {
+				iMaxItems = parseInt(BindingResolver.resolveValue(oContentConfig, this).maxItems) || 0;
+			}
+		}
 
 		if (!oFooter) {
 			return iMaxItems;
@@ -2500,6 +2664,16 @@ sap.ui.define([
 	Card.prototype.hasPaginator = function () {
 		var oManifestFooter = this._oCardManifest.get(MANIFEST_PATHS.FOOTER);
 		return oManifestFooter && oManifestFooter.paginator;
+	};
+
+	/**
+	 * @private
+	 * @ui5-restricted sap.ui.integration
+	 */
+	Card.prototype.resetPaginator = function () {
+		if (this.hasPaginator()) {
+			this.getCardFooter().getPaginator().reset();
+		}
 	};
 
 	/**
@@ -2568,7 +2742,8 @@ sap.ui.define([
 			oChildCard = this._createCard({
 				width: oParameters.width,
 				host: this.getHostInstance(),
-				parameters: oParameters.parameters
+				parameters: oParameters.parameters,
+				referenceId: this.getReferenceId()
 			});
 
 		oChildCard.setAssociation("openerReference", this);

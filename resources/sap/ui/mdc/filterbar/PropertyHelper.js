@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["../util/PropertyHelper"],function(P){"use strict";var a=P.extend("sap.ui.mdc.filterbar.PropertyHelper",{constructor:function(p,e,o,E){var A=["required","hiddenFilter"];P.call(this,p,e,o,A,E);}});a.prototype.prepareProperty=function(p){if(!p.typeConfig){var o=this.getParent();if(o&&o._oDelegate){var t=o._oDelegate.getTypeUtil();try{p.typeConfig=t.getTypeConfig(p.dataType,p.formatOptions,p.constraints);}catch(e){}}}P.prototype.prepareProperty.apply(this,arguments);};return a;});
+sap.ui.define(["../util/PropertyHelper"],function(e){"use strict";var t=e.extend("sap.ui.mdc.filterbar.PropertyHelper",{constructor:function(t,r){e.call(this,t,r,{required:{type:"boolean"},hiddenFilter:{type:"boolean"}})}});t.prototype.prepareProperty=function(t){if(!t.typeConfig){var r=this.getParent();if(r&&r._oDelegate){var p=r._oDelegate.getTypeUtil();try{t.typeConfig=p.getTypeConfig(t.dataType,t.formatOptions,t.constraints)}catch(e){}}}e.prototype.prepareProperty.apply(this,arguments)};return t});
+//# sourceMappingURL=PropertyHelper.js.map

@@ -4,10 +4,10 @@
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 sap.ui.define([
-	"sap/ui/integration/designtime/baseEditor/propertyEditor/textAreaEditor/TextAreaEditor",
+	"sap/ui/integration/designtime/baseEditor/propertyEditor/codeEditor/CodeEditor",
 	"sap/base/util/restricted/_isNil"
 ], function (
-	TextAreaEditor,
+	CodeEditor,
 	_isNil
 ) {
 	"use strict";
@@ -47,25 +47,25 @@ sap.ui.define([
 	 * </tr>
 	 * </table>
 	 *
-	 * @extends sap.ui.integration.designtime.baseEditor.propertyEditor.textAreaEditor.TextAreaEditor
+	 * @extends sap.ui.integration.designtime.baseEditor.propertyEditor.codeEditor.CodeEditor
 	 * @alias sap.ui.integration.designtime.baseEditor.propertyEditor.objectArrayEditor.ObjectArrayEditor
 	 * @author SAP SE
 	 * @since 1.100.0
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @private
 	 * @experimental 1.100
 	 * @ui5-restricted
 	 */
-	var ObjectArrayEditor = TextAreaEditor.extend("sap.ui.integration.designtime.baseEditor.propertyEditor.objectArrayEditor.ObjectArrayEditor", {
+	var ObjectArrayEditor = CodeEditor.extend("sap.ui.integration.designtime.baseEditor.propertyEditor.objectArrayEditor.ObjectArrayEditor", {
 		xmlFragment: "sap.ui.integration.designtime.baseEditor.propertyEditor.objectArrayEditor.ObjectArrayEditor",
 		metadata: {
 			library: "sap.ui.integration"
 		},
-		renderer: TextAreaEditor.getMetadata().getRenderer().render
+		renderer: CodeEditor.getMetadata().getRenderer().render
 	});
 
-	ObjectArrayEditor.configMetadata = Object.assign({}, TextAreaEditor.configMetadata, {
+	ObjectArrayEditor.configMetadata = Object.assign({}, CodeEditor.configMetadata, {
 		allowBindings: {
 			defaultValue: true,
 			mergeStrategy: "mostRestrictiveWins"
@@ -76,22 +76,22 @@ sap.ui.define([
 	});
 
 	ObjectArrayEditor.prototype._onLiveChange = function () {
-		var oTextArea = this.getContent();
-		var sValue = oTextArea.getValue();
+		var oInput = this.getContent();
+		var sValue = oInput.getValue();
 		if (!sValue || sValue === "") {
 			this.setValue(undefined);
 		} else {
 			try {
 				var oValue = JSON.parse(sValue);
 				if (!(oValue instanceof Array)) {
-					oTextArea.setValueState("Error");
-					oTextArea.setValueStateText(this.getI18nProperty("BASE_EDITOR.VALIDATOR.NOT_AN_ARRAY_OF_JSONOBJECTS"));
+					oInput.setValueState("Error");
+					oInput.setValueStateText(this.getI18nProperty("BASE_EDITOR.VALIDATOR.NOT_AN_ARRAY_OF_JSONOBJECTS"));
 					return;
 				}
 				this.setValue(oValue);
 			} catch (e) {
-				oTextArea.setValueState("Error");
-				oTextArea.setValueStateText(this.getI18nProperty("BASE_EDITOR.VALIDATOR.NOT_A_JSONOBJECT"));
+				oInput.setValueState("Error");
+				oInput.setValueStateText(this.getI18nProperty("BASE_EDITOR.VALIDATOR.NOT_A_JSONOBJECT"));
 			}
 		}
 	};

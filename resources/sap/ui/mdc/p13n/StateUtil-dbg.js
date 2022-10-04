@@ -38,6 +38,7 @@ sap.ui.define([
 		*	In addition the following attributes can be used to remove a state:
 		*
 		*	<ul>
+		* 	<li><code>filtered</code> - Set to <code>false</code> in the <code>filter</code> scope on condition level to remove one specific condition for the given key.</li>
 		*	<li><code>sorted</code> - Set to <code>false</code>  in the <code>sorters</code> scope to remove a sorter/code>.</li>
 		*	<li><code>grouped</code> - Set to <code>false</code>  in the <code>groupLevels</code> scope to remove a grouping.</li>
 		*	<li><code>visible</code> - Set to <code>false</code>  to remove an aggregation item.</li>
@@ -64,6 +65,13 @@ sap.ui.define([
 		* 					"values": [
 		* 						"Books"
 		* 					]
+		* 				},
+		*				{
+		* 					"operator": EQ,
+		* 					"values": [
+		* 						"Hardware"
+		* 					],
+		*					"filtered": false
 		* 				}
 		* 			]
 		* 		},
@@ -101,7 +109,7 @@ sap.ui.define([
 		*/
 		applyExternalState: function(oControl, oState){
 			var oInternalState = Engine.getInstance().internalizeKeys(oControl, oState);
-			return Engine.getInstance().applyState(oControl, oInternalState);
+			return Engine.getInstance().applyState(oControl, oInternalState, false);
 		},
 
 		/**

@@ -31,14 +31,13 @@ sap.ui.define([
 	 * <b>Note:</b> <code>sap.ui.webc.fiori.Page</code> occipues the whole available space of its parent. In order to achieve the intended design you have to make sure that there is enough space for the <code>sap.ui.webc.fiori.Page</code> to be rendered.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.92.0
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.fiori.Page
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Page = WebComponent.extend("sap.ui.webc.fiori.Page", {
 		metadata: {

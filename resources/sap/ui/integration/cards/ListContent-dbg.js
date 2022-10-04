@@ -7,6 +7,7 @@ sap.ui.define([
 	"./BaseListContent",
 	"./ListContentRenderer",
 	"sap/ui/util/openWindow",
+	"sap/ui/core/ResizeHandler",
 	"sap/m/library",
 	"sap/m/List",
 	"sap/m/ObjectStatus",
@@ -21,6 +22,7 @@ sap.ui.define([
 	BaseListContent,
 	ListContentRenderer,
 	openWindow,
+	ResizeHandler,
 	mLibrary,
 	List,
 	ObjectStatus,
@@ -66,7 +68,7 @@ sap.ui.define([
 	 * @extends sap.ui.integration.cards.BaseListContent
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -121,6 +123,18 @@ sap.ui.define([
 			this._oItemTemplate.destroy();
 			this._oItemTemplate = null;
 		}
+
+		if (this._iMicrochartsResizeHandler) {
+			ResizeHandler.deregister(this._iMicrochartsResizeHandler);
+			this._iMicrochartsResizeHandler = undefined;
+		}
+	};
+
+	/**
+	 * @override
+	 */
+	ListContent.prototype.onAfterRendering = function () {
+		this._resizeMicrocharts();
 	};
 
 	/**
@@ -193,7 +207,11 @@ sap.ui.define([
 		if (bHasGroups) {
 			oStaticConfiguration.groups = aResolvedGroups;
 		} else {
-			oStaticConfiguration.items = aResolvedItems;
+			oStaticConfiguration.groups = [
+				{
+					items: aResolvedItems
+				}
+			];
 		}
 
 		return oStaticConfiguration;
@@ -256,7 +274,7 @@ sap.ui.define([
 			}.bind(this));
 			mSettings.iconAlt = mItem.icon.alt;
 			mSettings.iconDisplayShape = mItem.icon.shape;
-			mSettings.iconInitials = mItem.icon.text;
+			mSettings.iconInitials = mItem.icon.initials || mItem.icon.text;
 
 			if (mSettings.title && mSettings.description) {
 				mSettings.iconSize = AvatarSize.S;
@@ -265,7 +283,7 @@ sap.ui.define([
 			}
 
 			mSettings.iconSize = mItem.icon.size || mSettings.iconSize;
-			mSettings.iconBackgroundColor = mItem.icon.backgroundColor || (mItem.icon.text ? undefined : AvatarColor.Transparent);
+			mSettings.iconBackgroundColor = mItem.icon.backgroundColor || (mSettings.iconInitials ? undefined : AvatarColor.Transparent);
 		}
 
 		if (mItem.attributesLayoutType) {
@@ -277,7 +295,8 @@ sap.ui.define([
 				mSettings.attributes.push(new ObjectStatus({
 					text: attr.value,
 					state: attr.state,
-					emptyIndicatorMode: EmptyIndicatorMode.On
+					emptyIndicatorMode: EmptyIndicatorMode.On,
+					visible: attr.visible
 				}));
 			});
 		}
@@ -340,6 +359,28 @@ sap.ui.define([
 		}
 
 		return oChart;
+	};
+
+	/**
+	 * @private
+	 */
+	 ListContent.prototype._resizeMicrocharts = function () {
+		var $charts = this.$().find(".sapUiIntMicrochartChart"),
+			iShortestWidth = Number.MAX_VALUE;
+
+		if ($charts.length === 0) {
+			return;
+		}
+
+		$charts.each(function (iIndex, oChartWrapper) {
+			iShortestWidth = Math.min(iShortestWidth, oChartWrapper.offsetWidth);
+		});
+
+		$charts.find(".sapUiIntMicrochartChartInner").css("max-width", iShortestWidth + "px");
+
+		if (!this._iMicrochartsResizeHandler) {
+			this._iMicrochartsResizeHandler = ResizeHandler.register(this, this._resizeMicrocharts.bind(this));
+		}
 	};
 
 	/**

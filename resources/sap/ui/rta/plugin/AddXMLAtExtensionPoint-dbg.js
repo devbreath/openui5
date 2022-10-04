@@ -10,14 +10,16 @@ sap.ui.define([
 	"sap/ui/fl/Utils",
 	"sap/ui/fl/apply/_internal/flexState/ManifestUtils",
 	"sap/ui/fl/write/api/ExtensionPointRegistryAPI",
-	"sap/base/util/values"
+	"sap/base/util/values",
+	"sap/ui/core/Configuration"
 ], function(
 	Plugin,
 	DtUtil,
 	FlUtils,
 	ManifestUtils,
 	ExtensionPointRegistryAPI,
-	values
+	values,
+	Configuration
 ) {
 	"use strict";
 
@@ -45,7 +47,7 @@ sap.ui.define([
 	 * @class
 	 * @extends sap.ui.rta.plugin.Plugin
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.78
@@ -81,7 +83,7 @@ sap.ui.define([
 	}
 
 	function isDesignMode() {
-		return sap.ui.getCore().getConfiguration().getDesignMode();
+		return Configuration.getDesignMode();
 	}
 
 	AddXMLAtExtensionPoint.prototype.bAppDescriptorCommandAlreadyAvailable = false;
@@ -240,7 +242,7 @@ sap.ui.define([
 				throw DtUtil.propagateError(
 					vError,
 					"AddXMLAtExtensionPoint#handler",
-					"Error occured in AddXMLAtExtensionPoint handler function",
+					"Error occurred in AddXMLAtExtensionPoint handler function",
 					"sap.ui.rta"
 				);
 			});

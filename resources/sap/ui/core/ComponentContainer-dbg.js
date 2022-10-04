@@ -11,7 +11,8 @@ sap.ui.define([
 	'./Component',
 	'./library',
 	"./ComponentContainerRenderer",
-	"sap/base/Log"
+	"sap/base/Log",
+	"sap/ui/core/Configuration"
 ],
 	function(
 		ManagedObject,
@@ -19,7 +20,8 @@ sap.ui.define([
 		Component,
 		library,
 		ComponentContainerRenderer,
-		Log
+		Log,
+		Configuration
 	) {
 	"use strict";
 
@@ -59,11 +61,10 @@ sap.ui.define([
 	 * See also {@link module:sap/ui/core/ComponentSupport}.
 	 *
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @public
 	 * @alias sap.ui.core.ComponentContainer
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ComponentContainer = Control.extend("sap.ui.core.ComponentContainer", /** @lends sap.ui.core.ComponentContainer.prototype */ {
 		metadata : {
@@ -277,7 +278,7 @@ sap.ui.define([
 	ComponentContainer.prototype.showPlaceholder = function(mSettings) {
 		var pLoaded;
 
-		if (!sap.ui.getCore().getConfiguration().getPlaceholder()) {
+		if (!Configuration.getPlaceholder()) {
 			return;
 		}
 

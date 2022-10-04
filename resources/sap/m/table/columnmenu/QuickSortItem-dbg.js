@@ -8,16 +8,18 @@ sap.ui.define([
 	"./QuickActionItem",
 	"./QuickAction",
 	"sap/m/ToggleButton",
+	"sap/m/library",
 	"sap/ui/core/library"
 ], function (
 	QuickActionItem,
 	QuickAction,
 	ToggleButton,
-	library
+	library,
+	CoreLibrary
 ) {
 	"use strict";
 
-	var SortOrder = library.SortOrder;
+	var SortOrder = CoreLibrary.SortOrder;
 
 	/**
 	 * Constructor for a new QuickSortItem.
@@ -32,7 +34,7 @@ sap.ui.define([
 	 * @extends sap.m.table.columnmenu.QuickActionItem
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @private
 	 * @experimental
@@ -43,7 +45,7 @@ sap.ui.define([
 		metadata: {
 			library: "sap.m",
 			properties: {
-				sortOrder: { type: "sap.ui.core.SortOrder", defaultValue: library.SortOrder.None }
+				sortOrder: { type: "sap.ui.core.SortOrder", defaultValue: CoreLibrary.SortOrder.None }
 			},
 			aggregations: {
 				quickAction: { type: "sap.m.table.columnmenu.QuickAction", multiple: false, visibility: "hidden" }
@@ -53,14 +55,15 @@ sap.ui.define([
 
 	QuickSortItem.prototype._getAction = function() {
 		var oQuickAction = this.getAggregation("quickAction");
-		var sLabel = this._getLabel(this.getParent().getItems().length);
+		var sLabel = this._getLabel();
 
 		if (oQuickAction) {
 			oQuickAction.setLabel(sLabel);
 		} else {
 			oQuickAction = new QuickAction({
 				label: sLabel,
-				content: [this._createContent()]
+				content: [this._createContent()],
+				category: library.table.columnmenu.Category.Sort
 			});
 		}
 
@@ -68,13 +71,9 @@ sap.ui.define([
 		return oQuickAction;
 	};
 
-	QuickSortItem.prototype._getLabel = function(iLength) {
+	QuickSortItem.prototype._getLabel = function() {
 		var oBundle = sap.ui.getCore().getLibraryResourceBundle("sap.m");
-		if (iLength === 1) {
-			return oBundle.getText("table.COLUMNMENU_QUICK_SORT");
-		} else {
-			return oBundle.getText("table.COLUMNMENU_SORT_BY", this.getLabel());
-		}
+		return oBundle.getText("table.COLUMNMENU_QUICK_SORT", this.getLabel());
 	};
 
 	QuickSortItem.prototype._createContent = function() {

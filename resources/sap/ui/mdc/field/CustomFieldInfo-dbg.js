@@ -16,14 +16,13 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class A field help used in the <code>FieldInfo</code> aggregation in <code>FieldBase</code> controls that allows you to add custom content.
 	 * @extends sap.ui.mdc.field.FieldInfoBase
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @ui5-restricted sap.fe
 	 * @experimental As of version 1.54
 	 * @since 1.54.0
 	 * @alias sap.ui.mdc.field.CustomFieldInfo
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var CustomFieldInfo = FieldInfoBase.extend("sap.ui.mdc.field.CustomFieldInfo", /** @lends sap.ui.mdc.field.CustomFieldInfo.prototype */
 	{
@@ -95,19 +94,21 @@ sap.ui.define([
 				metadata : {
 				},
 
-				renderer : function(oRm, oBox) {
+				renderer : {
+					apiVersion: 2,
+					render: function(oRm, oBox) {
 
-					var oContent = oBox._oInfo.getAggregation("content");
+						var oContent = oBox._oInfo.getAggregation("content");
 
-					oRm.write("<div");
-					oRm.writeControlData(oBox);
-					oRm.write(">");
+						oRm.openStart("div", oBox);
+						oRm.openEnd();
 
-					if (oContent) {
-						oRm.renderControl(oContent);
+						if (oContent) {
+							oRm.renderControl(oContent);
+						}
+
+						oRm.close("div");
 					}
-
-					oRm.write("</div>");
 				}
 
 			});
@@ -120,6 +121,10 @@ sap.ui.define([
 
 		return Promise.resolve(this._oMyBox);
 
+	};
+
+	CustomFieldInfo.prototype.checkDirectNavigation = function() {
+		return Promise.resolve(false);
 	};
 
 	function _observeChanges(oChanges) {

@@ -44,13 +44,12 @@ sap.ui.define([
 	 * @implements sap.ui.commons.ToolbarItem
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.38, replaced by {@link sap.m.ComboBox}
 	 * @alias sap.ui.commons.ComboBox
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ComboBox = TextField.extend("sap.ui.commons.ComboBox", /** @lends sap.ui.commons.ComboBox.prototype */ { metadata : {
 

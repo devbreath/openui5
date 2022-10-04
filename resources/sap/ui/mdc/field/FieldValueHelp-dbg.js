@@ -20,6 +20,7 @@ sap.ui.define([
 	'sap/ui/model/Context',
 	'sap/ui/Device',
 	'sap/m/library',
+	'sap/m/VariantItem',
 	'sap/ui/core/library',
 	"sap/ui/mdc/util/loadModules",
 	"sap/ui/events/KeyCodes"
@@ -39,6 +40,7 @@ sap.ui.define([
 		Context,
 		Device,
 		mobileLibrary,
+		VariantItem,
 		coreLibrary,
 		loadModules,
 		KeyCodes
@@ -74,14 +76,13 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class A field help used in the <code>FieldHelp</code> association of controls based on {@link sap.ui.mdc.field.FieldBase FieldBase} that shows a value help dialog.
 	 * @extends sap.ui.mdc.field.FieldHelpBase
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @ui5-restricted sap.fe
 	 * @MDC_PUBLIC_CANDIDATE
 	 * @since 1.58.0
 	 * @alias sap.ui.mdc.field.FieldValueHelp
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var FieldValueHelp = FieldHelpBase.extend("sap.ui.mdc.field.FieldValueHelp", /** @lends sap.ui.mdc.field.FieldValueHelp.prototype */
 	{
@@ -2757,10 +2758,9 @@ sap.ui.define([
 
 		if (!this._oCollectiveSearchSelect) {
 			// check if collective search is supported
-			var oItemTemplate = new Item(this.getId() + "-collSearchItem", {
+			var oItemTemplate = new VariantItem(this.getId() + "-collSearchItem", {
 				key: "{$help>key}",
 				text: "{$help>text}",
-				enabled: "{$help>enabled}",
 				textDirection: "{$help>textDirection}"
 			});
 

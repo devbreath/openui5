@@ -31,12 +31,11 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
 	 * @alias sap.m.IconTabFilterExpandButtonBadge
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var IconTabFilterExpandButtonBadge = Control.extend("sap.m.IconTabFilterExpandButtonBadge", {
 		metadata: {

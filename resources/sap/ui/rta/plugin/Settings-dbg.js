@@ -25,7 +25,7 @@ sap.ui.define([
 	 * @class The Settings allows trigger change of settings operations on the overlay
 	 * @extends sap.ui.rta.plugin.Plugin
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.44
@@ -236,7 +236,7 @@ sap.ui.define([
 			throw DtUtil.propagateError(
 				vError,
 				"Settings#handler",
-				"Error occured during handler execution",
+				"Error occurred during handler execution",
 				"sap.ui.rta.plugin"
 			);
 		});

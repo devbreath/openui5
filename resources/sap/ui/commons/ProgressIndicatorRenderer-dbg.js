@@ -5,8 +5,8 @@
  */
 
 // Provides default renderer for control sap.ui.commons.ProgressIndicator
-sap.ui.define([],
-	function() {
+sap.ui.define(["sap/ui/core/Configuration"],
+	function(Configuration) {
 	"use strict";
 
 
@@ -31,7 +31,7 @@ sap.ui.define([],
 			displayValue = oProgressIndicator.getDisplayValue(),
 			widthBorder;
 
-		oProgressIndicator.bRtl  = sap.ui.getCore().getConfiguration().getRTL();
+		oProgressIndicator.bRtl  = Configuration.getRTL();
 
 		if (widthBar > 100) {
 			widthBorder = (10000 / widthBar) + '%';
@@ -43,7 +43,7 @@ sap.ui.define([],
 		oRm.writeControlData(oProgressIndicator);
 		oRm.writeAttribute('tabindex', '0');
 
-		if (sap.ui.getCore().getConfiguration().getAccessibility()) {
+		if (Configuration.getAccessibility()) {
 			oRm.writeAccessibilityState(oProgressIndicator, {
 				role: 'progressbar',
 				valuemin: '0%',

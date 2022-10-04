@@ -36,14 +36,13 @@ sap.ui.define([
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
 		 * @experimental Since 1.72. This class is experimental and provides only limited functionality. Also the API might be changed in future.
 		 * @alias sap.f.ProductSwitch
 		 * @since 1.72
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var ProductSwitch = Control.extend("sap.f.ProductSwitch", {
 			metadata: {
@@ -85,7 +84,9 @@ sap.ui.define([
 						}
 					}
 				}
-			}
+			},
+
+			renderer: ProductSwitchRenderer
 		});
 
 		ProductSwitch.COLUMNS = {

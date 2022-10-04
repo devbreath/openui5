@@ -30,13 +30,12 @@ sap.ui.define([
 	 * Common button control that opens a menu when clicked by the user. The control provides an API for configuring the docking position
 	 * of the menu.
 	 * @extends sap.ui.commons.Button
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. Instead, use the <code>sap.m.MenuButton</code> control.
 	 * @alias sap.ui.commons.MenuButton
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var MenuButton = Button.extend("sap.ui.commons.MenuButton", /** @lends sap.ui.commons.MenuButton.prototype */ { metadata : {
 

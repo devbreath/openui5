@@ -178,13 +178,12 @@ function(
 		*
 		* @implements sap.ui.core.PopupInterface
 		* @author SAP SE
-		* @version 1.105.1
+		* @version 1.107.0
 		*
 		* @constructor
 		* @public
 		* @alias sap.m.Dialog
 		* @see {@link fiori:https://experience.sap.com/fiori-design-web/dialog/ Dialog}
-		* @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		*/
 		var Dialog = Control.extend("sap.m.Dialog", /** @lends sap.m.Dialog.prototype */ {
 			metadata: {
@@ -450,7 +449,9 @@ function(
 					}
 				},
 				designtime: "sap/m/designtime/Dialog.designtime"
-			}
+			},
+
+			renderer: DialogRenderer
 		});
 
 		ResponsivePaddingsEnablement.call(Dialog.prototype, {
@@ -643,7 +644,6 @@ function(
 		 *
 		 * @return {this} <code>this</code> to allow method chaining
 		 * @public
-		 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		Dialog.prototype.open = function () {
 
@@ -693,7 +693,6 @@ function(
 		 *
 		 * @return {this} <code>this</code> to allow method chaining
 		 * @public
-		 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		Dialog.prototype.close = function () {
 			this._bOpenAfterClose = false;
@@ -728,7 +727,6 @@ function(
 		 * @returns {boolean} Whether the dialog is open.
 		 * @public
 		 * @since 1.9.1
-		 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		Dialog.prototype.isOpen = function () {
 			return !!this.oPopup && this.oPopup.isOpen();
@@ -1267,7 +1265,12 @@ function(
 			oPosition = {
 				top: Math.round(oAreaDimensions.top + iTop)
 			};
-			oPosition[this._bRTL ? "right" : "left"] = Math.round(oAreaDimensions.left + iLeft);
+
+			if (this._bRTL) {
+				oPosition.right = Math.round(window.innerWidth - oAreaDimensions.right + iLeft);
+			} else {
+				oPosition.left = Math.round(oAreaDimensions.left + iLeft);
+			}
 
 			return oPosition;
 		};

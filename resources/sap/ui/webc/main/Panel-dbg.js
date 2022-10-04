@@ -51,7 +51,7 @@ sap.ui.define([
 	 *
 	 * <h3>CSS Shadow Parts</h3>
 	 *
-	 * <ui5-link target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/::part">CSS Shadow Parts</ui5-link> allow developers to style elements inside the Shadow DOM. <br>
+	 * {@link https://developer.mozilla.org/en-US/docs/Web/CSS/::part CSS Shadow Parts} allow developers to style elements inside the Shadow DOM. <br>
 	 * The <code>sap.ui.webc.main.Panel</code> exposes the following CSS Shadow Parts:
 	 * <ul>
 	 *     <li>header - Used to style the wrapper of the header</li>
@@ -61,14 +61,13 @@ sap.ui.define([
 	 * <h3>Keyboard Handling</h3>
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.92.0
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.Panel
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Panel = WebComponent.extend("sap.ui.webc.main.Panel", {
 		metadata: {

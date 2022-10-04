@@ -17,7 +17,7 @@ sap.ui.define([
 	 * Change handler for hiding of a control.
 	 * @alias sap.ui.fl.changeHandler.HideControl
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @experimental Since 1.27.0
 	 */
 	var HideForm = { };
@@ -277,7 +277,8 @@ sap.ui.define([
 			: oElement.getParent().getParent().getId();
 		return {
 			affectedControls: [oSelector],
-			displayControls: [oDisplaySelector]
+			displayControls: [oDisplaySelector],
+			updateRequired: true
 		};
 	};
 

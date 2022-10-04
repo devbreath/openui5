@@ -11,9 +11,10 @@ sap.ui.define([
 	"sap/ui/core/syncStyleClass",
 	"sap/base/Log",
 	"sap/ui/thirdparty/jquery",
-	'./utils/TableUtils'
+	'./utils/TableUtils',
+	"sap/ui/core/Configuration"
 ],
-	function(Library, ManagedObject, syncStyleClass, Log, jQuery, TableUtils) {
+	function(Library, ManagedObject, syncStyleClass, Log, jQuery, TableUtils, Configuration) {
 	"use strict";
 
 	// shortcut for sap.ui.table.ResetAllMode
@@ -30,7 +31,7 @@ sap.ui.define([
 	 * @extends sap.ui.base.ManagedObject
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.21.1
 	 *
 	 * @constructor
@@ -405,7 +406,7 @@ sap.ui.define([
 				}
 			}
 			if (bForDialog) {
-				oColumnInfo.text = TableUtils.Column.getHeaderText(oTable, i) || sPersoKey;
+				oColumnInfo.text = TableUtils.Column.getHeaderText(oColumn) || sPersoKey;
 			}
 			oData.aColumns.push(oColumnInfo);
 		}
@@ -425,7 +426,7 @@ sap.ui.define([
 		var sPersoKey = oControl.data(this.getCustomDataKey());
 		if (!sPersoKey) {
 			sPersoKey = oControl.getId();
-			if (sPersoKey.indexOf(sap.ui.getCore().getConfiguration().getUIDPrefix()) === 0) {
+			if (sPersoKey.indexOf(Configuration.getUIDPrefix()) === 0) {
 				Log.warning("Generated IDs should not be used as personalization keys! The stability cannot be ensured! (Control: \"" + oControl.getId() + "\")");
 			}
 		}

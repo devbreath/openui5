@@ -64,13 +64,12 @@ function(
 	 * @extends sap.m.NotificationListBase
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.34
 	 * @alias sap.m.NotificationListItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var NotificationListItem = NotificationListBase.extend('sap.m.NotificationListItem', /** @lends sap.m.NotificationListItem.prototype */ {
 		metadata: {
@@ -116,7 +115,9 @@ function(
 				 */
 				_showMoreButton: {type: 'sap.m.Link', multiple: false, visibility: "hidden"}
 			}
-		}
+		},
+
+		renderer: NotificationListItemRenderer
 	});
 
 	/**
@@ -144,15 +145,6 @@ function(
 
 			return this._avatar;
 		}
-	};
-
-	/**
-	 * Handles the internal event onBeforeRendering.
-	 *
-	 * @private
-	 */
-	NotificationListItem.prototype.onBeforeRendering = function() {
-		NotificationListBase.prototype.onBeforeRendering.call(this);
 	};
 
 	NotificationListItem.prototype.onAfterRendering = function() {

@@ -28,7 +28,7 @@ sap.ui.define([
 	 * @namespace
 	 * @name sap.ui.webc
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @public
 	 * @since 1.92.0
 	 * @experimental Since 1.92.0
@@ -40,14 +40,14 @@ sap.ui.define([
 	 * @namespace
 	 * @alias sap.ui.webc.common
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @public
 	 * @since 1.92.0
 	 * @experimental Since 1.92.0
 	 */
 	var thisLib = sap.ui.getCore().initLibrary({
 		name : "sap.ui.webc.common",
-		version: "1.105.1",
+		version: "1.107.0",
 		dependencies : ["sap.ui.core"],
 		noLibraryCSS: true,
 		designtime: "sap/ui/webc/common/designtime/library.designtime",
@@ -71,7 +71,7 @@ sap.ui.define([
 	CSP.setPackageCSSRoot("@ui5/webcomponents-base", sap.ui.require.toUrl("sap/ui/webc/common/thirdparty/base/css/"));
 	CSP.setPackageCSSRoot("@ui5/webcomponents-theming", sap.ui.require.toUrl("sap/ui/webc/common/thirdparty/theming/css/"));
 
-	OpenUI5Enablement.enrichBusyIndicatorSettings(UI5Element);
+	OpenUI5Enablement.default.enrichBusyIndicatorSettings(UI5Element.default);
 
 	return thisLib;
 });

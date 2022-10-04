@@ -22,14 +22,13 @@ sap.ui.define(['./library', 'sap/ui/core/Title'],
 	 * @extends sap.ui.core.Title
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.16.0.
 	 * moved to sap.ui.core library. Please use this one.
 	 * @alias sap.ui.commons.Title
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Title = CoreTitle.extend("sap.ui.commons.Title", /** @lends sap.ui.commons.Title.prototype */ { metadata : {
 

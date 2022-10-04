@@ -34,7 +34,7 @@ sap.ui.define([
 	 * @class The ContextMenu registers event handler to open the context menu. Menu entries can dynamically be added
 	 * @extends sap.ui.dt.Plugin
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.53
@@ -270,7 +270,7 @@ sap.ui.define([
 			.catch(function(oError) {
 				throw DtUtil.createError(
 					"ContextMenu#open",
-					"An error occured during calling getMenuItems: " + oError
+					"An error occurred during calling getMenuItems: " + oError
 				);
 			});
 	};

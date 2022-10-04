@@ -56,14 +56,13 @@ sap.ui.define([
 	 * @see http://scn.sap.com/docs/DOC-44986
 	 *
 	 * @extends sap.ui.table.Table
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @alias sap.ui.table.AnalyticalTable
 	 * @see {@link topic:08197fa68e4f479cbe30f639cc1cd22c sap.ui.table}
 	 * @see {@link fiori:/analytical-table-alv/ Analytical Table}
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var AnalyticalTable = Table.extend("sap.ui.table.AnalyticalTable", /** @lends sap.ui.table.AnalyticalTable.prototype */ { metadata : {
 
@@ -743,7 +742,6 @@ sap.ui.define([
 	 *         Index of the row to return the context from.
 	 * @returns {sap.ui.model.Context} The context of a row by its index
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	AnalyticalTable.prototype.getContextByIndex = function(iIndex) {
 		var oBinding = this.getBinding();
@@ -1007,7 +1005,6 @@ sap.ui.define([
 	 *
 	 * @returns {int} The total size of the data entries
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	AnalyticalTable.prototype.getTotalSize = function() {
 		var oBinding = this.getBinding();
@@ -1074,7 +1071,6 @@ sap.ui.define([
 	 * @param {int} iRowIndex The row index for which the selection state should be retrieved
 	 * @returns {boolean} true if the index is selected, false otherwise
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 * @name sap.ui.table.AnalyticalTable#isIndexSelected
 	 */
@@ -1087,7 +1083,6 @@ sap.ui.define([
 	 * @param {int} iRowIndex The row index which will be selected (in case it exists)
 	 * @returns {this} a reference to the <code>AnalyticalTable</code> control, can be used for chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 * @name sap.ui.table.AnalyticalTable#setSelectedIndex
 	 */
@@ -1102,7 +1097,6 @@ sap.ui.define([
 	 *
 	 * @returns {int[]} an array containing all selected indices
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 * @name sap.ui.table.AnalyticalTable#getSelectedIndices
 	 */
@@ -1117,7 +1111,6 @@ sap.ui.define([
 	 * @param {int} iToIndex the end index of the selection range
 	 * @returns {this} a reference to the <code>AnalyticalTable</code> control, can be used for chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 * @name sap.ui.table.AnalyticalTable#setSelectionInterval
 	 */
@@ -1135,7 +1128,6 @@ sap.ui.define([
 	 * @param {int} iToIndex The starting index of the range which will be selected.
 	 * @returns {this} a reference to the <code>AnalyticalTable</code> control, can be used for chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 * @name sap.ui.table.AnalyticalTable#addSelectionInterval
 	 */
@@ -1150,7 +1142,6 @@ sap.ui.define([
 	 * @param {int} iToIndex The starting index of the range which will be deselected.
 	 * @returns {this} a reference to the <code>AnalyticalTable</code> control, can be used for chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 * @name sap.ui.table.AnalyticalTable#removeSelectionInterval
 	 */
@@ -1165,7 +1156,6 @@ sap.ui.define([
 	 *
 	 * @returns {this} a reference to the <code>AnalyticalTable</code> control, can be used for chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 * @name sap.ui.table.AnalyticalTable#selectAll
 	 */
@@ -1178,7 +1168,6 @@ sap.ui.define([
 	 *
 	 * @returns {int} Current lead selection index.
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 * @name sap.ui.table.AnalyticalTable#getSelectedIndex
 	 */
@@ -1189,7 +1178,6 @@ sap.ui.define([
 	 * @param {int|int[]} vRowIndex A single index or an array of indices of the rows to be expanded
 	 * @returns {this} Reference to <code>this</code> in order to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 */
 	AnalyticalTable.prototype.expand = TreeTable.prototype.expand;
@@ -1200,7 +1188,6 @@ sap.ui.define([
 	 * @param {int|int[]} vRowIndex A single index, or an array of indices of the rows to be collapsed
 	 * @returns {this} Reference to <code>this</code> in order to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 */
 	AnalyticalTable.prototype.collapse = TreeTable.prototype.collapse;
@@ -1212,7 +1199,6 @@ sap.ui.define([
 	 *
 	 * @returns {this} Reference to <code>this</code> in order to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @since 1.70
 	 */
 	AnalyticalTable.prototype.expandAll = function() {
@@ -1230,7 +1216,6 @@ sap.ui.define([
 	 *
 	 * @returns {this} Reference to <code>this</code> in order to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 */
 	AnalyticalTable.prototype.collapseAll = TreeTable.prototype.collapseAll;
@@ -1241,7 +1226,6 @@ sap.ui.define([
 	 * @param {int} iRowIndex The index of the row to be checked
 	 * @returns {boolean} <code>true</code> if the row is expanded, <code>false</code> if it is collapsed
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 */
 	AnalyticalTable.prototype.isExpanded = TreeTable.prototype.isExpanded;

@@ -32,13 +32,12 @@ sap.ui.define([
 	 * <code>sap.ui.commons</code> library.
 	 * @extends sap.ui.core.Control
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
 	 * @ui5-restricted sap.ui.mdc
 	 * @alias sap.ui.table.CreationRow
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var CreationRow = Control.extend("sap.ui.table.CreationRow", /** @lends sap.ui.table.CreationRow.prototype */ {
 		metadata: {

@@ -47,13 +47,12 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.54
 	 * @alias sap.tnt.InfoLabel
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var InfoLabel = Control.extend("sap.tnt.InfoLabel", /** @lends sap.tnt.InfoLabel.prototype */ {
 		metadata: {
@@ -104,7 +103,9 @@ sap.ui.define([
 				icon : {type : "sap.ui.core.URI", group : "Appearance", defaultValue: "" }
 
 			}
-		}
+		},
+
+		renderer: InfoLabelRenderer
 	});
 
 	InfoLabel.prototype.init = function () {

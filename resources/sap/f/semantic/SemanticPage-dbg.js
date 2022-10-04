@@ -97,7 +97,7 @@ sap.ui.define([
 	* @extends sap.ui.core.Control
 	*
 	* @author SAP SE
-	* @version 1.105.1
+	* @version 1.107.0
 	*
 	* @constructor
 	* @public
@@ -107,7 +107,6 @@ sap.ui.define([
 	* @see {@link topic:84f3d52f492648d5b594e4f45dca7727 Semantic Pages}
 	* @see {@link topic:4a97a07ec8f5441d901994d82eaab1f5 Semantic Page (sap.m)}
 	* @see {@link fiori:https://experience.sap.com/fiori-design-web/semantic-page/ Semantic Page}
-	* @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	*/
 	var SemanticPage = Control.extend("sap.f.semantic.SemanticPage", /** @lends sap.f.semantic.SemanticPage.prototype */ {
 		metadata: {
@@ -603,7 +602,9 @@ sap.ui.define([
 			},
 			dnd: { draggable: false, droppable: true },
 			designtime : "sap/f/designtime/SemanticPage.designtime"
-		}
+		},
+
+		renderer: SemanticPageRenderer
 	});
 
 	/*

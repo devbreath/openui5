@@ -54,7 +54,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -149,6 +149,7 @@ sap.ui.define([
 	};
 
 	BaseContent.prototype.exit = function () {
+		this.hideLoadingPlaceholders();
 		this._oAwaitedEvents = null;
 
 		if (this._mObservers) {
@@ -405,9 +406,17 @@ sap.ui.define([
 	 * @ui5-restricted
 	 */
 	BaseContent.prototype.showLoadingPlaceholders = function () {
-		var oLoadingProvider = this.getAggregation("_loadingProvider");
-		if (oLoadingProvider) {
-			oLoadingProvider.setLoading(true);
+		var oLoadingProvider = this.getAggregation("_loadingProvider"),
+			oCard = this.getCardInstance();
+
+		if (!oLoadingProvider) {
+			return;
+		}
+
+		oLoadingProvider.setLoading(true);
+
+		if (oCard) {
+			oCard.addActiveLoadingProvider(oLoadingProvider);
 		}
 	};
 
@@ -416,9 +425,17 @@ sap.ui.define([
 	 * @ui5-restricted
 	 */
 	BaseContent.prototype.hideLoadingPlaceholders = function () {
-		var oLoadingProvider = this.getAggregation("_loadingProvider");
-		if (oLoadingProvider) {
-			oLoadingProvider.setLoading(false);
+		var oLoadingProvider = this.getAggregation("_loadingProvider"),
+			oCard = this.getCardInstance();
+
+		if (!oLoadingProvider || !oLoadingProvider.getLoading()) {
+			return;
+		}
+
+		oLoadingProvider.setLoading(false);
+
+		if (oCard) {
+			oCard.removeActiveLoadingProvider(oLoadingProvider);
 		}
 	};
 
@@ -589,6 +606,12 @@ sap.ui.define([
 	 */
 	BaseContent.prototype.onActionSubmitEnd = function (oResponse, oError) {
 	};
+
+	/**
+	* @private
+	* @ui5-restricted
+ 	*/
+	BaseContent.prototype.validateControls = function () { };
 
 	BaseContent.prototype.getCardInstance = function () {
 		return Core.byId(this.getCard());

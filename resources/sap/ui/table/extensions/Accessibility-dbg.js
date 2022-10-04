@@ -10,9 +10,9 @@ sap.ui.define([
 	"./AccessibilityRender",
 	"../utils/TableUtils",
 	"../library",
-	"sap/ui/core/Control",
-	"sap/ui/thirdparty/jquery"
-], function(ExtensionBase, AccRenderExtension, TableUtils, library, Control, jQuery) {
+	"sap/ui/thirdparty/jquery",
+	"sap/ui/core/Configuration"
+], function(ExtensionBase, AccRenderExtension, TableUtils, library, jQuery, Configuration) {
 	"use strict";
 
 	// shortcuts
@@ -32,18 +32,25 @@ sap.ui.define([
 		 * @see sap.ui.core.Control#getAccessibilityInfo
 		 */
 		getAccInfoOfControl: function(oControl) {
+			var oAccInfo = null;
+
 			if (oControl && typeof oControl.getAccessibilityInfo === "function") {
 				if (typeof oControl.getVisible === "function" && !oControl.getVisible()) {
-					return ACCInfoHelper._normalize({});
+					oAccInfo = ACCInfoHelper._normalize({});
+				} else {
+					var oSource = oControl.getAccessibilityInfo();
+					if (oSource) {
+						var oTarget = {};
+						ACCInfoHelper._flatten(oSource, oTarget);
+						oAccInfo = oTarget;
+					}
 				}
-				var oSource = oControl.getAccessibilityInfo();
-				if (oSource) {
-					var oTarget = {};
-					ACCInfoHelper._flatten(oSource, oTarget);
-					return oTarget;
+				if (oAccInfo && !oAccInfo.description) {
+					oAccInfo.description = TableUtils.getResourceText("TBL_CTRL_STATE_EMPTY");
 				}
 			}
-			return null;
+
+			return oAccInfo;
 		},
 
 		/*
@@ -228,7 +235,7 @@ sap.ui.define([
 			}
 
 			var oLabel = oColumn.getLabel();
-			if (oLabel instanceof Control) {
+			if (TableUtils.isA(oLabel, "sap.ui.core.Control")) {
 				sTooltip = oLabel.getTooltip_AsString();
 			}
 			if (sTooltip) {
@@ -504,6 +511,7 @@ sap.ui.define([
 			var oTable = this.getTable();
 			var $Cell = oCellInfo.cell;
 			var oColumn = sap.ui.getCore().byId($Cell.attr("data-sap-ui-colid"));
+			var oColumnLabel = TableUtils.Column.getHeaderLabel(oColumn);
 			var mAttributes = ExtensionHelper.getAriaAttributesFor(this, AccExtension.ELEMENTTYPES.COLUMNHEADER, {
 					headerId: $Cell.attr("id"),
 					column: oColumn,
@@ -512,6 +520,10 @@ sap.ui.define([
 			var sText = ExtensionHelper.getColumnTooltip(oColumn);
 			var aLabels = [oTable.getId() + "-colnumberofcols"].concat(mAttributes["aria-labelledby"]);
 			var iSpan = oCellInfo.columnSpan;
+
+			if (TableUtils.isA(oColumnLabel, "sap.m.Label") && oColumnLabel.getRequired()) {
+				aLabels.push(oTable.getId() + "-ariarequired");
+			}
 
 			if (iSpan > 1) {
 				aLabels.push(oTable.getId() + "-ariacolspan");
@@ -675,7 +687,7 @@ sap.ui.define([
 
 				case AccExtension.ELEMENTTYPES.ROWACTION:
 					mAttributes["role"] = "gridcell";
-					mAttributes["aria-colindex"] = oTable._getVisibleColumns().length + 1 + (TableUtils.hasRowHeader(oTable) ? 1 : 0);
+					mAttributes["aria-colindex"] = TableUtils.getVisibleColumnCount(oTable) + 1 + (TableUtils.hasRowHeader(oTable) ? 1 : 0);
 					mAttributes["aria-labelledby"] = [sTableId + "-rowacthdr"];
 					break;
 
@@ -706,9 +718,9 @@ sap.ui.define([
 					}
 
 					if (!bHasColSpan && oColumn) {
-						var oPopover = oColumn.getColumnHeaderMenu();
-						if (oPopover) {
-							mAttributes["aria-haspopup"] = oPopover.getAriaHasPopupType().toLowerCase();
+						var oColumnHeaderMenu = oColumn.getHeaderMenuInstance();
+						if (oColumnHeaderMenu) {
+							mAttributes["aria-haspopup"] = oColumnHeaderMenu.getAriaHasPopupType().toLowerCase();
 						} else if (oColumn._menuHasItems()) {
 							mAttributes["aria-haspopup"] = "menu";
 						}
@@ -867,17 +879,18 @@ sap.ui.define([
 					break;
 
 				case AccExtension.ELEMENTTYPES.NODATA: //The no data container
-					mAttributes["role"] = "gridcell";
-					var oNoContentMessage = TableUtils.getNoContentMessage(oTable);
+					var vNoContentMessage = TableUtils.getNoContentMessage(oTable);
 					var aLabels = [];
 
-					if (oNoContentMessage instanceof Control) {
-						if (oNoContentMessage.isA("sap.m.IllustratedMessage")) {
-							var oAccRef = oNoContentMessage.getAccessibilityReferences();
+					mAttributes["role"] = "gridcell";
+
+					if (TableUtils.isA(vNoContentMessage, "sap.ui.core.Control")) {
+						if (vNoContentMessage.getAccessibilityReferences instanceof Function) {
+							var oAccRef = vNoContentMessage.getAccessibilityReferences();
 							aLabels.push(oAccRef.title);
 							aLabels.push(oAccRef.description);
 						} else {
-							aLabels.push(oNoContentMessage.getId());
+							aLabels.push(vNoContentMessage.getId());
 						}
 					} else {
 						aLabels.push(sTableId + "-noDataMsg");
@@ -923,7 +936,7 @@ sap.ui.define([
 	 * @class Extension for sap.ui.table.Table which handles ACC related things.
 	 * @extends sap.ui.table.extensions.ExtensionBase
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @alias sap.ui.table.extensions.Accessibility
@@ -935,7 +948,7 @@ sap.ui.define([
 		 * @returns {string} The name of this extension.
 		 */
 		_init: function(oTable, sTableType, mSettings) {
-			this._accMode = sap.ui.getCore().getConfiguration().getAccessibility();
+			this._accMode = Configuration.getAccessibility();
 			this._busyCells = [];
 
 			TableUtils.addDelegate(oTable, this);
@@ -1159,7 +1172,7 @@ sap.ui.define([
 		if (sReason !== "Focus" && sReason !== TableUtils.RowsUpdateReason.Expand && sReason !== TableUtils.RowsUpdateReason.Collapse) {
 			// when the focus stays on the same cell and only the content is replaced (e.g. on scroll or expand),
 			// to force screenreader announcements
-			if (oInfo.isOfType(CellType.DATACELL | CellType.ROWHEADER | CellType.ROWACTION)) {
+			if (oInfo.isOfType(CellType.ANYCONTENTCELL)) {
 				oInfo.cell.attr("role", "status");
 				oInfo.cell.attr("role", "gridcell");
 			} else {

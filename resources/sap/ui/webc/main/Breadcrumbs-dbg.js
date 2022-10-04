@@ -45,14 +45,13 @@ sap.ui.define([
 	 * </ul> <br>
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.95.0
 	 * @experimental Since 1.95.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.Breadcrumbs
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Breadcrumbs = WebComponent.extend("sap.ui.webc.main.Breadcrumbs", {
 		metadata: {

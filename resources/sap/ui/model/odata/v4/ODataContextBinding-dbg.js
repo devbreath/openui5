@@ -74,7 +74,7 @@ sap.ui.define([
 		 * @mixes sap.ui.model.odata.v4.ODataParentBinding
 		 * @public
 		 * @since 1.37.0
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @borrows sap.ui.model.odata.v4.ODataBinding#getGroupId as #getGroupId
 		 * @borrows sap.ui.model.odata.v4.ODataBinding#getRootBinding as #getRootBinding
@@ -346,39 +346,43 @@ sap.ui.define([
 
 					if (that.isReturnValueLikeBindingParameter(oOperationMetadata)) {
 						oOldValue = that.oContext.getValue();
+						// Note: sContextPredicate missing e.g. when collection-bound
 						sContextPredicate = oOldValue
 							&& _Helper.getPrivateAnnotation(oOldValue, "predicate");
 						sResponsePredicate = _Helper.getPrivateAnnotation(
 							oResponseEntity, "predicate");
-						if (sContextPredicate === sResponsePredicate) {
-							// this is synchronous, because the entity to be patched is available in
-							// the context (we already read its predicate)
-							that.oContext.patch(oResponseEntity);
+
+						if (sResponsePredicate) {
+							if (sContextPredicate === sResponsePredicate) {
+								// this is sync, because the entity to be patched is available in
+								// the context (we already read its predicate)
+								that.oContext.patch(oResponseEntity);
+							}
+							if (that.hasReturnValueContext()) {
+								if (bReplaceWithRVC) {
+									that.oCache = null;
+									that.oCachePromise = SyncPromise.resolve(null);
+									oResult = that.oContext.getBinding()
+										.doReplaceWith(that.oContext, oResponseEntity,
+											sResponsePredicate);
+									oResult.setNewGeneration();
+
+									return oResult;
+								}
+
+								that.oReturnValueContext = Context.createNewContext(that.oModel,
+									that,
+									getReturnValueContextPath(sResolvedPath, sResponsePredicate));
+								// set the resource path for late property requests
+								that.oCache.setResourcePath(
+									that.oReturnValueContext.getPath().slice(1));
+
+								return that.oReturnValueContext;
+							}
 						}
 					}
 
-					if (that.hasReturnValueContext(oOperationMetadata)) {
-						if (that.oReturnValueContext) {
-							that.oReturnValueContext.destroy();
-						}
-
-						if (bReplaceWithRVC) {
-							that.oCache = null;
-							that.oCachePromise = SyncPromise.resolve(null);
-							oResult = that.oContext.getBinding().doReplaceWith(that.oContext,
-								oResponseEntity, sResponsePredicate);
-							oResult.setNewGeneration();
-
-							return oResult;
-						}
-
-						that.oReturnValueContext = Context.createNewContext(that.oModel,
-							that, getReturnValueContextPath(sResolvedPath, sResponsePredicate));
-						// set the resource path for late property requests
-						that.oCache.setResourcePath(that.oReturnValueContext.getPath().slice(1));
-
-						return that.oReturnValueContext;
-					} else if (bReplaceWithRVC) {
+					if (bReplaceWithRVC) {
 						throw new Error("Cannot replace w/o return value context");
 					}
 				});
@@ -396,10 +400,6 @@ sap.ui.define([
 				});
 			}).catch(function (oError) {
 				oGroupLock.unlock(true);
-				if (that.oReturnValueContext) {
-					that.oReturnValueContext.destroy();
-					that.oReturnValueContext = null;
-				}
 				that.oModel.reportError("Failed to execute " + sResolvedPath, sClassName, oError);
 				throw oError;
 			});
@@ -500,7 +500,12 @@ sap.ui.define([
 	 * If a back-end request fails, the 'dataReceived' event provides an <code>Error</code> in the
 	 * 'error' event parameter.
 	 *
+	 * Since 1.106 this event is bubbled up to the model, unless a listener calls
+	 * {@link sap.ui.base.Event#cancelBubble oEvent.cancelBubble()}.
+	 *
 	 * @param {sap.ui.base.Event} oEvent
+	 * @param {function} oEvent.cancelBubble
+	 *   A callback function to prevent that the event is bubbled up to the model
 	 * @param {object} oEvent.getParameters()
 	 * @param {object} [oEvent.getParameters().data]
 	 *   An empty data object if a back-end request succeeds
@@ -509,6 +514,7 @@ sap.ui.define([
 	 *
 	 * @event sap.ui.model.odata.v4.ODataContextBinding#dataReceived
 	 * @public
+	 * @see sap.ui.model.odata.v4.ODataModel#event:dataReceived
 	 * @since 1.37.0
 	 */
 
@@ -520,10 +526,16 @@ sap.ui.define([
 	 * fired: Whatever should happen in the event handler attached to that event, can instead be
 	 * done before calling {@link #execute}.
 	 *
+	 * Since 1.106 this event is bubbled up to the model, unless a listener calls
+	 * {@link sap.ui.base.Event#cancelBubble oEvent.cancelBubble()}.
+	 *
 	 * @param {sap.ui.base.Event} oEvent
+	 * @param {function} oEvent.cancelBubble
+	 *   A callback function to prevent that the event is bubbled up to the model
 	 *
 	 * @event sap.ui.model.odata.v4.ODataContextBinding#dataRequested
 	 * @public
+	 * @see sap.ui.model.odata.v4.ODataModel#event:dataRequested
 	 * @since 1.37.0
 	 */
 
@@ -653,15 +665,16 @@ sap.ui.define([
 		 * @returns {string} The original resource path
 		 */
 		function getOriginalResourcePath(oResponseEntity) {
-			if (that.hasReturnValueContext(oOperationMetadata)) {
-				return getReturnValueContextPath(sOriginalResourcePath,
-					_Helper.getPrivateAnnotation(oResponseEntity, "predicate"));
-			}
-			if (that.isReturnValueLikeBindingParameter(oOperationMetadata)
-				&& _Helper.getPrivateAnnotation(vEntity, "predicate")
-					=== _Helper.getPrivateAnnotation(oResponseEntity, "predicate")) {
-				// return value is *same* as binding parameter: attach messages to the latter
-				return sOriginalResourcePath.slice(0, sOriginalResourcePath.lastIndexOf("/"));
+			if (that.isReturnValueLikeBindingParameter(oOperationMetadata)) {
+				if (that.hasReturnValueContext()) {
+					return getReturnValueContextPath(sOriginalResourcePath,
+						_Helper.getPrivateAnnotation(oResponseEntity, "predicate"));
+				}
+				if (_Helper.getPrivateAnnotation(vEntity, "predicate")
+						=== _Helper.getPrivateAnnotation(oResponseEntity, "predicate")) {
+					// return value is *same* as binding parameter: attach messages to the latter
+					return sOriginalResourcePath.slice(0, sOriginalResourcePath.lastIndexOf("/"));
+				}
 			}
 
 			return sOriginalResourcePath;
@@ -720,6 +733,10 @@ sap.ui.define([
 			throw new Error("Unsupported parameters for navigation property");
 		}
 
+		if (that.oReturnValueContext) {
+			that.oReturnValueContext.destroy();
+			that.oReturnValueContext = null;
+		}
 		this.oOperation.bAction = bAction;
 		this.oOperation.mRefreshParameters = mParameters;
 		mParameters = Object.assign({}, mParameters);
@@ -872,16 +889,17 @@ sap.ui.define([
 	 * @param {boolean} [bReplaceWithRVC]
 	 *   Whether this operation binding's parent context, which must belong to a list binding, is
 	 *   replaced with the operation's return value context (see below) and that list context is
-	 *   returned instead. The list context may be a newly created context or an existing context.
+	 *   returned instead. That list context may be a newly created context or an existing context.
 	 *   A newly created context has the same <code>keepAlive</code> attribute and
 	 *   <code>fnOnBeforeDestroy</code> function as the parent context, see
 	 *   {@link sap.ui.model.odata.v4.Context#setKeepAlive}; <code>fnOnBeforeDestroy</code> will be
 	 *   called with the new context instance as the only argument in this case. An existing context
 	 *   does not change its <code>keepAlive</code> attribute. In any case, the resulting context
-	 *   takes the place (index, position) of the parent context
-	 *   {@link sap.ui.model.odata.v4.Context#getIndex}. If the parent context has requested
-	 *   messages when it was kept alive, they will be inherited if the $$inheritExpandSelect
-	 *   binding parameter is set to <code>true</code>. Since 1.97.0.
+	 *   takes the place (index, position) of the parent context (see
+	 *   {@link sap.ui.model.odata.v4.Context#getIndex}), which need not be in the collection
+	 *   currently if it is {@link sap.ui.model.odata.v4.Context#isKeepAlive kept alive}. If the
+	 *   parent context has requested messages when it was kept alive, they will be inherited if the
+	 *   $$inheritExpandSelect binding parameter is set to <code>true</code>. Since 1.97.0.
 	 * @returns {Promise}
 	 *   A promise that is resolved without data or with a return value context when the operation
 	 *   call succeeded, or rejected with an <code>Error</code> instance <code>oError</code> in case
@@ -904,7 +922,8 @@ sap.ui.define([
 	 *   operation response. It is created only if the operation is bound and has a single entity
 	 *   return value from the same entity set as the operation's binding parameter and has a
 	 *   parent context which is a {@link sap.ui.model.odata.v4.Context} and points to an entity
-	 *   from an entity set.<br>
+	 *   from an entity set. It is destroyed the next time this operation binding is executed again!
+	 *   <br>
 	 *   If a return value context is created, it must be used instead of
 	 *   <code>this.getBoundContext()</code>. All bound messages will be related to the return value
 	 *   context only. Such a message can only be connected to a corresponding control if the
@@ -935,7 +954,7 @@ sap.ui.define([
 		var sResolvedPath = this.getResolvedPath();
 
 		this.checkSuspended();
-		this.oModel.checkGroupId(sGroupId);
+		_Helper.checkGroupId(sGroupId);
 		if (!this.oOperation) {
 			throw new Error("The binding must be deferred: " + this.sPath);
 		}
@@ -953,7 +972,7 @@ sap.ui.define([
 			if (bReplaceWithRVC) {
 				if (!this.oContext.getBinding) {
 					throw new Error("Cannot replace this parent context: " + this.oContext);
-				}
+				} // Note: parent context need not have a key predicate!
 				this.oContext.getBinding().checkKeepAlive(this.oContext);
 			}
 		} else if (bReplaceWithRVC) {
@@ -999,7 +1018,8 @@ sap.ui.define([
 			throw oError;
 		}
 		return oCachePromise.then(function (oCache) {
-			var bDataRequested = false,
+			var bPreventBubbling,
+				bDataRequested = false,
 				oGroupLock,
 				sResolvedPath = that.getResolvedPath(),
 				sRelativePath = oCache || that.oOperation
@@ -1034,11 +1054,12 @@ sap.ui.define([
 					oGroupLock = that.oReadGroupLock || that.lockGroup();
 					that.oReadGroupLock = undefined;
 				}
+				bPreventBubbling = that.isRefreshWithoutBubbling();
 
 				return that.resolveRefreshPromise(
 					oCache.fetchValue(oGroupLock, sRelativePath, function () {
 						bDataRequested = true;
-						that.fireDataRequested();
+						that.fireDataRequested(bPreventBubbling);
 					}, oListener)
 				).then(function (vValue) {
 					that.assertSameCache(oCache);
@@ -1046,7 +1067,7 @@ sap.ui.define([
 					return vValue;
 				}).then(function (vValue) {
 					if (bDataRequested) {
-						that.fireDataReceived({data : {}});
+						that.fireDataReceived({data : {}}, bPreventBubbling);
 					}
 					return vValue;
 				}, function (oError) {
@@ -1054,7 +1075,8 @@ sap.ui.define([
 					if (bDataRequested) {
 						that.oModel.reportError("Failed to read path " + sResolvedPath, sClassName,
 							oError);
-						that.fireDataReceived(oError.canceled ? {data : {}} : {error : oError});
+						that.fireDataReceived(oError.canceled ? {data : {}} : {error : oError},
+							bPreventBubbling);
 					}
 					throw oError;
 				});
@@ -1205,19 +1227,15 @@ sap.ui.define([
 	 *    (a) a V4 parent context which
 	 *    (b) points to an entity from an entity set w/o navigation properties.
 	 *
-	 * @param {object} oMetadata The operation metadata
+	 * BEWARE: It is the caller's duty to check 1. through 4.(a) via
+	 * {@link #isReturnValueLikeBindingParameter}!
+	 *
 	 * @returns {boolean} Whether a return value context is created
 	 *
 	 * @private
 	 */
-	ODataContextBinding.prototype.hasReturnValueContext = function (oMetadata) {
-		var aMetaSegments;
-
-		if (!this.isReturnValueLikeBindingParameter(oMetadata)) {
-			return false;
-		}
-
-		aMetaSegments = _Helper.getMetaPath(this.getResolvedPath()).split("/");
+	ODataContextBinding.prototype.hasReturnValueContext = function () {
+		var aMetaSegments = _Helper.getMetaPath(this.getResolvedPath()).split("/");
 
 		// case 4b
 		return aMetaSegments.length === 3
@@ -1259,6 +1277,7 @@ sap.ui.define([
 	 * @returns {boolean} Whether operation's return value is like its binding parameter
 	 *
 	 * @private
+	 * @see #hasReturnValueContext
 	 */
 	ODataContextBinding.prototype.isReturnValueLikeBindingParameter = function (oMetadata) {
 		var oParentMetaData, sParentMetaPath;
@@ -1365,7 +1384,9 @@ sap.ui.define([
 					bKeepCacheOnError ? sGroupId : undefined);
 				// Do not fire a change event, or else ManagedObject destroys and recreates the
 				// binding hierarchy causing a flood of events.
-				oPromise = bHasChangeListeners ? that.createRefreshPromise() : undefined;
+				oPromise = bHasChangeListeners
+					? that.createRefreshPromise(/*bPreventBubbling*/bKeepCacheOnError)
+					: undefined;
 				if (bKeepCacheOnError && oPromise) {
 					oPromise = oPromise.catch(function (oError) {
 						return that.fetchResourcePath(that.oContext).then(function (sResourcePath) {
@@ -1461,7 +1482,7 @@ sap.ui.define([
 		 * cancellations.
 		 *
 		 * @param {Promise} oPromise - A promise
-		 * @return {Promise} A promise including an error handler
+		 * @returns {Promise} A promise including an error handler
 		 */
 		function reportError(oPromise) {
 			return oPromise.catch(function (oError) {
@@ -1497,10 +1518,9 @@ sap.ui.define([
 	/**
 	 * Returns a promise on the value for the given path relative to this binding. The function
 	 * allows access to the complete data the binding points to (if <code>sPath</code> is "") or
-	 * any part thereof. The data is a JSON structure as described in
-	 * <a
-	 * href="http://docs.oasis-open.org/odata/odata-json-format/v4.0/odata-json-format-v4.0.html">
-	 * "OData JSON Format Version 4.0"</a>.
+	 * any part thereof. The data is a JSON structure as described in <a href=
+	 * "https://docs.oasis-open.org/odata/odata-json-format/v4.0/odata-json-format-v4.0.html"
+	 * >"OData JSON Format Version 4.0"</a>.
 	 * Note that the function clones the result. Modify values via
 	 * {@link sap.ui.model.odata.v4.Context#setProperty}.
 	 *
@@ -1509,7 +1529,7 @@ sap.ui.define([
 	 *
 	 * @param {string} [sPath=""]
 	 *   A path relative to this context binding
-	 * @returns {Promise}
+	 * @returns {Promise<any|undefined>}
 	 *   A promise on the requested value; in case there is no bound context this promise resolves
 	 *   with <code>undefined</code>
 	 * @throws {Error}

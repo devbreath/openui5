@@ -6,6 +6,7 @@
 sap.ui.define([
 	"sap/ui/core/Control",
 	"sap/ui/core/Core",
+	"sap/base/util/merge",
 	"sap/ui/integration/controls/ActionsStrip",
 	"sap/ui/integration/controls/Paginator",
 	"sap/ui/integration/util/BindingHelper",
@@ -13,6 +14,7 @@ sap.ui.define([
 ], function (
 	Control,
 	Core,
+	merge,
 	ActionsStrip,
 	Paginator,
 	BindingHelper,
@@ -31,9 +33,10 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
+	 * @ui5-restricted
 	 * @private
 	 * @since 1.93
 	 * @alias sap.ui.integration.cards.Footer
@@ -130,11 +133,40 @@ sap.ui.define([
 		return Core.byId(this.getCard());
 	};
 
+	Footer.prototype.setEnabled = function (bValue) {
+		var oActionsStrip = this.getActionsStrip();
+		if (!oActionsStrip) {
+			return;
+		}
+
+		if (bValue) {
+			oActionsStrip.enableItems();
+		} else {
+			oActionsStrip.disableItems();
+		}
+	};
+
+	/**
+	 * @ui5-restricted
+	 * @private
+	 * @returns {object} Footer configuration with static values.
+	 */
+	Footer.prototype.getStaticConfiguration = function () {
+		var oConfiguration = merge({}, this.getConfiguration()),
+			oPaginator = this.getPaginator();
+
+		if (oPaginator) {
+			oConfiguration.paginator = oPaginator.getStaticConfiguration();
+		}
+
+		return oConfiguration;
+	};
+
 	Footer.create = function (oCard, oConfiguration) {
 		return new Footer({
 			configuration: oConfiguration,
 			card: oCard,
-			actionsStrip: ActionsStrip.create(oCard, oConfiguration.actionsStrip),
+			actionsStrip: ActionsStrip.create(oCard, oConfiguration.actionsStrip, true),
 			paginator: Paginator.create(oCard, oConfiguration.paginator)
 		});
 	};

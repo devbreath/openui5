@@ -13,7 +13,8 @@ sap.ui.define([
 	"sap/ui/fl/Layer",
 	"sap/ui/fl/Utils",
 	"sap/ui/rta/util/showMessageBox",
-	"sap/ui/rta/RuntimeAuthoring"
+	"sap/ui/rta/RuntimeAuthoring",
+	"sap/ui/core/Core"
 ], function(
 	UriParameters,
 	Log,
@@ -24,7 +25,8 @@ sap.ui.define([
 	Layer,
 	FlexUtils,
 	showMessageBox,
-	RuntimeAuthoring
+	RuntimeAuthoring,
+	Core
 ) {
 	"use strict";
 
@@ -33,7 +35,8 @@ sap.ui.define([
 			return FeaturesAPI.isKeyUser()
 				.then(function(bIsKeyUser) {
 					if (!bIsKeyUser) {
-						var oError = Error("Key user rights have not been granted to the current user");
+						var oRtaResourceBundle = Core.getLibraryResourceBundle("sap.ui.rta");
+						var oError = new Error(oRtaResourceBundle.getText("MSG_NO_KEY_USER_RIGHTS_ERROR_MESSAGE"));
 						oError.reason = "isKeyUser";
 						throw oError;
 					}
@@ -122,7 +125,7 @@ sap.ui.define([
 				PersistenceWriteAPI.getChangesWarning(mPropertyBag)
 					.then(function(oWarningMessage) {
 						if (oWarningMessage.showWarning) {
-							var oRtaResourceBundle = sap.ui.getCore().getLibraryResourceBundle("sap.ui.rta");
+							var oRtaResourceBundle = Core.getLibraryResourceBundle("sap.ui.rta");
 							var oMessageProps = oWarningMessage.warningType === "mixedChangesWarning"
 								? {
 									text: "MSG_ADAPTATION_STARTER_MIXED_CHANGES_WARNING",
@@ -147,6 +150,12 @@ sap.ui.define([
 		})
 		.catch(function(vError) {
 			if (vError !== "Reload triggered") {
+				var oRtaResourceBundle = Core.getLibraryResourceBundle("sap.ui.rta");
+				showMessageBox(
+					oRtaResourceBundle.getText("MSG_GENERIC_ERROR_MESSAGE", vError.message),
+					{title: oRtaResourceBundle.getText("MSG_ADAPTATION_COULD_NOT_START")},
+					"error"
+				);
 				Log.error("UI Adaptation could not be started", vError.message);
 			}
 			throw vError;

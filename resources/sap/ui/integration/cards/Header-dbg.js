@@ -6,7 +6,6 @@
 sap.ui.define([
 	"sap/ui/core/Core",
 	"sap/ui/model/json/JSONModel",
-	"sap/base/util/isEmptyObject",
 	"sap/base/util/merge",
 	"sap/f/cards/Header",
 	"sap/f/cards/HeaderRenderer",
@@ -18,7 +17,6 @@ sap.ui.define([
 ], function (
 	Core,
 	JSONModel,
-	isEmptyObject,
 	merge,
 	FHeader,
 	FHeaderRenderer,
@@ -44,13 +42,12 @@ sap.ui.define([
 	 * @extends sap.f.cards.Header
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
 	 * @since 1.77
 	 * @alias sap.ui.integration.cards.Header
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Header = FHeader.extend("sap.ui.integration.cards.Header", {
 
@@ -58,14 +55,13 @@ sap.ui.define([
 
 			mConfiguration = mConfiguration || {};
 
-			this._bIsEmpty = isEmptyObject(mConfiguration);
-
 			var mSettings = {
 				title: mConfiguration.title,
 				titleMaxLines: mConfiguration.titleMaxLines,
 				subtitle: mConfiguration.subTitle,
 				subtitleMaxLines: mConfiguration.subTitleMaxLines,
-				dataTimestamp: mConfiguration.dataTimestamp
+				dataTimestamp: mConfiguration.dataTimestamp,
+				visible: mConfiguration.visible
 			};
 
 			if (mConfiguration.status && mConfiguration.status.text && !mConfiguration.status.text.format) {
@@ -73,11 +69,15 @@ sap.ui.define([
 			}
 
 			if (mConfiguration.icon) {
+				var vInitials = mConfiguration.icon.initials || mConfiguration.icon.text;
+				var sBackgroundColor = mConfiguration.icon.backgroundColor || (vInitials ? AvatarColor.Accent6 : AvatarColor.Transparent);
+
 				mSettings.iconSrc = mConfiguration.icon.src;
 				mSettings.iconDisplayShape = mConfiguration.icon.shape;
-				mSettings.iconInitials = mConfiguration.icon.text;
+				mSettings.iconInitials = vInitials;
 				mSettings.iconAlt = mConfiguration.icon.alt;
-				mSettings.iconBackgroundColor = mConfiguration.icon.backgroundColor || (mConfiguration.icon.text ? AvatarColor.Accent6 : AvatarColor.Transparent);
+				mSettings.iconBackgroundColor = sBackgroundColor;
+				mSettings.iconVisible = mConfiguration.icon.visible;
 			}
 
 			if (mSettings.iconSrc) {
@@ -90,17 +90,15 @@ sap.ui.define([
 
 			FHeader.call(this, mSettings);
 
-			if (oActionsToolbar && oActionsToolbar.isA("sap.ui.integration.controls.ActionsToolbar")) {
-				oActionsToolbar.attachVisibilityChange(this._handleToolbarVisibilityChange.bind(this));
-			}
-
 			this._oConfiguration = mConfiguration;
 		},
 
 		metadata: {
 			library: "sap.ui.integration",
 			properties: {
-				interactive: { type: "boolean", defaultValue: false }
+				interactive: { type: "boolean", defaultValue: false },
+
+				iconVisible: { type: "boolean", defaultValue: true }
 			},
 			aggregations: {
 				/**
@@ -179,14 +177,6 @@ sap.ui.define([
 
 	Header.prototype._handleError = function (sLogMessage) {
 		this.fireEvent("_error", { logMessage: sLogMessage });
-	};
-
-	Header.prototype._handleToolbarVisibilityChange = function (oEvent) {
-		var bToolbarVisible = oEvent.getParameter("visible");
-
-		if (this._bIsEmpty && this.getVisible() !== bToolbarVisible) {
-			this.setVisible(bToolbarVisible);
-		}
 	};
 
 	/**
@@ -308,6 +298,11 @@ sap.ui.define([
 	};
 
 	Header.prototype.onDataRequestComplete = function () {
+		var oCard = this.getCardInstance();
+		if (oCard) {
+			oCard._fireDataChange();
+		}
+
 		this.fireEvent("_dataReady");
 		this.hideLoadingPlaceholders();
 	};

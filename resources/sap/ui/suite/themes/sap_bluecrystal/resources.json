@@ -42,6 +42,7 @@
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/suite/themes/sap_bluecrystal/library-parameters.json",
 			"size": 2,
 			"theme": "sap_bluecrystal"
 		},
@@ -71,6 +72,10 @@
 			"name": "library_skeleton.css",
 			"size": 1348,
 			"theme": "sap_bluecrystal"
+		},
+		{
+			"name": "resources.json",
+			"size": 1570
 		},
 		{
 			"name": "shared.less",

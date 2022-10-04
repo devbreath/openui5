@@ -7,7 +7,7 @@
 /**
  * Adds support rules of the sap.f library to the support infrastructure.
  */
-sap.ui.predefine('sap/f/library.support',[
+sap.ui.predefine("sap/f/library.support", [
 		"sap/ui/support/library",
 		"./rules/Avatar.support",
 		"./rules/DynamicPage.support"
@@ -30,7 +30,7 @@ sap.ui.predefine('sap/f/library.support',[
 /**
  * Defines support rules of the Avatar control of sap.f library.
  */
-sap.ui.predefine('sap/f/rules/Avatar.support',["sap/ui/support/library", "../library"],
+sap.ui.predefine("sap/f/rules/Avatar.support", ["sap/ui/support/library", "../library"],
 	function(SupportLib, library) {
 		"use strict";
 
@@ -107,7 +107,7 @@ sap.ui.predefine('sap/f/rules/Avatar.support',["sap/ui/support/library", "../lib
 /**
  * Defines support rules of the DynamicPage control of sap.f library.
  */
-sap.ui.predefine('sap/f/rules/DynamicPage.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/f/rules/DynamicPage.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 		"use strict";
 

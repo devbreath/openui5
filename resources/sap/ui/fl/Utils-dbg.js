@@ -6,6 +6,7 @@
 
 sap.ui.define([
 	"sap/base/strings/formatMessage",
+	"sap/base/util/ObjectPath",
 	"sap/base/util/isPlainObject",
 	"sap/base/util/uid",
 	"sap/base/util/UriParameters",
@@ -16,9 +17,11 @@ sap.ui.define([
 	"sap/ui/core/Component",
 	"sap/ui/fl/Scenario",
 	"sap/ui/thirdparty/hasher",
-	"sap/ui/thirdparty/jquery"
+	"sap/ui/core/mvc/View",
+	"sap/ui/core/Configuration"
 ], function(
 	formatMessage,
+	ObjectPath,
 	isPlainObject,
 	uid,
 	UriParameters,
@@ -29,7 +32,8 @@ sap.ui.define([
 	Component,
 	Scenario,
 	hasher,
-	jQuery
+	View,
+	Configuration
 ) {
 	"use strict";
 
@@ -39,13 +43,13 @@ sap.ui.define([
 	 * @namespace
 	 * @alias sap.ui.fl.Utils
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @private
 	 * @ui5-restricted sap.ui.fl, sap.ui.rta
 	 */
 	var Utils = {
-		APP_ID_AT_DESIGN_TIME: "${pro" + "ject.art" + "ifactId}", //avoid replaced by content of sap.ui.fl placeholder at build steps
+		APP_ID_AT_DESIGN_TIME: "${pro" + "ject.art" + "ifactId}", //avoid replaced by content of ${project.artifactId} placeholder at build steps
 		VARIANT_MODEL_NAME: "$FlexVariants",
 
 		/**
@@ -346,7 +350,7 @@ sap.ui.define([
 		 * @ui5-restricted sap.ui.fl
 		 */
 		getViewForControl: function(oControl) {
-			return Utils.getFirstAncestorOfControlWithControlType(oControl, sap.ui.core.mvc.View);
+			return Utils.getFirstAncestorOfControlWithControlType(oControl, View);
 		},
 
 		getFirstAncestorOfControlWithControlType: function(oControl, controlType) {
@@ -410,7 +414,7 @@ sap.ui.define([
 		},
 
 		getLrepUrl: function() {
-			var aFlexibilityServices = sap.ui.getCore().getConfiguration().getFlexibilityServices();
+			var aFlexibilityServices = Configuration.getFlexibilityServices();
 			var oLrepConfiguration = aFlexibilityServices.find(function(oServiceConfig) {
 				return oServiceConfig.connector === "LrepConnector";
 			});
@@ -427,7 +431,7 @@ sap.ui.define([
 		 * @ui5-restricted sap.ui.fl
 		 */
 		getCurrentLanguage: function() {
-			var sLanguage = sap.ui.getCore().getConfiguration().getLanguage();
+			var sLanguage = Configuration.getLanguage();
 			return Utils.convertBrowserLanguageToISO639_1(sLanguage);
 		},
 
@@ -486,11 +490,9 @@ sap.ui.define([
 		asciiToString: function(ascii) {
 			var asciiArray = ascii.split(",");
 			var parsedString = "";
-
-			jQuery.each(asciiArray, function(index, asciiChar) {
-				parsedString += String.fromCharCode(asciiChar);
-			});
-
+			for (var i = 0; i < asciiArray.length; i++) {
+				parsedString += String.fromCharCode(asciiArray[i]);
+			}
 			return parsedString;
 		},
 
@@ -569,7 +571,8 @@ sap.ui.define([
 		 * @returns {object|undefined} Returns UShell container object if available or undefined
 		 */
 		getUshellContainer: function() {
-			return sap.ushell && sap.ushell.Container;
+			// TODO wait until  FLP does offer anything
+			return ObjectPath.get("sap.ushell.Container");
 		},
 
 		createDefaultFileName: function(sNameAddition) {
@@ -790,7 +793,7 @@ sap.ui.define([
 					}
 				})
 				.catch(function(e) {
-					var sErrorMessage = "Error during execPromiseQueueSequentially processing occured";
+					var sErrorMessage = "Error during execPromiseQueueSequentially processing occurred";
 					sErrorMessage += e ? ": " + e.message : "";
 					Log.error(sErrorMessage, e);
 

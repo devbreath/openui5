@@ -40,7 +40,7 @@ sap.ui.define([
 	 * @extends sap.ui.integration.util.BaseFactory
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -70,6 +70,15 @@ sap.ui.define([
 			}
 
 			oContent.loadDependencies(mConfig.cardManifest)
+				.then(function () {
+					var oExtension = oCard.getAggregation("_extension");
+
+					if (!oExtension) {
+						return Promise.resolve();
+					}
+
+					return oExtension.loadDependencies();
+				})
 				.then(function () {
 					if ((mConfig.cardManifest && mConfig.cardManifest.isDestroyed()) ||
 						(mConfig.dataProviderFactory && mConfig.dataProviderFactory.isDestroyed())) {

@@ -6,8 +6,9 @@
 
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/ui/fl/support/apps/contentbrowser/utils/ErrorUtils"
-], function (Controller, ErrorUtils) {
+	"sap/ui/fl/support/apps/contentbrowser/utils/ErrorUtils",
+	"sap/ui/core/UIComponent"
+], function (Controller, ErrorUtils, UIComponent) {
 	"use strict";
 
 	/**
@@ -16,7 +17,7 @@ sap.ui.define([
 	 * @constructor
 	 * @alias sap.ui.fl.support.apps.contentbrowser.controller.Layers
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @experimental Since 1.45
 	 */
 	return Controller.extend("sap.ui.fl.support.apps.contentbrowser.controller.Layers", {
@@ -31,7 +32,7 @@ sap.ui.define([
 			var oLayerModelData = this.getView().getModel("layers").getData();
 			var sLayerName = oLayerModelData[sLayerBindingPath].name;
 
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			var oRouter = UIComponent.getRouterFor(this);
 			oRouter.navTo("LayerContentMaster", {layer: sLayerName});
 		},
 

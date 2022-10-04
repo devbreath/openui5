@@ -1,1 +1,2 @@
-;(function(){ace.require(["ace/snippets/powershell"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();
+(function(){ace.require(["ace/snippets/powershell"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
+//# sourceMappingURL=powershell.js.map

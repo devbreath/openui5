@@ -37,7 +37,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -184,7 +184,7 @@ sap.ui.define([
 	};
 
 	BaseFilter.prototype._getErrorMessage = function () {
-		var sMessage = "Unable to load the filter.";
+		var sMessage = Core.getLibraryResourceBundle("sap.ui.integration").getText("CARD_FILTER_DATA_LOAD_ERROR");
 
 		return new HBox({
 			justifyContent: "Center",
@@ -269,7 +269,8 @@ sap.ui.define([
 		if (oCard) {
 			sManifestKey = "/sap.card/configuration/filters/" + this.getKey() + "/value";
 			mParams[sManifestKey] = oValueForModel.value;
-			this.getCardInstance()._fireConfigurationChange(mParams);
+			oCard._fireConfigurationChange(mParams);
+			oCard.resetPaginator();
 		}
 	};
 

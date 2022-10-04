@@ -21,7 +21,7 @@ sap.ui.define([
 	 * @extends sap.ui.rta.command.BaseCommand
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -96,10 +96,12 @@ sap.ui.define([
 		if (!this._sCompositeId) {
 			this._sCompositeId = FlUtils.createDefaultFileName("composite");
 		}
-		if (oCommand.getPreparedChange && oCommand.getPreparedChange()) {
-			var oChangeDefinition = oCommand.getPreparedChange().getDefinition();
-			if (!oChangeDefinition.support.compositeCommand) {
-				oChangeDefinition.support.compositeCommand = this._sCompositeId;
+		var oPreparedChange = oCommand.getPreparedChange && oCommand.getPreparedChange();
+		if (oPreparedChange) {
+			var oChangeSupportInformation = oPreparedChange.getSupportInformation();
+			if (!oChangeSupportInformation.compositeCommand) {
+				oChangeSupportInformation.compositeCommand = this._sCompositeId;
+				oPreparedChange.setSupportInformation(oChangeSupportInformation);
 			}
 		} else if (oCommand.setCompositeId) {
 			// relevant for app descriptor commands

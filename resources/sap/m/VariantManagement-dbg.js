@@ -10,6 +10,7 @@ sap.ui.define([
 	"sap/ui/model/base/ManagedObjectModel",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
+	'sap/ui/base/ManagedObjectObserver',
 	"sap/ui/Device",
 	"sap/ui/core/InvisibleText",
 	"sap/ui/core/Control",
@@ -50,6 +51,7 @@ sap.ui.define([
 	ManagedObjectModel,
 	Filter,
 	FilterOperator,
+	ManagedObjectObserver,
 	Device,
 	InvisibleText,
 	Control,
@@ -284,6 +286,17 @@ sap.ui.define([
 					type: "sap.ui.core.TitleLevel",
                     group: "Appearance",
                     defaultValue: TitleLevel.Auto
+				},
+
+				/**
+				 * Defines the behavior, when the same list item is selected
+                 * If set to <code>false</code> the <code>select</code> event will be ommited.
+				 */
+				_selectStategyForSameItem: {
+					type: "boolean",
+					group: "Misc",
+					defaultValue: true,
+					visibility: "hidden"
 				}
 			},
 			defaultAggregation: "items",
@@ -459,6 +472,54 @@ sap.ui.define([
 
         this._oManagedObjectModel = new ManagedObjectModel(this);
         this.setModel(this._oManagedObjectModel, "$mVariants");
+
+		this._oObserver = new ManagedObjectObserver(this._observeChanges.bind(this));
+		this._oObserver.observe(this, {
+			aggregations: [
+				"items"
+			]
+		});
+	};
+
+	VariantManagement.prototype._observeChanges = function(oChanges) {
+		var oVariantItem;
+
+		if (oChanges.type === "aggregation") {
+
+			if (oChanges.name === "items") {
+
+				oVariantItem = oChanges.child;
+
+				switch (oChanges.mutation) {
+					case "insert":
+						if (!this._oObserver.isObserved(oVariantItem, {properties: ["title"]})) {
+							this._oObserver.observe(oVariantItem, {properties: ["title"]});
+						}
+
+						if (this.getSelectedKey() === oVariantItem.getKey()) {
+							this.refreshTitle();
+						}
+						break;
+					case "remove":
+						if (this._oObserver.isObserved(oVariantItem, {properties: ["title"]})) {
+							this._oObserver.unobserve(oVariantItem, {properties: ["title"]});
+						}
+						break;
+					default:
+						Log.error("operation " + oChanges.mutation + " not yet implemented");
+				}
+			}
+		} else if (oChanges.type === "property") {
+
+			if (oChanges.object.isA && oChanges.object.isA("sap.m.VariantItem")) {
+				oVariantItem = oChanges.object;
+				if (oVariantItem) {
+					if (this.getSelectedKey() === oVariantItem.getKey()) {
+						this.refreshTitle();
+					}
+				}
+			}
+		}
 	};
 
 	VariantManagement.prototype.applySettings = function(mSettings, oScope) {
@@ -566,7 +627,6 @@ sap.ui.define([
 	};
 
 
-
 	/**
 	 * Required by the {@link sap.m.IOverflowToolbarContent} interface.
 	 * Registers invalidations event which is fired when width of the control is changed.
@@ -588,6 +648,12 @@ sap.ui.define([
 	 */
 	VariantManagement.prototype.getTitle = function() {
 		return this.oVariantText;
+	};
+
+	VariantManagement.prototype.refreshTitle = function() {
+		if (this.oVariantText) {
+			this.oVariantText.getBinding("text").refresh(true);
+		}
 	};
 
 	VariantManagement.prototype._setInvisibleText = function(sText, bFlag) {
@@ -933,24 +999,26 @@ sap.ui.define([
 					}
 				}
 				if (sSelectionKey) {
-					// this.setModified(false);
-					this.setSelectedKey(sSelectionKey);
 
-					this.fireSelect({
-						key: sSelectionKey
-					});
+					var bTriggerForSameItem = this.getProperty("_selectStategyForSameItem");
+
+					if (bTriggerForSameItem || (!bTriggerForSameItem && (this.getSelectedKey() !== sSelectionKey))) {
+						this.setSelectedKey(sSelectionKey);
+
+						this.fireSelect({
+							key: sSelectionKey
+						});
+					}
 					this.oVariantPopOver.close();
 				}
 			}.bind(this)
 		});
 		this.oVariantList.setNoDataText(this._oRb.getText("VARIANT_MANAGEMENT_NODATA"));
 
-
 		var oItemTemplate = new Item({
 			key: "{$mVariants>key}",
 			text: "{$mVariants>title}"
 		});
-
 
 		this.oVariantList.bindAggregation("items", {
 			path: "/items",
@@ -2524,6 +2592,9 @@ sap.ui.define([
 	// exit destroy all controls created in init
 	VariantManagement.prototype.exit = function() {
 		var oModel;
+
+		this._oObserver.disconnect();
+		this._oObserver = undefined;
 
 		Control.prototype.exit.apply(this, arguments);
 		this._clearDeletedItems();

@@ -31,14 +31,13 @@ sap.ui.define([
 	 * @class The column for the metadata driven table, that hold the template to be shown when the rows has data.
 	 * @extends sap.m.OverflowToolbar
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.58
 	 * @experimental As of version 1.58
 	 * @ui5-restricted sap.ui.mdc
 	 * @alias sap.ui.mdc.ActionToolbar
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 
 	var ActionToolbar = OverflowToolbar.extend("sap.ui.mdc.ActionToolbar", {

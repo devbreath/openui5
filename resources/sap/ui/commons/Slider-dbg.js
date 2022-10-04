@@ -14,9 +14,10 @@ sap.ui.define([
     'sap/ui/core/Control',
     'sap/ui/core/EnabledPropagator',
     'sap/ui/core/ResizeHandler',
-    './SliderRenderer'
+    './SliderRenderer',
+    'sap/ui/core/Configuration'
 ],
-	function(jQuery, Log, containsOrEquals, ControlEvents, library, Control, EnabledPropagator, ResizeHandler, SliderRenderer) {
+	function(jQuery, Log, containsOrEquals, ControlEvents, library, Control, EnabledPropagator, ResizeHandler, SliderRenderer, Configuration) {
 	"use strict";
 
 
@@ -34,13 +35,12 @@ sap.ui.define([
 	 * @implements sap.ui.core.IFormContent
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.38, replaced by {@link sap.m.Slider}
 	 * @alias sap.ui.commons.Slider
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Slider = Control.extend("sap.ui.commons.Slider", /** @lends sap.ui.commons.Slider.prototype */ { metadata : {
 
@@ -197,8 +197,8 @@ sap.ui.define([
 		this.oGrip = this.getDomRef("grip");
 		this.oBar  = this.getDomRef("bar");
 		this.oHiLi = this.getDomRef("hili");
-		this.bRtl  = sap.ui.getCore().getConfiguration().getRTL();
-		this.bAcc  = sap.ui.getCore().getConfiguration().getAccessibility();
+		this.bRtl  = Configuration.getRTL();
+		this.bAcc  = Configuration.getAccessibility();
 		this.bTextLabels = (this.getLabels() && this.getLabels().length > 0);
 		this.oMovingGrip = this.oGrip;
 

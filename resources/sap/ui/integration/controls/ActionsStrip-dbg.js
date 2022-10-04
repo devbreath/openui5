@@ -48,7 +48,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -59,7 +59,10 @@ sap.ui.define([
 		metadata: {
 			library: "sap.ui.integration",
 			properties: {
-
+				disableItemsInitially: {
+					type: "boolean",
+					defaultValue: false
+				}
 			},
 			aggregations: {
 				/**
@@ -117,7 +120,10 @@ sap.ui.define([
 			oActions = new CardActions({
 				card: oCard
 			}),
-			bHasSpacer = false;
+			bHasSpacer = false,
+			mActionsConfig;
+
+		this._oActions = oActions;
 
 		aButtons = BindingHelper.createBindingInfos(aButtons, oCard.getBindingNamespaces());
 
@@ -147,12 +153,20 @@ sap.ui.define([
 
 			oControl.setLayoutData(oOverflow);
 
-			oActions.attach({
+			mActionsConfig = {
 				area: ActionArea.ActionsStrip,
 				control: oControl,
 				actions: aActions,
 				enabledPropertyName: "enabled"
-			});
+			};
+
+			if (this.getDisableItemsInitially()) {
+				mActionsConfig.enabledPropertyValue = false;
+				oControl._mActionsConfig = mActionsConfig;
+				oControl._bIsDisabled = true;
+			}
+
+			oActions.attach(mActionsConfig);
 
 			oToolbar.addContent(oControl);
 		}.bind(this));
@@ -160,6 +174,37 @@ sap.ui.define([
 		if (!bHasSpacer) {
 			oToolbar.insertContent(new ToolbarSpacer(), 0);
 		}
+	};
+
+	ActionsStrip.prototype.disableItems = function () {
+		var aItems = this._getToolbar().getContent();
+
+		aItems.forEach(function (oItem) {
+			if (oItem.setEnabled && !oItem._bIsDisabled) {
+				oItem.setEnabled(false);
+				oItem._bIsDisabled = true;
+			}
+		});
+	};
+
+	ActionsStrip.prototype.enableItems = function () {
+		var aItems = this._getToolbar().getContent(),
+			oActions = this._oActions,
+			mActionsConfig;
+
+		aItems.forEach(function (oItem) {
+			if (oItem.setEnabled && oItem._bIsDisabled) {
+				mActionsConfig = oItem._mActionsConfig;
+				if (mActionsConfig.action) {
+					mActionsConfig.enabledPropertyValue = true;
+					oActions._setControlEnabledState(mActionsConfig);
+				} else {
+					oItem.setEnabled(true);
+				}
+
+				delete oItem._bIsDisabled;
+			}
+		});
 	};
 
 	ActionsStrip.prototype._createLink = function (mConfig) {
@@ -202,13 +247,14 @@ sap.ui.define([
 		return oButton;
 	};
 
-	ActionsStrip.create = function (oCard, aButtons) {
+	ActionsStrip.create = function (oCard, aButtons, bDisableItemsInitially) {
 		if (!aButtons) {
 			return null;
 		}
 
 		var oActionsStrip = new ActionsStrip({
-			card: oCard
+			card: oCard,
+			disableItemsInitially: bDisableItemsInitially
 		});
 		oActionsStrip._initButtons(aButtons);
 

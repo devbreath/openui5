@@ -36,7 +36,7 @@ sap.ui.define([
 	/**
 	 * @namespace sap.ui.fl.apply._internal.flexState.FlexObjectState
 	 * @since 1.83
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @ui5-restricted sap.ui.fl
 	 */
@@ -146,7 +146,8 @@ sap.ui.define([
 			mPropertyBag.skipUpdateCache,
 			mPropertyBag.draft,
 			mPropertyBag.layer,
-			mPropertyBag.removeOtherLayerChanges
+			mPropertyBag.removeOtherLayerChanges,
+			mPropertyBag.condenseAnyLayer
 		)
 			.then(oDescriptorFlexController.saveAll.bind(
 				oDescriptorFlexController,
@@ -154,7 +155,8 @@ sap.ui.define([
 				mPropertyBag.skipUpdateCache,
 				mPropertyBag.draft,
 				mPropertyBag.layer,
-				mPropertyBag.removeOtherLayerChanges
+				mPropertyBag.removeOtherLayerChanges,
+				mPropertyBag.condenseAnyLayer
 			));
 	}
 

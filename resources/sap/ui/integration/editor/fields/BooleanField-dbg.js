@@ -17,7 +17,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.editor.fields.BooleanField
 	 * @author SAP SE
 	 * @since 1.83.0
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @experimental since 1.83.0
 	 * @ui5-restricted

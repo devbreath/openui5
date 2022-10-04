@@ -19,7 +19,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.editor.fields.viz.VizBase
 	 * @author SAP SE
 	 * @since 1.105.0
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @experimental since 1.105.0
 	 * @ui5-restricted
@@ -45,14 +45,21 @@ sap.ui.define([
 				}
 			}
 		},
-		renderer: function (oRm, oVizControl) {
-			var oControl = oVizControl.getAggregation("_control");
-			oRm.openStart("div");
-			oVizControl.applyStyle(oRm);
-			oRm.writeElementData(oVizControl);
-			oRm.openEnd();
-			oRm.renderControl(oControl);
-			oRm.close("div");
+		renderer: {
+			/*
+			 * Custom subclasses typically reuse the VizBase renderer 'as is', but still might use
+			 * legacy rendering APIs in their applyStyle method. Therefore, the apiVersion cannot
+			 * be switched to '2'.
+			 */
+			apiVersion: 1, // @todo-semantic-rendering for backward compatibility
+			render: function (oRm, oVizControl) {
+				var oControl = oVizControl.getAggregation("_control");
+				oRm.openStart("div", oVizControl);
+				oVizControl.applyStyle(oRm);
+				oRm.openEnd();
+				oRm.renderControl(oControl);
+				oRm.close("div");
+			}
 		}
 	});
 

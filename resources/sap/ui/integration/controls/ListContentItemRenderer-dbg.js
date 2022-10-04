@@ -46,7 +46,7 @@ sap.ui.define([
 			rm.class("sapUiIntLCIWithActionsStrip");
 		}
 
-		if (oLI.getAttributes().length) {
+		if (oLI._getVisibleAttributes().length) {
 			rm.class("sapUiIntLCIWithAttributes");
 		}
 	};
@@ -157,7 +157,7 @@ sap.ui.define([
 	};
 
 	ListContentItemRenderer.renderItemAttributes = function(rm, oLI) {
-		var aAttrs = oLI.getAttributes(),
+		var aAttrs = oLI._getVisibleAttributes(),
 			sLayoutType = oLI.getAttributesLayoutType(),
 			iLength = aAttrs.length,
 			i;

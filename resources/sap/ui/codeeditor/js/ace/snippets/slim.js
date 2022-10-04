@@ -1,1 +1,2 @@
-;(function(){ace.require(["ace/snippets/slim"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();
+(function(){ace.require(["ace/snippets/slim"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
+//# sourceMappingURL=slim.js.map

@@ -22,14 +22,13 @@ sap.ui.define(['./Slider', './library', './RangeSliderRenderer'],
 	 * @extends sap.ui.commons.Slider
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.8.0
 	 * @deprecated as of version 1.38, replaced by {@link sap.m.RangeSlider}
 	 * @alias sap.ui.commons.RangeSlider
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var RangeSlider = Slider.extend("sap.ui.commons.RangeSlider", /** @lends sap.ui.commons.RangeSlider.prototype */ { metadata : {
 

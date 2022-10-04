@@ -76,7 +76,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -108,21 +108,6 @@ sap.ui.define([
 					type: "sap.m.ActionSheet",
 					multiple: false,
 					visibility: "hidden"
-				}
-			},
-			events: {
-				/**
-				 * Fired when the actions toolbar changes its visibility.
-				 */
-				visibilityChange: {
-					parameters: {
-						/**
-						 * True if the actions toolbar is now visible. False otherwise.
-						 */
-						visible: {
-							type: "boolean"
-						}
-					}
 				}
 			}
 		},
@@ -282,10 +267,6 @@ sap.ui.define([
 			return oButton.getVisible();
 		});
 
-		this.fireVisibilityChange({
-			visible: bVisible
-		});
-
 		this.setVisible(bVisible);
 	};
 
@@ -349,6 +330,17 @@ sap.ui.define([
 
 		oButton["set" + capitalize(sName)](vVal);
 		this._updateVisibility();
+	};
+
+	ActionsToolbar.prototype.setEnabled = function (bValue) {
+		var oToolbar = this._getToolbar();
+
+		if (bValue) {
+			oToolbar.setEnabled(true);
+		} else {
+			this.getAggregation("_actionSheet").close();
+			oToolbar.setEnabled(false);
+		}
 	};
 
 	return ActionsToolbar;

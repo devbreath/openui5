@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-sap.ui.define(function () {
+sap.ui.define(["sap/ui/core/Configuration"], function (Configuration) {
 	"use strict";
 
 	/**
@@ -17,8 +17,10 @@ sap.ui.define(function () {
 
 	ObjectPageSectionRenderer.render = function (oRm, oControl) {
 		var sTitle, bTitleVisible,
-			bAccessibilityOn = sap.ui.getCore().getConfiguration().getAccessibility(),
-			oLabelledBy = oControl.getAggregation("ariaLabelledBy");
+			bAccessibilityOn = Configuration.getAccessibility(),
+			oLabelledBy = oControl.getAggregation("ariaLabelledBy"),
+			oHeading = oControl.getHeading(),
+			bWrapTitle = oControl.getWrapTitle();
 
 		if (!oControl.getVisible() || !oControl._getInternalVisible()) {
 			return;
@@ -34,6 +36,10 @@ sap.ui.define(function () {
 			oRm.class("sapUxAPObjectPageSectionNoTitle");
 		}
 
+		if (bWrapTitle) {
+			oRm.class("sapUxAPObjectPageSectionWrapTitle");
+		}
+
 		oRm.attr("role", "region");
 
 		if (bAccessibilityOn && oLabelledBy) {
@@ -43,6 +49,14 @@ sap.ui.define(function () {
 		oRm.attr("data-sap-ui-customfastnavgroup", true);
 
 		oRm.openEnd();
+
+		if (oHeading) {
+			oRm.openStart("div")
+				.class("sapUxAPObjectPageSectionHeading")
+				.openEnd();
+				oRm.renderControl(oHeading);
+			oRm.close("div");
+		}
 
 		oRm.openStart("div", oControl.getId() + "-header")
 			.attr("role", "heading")
@@ -79,7 +93,7 @@ sap.ui.define(function () {
 
 		oRm.openEnd();
 
-		oControl.getSubSections().forEach(oRm.renderControl, oRm);
+		oRm.renderControl(oControl._getGrid());
 
 		oRm.close("div");
 

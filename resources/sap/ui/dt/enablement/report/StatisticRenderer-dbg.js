@@ -10,10 +10,12 @@ sap.ui.define(function() {
 
 	/**
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @namespace
 	 */
-	var StatisticRenderer = {};
+	var StatisticRenderer = {
+		apiVersion: 2
+	};
 
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
@@ -22,20 +24,13 @@ sap.ui.define(function() {
 	 * @param {sap.ui.dt.enablement.report.Statistic} oStatistic An object representation of the control that should be rendered.
 	 */
 	StatisticRenderer.render = function(rm, oStatistic) {
-		rm.addClass("sapUiDtStatisticReport");
-
-		rm.write("<div");
-		rm.writeControlData(oStatistic);
-
-		rm.writeStyles();
-
-		rm.writeClasses();
-
-		rm.write(">");
+		rm.openStart("div", oStatistic);
+		rm.class("sapUiDtStatisticReport");
+		rm.openEnd();
 
 		rm.renderControl(oStatistic._getForm());
 
-		rm.write("</div>");
+		rm.close("div");
 	};
 
 	return StatisticRenderer;

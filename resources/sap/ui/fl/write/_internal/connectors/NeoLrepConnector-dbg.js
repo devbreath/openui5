@@ -21,7 +21,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.write._internal.connectors.NeoLrepConnector
 	 * @since 1.81
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @ui5-restricted sap.ui.fl.write._internal.Storage
 	 */
@@ -53,6 +53,11 @@ sap.ui.define([
 		 */
 		getContexts: function(/* mPropertyBag */) {
 			return Promise.reject("getContexts is not implemented");
+		},
+		contextBasedAdaptation: {
+			create: function() {
+				return Promise.reject("contextBasedAdaptation.create is not implemented");
+			}
 		}
 	});
 });

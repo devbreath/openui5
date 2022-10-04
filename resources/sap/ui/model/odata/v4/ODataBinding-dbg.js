@@ -136,7 +136,7 @@ sap.ui.define([
 					break;
 				case "$$groupId":
 				case "$$updateGroupId":
-					that.oModel.checkGroupId(vValue, false,
+					_Helper.checkGroupId(vValue, false,
 						"Unsupported value for binding parameter '" + sKey + "': ");
 					break;
 				case "$$ignoreMessages":
@@ -386,6 +386,15 @@ sap.ui.define([
 	 */
 	ODataBinding.prototype.doDeregisterChangeListener = function (sPath, oListener) {
 		this.oCache.deregisterChangeListener(sPath, oListener);
+	};
+
+	/**
+	 * @override
+	 * @see sap.ui.base.EventProvider#getEventingParent
+	 */
+	ODataBinding.prototype.getEventingParent = function () {
+		// this allows that dataRequested/dataReceived events are bubbled up to the model
+		return this.oModel;
 	};
 
 	/**
@@ -640,6 +649,40 @@ sap.ui.define([
 	};
 
 	/**
+	 * Fires the 'dataReceived' event. It may be bubbled up to the model.
+	 *
+	 * @param {object} oParameters
+	 *   The event parameters
+	 * @param {object} [oParameters.data]
+	 *   An empty data object if a back-end request succeeds
+	 * @param {Error} [oParameters.error]
+	 *   The error object if a back-end request failed.
+	 * @param {boolean} [bPreventBubbling]
+	 *   Whether the dataRequested and dataReceived events must not be bubbled up to the model
+	 *
+	 * @private
+	 */
+	 // @override sap.ui.model.Binding#fireDataReceived
+	ODataBinding.prototype.fireDataReceived = function (oParameters, bPreventBubbling) {
+		this.fireEvent("dataReceived", oParameters, /*bAllowPreventDefault*/false,
+			/*bEnableEventBubbling*/!bPreventBubbling);
+	};
+
+	/**
+	 * Fires the 'dataRequested' event. It may be bubbled up to the model.
+	 *
+	 * @param {boolean} [bPreventBubbling]
+	 *   Whether the dataRequested and dataReceived events must not be bubbled up to the model
+	 *
+	 * @private
+	 */
+	 // @override sap.ui.model.Binding#fireDataRequested
+	ODataBinding.prototype.fireDataRequested = function (bPreventBubbling) {
+		this.fireEvent("dataRequested", undefined, /*bAllowPreventDefault*/false,
+			/*bEnableEventBubbling*/!bPreventBubbling);
+	};
+
+	/**
 	 * Returns all bindings which have this binding as parent binding.
 	 *
 	 * @returns {sap.ui.model.odata.v4.ODataBinding[]}
@@ -755,8 +798,8 @@ sap.ui.define([
 	 */
 
 	/**
-	 * Returns the root binding of this binding's hierarchy, see binding
-	 * {@link topic:54e0ddf695af4a6c978472cecb01c64d Initialization and Read Requests}.
+	 * Returns the root binding of this binding's hierarchy, see
+	 * {@link topic:fccfb2eb41414f0792c165e69a878717 Initialization and Read Requests}.
 	 *
 	 * @returns {sap.ui.model.odata.v4.ODataContextBinding|sap.ui.model.odata.v4.ODataListBinding|
 	 *      sap.ui.model.odata.v4.ODataPropertyBinding|undefined}
@@ -841,7 +884,7 @@ sap.ui.define([
 	 *   {@link sap.ui.model.odata.v4.ODataListBinding#refresh refresh} (since 1.100.0),
 	 *   {@link sap.ui.model.odata.v4.ODataListBinding#sort sort}, or
 	 *   {@link sap.ui.model.odata.v4.ODataListBinding#suspend suspend} because they relate to a
-	 *   {@link sap.ui.model.odata.v4.Context#setKeepAlive kept-alive} context of this binding
+	 *   {@link sap.ui.model.odata.v4.Context#isKeepAlive kept-alive} context of this binding
 	 *   (since 1.97.0). Since 1.98.0, {@link sap.ui.model.odata.v4.Context#isTransient transient}
 	 *   contexts of a {@link #getRootBinding root binding} are treated as kept-alive by this flag.
 	 *   Since 1.99.0, the same happens for bindings using the <code>$$ownRequest</code> parameter
@@ -983,7 +1026,7 @@ sap.ui.define([
 	 *   The group lock
 	 *
 	 * @private
-	 * @see {sap.ui.model.odata.v4.ODataModel#lockGroup}
+	 * @see sap.ui.model.odata.v4.ODataModel#lockGroup
 	 */
 	ODataBinding.prototype.lockGroup = function (sGroupId, bLocked, bModifying, fnCancel) {
 		sGroupId = sGroupId || (bModifying ? this.getUpdateGroupId() : this.getGroupId());
@@ -1037,7 +1080,7 @@ sap.ui.define([
 	 *       binding,
 	 *     <li> or a value of type boolean is given.
 	 *   </ul> Since 1.100.0, pending changes are ignored if they relate to a
-	 *   {@link sap.ui.model.odata.v4.Context#setKeepAlive kept-alive} context of this binding, and
+	 *   {@link sap.ui.model.odata.v4.Context#isKeepAlive kept-alive} context of this binding, and
 	 *   {@link sap.ui.model.odata.v4.Context#isTransient transient} contexts of a
 	 *   {@link #getRootBinding root binding} do not count as pending changes.
 	 *
@@ -1192,7 +1235,7 @@ sap.ui.define([
 		if (this.hasPendingChanges(true)) {
 			throw new Error("Cannot refresh due to pending changes");
 		}
-		this.oModel.checkGroupId(sGroupId);
+		_Helper.checkGroupId(sGroupId);
 
 		// The actual refresh is specific to the binding and is implemented in each binding class.
 		return Promise.resolve(this.refreshInternal("", sGroupId, true)).then(function () {

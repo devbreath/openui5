@@ -18,6 +18,7 @@ sap.ui.define([
     'sap/ui/core/library',
     'sap/base/assert',
     'sap/base/Log',
+    'sap/ui/core/Configuration',
     // jQuery Plugin 'rect'
     'sap/ui/dom/jquery/rect',
     // jQuery Plugin 'control'
@@ -37,7 +38,8 @@ sap.ui.define([
 		ResizeHandler,
 		coreLibrary,
 		assert,
-		Log
+		Log,
+		Configuration
 	) {
         "use strict";
 
@@ -63,13 +65,12 @@ sap.ui.define([
          *
          * @namespace
          * @author SAP SE
-         * @version 1.105.1
+         * @version 1.107.0
          *
          * @constructor
          * @public
          * @deprecated Since version 1.38. Instead, use the <code>sap.m.Popover</code> control.
          * @alias sap.ui.ux3.ToolPopup
-         * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
          */
         var ToolPopup = Control.extend("sap.ui.ux3.ToolPopup", /** @lends sap.ui.ux3.ToolPopup.prototype */ {
             metadata: {
@@ -599,7 +600,6 @@ sap.ui.define([
              * Indicates whether the pop up is currently open
              *
              * @returns {boolean}
-             * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
              * @public
              */
             ToolPopup.prototype.isOpen = function () {
@@ -894,7 +894,7 @@ sap.ui.define([
                     iVal = 0,
                     iZero = 0, // this is the 0 of the  relative position between ToolPopup and Opener
                     iHalfArrow = oThis.iArrowHeight / 2,
-                    isRTL = sap.ui.getCore().getConfiguration().getRTL(),
+                    isRTL = Configuration.getRTL(),
                     sArrowDir,
                     oPopRect = oThis.$().rect(),
                     oOpener = jQuery(document.getElementById(oThis.getOpener())),
@@ -1056,7 +1056,6 @@ sap.ui.define([
              *         (outside the ToolPopup) and the focus should not move aways from that place.
              * @returns {this}
              * @public
-             * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
              */
             ToolPopup.prototype.close = function (bPreventRestoreFocus) {
                 if (this.oPopup && this.oPopup.isOpen()) {
@@ -1097,7 +1096,6 @@ sap.ui.define([
              * @since 1.13.1
              * @returns {boolean}
              * @public
-             * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
              */
             ToolPopup.prototype.getEnabled = function () {
                 // assuming that a ToolPopup without a Popup can’t be open
@@ -1143,7 +1141,7 @@ sap.ui.define([
                     this._bFocusSet = false;
                 }
 
-                this._bRTL = sap.ui.getCore().getConfiguration().getRTL();
+                this._bRTL = Configuration.getRTL();
             };
 
             ToolPopup.prototype._ensurePopup = function () {
@@ -1196,7 +1194,6 @@ sap.ui.define([
              * Sets the position of the pop up, the same parameters as for sap.ui.core.Popup can be used.
              *
              * @public
-             * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
              */
             ToolPopup.prototype.setPosition = function () {
                 this._ensurePopup();
@@ -1374,7 +1371,6 @@ sap.ui.define([
              * @param {string} [sID] ID of the corresponding element that should be focusable as well
              * @since 1.19.0
              * @public
-             * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
              */
             ToolPopup.prototype.addFocusableArea = function (sID) {
                 this._ensurePopup();
@@ -1397,7 +1393,6 @@ sap.ui.define([
              * @param {string} [sID] ID of the corresponding element
              * @since 1.19.0
              * @public
-             * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
              */
             ToolPopup.prototype.removeFocusableArea = function (sID) {
                 this._ensurePopup();

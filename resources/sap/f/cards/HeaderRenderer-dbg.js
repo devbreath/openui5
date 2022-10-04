@@ -30,6 +30,7 @@ sap.ui.define([], function () {
 			bLoading = oHeader.isLoading(),
 			oError = oHeader.getAggregation("_error"),
 			oToolbar = oHeader.getToolbar(),
+			bIconVisible = oHeader.getIconVisible ? oHeader.getIconVisible() : true,
 			sTabIndex;
 
 		oRm.openStart("div", oHeader)
@@ -78,7 +79,7 @@ sap.ui.define([], function () {
 			return;
 		}
 
-		if (oHeader.getIconSrc() || oHeader.getIconInitials() || oBindingInfos.iconSrc) {
+		if (bIconVisible && (oHeader.getIconSrc() || oHeader.getIconInitials() || oBindingInfos.iconSrc)) {
 			oRm.openStart("div")
 				.class("sapFCardHeaderImage")
 				.openEnd();

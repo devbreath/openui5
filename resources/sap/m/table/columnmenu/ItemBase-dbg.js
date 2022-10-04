@@ -23,7 +23,7 @@ sap.ui.define([
 	 * @extends sap.m.table.columnmenu.Entry
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @private
 	 * @experimental
@@ -54,7 +54,7 @@ sap.ui.define([
 	 * @protected
 	 */
 	ItemBase.prototype.getEffectiveItems = function() {
-		return [this];
+		return this.getVisible() ? [this] : [];
 	};
 
 	/**

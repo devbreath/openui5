@@ -31,14 +31,13 @@ sap.ui.define([
 	 *
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @extends sap.ui.core.delegate.ItemNavigation
 	 *
 	 * @private
 	 * @constructor
 	 * @alias sap.f.delegate.GridItemNavigation
-	 * @ui5-metamodel This control/element will also be described in the UI5 (legacy) designtime metamodel
 	 */
 	var GridItemNavigation = ItemNavigation.extend("sap.f.delegate.GridItemNavigation", /** @lends sap.f.GridItemNavigation.prototype */ {
 		metadata: {

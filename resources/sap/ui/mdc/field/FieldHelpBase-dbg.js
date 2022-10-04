@@ -40,14 +40,13 @@ sap.ui.define([
 	 * @class Base type for the <code>FieldHelp</code> association in the <code>FieldBase</code> controls.
 	 * @extends sap.ui.mdc.Element
 	 * @implements sap.ui.core.PopupInterface
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @abstract
 	 * @private
 	 * @ui5-restricted sap.ui.mdc
 	 * @since 1.54.0
 	 * @alias sap.ui.mdc.field.FieldHelpBase
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var FieldHelpBase = Element.extend("sap.ui.mdc.field.FieldHelpBase", /** @lends sap.ui.mdc.field.FieldHelpBase.prototype */
 	{

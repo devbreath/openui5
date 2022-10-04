@@ -80,14 +80,13 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.73
 	 * @see {@link fiori:https://experience.sap.com/fiori-design-web/avatar/ Avatar}
 	 * @alias sap.m.Avatar
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Avatar = Control.extend("sap.m.Avatar", {
 		metadata: {
@@ -230,7 +229,9 @@ sap.ui.define([
 			},
 			dnd: { draggable: true, droppable: false },
 			designtime: "sap/m/designtime/Avatar.designtime"
-		}
+		},
+
+		renderer: AvatarRenderer
 	});
 
 	/**

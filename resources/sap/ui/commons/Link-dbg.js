@@ -31,13 +31,12 @@ sap.ui.define([
 	 * @implements sap.ui.commons.ToolbarItem,sap.ui.commons.FormattedTextViewControl, sap.ui.core.IFormContent
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. Instead, use the <code>sap.m.Link</code> control.
 	 * @alias sap.ui.commons.Link
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Link = Control.extend("sap.ui.commons.Link", /** @lends sap.ui.commons.Link.prototype */ { metadata : {
 
@@ -114,7 +113,6 @@ sap.ui.define([
 	 * @function
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 
 

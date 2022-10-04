@@ -22,7 +22,7 @@ function(
 	 * @extends sap.ui.rta.toolbar.Base
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private

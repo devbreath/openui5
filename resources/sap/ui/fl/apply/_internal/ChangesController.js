@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/ui/fl/FlexControllerFactory","sap/ui/fl/Utils"],function(O,F){"use strict";var C={getFlexControllerInstance:function(s){if(typeof s==="string"){return O.create(s);}var m=s.appComponent||s;return O.createForControl(m);},getDescriptorFlexControllerInstance:function(s){if(typeof s.appId==="string"){return O.create(s.appId);}var a=s.appComponent||s;var A=F.getAppDescriptorComponentObjectForControl(a);return O.create(A.name);},getAppComponentForSelector:function(s){if(typeof s.appId==="string"){return s;}return s.appComponent||F.getAppComponentForControl(s);}};return C;});
+sap.ui.define(["sap/ui/fl/FlexControllerFactory","sap/ui/fl/Utils"],function(t,e){"use strict";var r={getFlexControllerInstance:function(e){if(typeof e==="string"){return t.create(e)}var r=e.appComponent||e;return t.createForControl(r)},getDescriptorFlexControllerInstance:function(r){if(typeof r.appId==="string"){return t.create(r.appId)}var n=r.appComponent||r;var o=e.getAppDescriptorComponentObjectForControl(n);return t.create(o.name)},getAppComponentForSelector:function(t){if(typeof t.appId==="string"){return t}return t.appComponent||e.getAppComponentForControl(t)}};return r});
+//# sourceMappingURL=ChangesController.js.map

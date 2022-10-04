@@ -33,7 +33,7 @@ function(
 	 * @namespace sap.ui.fl.apply._internal.flexState.ManifestUtils
 	 * @experimental
 	 * @since 1.74
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 */
 	var ManifestUtils = {

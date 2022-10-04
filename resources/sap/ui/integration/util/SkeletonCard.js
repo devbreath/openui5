@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/ui/integration/widgets/Card","sap/ui/integration/util/ManifestResolver"],function(C,M){"use strict";var S=C.extend("sap.ui.integration.util.SkeletonCard",{metadata:{library:"sap.ui.integration"}});S.prototype.resolveManifest=function(){return M.resolveCard(this);};S.prototype.isSkeleton=function(){return true;};S.prototype._createCard=function(s){return new S(s);};return S;});
+sap.ui.define(["sap/ui/integration/widgets/Card","sap/ui/integration/util/ManifestResolver"],function(t,e){"use strict";var r=t.extend("sap.ui.integration.util.SkeletonCard",{metadata:{library:"sap.ui.integration"}});r.prototype.resolveManifest=function(){return e.resolveCard(this)};r.prototype.isSkeleton=function(){return true};r.prototype._createCard=function(t){return new r(t)};return r});
+//# sourceMappingURL=SkeletonCard.js.map

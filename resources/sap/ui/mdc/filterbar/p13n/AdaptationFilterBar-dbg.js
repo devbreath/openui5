@@ -4,8 +4,8 @@
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 sap.ui.define([
-	"sap/ui/mdc/filterbar/p13n/GroupContainer", "sap/ui/mdc/filterbar/p13n/FilterColumnLayout", "sap/ui/mdc/filterbar/p13n/FilterGroupLayout","sap/ui/mdc/filterbar/p13n/TableContainer", "sap/ui/mdc/filterbar/FilterBarBase", "sap/ui/mdc/filterbar/FilterBarBaseRenderer", "sap/base/util/merge", "sap/base/util/UriParameters", "sap/ui/core/Core", "sap/ui/mdc/enum/PersistenceMode"
-], function( GroupContainer, FilterColumnLayout, FilterGroupLayout, TableContainer, FilterBarBase, FilterBarBaseRenderer, merge, SAPUriParameters, Core, PersistenceMode) {
+	"sap/ui/mdc/p13n/subcontroller/FilterController", "sap/ui/mdc/p13n/subcontroller/AdaptFiltersController", "sap/ui/mdc/filterbar/p13n/GroupContainer", "sap/ui/mdc/filterbar/p13n/FilterColumnLayout", "sap/ui/mdc/filterbar/p13n/FilterGroupLayout","sap/ui/mdc/filterbar/p13n/TableContainer", "sap/ui/mdc/filterbar/FilterBarBase", "sap/ui/mdc/filterbar/FilterBarBaseRenderer", "sap/base/util/merge", "sap/base/util/UriParameters", "sap/ui/core/Core", "sap/ui/mdc/enum/PersistenceMode"
+], function(FilterController, AdaptFiltersController, GroupContainer, FilterColumnLayout, FilterGroupLayout, TableContainer, FilterBarBase, FilterBarBaseRenderer, merge, SAPUriParameters, Core, PersistenceMode) {
 	"use strict";
 
 	/**
@@ -18,12 +18,11 @@ sap.ui.define([
 	 *
 	 * @extends sap.ui.mdc.filterbar.FilterBarBase
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.80.0
 	 * @alias sap.ui.mdc.filterbar.p13n.AdaptationFilterBar
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var AdaptationFilterBar = FilterBarBase.extend("sap.ui.mdc.filterbar.p13n.AdaptationFilterBar", {
 		metadata: {
@@ -52,17 +51,39 @@ sap.ui.define([
 		FilterBarBase.prototype.init.apply(this,arguments);
 		this.addStyleClass("sapUIAdaptationFilterBar");
 		this._bPersistValues = true;
+		this._bUseQueryPanel = new SAPUriParameters(window.location.search).getAll("sap-ui-xx-filterQueryPanel")[0] === "true";
+
 		this.getEngine().defaultProviderRegistry.attach(this, PersistenceMode.Transient);
 		this._fnResolveAdaptationControlPromise = null;
 		this._oAdaptationControlPromise = new Promise(function(resolve, reject) {
 			this._fnResolveAdaptationControlPromise = resolve;
 		}.bind(this));
 	};
+
+	AdaptationFilterBar.prototype._onModifications = function() {
+		var pModification = FilterBarBase.prototype._onModifications.apply(this, arguments);
+		if (this._bUseQueryPanel) {
+			var oP13nData = this._oFilterBarLayout.getInner().getP13nData();
+			this._updateActiveStatus(oP13nData);
+			this._oFilterBarLayout.setP13nData({items: oP13nData});
+		}
+		return pModification;
+	};
+
 	AdaptationFilterBar.prototype.applySettings = function() {
 		FilterBarBase.prototype._applySettings.apply(this, arguments);
 		this._waitForAdaptControlAndPropertyHelper().then(function() {
 			this._initControlDelegate();
 		}.bind(this));
+	};
+
+	AdaptationFilterBar.prototype.setVisibleFields = function(aVisibleKeys) {
+		var oAdaptationControl = this._getAdaptationControlInstance();
+		if (this._checkAdvancedParent(oAdaptationControl)) {
+			throw new Error("Only supported for simple parents");
+		}
+
+		this._aVisibleKeys = aVisibleKeys;
 	};
 
 	// FIXME: currently the FilterBar key handling is tightly coupled to the path
@@ -92,6 +113,7 @@ sap.ui.define([
 			}.bind(this));
 		}.bind(this));
 	};
+
 	AdaptationFilterBar.prototype._initControlDelegate = function() {
 		return this.initControlDelegate().then(function() {
 			//this.getTypeUtil();
@@ -140,7 +162,7 @@ sap.ui.define([
 				var oItem = aItems.find(function(o){
 					return o.name == sKey;
 				});
-				if (oItem) {
+				if (oItem && this._checkAdvancedParent(this._getAdaptationControlInstance()) ) {
 					oItem.active = this._getConditionModel().getConditions(sKey).length > 0 ? true : false;
 				}
 			}
@@ -170,13 +192,14 @@ sap.ui.define([
 				//this._getAdaptationControlInstance(), "Filter", mConditions, true, true
 				return this.getEngine().createChanges({
 					control: this._getAdaptationControlInstance(),
+					applyAbsolute: true,
 					key: "Filter",
 					state: mConditions,
 					suppressAppliance: true
 				});
 			} else {
 				//TODO: currently only required once the parent FilterBar has p13nMode 'value' disabled.
-				this._getAdaptationControlInstance()._setXConditions(mConditions, true);
+				this._getAdaptationControlInstance()._setXConditions(mConditions);
 				return Promise.resolve(null);
 			}
 			}.bind(this));
@@ -186,15 +209,36 @@ sap.ui.define([
 	 *
 	 * Please note that the provided model should be created with sap.ui.mdc.p13n.P13nBuilder
 	 *
-	 * @param {object} oP13nData Necessary data to display and create <code>FilterColumnLayout</code> instances.
+	 * @param {object[]} aP13nData Necessary data to display and create <code>FilterColumnLayout</code> instances.
 	 *
 	 */
-	AdaptationFilterBar.prototype.setP13nData = function(oP13nData) {
-		this.oAdaptationData = oP13nData;
-		this._oFilterBarLayout.update(oP13nData);
+	AdaptationFilterBar.prototype.setP13nData = function(aP13nData) {
+		this.oAdaptationData = aP13nData;
+		this._updateActiveStatus(this.oAdaptationData.items);
+		this._oFilterBarLayout.update(aP13nData);
+	};
+
+	AdaptationFilterBar.prototype._updateActiveStatus = function(oP13nData) {
+		var mConditions = this.getFilterConditions();
+		oP13nData.forEach(function(oP13nItem){
+			var oFilterField = this.mFilterFields && this.mFilterFields[oP13nItem.name];
+			if (oFilterField) {
+				var sKey = oFilterField.getFieldPath();
+				if (mConditions[sKey] && mConditions[sKey].length > 0) {
+					oP13nItem.active = true;
+				}
+			}
+		}.bind(this));
 	};
 
 	AdaptationFilterBar.prototype.getP13nData = function() {
+		if (this._aVisibleKeys && this._aVisibleKeys.length > 0) {
+			this.oAdaptationData.items.forEach(function(oItem){
+				if (this._aVisibleKeys.indexOf(oItem.name) > -1) {
+					oItem.active = true;
+				}
+			}, this);
+		}
 		return this.oAdaptationData;
 	};
 
@@ -208,9 +252,11 @@ sap.ui.define([
 	};
 
 	AdaptationFilterBar.prototype.applyConditionsAfterChangesApplied = function(oControl) {
-		FilterBarBase.prototype.applyConditionsAfterChangesApplied.apply(this, arguments);
 		if (oControl === this._getAdaptationControlInstance()) {
-			this.triggerSearch();
+			this._getWaitForChangesPromise()
+			.then(function(){
+				this.triggerSearch();
+			}.bind(this));
 		}
 	};
 
@@ -224,10 +270,10 @@ sap.ui.define([
 			var mConditions = this._bPersistValues ? this._getAdaptationControlInstance().getFilterConditions() : this._getAdaptationControlInstance()._getXConditions();
 
 			this.setFilterConditions(mConditions);
-			this._setXConditions(mConditions, true);
+			this._setXConditions(mConditions);
 
 			if (this._bFilterFieldsCreated) {
-				this._oFilterBarLayout.setP13nData(this.oAdaptationData);
+				this._oFilterBarLayout.setP13nData(this.getP13nData());
 				return this;
 			}
 
@@ -237,10 +283,10 @@ sap.ui.define([
 
 			//used to store the originals
 			this._mOriginalsForClone = {};
-
+			this.mFilterFields = {};
 			var aFieldPromises = [];
 
-			this.oAdaptationData.items.forEach(function(oItem, iIndex){
+			this.getP13nData().items.forEach(function(oItem, iIndex){
 				var oFilterFieldPromise;
 
 				oFilterFieldPromise = this._checkExisting(oItem, oFilterDelegate);
@@ -264,7 +310,7 @@ sap.ui.define([
 						oFieldForDialog = oFilterField;
 					}
 
-					oItem.filterfield = oFieldForDialog;
+					this.mFilterFields[oItem.name] = oFieldForDialog;
 
 				}.bind(this));
 
@@ -273,12 +319,11 @@ sap.ui.define([
 			}.bind(this));
 
 			return Promise.all(aFieldPromises).then(function(){
-				this.oAdaptationData.items.forEach(function(oItem){
-					this.addAggregation("filterItems", oItem.filterfield);
-					delete oItem.filterfield;
+				this.getP13nData().items.forEach(function(oItem){
+					this.addAggregation("filterItems", this.mFilterFields[oItem.name]);
 				}.bind(this));
 
-				this._oFilterBarLayout.setP13nData(this.oAdaptationData);
+				this._oFilterBarLayout.setP13nData(this.getP13nData());
 				this._bFilterFieldsCreated = true;
 
 				return this;
@@ -374,9 +419,7 @@ sap.ui.define([
 		this.setAssociation("adaptationControl", oControl, bSuppressInvalidate);
 
 		//FIXME: remove once the UI has been decided
-		var bUseQueryPanel = new SAPUriParameters(window.location.search).getAll("sap-ui-xx-filterQueryPanel")[0] === "true";
-		this._cLayoutItem = bUseQueryPanel || this._checkAdvancedParent(oControl) ? FilterGroupLayout : FilterColumnLayout; //Note: once the URL parameter is removed, FilterColumnLayout can be deleted
-
+		this._cLayoutItem = this._bUseQueryPanel || this._checkAdvancedParent(oControl) ? FilterGroupLayout : FilterColumnLayout; //Note: once the URL parameter is removed, FilterColumnLayout can be deleted
 		this._oFilterBarLayout = this._checkAdvancedParent(oControl) ? new GroupContainer() : new TableContainer();
 
 		this._oFilterBarLayout.getInner().setParent(this);
@@ -387,8 +430,8 @@ sap.ui.define([
 				if (oEvt.getParameter("reason") === "Remove") {
 					var oItem = oEvt.getParameter("item");
 					var mConditions = this._bPersistValues ? merge({}, this.getFilterConditions()) : this._getAdaptationControlInstance()._getXConditions();
-					mConditions[oItem.name] = [];
-					this._setXConditions(mConditions, true);
+					mConditions[this.mFilterFields[oItem.name].getFieldPath()] = [];
+					this._setXConditions(mConditions);
 				}
 				this.fireChange();
 			}.bind(this));
@@ -413,9 +456,10 @@ sap.ui.define([
 		for (var sKey in this._mOriginalsForClone) {
 			this._mOriginalsForClone[sKey].destroy();
 		}
+		this._bUseQueryPanel = null;
 		this._mOriginalsForClone = null;
 		this.oAdaptationData = null;
-
+		this.mFilterFields = null;
 		this._fnResolveAdaptationControlPromise = null;
 		this._oAdaptationControlPromise = null;
 	};

@@ -25,7 +25,7 @@ sap.ui.define([
 	 * @namespace
 	 * @alias sap.uxap
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.36
 	 * @public
 	 */
@@ -68,7 +68,7 @@ sap.ui.define([
 			"sap.uxap.ObjectPageHeaderLayoutData",
 			"sap.uxap.ObjectPageLazyLoader"
 		],
-		version: "1.105.1",
+		version: "1.107.0",
 		extensions: {
 			flChangeHandlers: {
 				"sap.uxap.ObjectPageHeader": "sap/uxap/flexibility/ObjectPageHeader",
@@ -106,7 +106,6 @@ sap.ui.define([
 	 *
 	 * @namespace
 	 * @public
-	 * @ui5-metamodel This simple type also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.BlockBaseColumnLayout = DataType.createType('sap.uxap.BlockBaseColumnLayout', {
 			isValid: function (vValue) {
@@ -124,7 +123,6 @@ sap.ui.define([
 	 * @enum {string}
 	 * @static
 	 * @public
-	 * @ui5-metamodel This simple type also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.BlockBaseFormAdjustment = {
 
@@ -151,7 +149,6 @@ sap.ui.define([
 	 * @author SAP SE
 	 * @enum {string}
 	 * @public
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.ObjectPageConfigurationMode = {
 
@@ -174,7 +171,6 @@ sap.ui.define([
 	 * @author SAP SE
 	 * @enum {string}
 	 * @public
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.ObjectPageHeaderDesign = {
 
@@ -197,7 +193,6 @@ sap.ui.define([
 	 * @author SAP SE
 	 * @enum {string}
 	 * @public
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.ObjectPageHeaderPictureShape = {
 
@@ -220,7 +215,6 @@ sap.ui.define([
 	 * @author SAP SE
 	 * @enum {string}
 	 * @public
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.ObjectPageSubSectionLayout = {
 
@@ -243,7 +237,6 @@ sap.ui.define([
 	 * @author SAP SE
 	 * @enum {string}
 	 * @public
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.ObjectPageSubSectionMode = {
 
@@ -268,7 +261,6 @@ sap.ui.define([
 	 * @enum {string}
 	 * @public
 	 * @since 1.32.0
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.Importance = {
 
@@ -373,7 +365,6 @@ sap.ui.define([
 	 * @name sap.uxap.IHeaderTitle
 	 * @interface
 	 * @public
-	 * @ui5-metamodel This interface also will be described in the UI5 (legacy) designtime metamodel
 	 * @see {@link topic:d2ef0099542d44dc868719d908e576d0 Object Page Headers}
 	 */
 
@@ -398,7 +389,6 @@ sap.ui.define([
 	 * @name sap.uxap.IHeaderContent
 	 * @interface
 	 * @public
-	 * @ui5-metamodel This interface also will be described in the UI5 (legacy) designtime metamodel
 	 * @see {@link topic:d2ef0099542d44dc868719d908e576d0 Object Page Headers}
 	 */
 

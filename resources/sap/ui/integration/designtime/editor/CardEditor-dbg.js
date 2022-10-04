@@ -44,14 +44,13 @@ sap.ui.define([
 	 * @extends sap.ui.integration.editor.Editor
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @see {@link topic:5b46b03f024542ba802d99d67bc1a3f4 Cards}
 	 * @since 1.83
 	 * @private
 	 * @experimental since 1.83.0
 	 * @alias sap.ui.integration.designtime.editor.CardEditor
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var CardEditor = Editor.extend("sap.ui.integration.designtime.editor.CardEditor", /** @lends sap.ui.integration.designtime.editor.CardEditor.prototype */ {
 		metadata: {
@@ -148,7 +147,7 @@ sap.ui.define([
 		if (typeof vCardIdOrSettings === "object") {
 			this._oEditorCard = new Card(vCardIdOrSettings);
 			this._oEditorCard.onBeforeRendering();
-			this._oEditorCard.attachEventOnce("_cardReady", function () {
+			this._oEditorCard.attachEventOnce("_dataReady", function () {
 				this.setJson(vCardIdOrSettings, bSuppressRerendering);
 			}.bind(this));
 		}

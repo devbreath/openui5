@@ -29,12 +29,11 @@ sap.ui.define([
 	 * @class Implements the selection methods for a table.
 	 * @extends sap.ui.core.Element
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @public
 	 * @since 1.64
 	 * @experimental As of version 1.64
 	 * @alias sap.ui.table.plugins.SelectionPlugin
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var SelectionPlugin = Element.extend("sap.ui.table.plugins.SelectionPlugin", {metadata: {
 		"abstract": true,

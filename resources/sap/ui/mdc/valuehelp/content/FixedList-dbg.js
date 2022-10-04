@@ -26,7 +26,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new element
 	 * @class Content for the {@link sap.ui.mdc.valuehelp.base.Container Container} element showing a list with fix values.
 	 * @extends sap.ui.mdc.valuehelp.base.ListContent
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -34,7 +34,6 @@ sap.ui.define([
 	 * @since 1.95.0
 	 * @experimental As of version 1.95
 	 * @alias sap.ui.mdc.valuehelp.content.FixedList
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var FixedList = ListContent.extend("sap.ui.mdc.valuehelp.content.FixedList", /** @lends sap.ui.mdc.valuehelp.content.FixedList.prototype */
 	{
@@ -453,6 +452,11 @@ sap.ui.define([
 					oList.scrollToIndex(iSelectedIndex); // only possible if open
 				} else {
 					this._iNavigateIndex = iSelectedIndex; // TODO: better solution
+				}
+
+				// in case of a single value field trigger the focusin on the new selected item to update the screenreader invisible text
+				if (this.getParent().isOpen()) {
+					oItem.$().trigger("focusin");
 				}
 
 				oItem.setSelected(true);

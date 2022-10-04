@@ -17,8 +17,8 @@ sap.ui.define([
 	// "sap/ui/mdc/enum/PersistenceMode",
 	'sap/ui/mdc/condition/FilterConverter',
 	'sap/base/util/restricted/_throttle',
-	'sap/ui/mdc/util/Common'
-
+	'sap/ui/mdc/util/Common',
+	"sap/base/Log"
 ], function(
 	FilterableListContent,
 	loadModules,
@@ -32,7 +32,8 @@ sap.ui.define([
 	// PersistenceMode,
 	FilterConverter,
 	throttle,
-	Common
+	Common,
+	Log
 ) {
 	"use strict";
 
@@ -100,8 +101,7 @@ sap.ui.define([
 						oItem.setSelected(!oItem.getSelected());
 					}
 
-					var sModelName = this._getListBindingInfo().model;
-					var oItemContext = oItem.getBindingContext(sModelName);
+					var oItemContext = this._getListItemBindingContext(oItem);
 					var oValues = this._getItemFromContext(oItemContext);
 					var oCondition = oValues && this._createCondition(oValues.key, oValues.description, oValues.payload);
 
@@ -112,9 +112,8 @@ sap.ui.define([
 					if (!this.isTypeahead() || !this._isSingleSelect()) { // single-suggestion handled in this._handleItemPress
 						var oParams = oEvent.getParameters();
 						var aListItems = oParams.listItems || oParams.listItem && [oParams.listItem];
-						var sModelName = this._getListBindingInfo().model;
 						var aConditions = aListItems.map(function (oItem) {
-							var oItemContext = oItem.getBindingContext(sModelName);
+							var oItemContext = this._getListItemBindingContext(oItem);
 							var oValues = this._getItemFromContext(oItemContext);
 							return oValues && this._createCondition(oValues.key, oValues.description, oValues.payload);
 						}.bind(this));
@@ -152,10 +151,10 @@ sap.ui.define([
 				},
 				getItems: function () {
 					return oInnerTable.getRows().filter(function (oRow) {
-						var oRowBindingContext = oRow.getBindingContext();
+						var oRowBindingContext = this._getListItemBindingContext(oRow);
 						return oRowBindingContext && oRowBindingContext.getObject();	// don't return empty rows
-					});
-				},
+					}.bind(this));
+				}.bind(this),
 				getSelectedItems: function () {
 					var aSelectedIndices = _getUITableSelectionHandler().getSelectedIndices();
 					var aSelectedContexts = aSelectedIndices.reduce(function(aResult, iCurrent) {
@@ -163,11 +162,11 @@ sap.ui.define([
 						return oContext ? aResult.concat(oContext) : aResult;
 					}, []);
 					return MDCTableHelperConfig["Table"].getItems().filter(function (oRow) {
-						return aSelectedContexts.indexOf(oRow.getBindingContext()) >= 0;
-					});
-				},
+						return aSelectedContexts.indexOf(this._getListItemBindingContext(oRow)) >= 0;
+					}.bind(this));
+				}.bind(this),
 				modifySelection: function (oItem, bSelected) {
-					var oContext = oItem.getBindingContext();
+					var oContext = this._getListItemBindingContext(oItem);
 					var iContextIndex = MDCTableHelperConfig["Table"].getContexts().indexOf(oContext);
 					var bInSelectedIndices = _getUITableSelectionHandler().getSelectedIndices().indexOf(iContextIndex) >= 0;
 					if (bSelected && !bInSelectedIndices) {
@@ -185,12 +184,12 @@ sap.ui.define([
 					}
 
 					var aRowIndices = oEvent.getParameter("rowIndices"); // rowIndices are actually context indices
-					var aContexts = MDCTableHelperConfig["Table"].getContexts().filter(function (oContext, iIndex) {
-						return aRowIndices.indexOf(iIndex) >= 0;
+					var aContexts = aRowIndices.map(function (iIndex) {
+						return oInnerTable.getContextByIndex(iIndex);
 					});
 					var aRows = MDCTableHelperConfig["Table"].getItems().filter(function (oRow, iIndex) {
-						return aContexts.indexOf(oRow.getBindingContext()) >= 0;
-					});
+						return aContexts.indexOf(this._getListItemBindingContext(oRow)) >= 0;
+					}.bind(this));
 					var aAddConditions = [], aRemoveConditions = [];
 					var aSelectedRows = MDCTableHelperConfig["Table"].getSelectedItems();
 					var aCurrentConditions = this.getConditions();
@@ -199,7 +198,8 @@ sap.ui.define([
 						var bIsRowSelected = aSelectedRows.indexOf(oRow) !== -1;
 						if (bIsInSelectedConditions !== bIsRowSelected) {
 							var aBucket = aSelectedRows.indexOf(oRow) !== -1 ? aAddConditions : aRemoveConditions;
-							var oValues = this._getItemFromContext(oRow.getBindingContext());
+							var oRowBindingContext = this._getListItemBindingContext(oRow);
+							var oValues = this._getItemFromContext(oRowBindingContext);
 							var oCondition = oValues && this._createCondition(oValues.key, oValues.description, oValues.payload);
 							aBucket.push(oCondition);
 						}
@@ -279,7 +279,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new element
 	 * @class Content for the {@link sap.ui.mdc.valuehelp.base.Container Container} element using a {@link sap.ui.mdc.Table}.
 	 * @extends sap.ui.mdc.valuehelp.base.FilterableListContent
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -287,7 +287,6 @@ sap.ui.define([
 	 * @since 1.95.0
 	 * @experimental As of version 1.95
 	 * @alias sap.ui.mdc.valuehelp.content.MDCTable
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var MDCTable = FilterableListContent.extend("sap.ui.mdc.valuehelp.content.MDCTable", /** @lends sap.ui.mdc.valuehelp.content.MDCTable.prototype */
 	{
@@ -297,6 +296,15 @@ sap.ui.define([
 				"sap.ui.mdc.valuehelp.IDialogContent"
 			],
 			properties: {
+				/**
+				 * This property will lead to a rebind on newly inserted tables after initial filters are set, immediately before the table is shown for the first time.
+				 *
+				 * <b>Note:</b> This only takes effect if autoBindOnInit is disabled on the <code>Table</code>
+				 */
+				forceBind: {
+					type: "boolean",
+					defaultValue: false
+				}
 			},
 			aggregations: {
 				/**
@@ -325,6 +333,8 @@ sap.ui.define([
 		});
 
 		this._addPromise("listBinding");
+
+		this._bRebindTable = false;
 	};
 
 	var handleListBinding = function () {
@@ -349,7 +359,6 @@ sap.ui.define([
 	MDCTable.prototype._handleUpdateFinished = function (oEvent) {
 
 		this._bScrolling = false;
-		this._bSearchTriggered = false;
 		_updateSelectionThrottled.call(this);
 	};
 
@@ -410,15 +419,6 @@ sap.ui.define([
 		}
 	};
 
-	MDCTable.prototype._handleSearch = function (oEvent) {
-		var sFilterFields = this.getFilterFields();
-		var oFilterBar = oEvent.getSource();
-		var oConditions = oFilterBar.getInternalConditions();
-		var oCondition = sFilterFields && oConditions[sFilterFields] && oConditions[sFilterFields][0];
-		var sFilterValue = oCondition && oCondition.values[0];
-		this.setFilterValue(sFilterValue);
-	};
-
 	MDCTable.prototype._observeChanges = function (oChanges) {
 
 		if (["_defaultFilterBar", "filterBar"].indexOf(oChanges.name) !== -1) {
@@ -434,6 +434,13 @@ sap.ui.define([
 				this._addPromise("listBinding");
 			} else {
 				this._oTable = oTable;
+
+				if (this._oTable.getAutoBindOnInit()) {
+					Log.warning("Usage of autobound tables may lead to unnecessary requests.");
+				} else if (this.getForceBind()) {
+					this._bRebindTable = true;
+				}
+
 				this._oObserver.observe(oTable, {aggregations: ["_content"]});
 				this._sTableType = _getMDCTableType(oTable);
 				oTable.addDelegate({ onmouseover: function (oEvent) {	// Fix m.Table itemPress
@@ -565,6 +572,18 @@ sap.ui.define([
 		return this._oTableHelper && this._oTableHelper.getListBindingInfo();
 	};
 
+	MDCTable.prototype.onBeforeShow = function() {
+		return Promise.resolve(FilterableListContent.prototype.onBeforeShow.apply(this, arguments)).then(function () {
+			var oTable = this.getTable();
+			var bOverlay = oTable && oTable.isTableBound() && oTable._oTable.getShowOverlay();
+			var bForceRebind = oTable && this._bRebindTable;
+			if (bForceRebind || bOverlay) {
+				oTable.rebind();
+				this._bRebindTable = false;
+			}
+		}.bind(this));
+	};
+
 	MDCTable.prototype.onShow = function () {
 		if (this._oTable) {
 			// check if selection mode is fine
@@ -578,58 +597,6 @@ sap.ui.define([
 		}
 
 		FilterableListContent.prototype.onShow.apply(this, arguments);
-	};
-
-	MDCTable.prototype.onHide = function () {
-		this._bSearchTriggered = false;
-		FilterableListContent.prototype.onHide.apply(this, arguments);
-	};
-
-	MDCTable.prototype._createFiltersFromBarConditions = function (oConditions) {
-		var oConditionTypes = this._getTypesForConditions(oConditions);
-		var oCreatedFBFilters = oConditions && oConditionTypes && FilterConverter.createFilters(oConditions, oConditionTypes, undefined, this.getCaseSensitive());
-		return oCreatedFBFilters && [].concat(oCreatedFBFilters);
-	};
-
-	MDCTable.prototype.applyFilters = function(sSearch) { // TODO the arguments are not passed as expected.
-
-
-		var oTable = this.getTable();
-		var oFilterBar = this._getPriorityFilterBar();
-
-		if (oTable && oFilterBar) {
-			var oListBinding = this.getListBinding();
-			var bListBindingSuspended = oListBinding && oListBinding.isSuspended();
-
-			if (oListBinding && !bListBindingSuspended && !this._bSearchTriggered) {
-				var sFBSearch = oFilterBar.getSearch() || "";
-				var sBindingSearch = oListBinding.mParameters.$search || "";
-				var aFBFilters = this._createFiltersFromBarConditions(oFilterBar.getConditions());
-				var aBindingFilters = oListBinding.aApplicationFilters.reduce(function (aResult, oFilter) {
-					return aResult.concat(oFilter._bMultiFilter ? oFilter.aFilters : oFilter);
-				}, []);
-				var bFiltersChanged = !deepEqual(aFBFilters, aBindingFilters);
-				var bSearchChanged = sFBSearch !== sBindingSearch;
-				var bTableHasOverlay = oTable._oTable && oTable._oTable.getShowOverlay && oTable._oTable.getShowOverlay();
-
-
-				if (bFiltersChanged || bSearchChanged || bTableHasOverlay) {
-					this._handleScrolling();
-					oFilterBar.triggerSearch();
-					this._bSearchTriggered = true;
-				}
-			}
-
-			if (bListBindingSuspended) {
-				oListBinding.resume();
-			}
-
-			if (!oListBinding && oTable.getAutoBindOnInit()) {
-				this._retrievePromise("listBinding").then(function () {
-					this.applyFilters(sSearch);
-				}.bind(this));
-			}
-		}
 	};
 
 	MDCTable.prototype._handleScrolling = function (oItem) {
@@ -690,7 +657,8 @@ sap.ui.define([
 			"_bBusy",
 			"_sTableType",
 			"_oUITableSelectionPlugin",
-			"_oTable"
+			"_oTable",
+			"_bRebindTable"
 		]);
 
 		FilterableListContent.prototype.exit.apply(this, arguments);

@@ -22,13 +22,12 @@ sap.ui.define(['./library', 'sap/ui/core/Element'],
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. Instead, use the <code>sap.ui.table.Table</code> control.
 	 * @alias sap.ui.commons.RowRepeaterSorter
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var RowRepeaterSorter = Element.extend("sap.ui.commons.RowRepeaterSorter", /** @lends sap.ui.commons.RowRepeaterSorter.prototype */ { metadata : {
 

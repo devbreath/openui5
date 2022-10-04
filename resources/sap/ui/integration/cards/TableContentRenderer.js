@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["./BaseContentRenderer","../library"],function(B,l){"use strict";var T=B.extend("sap.ui.integration.cards.TableContentRenderer",{apiVersion:2});T.getMinHeight=function(c,C,o){var m=o.getContentPageSize(c);if(!m){return this.DEFAULT_MIN_HEIGHT;}var i=this.isCompact(C),r=i?2:2.75,t=i?2:2.75;return(m*r+t)+"rem";};T.getItemMinHeight=function(c,C){if(!c||!c.row){return 0;}var i=this.isCompact(C);return i?2:2.75;};return T;});
+sap.ui.define(["./BaseContentRenderer","../library"],function(e,t){"use strict";var n=e.extend("sap.ui.integration.cards.TableContentRenderer",{apiVersion:2});n.getMinHeight=function(e,t,n){var r=n.getContentPageSize(e);if(!r){return this.DEFAULT_MIN_HEIGHT}var i=this.isCompact(t),a=i?2:2.75,s=i?2:2.75;return r*a+s+"rem"};n.getItemMinHeight=function(e,t){if(!e||!e.row){return 0}var n=this.isCompact(t);return n?2:2.75};return n});
+//# sourceMappingURL=TableContentRenderer.js.map

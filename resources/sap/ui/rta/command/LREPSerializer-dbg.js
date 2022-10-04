@@ -29,7 +29,7 @@ sap.ui.define([
 	 * @class
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.42
@@ -176,7 +176,8 @@ sap.ui.define([
 				draft: !!mPropertyBag.saveAsDraft,
 				layer: mPropertyBag.layer,
 				removeOtherLayerChanges: !!mPropertyBag.removeOtherLayerChanges,
-				version: mPropertyBag.version
+				version: mPropertyBag.version,
+				condenseAnyLayer: mPropertyBag.condenseAnyLayer
 			});
 		}.bind(this))
 		.then(function() {

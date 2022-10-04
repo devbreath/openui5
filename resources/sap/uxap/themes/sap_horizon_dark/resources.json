@@ -8,7 +8,7 @@
 		},
 		{
 			"name": "AnchorBar.less",
-			"size": 12424,
+			"size": 12437,
 			"designtime": true,
 			"theme": "sap_horizon_dark"
 		},
@@ -32,7 +32,7 @@
 		},
 		{
 			"name": "ObjectPageHeaderContent.less",
-			"size": 3634,
+			"size": 3653,
 			"designtime": true,
 			"theme": "sap_horizon_dark"
 		},
@@ -44,7 +44,7 @@
 		},
 		{
 			"name": "ObjectPageSection.less",
-			"size": 2409,
+			"size": 2571,
 			"designtime": true,
 			"theme": "sap_horizon_dark"
 		},
@@ -73,22 +73,23 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 83025,
+			"size": 84376,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/uxap/themes/sap_horizon_dark/library-parameters.json",
 			"size": 556,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library.css",
-			"size": 83017,
+			"size": 84368,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library.less",
-			"size": 35631,
+			"size": 35825,
 			"designtime": true,
 			"theme": "sap_horizon_dark"
 		},
@@ -100,13 +101,17 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 85774,
+			"size": 87143,
 			"theme": "sap_horizon_dark"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 85766,
+			"size": 87135,
 			"theme": "sap_horizon_dark"
+		},
+		{
+			"name": "resources.json",
+			"size": 2180
 		}
 	]
 }

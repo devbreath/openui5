@@ -42,13 +42,12 @@ sap.ui.define([
 	 * @class
 	 * Thing Inspector
 	 * @extends sap.ui.ux3.Overlay
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.38. There is not an exact replacement.
 	 * @alias sap.ui.ux3.ThingInspector
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ThingInspector = Overlay.extend("sap.ui.ux3.ThingInspector", /** @lends sap.ui.ux3.ThingInspector.prototype */ { metadata : {
 

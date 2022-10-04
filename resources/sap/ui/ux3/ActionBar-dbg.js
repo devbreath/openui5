@@ -21,7 +21,8 @@ sap.ui.define([
     'sap/ui/commons/MenuButton',
     'sap/ui/commons/Button',
     'sap/ui/Device',
-    'sap/base/Log'
+    'sap/base/Log',
+    "sap/ui/core/Configuration"
 ],
 	function(
 	    jQuery,
@@ -39,7 +40,8 @@ sap.ui.define([
 		MenuButton,
 		Button,
 		Device,
-		Log
+		Log,
+		Configuration
 	) {
 	"use strict";
 
@@ -72,13 +74,12 @@ sap.ui.define([
 	 *
 	 * When using this control, please be aware that it fulfills rather specific requirements: it has been designed for and is used within composite controls QuickView and ThingInspector.
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. Instead, use the <code>sap.m.Toolbar</code> or <code>sap.m.OverflowToolbar</code> control.
 	 * @alias sap.ui.ux3.ActionBar
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ActionBar = Control.extend("sap.ui.ux3.ActionBar", /** @lends sap.ui.ux3.ActionBar.prototype */ {
 		metadata : {
@@ -458,7 +459,7 @@ sap.ui.define([
 				};
 				//populates the menu of the 'Follow' actionBar button depending on the 'FollowState' property
 				oResult._fnPrepareFollowMenu = function( oEvent, oActionBar ) {
-					var imagePath = sap.ui.resource("sap.ui.ux3", "themes/" + sap.ui.getCore().getConfiguration().getTheme());
+					var imagePath = sap.ui.resource("sap.ui.ux3", "themes/" + Configuration.getTheme());
 					if (oActionBar.mActionMap[oActionBar.mActionKeys.Follow]) {
 						if (!oActionBar._oUnFollowItem) {
 							oActionBar._oUnFollowItem = new MenuItem({
@@ -898,7 +899,6 @@ sap.ui.define([
 	 * These are the more- and follow menu and the feeder popup
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	ActionBar.prototype.closePopups = function() {
 		if (this._oUpdatePopup) {

@@ -44,7 +44,7 @@
 		},
 		{
 			"name": "ObjectPageSection.less",
-			"size": 2244,
+			"size": 3217,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -73,22 +73,23 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 49556,
+			"size": 50411,
 			"theme": "base"
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/uxap/themes/base/library-parameters.json",
 			"size": 2,
 			"theme": "base"
 		},
 		{
 			"name": "library.css",
-			"size": 49553,
+			"size": 50408,
 			"theme": "base"
 		},
 		{
 			"name": "library.less",
-			"size": 50067,
+			"size": 51040,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -100,13 +101,17 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 50014,
+			"size": 50869,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 50011,
+			"size": 50866,
 			"theme": "base"
+		},
+		{
+			"name": "resources.json",
+			"size": 1936
 		}
 	]
 }

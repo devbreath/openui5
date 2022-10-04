@@ -1,1 +1,2 @@
-;(function(){ace.require(["ace/snippets/smarty"],function(m){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=m;}});})();
+(function(){ace.require(["ace/snippets/smarty"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
+//# sourceMappingURL=smarty.js.map

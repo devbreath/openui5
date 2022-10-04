@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/ui/model/SimpleType"],function(S){"use strict";var O=S.extend("sap.ui.model.odata.type.ODataType",{constructor:function(f,c){},metadata:{"abstract":true}});O.prototype.setConstraints=function(c){};O.prototype.setFormatOptions=function(f){};return O;});
+sap.ui.define(["sap/ui/model/SimpleType"],function(t){"use strict";var e=t.extend("sap.ui.model.odata.type.ODataType",{constructor:function(t,e){},metadata:{abstract:true}});e.prototype.setConstraints=function(t){};e.prototype.setFormatOptions=function(t){};return e});
+//# sourceMappingURL=ODataType.js.map

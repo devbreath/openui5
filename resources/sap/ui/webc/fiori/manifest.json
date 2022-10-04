@@ -5,7 +5,7 @@
     "type": "library",
     "embeds": [],
     "applicationVersion": {
-      "version": "1.105.1"
+      "version": "1.107.0"
     },
     "title": "UI5 Web Components Retrofit Fiori Components",
     "description": "UI5 Web Components Retrofit Fiori Components",
@@ -16,7 +16,12 @@
       {
         "name": "ui5-web-components",
         "packagedWithMySelf": true,
-        "version": "1.1.2"
+        "version": "1.5.0"
+      },
+      {
+        "name": "ZXing",
+        "packagedWithMySelf": true,
+        "version": "0.19.1"
       }
     ]
   },
@@ -26,16 +31,16 @@
   },
   "sap.ui5": {
     "dependencies": {
-      "minUI5Version": "1.105",
+      "minUI5Version": "1.107",
       "libs": {
         "sap.ui.core": {
-          "minVersion": "1.105.1"
+          "minVersion": "1.107.0"
         },
         "sap.ui.webc.common": {
-          "minVersion": "1.105.1"
+          "minVersion": "1.107.0"
         },
         "sap.ui.webc.main": {
-          "minVersion": "1.105.1"
+          "minVersion": "1.107.0"
         }
       }
     },

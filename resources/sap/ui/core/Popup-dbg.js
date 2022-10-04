@@ -9,13 +9,15 @@
 // Provides helper class sap.ui.core.Popup
 sap.ui.define([
 	'sap/ui/Device',
+	'sap/ui/base/Event',
 	'sap/ui/base/ManagedObject',
 	'sap/ui/base/Object',
 	'sap/ui/base/ObjectPool',
 	'./Control',
+	'./Element',
+	'./FocusHandler',
 	'./IntervalTrigger',
 	'./RenderManager',
-	'./Element',
 	'./ResizeHandler',
 	'./library',
 	"sap/base/assert",
@@ -29,18 +31,21 @@ sap.ui.define([
 	"sap/ui/events/F6Navigation",
 	"sap/ui/events/isMouseEventDelayed",
 	"sap/ui/base/EventProvider",
+	"sap/ui/core/Configuration",
 	"sap/ui/dom/jquery/control", // jQuery Plugin "control"
 	"sap/ui/dom/jquery/Focusable", // jQuery Plugin "firstFocusableDomRef"
 	"sap/ui/dom/jquery/rect" // jQuery Plugin "rect"
 ], function(
 	Device,
+	Event,
 	ManagedObject,
 	BaseObject,
 	ObjectPool,
 	Control,
+	Element,
+	FocusHandler,
 	IntervalTrigger,
 	RenderManager,
-	Element,
 	ResizeHandler,
 	library,
 	assert,
@@ -53,7 +58,8 @@ sap.ui.define([
 	jQuery,
 	F6Navigation,
 	isMouseEventDelayed,
-	EventProvider
+	EventProvider,
+	Configuration
 	//control
 	//Focusable
 	//rect
@@ -266,6 +272,7 @@ sap.ui.define([
 			this._mEvents["sap.ui.core.Popup.onFocusEvent-" + this._popupUID] = this.onFocusEvent;
 			this._mEvents["sap.ui.core.Popup.increaseZIndex-" + this._popupUID] = this._increaseMyZIndex;
 			this._mEvents["sap.ui.core.Popup.contains-" + this._popupUID] = this._containsEventBusWrapper;
+			this._mEvents["sap.ui.core.Popup.extendFocusInfo-" + this._popupUID] = this._extendFocusInfoEventBusWrapper;
 
 			if (oContent) {
 				this.setContent(oContent);
@@ -1752,7 +1759,7 @@ sap.ui.define([
 	 * @private
 	 */
 	Popup.prototype._applyPosition = function(oPosition) {
-		var bRtl = sap.ui.getCore().getConfiguration().getRTL();
+		var bRtl = Configuration.getRTL();
 		var $Ref = this._$();
 
 		if ($Ref.length) {
@@ -2390,7 +2397,7 @@ sap.ui.define([
 			var oElement;
 			this._aExtraContent.forEach(function(oAreaRef) {
 				if (oAreaRef.delegate) {
-					oElement = jQuery(document.getElementById(oAreaRef.id)).control(0);
+					oElement = Element.closestTo(document.getElementById(oAreaRef.id));
 					if (oElement) {
 						oElement.removeEventDelegate(oAreaRef.delegate);
 					}
@@ -2731,6 +2738,46 @@ sap.ui.define([
 		}
 	}
 
+	Popup.prototype._extendFocusInfo = function(oEvent, oEventData) {
+		var bExtended = false,
+			sEventPrefix = "sap.ui.core.Popup.extendFocusInfo-",
+			oData;
+
+		if (oEvent instanceof Event) {
+			// the call is from event provider
+			oData = {
+				info: oEventData.info,
+				element: oEvent.getParameter("domRef")
+			};
+		} else {
+			// the call is from the event bus
+			oData = oEvent;
+		}
+
+		var oContent = this.getContent();
+		var oContentDom = (oContent instanceof Element) ? oContent.getDomRef() : oContent;
+
+		if (oContentDom && oContentDom.contains(oData.element)) {
+			oData.info.preventScroll = true;
+			bExtended = true;
+		} else {
+			var aChildPopups = this.getChildPopups();
+			bExtended = aChildPopups.some(function(sChildID) {
+				var sEventId = sEventPrefix + sChildID;
+				sap.ui.getCore().getEventBus().publish("sap.ui", sEventId, oData);
+
+				return oData.extended;
+			});
+		}
+
+		return bExtended;
+	};
+
+	// Wrapper of _contains method for the event bus
+	Popup.prototype._extendFocusInfoEventBusWrapper = function(sChannel, sEvent, oData) {
+		oData.contains = this._extendFocusInfo(oData);
+	};
+
 	/**
 	 * @private
 	 */
@@ -2767,6 +2814,11 @@ sap.ui.define([
 			"visibility": "visible"
 		}).show();
 
+		if (!this.isInPopup(this._oLastPosition.of)) {
+			this._bFocusExtenderAdded = true;
+			FocusHandler.addFocusInfoExtender(this._extendFocusInfo, this);
+		}
+
 		if (Popup.blStack.length === 1) {
 			_fireBlockLayerStateChange({
 				visible: true,
@@ -2786,10 +2838,14 @@ sap.ui.define([
 		disconnectBlockLayerAndWithin(oWithinDOMRef);
 
 		if ($BlockRef.length) {
+			if (this._bFocusExtenderAdded) {
+				this._bFocusExtenderAdded = false;
+				FocusHandler.removeFocusInfoExtender(this._extendFocusInfo, this);
+			}
+
 			// if there are more z-indices this means there are more dialogs stacked
 			// up. So redisplay the block layer (with new z-index) under the new
 			// current dialog which should be displayed.
-
 			if (Popup.blStack.length > 1) {
 				Popup.blStack = Popup.blStack.filter(function(oPopupInfo) {
 					return oPopupInfo.popup !== that;
@@ -2808,6 +2864,7 @@ sap.ui.define([
 				// the last dialog was closed so we can hide the block layer now
 				oBlockLayerDomRef.style.visibility = "hidden";
 				oBlockLayerDomRef.style.display = "none";
+
 
 				_fireBlockLayerStateChange({
 					visible: false,

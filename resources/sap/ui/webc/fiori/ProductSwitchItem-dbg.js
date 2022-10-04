@@ -34,7 +34,7 @@ sap.ui.define([
 	 * </ul>
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -42,7 +42,6 @@ sap.ui.define([
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.fiori.ProductSwitchItem
 	 * @implements sap.ui.webc.fiori.IProductSwitchItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ProductSwitchItem = WebComponent.extend("sap.ui.webc.fiori.ProductSwitchItem", {
 		metadata: {
@@ -59,7 +58,7 @@ sap.ui.define([
 				 * Example: <br>
 				 * <pre>ui5-product-switch-item icon="palette"</pre>
 				 *
-				 * See all the available icons in the <ui5-link target="_blank" href="https://openui5.hana.ondemand.com/test-resources/sap/m/demokit/iconExplorer/webapp/index.html" class="api-table-content-cell-link">Icon Explorer</ui5-link>.
+				 * See all the available icons in the {@link demo:sap/m/demokit/iconExplorer/webapp/index.html Icon Explorer}.
 				 */
 				icon: {
 					type: "string",

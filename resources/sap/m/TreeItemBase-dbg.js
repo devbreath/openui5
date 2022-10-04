@@ -30,17 +30,20 @@ sap.ui.define([
 	 * @extends sap.m.ListItemBase
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.42.0
 	 * @alias sap.m.TreeItemBase
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
-	var TreeItemBase = ListItemBase.extend("sap.m.TreeItemBase", /** @lends sap.m.TreeItemBase.prototype */ { metadata : {
-		library : "sap.m"
-	}});
+	var TreeItemBase = ListItemBase.extend("sap.m.TreeItemBase", /** @lends sap.m.TreeItemBase.prototype */ {
+		metadata : {
+			library : "sap.m"
+		},
+
+		renderer: TreeItemBaseRenderer
+	});
 
 	TreeItemBase.prototype.ExpandedIconURI = IconPool.getIconURI("navigation-down-arrow");
 	TreeItemBase.prototype.CollapsedIconURI = IconPool.getIconURI("navigation-right-arrow");

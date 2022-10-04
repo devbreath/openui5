@@ -22,25 +22,28 @@ sap.ui.define(['sap/m/PlanningCalendarLegend', 'sap/ui/unified/CalendarLegendIte
 		 * @extends sap.m.PlanningCalendarLegend
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @private
 		 * @since 1.74
 		 * @experimental Since 1.74.
 		 * @alias sap.f.PlanningCalendarInCardLegend
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
-		var PlanningCalendarInCardLegend = PlanningCalendarLegend.extend("sap.f.PlanningCalendarInCardLegend", /** @lends sap.f.PlanningCalendarInCardLegend.prototype */ { metadata : {
+		var PlanningCalendarInCardLegend = PlanningCalendarLegend.extend("sap.f.PlanningCalendarInCardLegend", /** @lends sap.f.PlanningCalendarInCardLegend.prototype */ {
+			metadata : {
 
-			library : "sap.m",
-			properties: {
-				/**
-				 * Defines the number of visible calendar and appointment items.
-				 */
-				visibleLegendItemsCount: {type : "int", group : "Data", defaultValue: 2}
-			}
-		}});
+				library : "sap.m",
+				properties: {
+					/**
+					 * Defines the number of visible calendar and appointment items.
+					 */
+					visibleLegendItemsCount: {type : "int", group : "Data", defaultValue: 2}
+				}
+			},
+
+			renderer: PlanningCalendarInCardLegendRenderer
+		});
 
 		PlanningCalendarInCardLegend.prototype.exit = function () {
 			PlanningCalendarLegend.prototype.exit.call(this, arguments);

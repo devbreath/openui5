@@ -35,13 +35,12 @@ sap.ui.define([
 	 * @implements sap.ui.core.PopupInterface
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38.
 	 * @alias sap.ui.ux3.Overlay
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Overlay = Control.extend("sap.ui.ux3.Overlay", /** @lends sap.ui.ux3.Overlay.prototype */ { metadata : {
 
@@ -266,7 +265,6 @@ sap.ui.define([
 	 *
 	 * @param {string} initialFocusId ID of the control that gets focused when the overlay is openend
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Overlay.prototype.open = function(initialFocusId) {
 		this._initialFocusId = initialFocusId;
@@ -293,7 +291,6 @@ sap.ui.define([
 	 * Closes the Overlay.
 	 *
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Overlay.prototype.close = function() {
 		if (!this._oPopup.isOpen()) {
@@ -414,7 +411,6 @@ sap.ui.define([
 	 *
 	 * @type boolean
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Overlay.prototype.isOpen = function() {
 		return this._oPopup.isOpen();

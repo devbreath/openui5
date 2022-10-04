@@ -807,6 +807,7 @@
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/commons/themes/sap_belize_hcb/library-parameters.json",
 			"size": 568,
 			"theme": "sap_belize_hcb"
 		},
@@ -836,6 +837,10 @@
 			"name": "library_skeleton.css",
 			"size": 128267,
 			"theme": "sap_belize_hcb"
+		},
+		{
+			"name": "resources.json",
+			"size": 15994
 		},
 		{
 			"name": "shared.less",

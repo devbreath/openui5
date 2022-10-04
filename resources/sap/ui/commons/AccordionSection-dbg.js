@@ -5,8 +5,8 @@
  */
 
 // Provides control sap.ui.commons.AccordionSection.
-sap.ui.define(['./library', 'sap/ui/core/Element'],
-	function(library, Element) {
+sap.ui.define(['./library', 'sap/ui/core/Element', "sap/ui/core/Configuration"],
+	function(library, Element, Configuration) {
 	"use strict";
 
 
@@ -22,13 +22,12 @@ sap.ui.define(['./library', 'sap/ui/core/Element'],
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38.
 	 * @alias sap.ui.commons.AccordionSection
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) design time metamodel
 	 */
 	var AccordionSection = Element.extend("sap.ui.commons.AccordionSection", /** @lends sap.ui.commons.AccordionSection.prototype */ { metadata : {
 
@@ -251,7 +250,7 @@ sap.ui.define(['./library', 'sap/ui/core/Element'],
 	AccordionSection.prototype._setCollapsedState = function(bCollapsed) {
 		var tb = this.getDomRef("tb"),
 			cont = this.getDomRef("cont"),
-			accessibility = sap.ui.getCore().getConfiguration().getAccessibility();
+			accessibility = Configuration.getAccessibility();
 		if (this.getDomRef()) {
 			// after AccordionSection has been rendered
 			if (bCollapsed) {

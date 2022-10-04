@@ -26,7 +26,7 @@ sap.ui.define([
 	 * The <code>sap.ui.webc.main.ColorPaletteItem</code> component represents a color in the the <code>sap.ui.webc.main.ColorPalette</code>.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -34,7 +34,6 @@ sap.ui.define([
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.ColorPaletteItem
 	 * @implements sap.ui.webc.main.IColorPaletteItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ColorPaletteItem = WebComponent.extend("sap.ui.webc.main.ColorPaletteItem", {
 		metadata: {

@@ -1,1 +1,2 @@
-sap.ui.define(["sap/ui/webc/common/thirdparty/base/types/DataType"],function(e){"use strict";function t(e){return e&&typeof e==="object"&&"default"in e?e["default"]:e}var n=t(e);const a={Single:"Single",Multiple:"Multiple",Range:"Range"};class i extends n{static isValid(e){return!!a[e]}}i.generateTypeAccessors(a);return i});
+sap.ui.define(["exports","sap/ui/webc/common/thirdparty/base/types/DataType"],function(e,t){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;t=a(t);function a(e){return e&&e.__esModule?e:{default:e}}const s={Single:"Single",Multiple:"Multiple",Range:"Range"};class u extends t.default{static isValid(e){return!!s[e]}}u.generateTypeAccessors(s);var i=u;e.default=i});
+//# sourceMappingURL=CalendarSelectionMode.js.map

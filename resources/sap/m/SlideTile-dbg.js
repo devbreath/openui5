@@ -12,7 +12,8 @@ sap.ui.define([
 	'./SlideTileRenderer',
 	"sap/ui/events/KeyCodes",
 	"sap/ui/events/PseudoEvents",
-	"sap/ui/thirdparty/jquery"
+	"sap/ui/thirdparty/jquery",
+	"sap/ui/core/Configuration"
 ],
 	function(
 		library,
@@ -22,7 +23,8 @@ sap.ui.define([
 		SlideTileRenderer,
 		KeyCodes,
 		PseudoEvents,
-		jQuery
+		jQuery,
+		Configuration
 	) {
 	"use strict";
 
@@ -39,12 +41,11 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.34
 	 *
 	 * @public
 	 * @alias sap.m.SlideTile
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var SlideTile = Control.extend("sap.m.SlideTile", /** @lends sap.m.SlideTile.prototype */ {
 		metadata: {
@@ -122,7 +123,9 @@ sap.ui.define([
 					}
 				}
 			}
-		}
+		},
+
+		renderer: SlideTileRenderer
 	});
 
 	/* --- Lifecycle Handling --- */
@@ -503,7 +506,7 @@ sap.ui.define([
 	SlideTile.prototype._scrollToTile = function (tileIndex) {
 		if (tileIndex >= 0) {
 			var oWrapperTo = this.$("wrapper-" + tileIndex);
-			var sDir = sap.ui.getCore().getConfiguration().getRTL() ? "right" : "left";
+			var sDir = Configuration.getRTL() ? "right" : "left";
 
 			this._changeSizeTo(tileIndex);
 			oWrapperTo.css(sDir, "0rem");
@@ -546,7 +549,7 @@ sap.ui.define([
 		}
 
 		oWrapperTo = this.$("wrapper-" + this._iCurrentTile);
-		sDir = sap.ui.getCore().getConfiguration().getRTL() ? "right" : "left";
+		sDir = Configuration.getRTL() ? "right" : "left";
 
 		var oCurrentTile = this.getTiles()[this._iCurrentTile];
 		if (oCurrentTile && oCurrentTile._isNavigateActionEnabled()) {

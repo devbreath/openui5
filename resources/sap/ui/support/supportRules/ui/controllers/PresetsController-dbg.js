@@ -89,7 +89,7 @@ sap.ui.define([
 	 *
 	 * @extends sap.ui.support.supportRules.ui.controllers.BaseController
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @alias sap.ui.support.supportRules.ui.controllers.PresetsController
 	 */
@@ -375,7 +375,7 @@ sap.ui.define([
 		this.oModel.setProperty("/currentExportData", {
 			"id": (oCurrentPreset.isMySelection || oCurrentPreset.isSystemPreset) ? "" : oCurrentPreset.id,
 			"title": oCurrentPreset.title,
-			"descriptionValue": oCurrentPreset.description, // there is an issue on build if we use OpenUI5 UI Library: sap.ui.support
+			"descriptionValue": oCurrentPreset.description, // there is an issue on build if we use ${description}
 			"dateExportedForDisplay": new Date(), // the current date is shown as export date
 			"isMySelection": oCurrentPreset.isMySelection
 		});

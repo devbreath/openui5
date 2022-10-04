@@ -23,9 +23,10 @@ sap.ui.define([
 	"./library",
 	"sap/uxap/AnchorBarRenderer",
 	"sap/base/Log",
+	"sap/ui/core/Configuration",
 	"sap/ui/dom/jquery/scrollLeftRTL"
-], function (jQuery, Button, MenuButton, mobileLibrary, Toolbar, IconPool, Item, ResizeHandler,	ScrollEnablement,
-		HorizontalLayout, Device, CustomData, Control, HierarchicalSelect, library, AnchorBarRenderer, Log) {
+], function (jQuery, Button, MenuButton, mobileLibrary, Toolbar, IconPool, Item, ResizeHandler, ScrollEnablement,
+		HorizontalLayout, Device, CustomData, Control, HierarchicalSelect, library, AnchorBarRenderer, Log, Configuration) {
 	"use strict";
 
 	// shortcut for sap.m.SelectType
@@ -56,7 +57,6 @@ sap.ui.define([
 	 * @since 1.26
 	 * @see {@link topic:370b67986497463187336fa130aebbf1 Anchor Bar}
 	 * @alias sap.uxap.AnchorBar
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var AnchorBar = Toolbar.extend("sap.uxap.AnchorBar", /** @lends sap.uxap.AnchorBar.prototype */ {
 		metadata: {
@@ -97,7 +97,9 @@ sap.ui.define([
 				_scrollArrowLeft: {type: "sap.ui.core.Control", multiple: false, visibility: "hidden"},
 				_scrollArrowRight: {type: "sap.ui.core.Control", multiple: false, visibility: "hidden"}
 			}
-		}
+		},
+
+		renderer: AnchorBarRenderer
 	});
 
 	AnchorBar.ButtonDelegate = {
@@ -134,7 +136,7 @@ sap.ui.define([
 		this._oSectionInfo = {};    //keep scrolling info on sections
 		this._oScroller = null;
 		this._sSelectedKey = null; // keep track of sap.uxap.HierarchicalSelect selected key
-		this._bRtl = sap.ui.getCore().getConfiguration().getRTL();
+		this._bRtl = Configuration.getRTL();
 
 		//there are 2 different uses cases:
 		//case 1: on a real phone we don't need the scrolling anchorBar, just the hierarchicalSelect
@@ -347,7 +349,9 @@ sap.ui.define([
 	 * @private
 	 */
 	AnchorBar.prototype._onSelectChange = function (oEvent) {
-		var oSelectedItem = oEvent.getParameter("selectedItem"), oSelectedSection;
+		var oSelectedItem = oEvent.getParameter("selectedItem"),
+			oSelectedSection,
+			oSelectedSectionDomRef;
 
 		if (!oSelectedItem) {
 			Log.warning("AnchorBar :: no selected hierarchicalSelect item");
@@ -357,8 +361,12 @@ sap.ui.define([
 		oSelectedSection = sap.ui.getCore().byId(oSelectedItem.getKey());
 
 		if (oSelectedSection) {
-
 			this.fireEvent("_anchorPress", { sectionBaseId: oSelectedSection.getId() });
+			oSelectedSectionDomRef = oSelectedSection.getDomRef();
+
+			if (oSelectedSectionDomRef) {
+				oSelectedSectionDomRef.focus();
+			}
 		} else {
 			Log.error("AnchorBar :: cannot find corresponding section", oSelectedItem.getKey());
 		}
@@ -424,12 +432,12 @@ sap.ui.define([
 
 		oScrollButton.addEventDelegate({
 			onAfterRendering: function () {
-				if (sap.ui.getCore().getConfiguration().getTheme() != "sap_hcb") {
+				if (Configuration.getTheme() != "sap_hcb") {
 					this.$().attr("tabindex", -1);
 				}
 			},
 			onThemeChanged: function () {
-				if (sap.ui.getCore().getConfiguration().getTheme() == "sap_hcb") {
+				if (Configuration.getTheme() == "sap_hcb") {
 					this.$().removeAttr("tabindex");
 				} else {
 					this.$().attr("tabindex", -1);
@@ -590,7 +598,6 @@ sap.ui.define([
 	 * @param {string} sId The Section ID to scroll to
 	 * @param {int} [iDuration=0] Scroll duration (in ms)
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	AnchorBar.prototype.scrollToSection = function (sId, iDuration) {
 
@@ -659,7 +666,6 @@ sap.ui.define([
 	 *
 	 * @type object
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @returns {sap.ui.core.delegate.ScrollEnablement} The <code>sap.ui.core.delegate.ScrollEnablement</code> instance
 	 */
 	AnchorBar.prototype.getScrollDelegate = function () {

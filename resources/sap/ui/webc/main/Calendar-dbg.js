@@ -94,14 +94,13 @@ sap.ui.define([
 	 * <code> &lt;script data-id="sap-ui-config" type="application/json"&gt; { "calendarType": "Japanese" } &lt;/script&gt; </code>
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.92.0
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.Calendar
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Calendar = WebComponent.extend("sap.ui.webc.main.Calendar", {
 		metadata: {

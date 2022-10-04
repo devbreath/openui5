@@ -5,12 +5,9 @@
  */
 
 // Provides control sap.ui.table.AnalyticalColumnMenu.
-sap.ui.define(['./ColumnMenu', "sap/ui/unified/MenuRenderer", './library', "sap/ui/thirdparty/jquery"],
-	function(ColumnMenu, MenuRenderer, library, jQuery) {
+sap.ui.define(['./ColumnMenu', "sap/ui/unified/MenuRenderer", './utils/TableUtils', './library', "sap/ui/thirdparty/jquery"],
+	function(ColumnMenu, MenuRenderer, TableUtils, library, jQuery) {
 	"use strict";
-
-	// shortcut
-	var GroupEventType = library.GroupEventType;
 
 	/**
 	 * Constructor for a new AnalyticalColumnMenu.
@@ -23,14 +20,13 @@ sap.ui.define(['./ColumnMenu', "sap/ui/unified/MenuRenderer", './library', "sap/
 	 * @extends sap.ui.table.ColumnMenu
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @experimental Since version 1.21.
 	 * The AnalyticalColumnMenu will be productized soon.
 	 * @alias sap.ui.table.AnalyticalColumnMenu
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var AnalyticalColumnMenu = ColumnMenu.extend("sap.ui.table.AnalyticalColumnMenu", /** @lends sap.ui.table.AnalyticalColumnMenu.prototype */ {
 		metadata : {
@@ -67,10 +63,21 @@ sap.ui.define(['./ColumnMenu', "sap/ui/unified/MenuRenderer", './library', "sap/
 				function(oEvent) {
 					var oMenuItem = oEvent.getSource();
 					var bGrouped = oColumn.getGrouped();
-					var sGroupEventType = bGrouped ? GroupEventType.group : GroupEventType.ungroup;
 
-					oColumn.setGrouped(!bGrouped);
-					oTable.fireGroup({column: oColumn, groupedColumns: oTable._aGroupedColumns, type: sGroupEventType});
+					oColumn._setGrouped(!bGrouped);
+					if (!bGrouped && !oColumn.getShowIfGrouped()) {
+						var oDomRef;
+
+						if (TableUtils.isNoDataVisible(oTable)) {
+							oDomRef = oTable.getDomRef("noDataCnt");
+						} else {
+							oDomRef = oTable.getDomRef("rowsel0");
+						}
+
+						if (oDomRef) {
+							oDomRef.focus();
+						}
+					}
 					oMenuItem.setIcon(!bGrouped ? "sap-icon://accept" : null);
 				}
 			);
@@ -83,12 +90,9 @@ sap.ui.define(['./ColumnMenu', "sap/ui/unified/MenuRenderer", './library', "sap/
 	 * @private
 	 */
 	AnalyticalColumnMenu.prototype._addSumMenuItem = function() {
-		var oColumn = this._oColumn,
-			oTable = this._oTable,
-			oBinding = oTable.getBinding(),
-			oResultSet = oBinding && oBinding.getAnalyticalQueryResult();
+		var oColumn = this._oColumn;
 
-		if (oTable && oResultSet && oResultSet.findMeasureByPropertyName(oColumn.getLeadingProperty())) {
+		if (oColumn._isAggregatableByMenu()) {
 			this._oSumItem = this._createMenuItem(
 				"total",
 				"TBL_TOTAL",

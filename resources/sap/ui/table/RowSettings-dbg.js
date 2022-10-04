@@ -24,13 +24,12 @@ sap.ui.define([
 	 * The <code>RowSettings</code> control allows you to configure a row.
 	 * You can only use this control in the context of the <code>sap.ui.table.Table</code> control to define row settings.
 	 * @extends sap.ui.core.Element
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.48.0
 	 * @alias sap.ui.table.RowSettings
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var RowSettings = Element.extend("sap.ui.table.RowSettings", /** @lends sap.ui.table.RowSettings.prototype */ {
 		metadata: {

@@ -100,13 +100,12 @@ function(library,
 	 * @implements sap.ui.core.IFormContent, sap.m.IHyphenation
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.87
 	 * @alias sap.m.ExpandableText
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ExpandableText = Control.extend("sap.m.ExpandableText", /** @lends sap.m.ExpandableText.prototype */ {
 		metadata: {
@@ -176,7 +175,9 @@ function(library,
 			},
 
 			designtime: "sap/m/designtime/ExpandableText.designtime"
-		}
+		},
+
+		renderer: ExpandableTextRenderer
 	});
 
 	/**

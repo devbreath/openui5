@@ -1,1 +1,2 @@
-sap.ui.define(function(){"use strict";var e="";return e});
+sap.ui.define([],function(){"use strict"});
+//# sourceMappingURL=LocaleData.js.map

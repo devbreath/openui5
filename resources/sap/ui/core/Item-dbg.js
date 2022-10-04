@@ -24,11 +24,10 @@ sap.ui.define(['./Element', './library'],
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @public
 	 * @alias sap.ui.core.Item
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Item = Element.extend("sap.ui.core.Item", /** @lends sap.ui.core.Item.prototype */ { metadata : {
 

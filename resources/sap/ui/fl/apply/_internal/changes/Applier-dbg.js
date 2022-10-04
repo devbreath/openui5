@@ -140,7 +140,7 @@ sap.ui.define([
 
 	function _checkPreconditions(oChange, mPropertyBag) {
 		var sErrorMessage;
-		if (_isXmlModifier(mPropertyBag) && oChange.getDefinition().jsOnly) {
+		if (_isXmlModifier(mPropertyBag) && oChange.getJsOnly()) {
 			// change is not capable of xml modifier
 			// the change status has to be reset to initial
 			sErrorMessage = "Change cannot be applied in XML. Retrying in JS.";
@@ -184,8 +184,8 @@ sap.ui.define([
 
 		var sChangeId = oChange.getId();
 		var sLogMessage = "Change ''{0}'' could not be applied.";
-		var bErrorOccured = oError instanceof Error;
-		var sCustomDataIdentifier = FlexCustomData.getCustomDataIdentifier(false, bErrorOccured, bXmlModifier);
+		var bErrorOccurred = oError instanceof Error;
+		var sCustomDataIdentifier = FlexCustomData.getCustomDataIdentifier(false, bErrorOccurred, bXmlModifier);
 		switch (sCustomDataIdentifier) {
 			case FlexCustomData.notApplicableChangesCustomDataKey:
 				FlUtils.formatAndLogMessage("info", [sLogMessage, oError.message], [sChangeId]);
@@ -212,10 +212,9 @@ sap.ui.define([
 	}
 
 	function _logApplyChangeError(oError, oChange) {
-		var oDefinition = oChange.getDefinition();
-		var sChangeType = oDefinition.changeType;
-		var sTargetControlId = oDefinition.selector.id;
-		var fullQualifiedName = oDefinition.namespace + oDefinition.fileName + "." + oDefinition.fileType;
+		var sChangeType = oChange.getChangeType();
+		var sTargetControlId = oChange.getSelector().id;
+		var fullQualifiedName = oChange.getNamespace() + oChange.getId() + "." + oChange.getFileType();
 
 		var sWarningMessage = "A flexibility change could not be applied.";
 		sWarningMessage += "\nThe displayed UI might not be displayed as intedend.";

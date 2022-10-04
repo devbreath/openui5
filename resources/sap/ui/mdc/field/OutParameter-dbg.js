@@ -22,7 +22,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class The <code>OutParameter</code> element is used in the {@link sap.ui.mdc.field.FieldValueHelp FieldValueHelp} element.
 	 * @extends sap.ui.mdc.field.InParameter
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -30,7 +30,6 @@ sap.ui.define([
 	 * @MDC_PUBLIC_CANDIDATE
 	 * @since 1.66.0
 	 * @alias sap.ui.mdc.field.OutParameter
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var OutParameter = InParameter.extend("sap.ui.mdc.field.OutParameter", /** @lends sap.ui.mdc.field.OutParameter.prototype */
 	{

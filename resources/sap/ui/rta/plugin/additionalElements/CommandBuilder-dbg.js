@@ -25,7 +25,7 @@ sap.ui.define([
 	 * Helper object to build the RTA commands resulting from the AdditionalElements Plugin
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @since 1.94
 	 * @experimental Since 1.94. This class is experimental and provides only limited functionality. Also the API might be changed in future.
@@ -295,7 +295,7 @@ sap.ui.define([
 						throw DtUtils.propagateError(
 							vMessage,
 							"AdditionalElementsPlugin#_createCommands",
-							"Error occured during _createCommands execution",
+							"Error occurred during _createCommands execution",
 							"sap.ui.rta.plugin"
 						);
 					});

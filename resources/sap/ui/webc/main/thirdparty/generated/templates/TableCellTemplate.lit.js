@@ -1,1 +1,2 @@
-sap.ui.define(["sap/ui/webc/common/thirdparty/base/renderer/LitRenderer"],function(e){"use strict";const t=(t,r,n)=>e.html`<td tabindex="-1" part="cell" role="cell"><slot></slot></td>`;return t});
+sap.ui.define(["exports","sap/ui/webc/common/thirdparty/base/renderer/LitRenderer"],function(e,t){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;const r=(e,r,d)=>(0,t.html)`<td tabindex="-1" part="cell" role="cell"><slot></slot></td>`;var d=r;e.default=d});
+//# sourceMappingURL=TableCellTemplate.lit.js.map

@@ -72,6 +72,7 @@
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/layout/themes/sap_hcb/library-parameters.json",
 			"size": 3014,
 			"theme": "sap_hcb"
 		},
@@ -101,6 +102,10 @@
 			"name": "library_skeleton.css",
 			"size": 155406,
 			"theme": "sap_hcb"
+		},
+		{
+			"name": "resources.json",
+			"size": 1877
 		}
 	]
 }

@@ -11,8 +11,8 @@ sap.ui.define([
 	"sap/ui/core/Core",
 	"sap/ui/core/Control",
 	"sap/ui/core/Configuration",
-	'sap/ui/core/Icon',
-	'./PaginatorRenderer'
+	"sap/ui/core/Icon",
+	"./PaginatorRenderer"
 ], function (
 	library,
 	mLibrary,
@@ -20,7 +20,8 @@ sap.ui.define([
 	Core,
 	Control,
 	Configuration,
-	Icon
+	Icon,
+	PaginatorRenderer
 ) {
 	"use strict";
 
@@ -39,9 +40,10 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
+	 * @ui5-restricted
 	 * @private
 	 * @alias sap.ui.integration.controls.Paginator
 	 */
@@ -60,8 +62,13 @@ sap.ui.define([
 			aggregations: {
 				_prevIcon: {type: "sap.ui.core.Icon", multiple: false, visibility: "hidden"},
 				_nextIcon: {type: "sap.ui.core.Icon", multiple: false, visibility: "hidden"}
+			},
+			events: {
+				animationComplete: {}
 			}
-		}
+		},
+
+		renderer: PaginatorRenderer
 	});
 
 	Paginator.create = function (oCard, oConfig) {
@@ -84,14 +91,14 @@ sap.ui.define([
 			src: "sap-icon://slim-arrow-left",
 			useIconTooltip: false,
 			decorative: false,
-			press: this._previous.bind(this)
+			press: this.previous.bind(this)
 		}));
 
 		this.setAggregation("_nextIcon", new Icon({
 			src: "sap-icon://slim-arrow-right",
 			useIconTooltip: false,
 			decorative: false,
-			press: this._next.bind(this)
+			press: this.next.bind(this)
 		}));
 	};
 
@@ -215,8 +222,15 @@ sap.ui.define([
 		this._iPreviousStartIndex = iStartIndex;
 	};
 
+	/**
+	 * Goes back to the first page
+	 */
+	Paginator.prototype.reset = function () {
+		this.setPageNumber(0).sliceData();
+	};
+
 	Paginator.prototype._prepareAnimation = function (iStartIndex) {
-		if (!this._hasAnimation()) {
+		if (!this._hasAnimation() || this._isSkeletonCard()) {
 			return;
 		}
 
@@ -251,7 +265,7 @@ sap.ui.define([
 	};
 
 	Paginator.prototype._clearAnimation = function () {
-		if (!this._hasAnimation()) {
+		if (!this._hasAnimation() || !this._bActiveAnimation || this._isSkeletonCard()) {
 			return;
 		}
 
@@ -269,7 +283,9 @@ sap.ui.define([
 			oContentLoadingProvider._bAwaitPagination = false;
 			oCardLoadingProvider._bAwaitPagination = false;
 		} else {
-			oContentDomRefCloned.parentNode.removeChild(oContentDomRefCloned);
+			if (oContentDomRefCloned) {
+				oContentDomRefCloned.parentNode.removeChild(oContentDomRefCloned);
+			}
 
 			oContentDomRef.classList.remove("sapFCardContentOriginal");
 			oContentDomRef.classList.remove("sapFCardContentTransition");
@@ -279,16 +295,22 @@ sap.ui.define([
 			oCardLoadingProvider.setLoading(false);
 			this._bActiveAnimation = false;
 		}
+
+		this.fireAnimationComplete();
 	};
 
 	Paginator.prototype._listUpdateFinished = function () {
-		if (!this._bActiveAnimation || this.isServerSide()) {
+		if (!this._bActiveAnimation || this.isServerSide() || this._isSkeletonCard()) {
 			return;
 		}
 
 		var oContent = this.getCard().getCardContent(),
 			oContentDomRef = oContent.getDomRef(),
 			oContentDomRefCloned = oContentDomRef.previousSibling;
+
+		if (!oContentDomRefCloned) {
+			return;
+		}
 
 		oContentDomRefCloned.addEventListener("transitionend", function () {
 			oContentDomRefCloned.parentNode.removeChild(oContentDomRefCloned);
@@ -304,8 +326,12 @@ sap.ui.define([
 		oContentDomRefCloned.classList.add("sapFCardContentTransition");
 	};
 
+	Paginator.prototype._isSkeletonCard = function () {
+		return this.getCard().isSkeleton();
+	};
+
 	Paginator.prototype.onPlaceholderAfterRendering = function () {
-		if (!this._oClonedContent) {
+		if (!this._oClonedContent || this._isSkeletonCard()) {
 			return;
 		}
 
@@ -341,8 +367,18 @@ sap.ui.define([
 		return bHasAnimations && this.getCard().getCardContent().isA("sap.ui.integration.cards.ListContent");
 	};
 
-	Paginator.prototype._previous = function () {
-		if (this._bActiveAnimation) {
+	Paginator.prototype._hasActiveLoadingProvider = function () {
+		var oCard = this.getCard();
+
+		return oCard && oCard.hasActiveLoadingProvider();
+	};
+
+	/**
+	 * @ui5-restricted
+	 * @private
+	 */
+	Paginator.prototype.previous = function () {
+		if (this._bActiveAnimation || this._hasActiveLoadingProvider()) {
 			return;
 		}
 
@@ -350,8 +386,12 @@ sap.ui.define([
 		this.sliceData();
 	};
 
-	Paginator.prototype._next = function () {
-		if (this._bActiveAnimation) {
+	/**
+	 * @ui5-restricted
+	 * @private
+	 */
+	Paginator.prototype.next = function () {
+		if (this._bActiveAnimation || this._hasActiveLoadingProvider()) {
 			return;
 		}
 
@@ -367,6 +407,16 @@ sap.ui.define([
 			this.setPageNumber(parseInt(sDataSlide) - 1);
 			this.sliceData();
 		}
+	};
+
+	/**
+	 * @returns {object} Paginator configuration with static values.
+	 */
+	Paginator.prototype.getStaticConfiguration = function () {
+		return {
+			pageCount: this.getPageCount(),
+			pageIndex: this.getPageNumber()
+		};
 	};
 
 	return Paginator;

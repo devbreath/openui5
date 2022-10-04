@@ -12,8 +12,9 @@ sap.ui.define([
 	'./library',
 	'sap/ui/core/Control',
 	'./TreeRenderer',
-	'./Button'
-], function(jQuery, Log, isEmptyObject, library, Control, TreeRenderer, Button) {
+	'./Button',
+	'sap/ui/core/Configuration'
+], function(jQuery, Log, isEmptyObject, library, Control, TreeRenderer, Button, Configuration) {
 	"use strict";
 
 
@@ -32,13 +33,12 @@ sap.ui.define([
 	 * @class
 	 * Simple tree to display item in a hierarchical way
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.38, replaced by {@link sap.m.Tree}
 	 * @alias sap.ui.commons.Tree
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Tree = Control.extend("sap.ui.commons.Tree", /** @lends sap.ui.commons.Tree.prototype */ { metadata : {
 
@@ -217,7 +217,6 @@ sap.ui.define([
 	 *
 	 * @type {void}
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Tree.prototype.expandAll = function(){
 		var aNodes = this._getNodes();
@@ -233,7 +232,6 @@ sap.ui.define([
 	 *
 	 * @type {void}
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Tree.prototype.collapseAll = function(){
 		var aNodes = this._getNodes();
@@ -336,9 +334,9 @@ sap.ui.define([
 	 * @returns {string} The icon path prefix
 	 */
 	Tree.prototype.getIconPrefix = function() {
-		var sIconPrefix = "themes/" + sap.ui.getCore().getConfiguration().getTheme() + "/";
+		var sIconPrefix = "themes/" + Configuration.getTheme() + "/";
 
-		if (!sap.ui.getCore().getConfiguration().getRTL()) {
+		if (!Configuration.getRTL()) {
 			sIconPrefix		+= "img/tree/";
 		} else {
 			sIconPrefix		+= "img-RTL/tree/";

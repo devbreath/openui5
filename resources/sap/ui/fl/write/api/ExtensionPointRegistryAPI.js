@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/ui/fl/write/_internal/extensionPoint/Registry"],function(E){"use strict";var a={getExtensionPointInfo:function(p){return E.getExtensionPointInfo(p.name,p.view);},getExtensionPointInfoByViewId:function(p){return E.getExtensionPointInfoByViewId(p.viewId);},getExtensionPointInfoByParentId:function(p){return E.getExtensionPointInfoByParentId(p.parentId);}};return a;});
+sap.ui.define(["sap/ui/fl/write/_internal/extensionPoint/Registry"],function(n){"use strict";var t={getExtensionPointInfo:function(t){return n.getExtensionPointInfo(t.name,t.view)},getExtensionPointInfoByViewId:function(t){return n.getExtensionPointInfoByViewId(t.viewId)},getExtensionPointInfoByParentId:function(t){return n.getExtensionPointInfoByParentId(t.parentId)}};return t});
+//# sourceMappingURL=ExtensionPointRegistryAPI.js.map

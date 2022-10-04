@@ -13,9 +13,10 @@ sap.ui.define([
     './Toolbar',
     './Paginator',
     './Button',
-    'sap/ui/model/FilterType'
+    'sap/ui/model/FilterType',
+    'sap/ui/core/Configuration'
 ],
-	function(jQuery, library, Control, RowRepeaterRenderer, Toolbar, Paginator, Button, FilterType) {
+	function(jQuery, library, Control, RowRepeaterRenderer, Toolbar, Paginator, Button, FilterType, Configuration) {
 	"use strict";
 
 
@@ -42,13 +43,12 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. Instead, use the <code>sap.ui.table.Table</code> control.
 	 * @alias sap.ui.commons.RowRepeater
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var RowRepeater = Control.extend("sap.ui.commons.RowRepeater", /** @lends sap.ui.commons.RowRepeater.prototype */ { metadata : {
 
@@ -291,7 +291,6 @@ sap.ui.define([
 	 *
 	 * @return {this} <code>this</code> to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	RowRepeater.prototype.triggerShowMore = function() {
 
@@ -353,7 +352,6 @@ sap.ui.define([
 	 *         The new value of number of rows displayed.
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	RowRepeater.prototype.resize = function(numberOfRows) {
 
@@ -411,7 +409,6 @@ sap.ui.define([
 	 *         The ID if the filter.
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	RowRepeater.prototype.applyFilter = function(id) {
 
@@ -461,7 +458,6 @@ sap.ui.define([
 	 *         The ID of the sorter.
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	RowRepeater.prototype.triggerSort = function(id) {
 
@@ -509,7 +505,6 @@ sap.ui.define([
 	 *
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	RowRepeater.prototype.firstPage = function() {
 
@@ -568,7 +563,6 @@ sap.ui.define([
 	 *
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	RowRepeater.prototype.lastPage = function() {
 
@@ -628,7 +622,6 @@ sap.ui.define([
 	 *
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	RowRepeater.prototype.previousPage = function() {
 
@@ -687,7 +680,6 @@ sap.ui.define([
 	 *
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	RowRepeater.prototype.nextPage = function() {
 
@@ -749,7 +741,6 @@ sap.ui.define([
 	 *         The index of the page to go to.
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	RowRepeater.prototype.gotoPage = function(iPageNumber) {
 
@@ -1098,7 +1089,7 @@ sap.ui.define([
 
 		// create UL for new page
 		var sDirection;
-		if (sap.ui.getCore() && sap.ui.getCore().getConfiguration() && sap.ui.getCore().getConfiguration().getRTL()) {
+		if (sap.ui.getCore() && Configuration && Configuration.getRTL()) {
 			sDirection = (iPageTo < iPageFrom) ? "left" : "right";
 		} else {
 			sDirection = (iPageTo < iPageFrom) ? "right" : "left";
@@ -1156,7 +1147,7 @@ sap.ui.define([
 
 		// remove positioning from new UL
 		var sDirection;
-		if (sap.ui.getCore() && sap.ui.getCore().getConfiguration() && sap.ui.getCore().getConfiguration().getRTL()) {
+		if (sap.ui.getCore() && Configuration && Configuration.getRTL()) {
 			sDirection = (this.getCurrentPage() < this.iPreviousPage) ? "left" : "right";
 		} else {
 			sDirection = (this.getCurrentPage() < this.iPreviousPage) ? "right" : "left";

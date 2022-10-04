@@ -74,7 +74,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.write._internal.connectors.BackendConnector
 	 * @since 1.72
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @ui5-restricted sap.ui.fl.write._internal.connectors
 	 */
@@ -187,7 +187,7 @@ sap.ui.define([
 				return Promise.resolve({response: this.initialConnector.settings});
 			}
 			var sFeaturesUrl = InitialUtils.getUrl(this.ROUTES.SETTINGS, mPropertyBag);
-			return InitialUtils.sendRequest(sFeaturesUrl).then(function (oResult) {
+			return InitialUtils.sendRequest(sFeaturesUrl, "GET", {initialConnector: InitialConnector}).then(function (oResult) {
 				return oResult.response;
 			});
 		}

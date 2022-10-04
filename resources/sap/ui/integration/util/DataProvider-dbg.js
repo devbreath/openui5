@@ -29,21 +29,27 @@ sap.ui.define([
 	 * @extends sap.ui.base.ManagedObject
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
 	 * @ui5-restricted sap.ui.integration, shell-toolkit
 	 * @since 1.65
 	 * @alias sap.ui.integration.util.DataProvider
-	 * @ui5-metamodel This control/element will also be described in the UI5 (legacy) designtime metamodel
 	 */
 	var DataProvider = ManagedObject.extend("sap.ui.integration.util.DataProvider", {
 		metadata: {
 			library: "sap.ui.integration",
 			properties: {
 				/**
-				 * Data settings in json format. Will override any other settings.
+				 * Data settings.
+				 */
+				settings: {
+					type: "object"
+				},
+
+				/**
+				 * Data settings in json format. Will override <code>settings</code>.
 				 */
 				settingsJson: {
 					type: "string"
@@ -136,10 +142,10 @@ sap.ui.define([
 	 * Sets the data settings for the <code>DataProvider</code> in json format.
 	 *
 	 * @param {string} sSettingsJson The data settings in json format.
+	 * @override
 	 */
 	DataProvider.prototype.setSettingsJson = function (sSettingsJson) {
 		this.setProperty("settingsJson", sSettingsJson);
-
 		this.setSettings(JSON.parse(sSettingsJson));
 
 		if (this._bActive) {
@@ -159,24 +165,6 @@ sap.ui.define([
 		}
 		var sSanitizedUrl = sUrl && sUrl.trim().replace(/^\//, "");
 		return this.getBaseRuntimeUrl() + sSanitizedUrl;
-	};
-
-	/**
-	 * Sets the data settings for the <code>DataProvider</code>
-	 *
-	 * @param {Object} oSettings The data settings.
-	 */
-	DataProvider.prototype.setSettings = function (oSettings) {
-		this._oSettings = oSettings;
-	};
-
-	/**
-	 * Returns the data settings for the <code>DataProvider</code>
-	 *
-	 * @returns {Object} The data settings.
-	 */
-	DataProvider.prototype.getSettings = function () {
-		return this._oSettings;
 	};
 
 	/**
@@ -267,7 +255,6 @@ sap.ui.define([
 			this._iDataUpdateCallId = null;
 		}
 
-		this._oSettings = null;
 		ManagedObject.prototype.destroy.apply(this, arguments);
 	};
 
@@ -277,12 +264,13 @@ sap.ui.define([
 
 	DataProvider.prototype.onDataRequestComplete = function () {
 		var iInterval;
+		var oSettings = this.getSettings();
 
-		if (!this._oSettings || !this._oSettings.updateInterval) {
+		if (!oSettings || !oSettings.updateInterval) {
 			return;
 		}
 
-		iInterval = parseInt(this._oSettings.updateInterval);
+		iInterval = parseInt(oSettings.updateInterval);
 
 		if (isNaN(iInterval)) {
 			return;

@@ -77,7 +77,7 @@ sap.ui.define([
 	 * @extends sap.ui.integration.cards.BaseListContent
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -204,7 +204,11 @@ sap.ui.define([
 		if (bHasGroups) {
 			oStaticConfiguration.groups = aResolvedGroups;
 		} else {
-			oStaticConfiguration.rows = aResolvedRows;
+			oStaticConfiguration.groups = [
+				{
+					rows: aResolvedRows
+				}
+			];
 		}
 
 		return oStaticConfiguration;
@@ -400,14 +404,15 @@ sap.ui.define([
 			var oSrc = BindingHelper.formattedProperty(oColumn.icon.src, function (sValue) {
 				return this._oIconFormatter.formatSrc(sValue);
 			}.bind(this));
+			var vInitials = oColumn.icon.initials || oColumn.icon.text;
 
 			return new Avatar({
 				src: oSrc,
 				displayShape: oColumn.icon.shape,
 				displaySize: oColumn.icon.size || AvatarSize.XS,
 				tooltip: oColumn.icon.alt,
-				initials: oColumn.icon.text,
-				backgroundColor: oColumn.icon.backgroundColor || (oColumn.icon.text ? undefined : AvatarColor.Transparent)
+				initials: vInitials,
+				backgroundColor: oColumn.icon.backgroundColor || (vInitials ? undefined : AvatarColor.Transparent)
 			}).addStyleClass("sapFCardIcon");
 		}
 

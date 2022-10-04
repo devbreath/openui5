@@ -31,14 +31,13 @@ sap.ui.define([
 	 * Clicking or tapping on a <code>sap.ui.webc.main.ToggleButton</code> changes its state to <code>pressed</code>. The button returns to its initial state when the user clicks or taps on it again. By applying additional custom CSS-styling classes, apps can give a different style to any <code>sap.ui.webc.main.ToggleButton</code>.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.92.0
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.ToggleButton
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ToggleButton = WebComponent.extend("sap.ui.webc.main.ToggleButton", {
 		metadata: {
@@ -123,7 +122,7 @@ sap.ui.define([
 				 * <br>
 				 * Example:
 				 *
-				 * See all the available icons within the <ui5-link target="_blank" href="https://openui5.hana.ondemand.com/test-resources/sap/m/demokit/iconExplorer/webapp/index.html" class="api-table-content-cell-link">Icon Explorer</ui5-link>.
+				 * See all the available icons within the {@link demo:sap/m/demokit/iconExplorer/webapp/index.html Icon Explorer}.
 				 */
 				icon: {
 					type: "string",

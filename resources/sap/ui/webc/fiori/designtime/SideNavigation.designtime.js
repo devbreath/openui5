@@ -4,3 +4,4 @@
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 sap.ui.define([],function(){"use strict";return{name:{singular:"SIDE_NAVIGATION_NAME",plural:"SIDE_NAVIGATION_PLURAL"},actions:{remove:{changeType:"hideControl"},reveal:{changeType:"unhideControl"}}}});
+//# sourceMappingURL=SideNavigation.designtime.js.map

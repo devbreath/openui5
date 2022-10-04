@@ -50,13 +50,12 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38.
 	 * @alias sap.ui.ux3.ExactBrowser
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ExactBrowser = Control.extend("sap.ui.ux3.ExactBrowser", /** @lends sap.ui.ux3.ExactBrowser.prototype */ { metadata : {
 
@@ -317,7 +316,6 @@ sap.ui.define([
 		 *
 		 * @type void
 		 * @public
-		 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 		ExactBrowser.prototype.reset = function() {
 			this._rootList._closeAll();

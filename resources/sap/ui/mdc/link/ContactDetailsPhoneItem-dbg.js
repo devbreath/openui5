@@ -16,12 +16,11 @@ sap.ui.define([
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class Type for...
 	 * @extends sap.ui.core.Element
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.56.0
 	 * @alias sap.ui.mdc.link.ContactDetailsPhoneItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ContactDetailsPhoneItem = Element.extend("sap.ui.mdc.link.ContactDetailsPhoneItem", /** @lends sap.ui.mdc.link.ContactDetailsPhoneItem.prototype */
 	{

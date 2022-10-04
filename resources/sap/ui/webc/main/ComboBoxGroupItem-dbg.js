@@ -24,7 +24,7 @@ sap.ui.define([
 	 * The <code>sap.ui.webc.main.ComboBoxGroupItem</code> is type of suggestion item, that can be used to split the <code>sap.ui.webc.main.ComboBox</code> suggestions into groups.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -32,7 +32,6 @@ sap.ui.define([
 	 * @experimental Since 1.95.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.ComboBoxGroupItem
 	 * @implements sap.ui.webc.main.IComboBoxItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ComboBoxGroupItem = WebComponent.extend("sap.ui.webc.main.ComboBoxGroupItem", {
 		metadata: {

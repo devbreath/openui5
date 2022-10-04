@@ -70,14 +70,13 @@ sap.ui.define([
 	 *             A special case allows switching the comparison mode between the main and side content. In this case, the screen is split into 50:50 percent for main vs. side content. The responsive behavior of the equal split is the same as in the standard view - the side content disappears on screen widths of less than 720 px and can only be viewed by triggering it.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.99.0
 	 * @experimental Since 1.99.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.fiori.DynamicSideContent
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var DynamicSideContent = WebComponent.extend("sap.ui.webc.fiori.DynamicSideContent", {
 		metadata: {

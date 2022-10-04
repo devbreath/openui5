@@ -165,7 +165,7 @@ sap.ui.define([
 	 * @see {@link sap.f.dnd.GridDropInfo}
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @extends sap.ui.core.Control
 	 *
@@ -173,7 +173,6 @@ sap.ui.define([
 	 * @public
 	 * @constructor
 	 * @alias sap.f.GridContainer
-	 * @ui5-metamodel This control/element will also be described in the UI5 (legacy) designtime metamodel
 	 */
 	var GridContainer = Control.extend("sap.f.GridContainer", /** @lends sap.f.GridContainer.prototype */ {
 		metadata: {
@@ -275,6 +274,18 @@ sap.ui.define([
 				 */
 				_defaultLayout: { type: "sap.f.GridContainerSettings", multiple: false, visibility: "hidden" }
 			},
+			associations : {
+
+				/**
+				 * Association to controls / IDs which describe this control (see WAI-ARIA attribute aria-describedby).
+				 */
+				ariaDescribedBy: {type: "sap.ui.core.Control", multiple: true, singularName: "ariaDescribedBy"},
+
+				/**
+				 * Association to controls / IDs which label this control (see WAI-ARIA attribute aria-labelledby).
+				 */
+				ariaLabelledBy: {type: "sap.ui.core.Control", multiple: true, singularName: "ariaLabelledBy"}
+			},
 			events: {
 
 				/**
@@ -333,7 +344,9 @@ sap.ui.define([
 				}
 			},
 			dnd: { draggable: false, droppable: true }
-		}
+		},
+
+		renderer: GridContainerRenderer
 	});
 
 	/**
@@ -657,7 +670,7 @@ sap.ui.define([
 	 * Removes an item from the aggregation named <code>items</code>.
 	 *
 	 * @param {int | string | sap.ui.core.Item} vItem The item to remove or its index or ID.
-	 * @returns {sap.ui.core.Control} The removed item or null.
+	 * @returns {sap.ui.core.Control|null} The removed item or <code>null</code>.
 	 * @public
 	 */
 	GridContainer.prototype.removeItem = function (vItem) {

@@ -31,7 +31,7 @@ sap.ui.define([
 	 * @extends sap.ui.rta.command.BaseCommand
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -208,7 +208,7 @@ sap.ui.define([
 			mChangeSpecificData = Object.assign({}, mChangeSpecificData, mVariantObj);
 		}
 		mChangeSpecificData.command = sCommand;
-		mChangeSpecificData.generator = rtaLibrary.GENERATOR_NAME;
+		mChangeSpecificData.generator = mFlexSettings.generator || rtaLibrary.GENERATOR_NAME;
 		return ChangesWriteAPI.create({changeSpecificData: mChangeSpecificData, selector: this._validateControlForChange(mFlexSettings)})
 			.then(function(oChange) {
 				// originalSelector is only present when making a change on/inside a template; the selector does not work with the JS propagation hook (the template has no parent),
@@ -217,7 +217,7 @@ sap.ui.define([
 				// ATTENTION! the change gets applied as soon as the parent is available, so there might be possible side effects with lazy loading
 				if (mFlexSettings && mFlexSettings.originalSelector) {
 					oChange.addDependentControl(mFlexSettings.originalSelector, "originalSelector", {modifier: JsControlTreeModifier, appComponent: this.getAppComponent()});
-					oChange.getDefinition().selector = Object.assign(oChange.getDefinition().selector, JsControlTreeModifier.getSelector(this.getSelector().id, this.getAppComponent()));
+					oChange.setSelector(Object.assign(oChange.getSelector(), JsControlTreeModifier.getSelector(this.getSelector().id, this.getAppComponent())));
 					oChange.setContent(Object.assign({}, oChange.getContent(), mFlexSettings.content));
 				}
 				return oChange;

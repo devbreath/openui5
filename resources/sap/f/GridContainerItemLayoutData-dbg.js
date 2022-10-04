@@ -21,7 +21,7 @@ sap.ui.define(['sap/ui/core/LayoutData'],
 		 * @see {@link topic:32d4b9c2b981425dbc374d3e9d5d0c2e Grid Controls}
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @extends sap.ui.core.LayoutData
 		 *
@@ -30,7 +30,6 @@ sap.ui.define(['sap/ui/core/LayoutData'],
 		 * @public
 		 * @constructor
 		 * @alias sap.f.GridContainerItemLayoutData
-		 * @ui5-metamodel This control/element will also be described in the UI5 (legacy) designtime metamodel
 		 */
 		var GridContainerItemLayoutData = LayoutData.extend("sap.f.GridContainerItemLayoutData", /** @lends sap.f.GridContainerItemLayoutData.prototype */ {
 			metadata: {

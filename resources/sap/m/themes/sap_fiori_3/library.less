@@ -2821,16 +2821,6 @@ html[data-sap-ui-animation='on'] .sapMPageWithFloatingFooter {
 		top: 2rem;
 	}
 
-	.sapMPageWithHeader.sapMPageWithSubHeader {
-		> section {
-			top: 4.5rem;
-		}
-
-		.sapMPageSubHeader.sapMPageSubHeaderInfoBar + section {
-			top: 4.5rem;
-		}
-	}
-
 	.sapMPageWithHeader {
 		&.sapFShellBar-CTX > section {
 			top: 2.75rem;
@@ -5393,7 +5383,7 @@ html.sap-desktop .sapMTBActive:focus {
 
 .sapMTB {
 	height: 2.75rem;
-	padding: 0 0.5rem 0 0.25rem;
+	padding: 0 0.5rem 0 1rem;
 	background: @sapUiToolbarBackground;
 }
 
@@ -5403,7 +5393,12 @@ html.sap-desktop .sapMTBActive:focus {
 
 /* Transparent Toolbar Context */
 .sapMTB-Transparent-CTX.sapMTB {
-	padding: 0 0.5rem 0 0.75rem;
+	padding-left: 1rem;
+}
+
+/* Info Toolbar Context */
+.sapMIBar.sapMTB.sapMTB-Info-CTX {
+	padding-left: 1rem;
 }
 
 /* Solid Toolbar Context */

@@ -36,13 +36,12 @@ sap.ui.define([
 	 * @extends sap.ui.commons.CalloutBase
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. Instead, use the <code>sap.m.QuickView</code> control.
 	 * @alias sap.ui.ux3.QuickView
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var QuickView = CalloutBase.extend("sap.ui.ux3.QuickView", /** @lends sap.ui.ux3.QuickView.prototype */ { metadata : {
 

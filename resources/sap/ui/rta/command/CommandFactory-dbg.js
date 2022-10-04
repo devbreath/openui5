@@ -485,7 +485,7 @@ sap.ui.define([
 	 * @extends sap.ui.base.ManagedObject
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -523,9 +523,9 @@ sap.ui.define([
 
 	/**
 	 * Instance-specific method for generating command
-	 * @param {sap.ui.core.Element|string} vElement - Could be either an element or a slector for the element for which the command is to be created
+	 * @param {sap.ui.core.Element|string} vElement - Could be either an element or a selector for the element for which the command is to be created
 	 * @param {string} sCommand - Command type
-	 * @param {object} mSettings - Initial settings for the new command (command specific settings, looks diffrent for each and every command)
+	 * @param {object} mSettings - Initial settings for the new command (command specific settings, looks different for each and every command)
 	 * @param {sap.ui.dt.DesignTimeMetadata} oDesignTimeMetadata - Contains the action used in the command
 	 * @param {string} sVariantManagementReference - Variant management reference
 	 * @returns {Promise} A promise which will return the created command
@@ -536,9 +536,9 @@ sap.ui.define([
 
 	/**
 	 * Static method for generating command
-	 * @param {sap.ui.core.Element|string} vElement - Could be either an element or a slector for the element for which the command is to be created
+	 * @param {sap.ui.core.Element|string} vElement - Could be either an element or a selector for the element for which the command is to be created
 	 * @param {string} sCommand - Command type
-	 * @param {object} mSettings -  Initial settings for the new command (command specific settings, looks diffrent for each and every command)
+	 * @param {object} mSettings -  Initial settings for the new command (command specific settings, looks different for each and every command)
 	 * @param {sap.ui.dt.DesignTimeMetadata} oDesignTimeMetadata - Contains the action used in the command
 	 * @param {object} [mFlexSettings] - Property bag
 	 * @param {string} [mFlexSettings.layer] - The Layer in which RTA should be started. Default: "CUSTOMER"
@@ -546,6 +546,7 @@ sap.ui.define([
 	 * @param {string} [mFlexSettings.baseId] - Base ID of the app
 	 * @param {string} [mFlexSettings.projectId] - Project ID
 	 * @param {string} [mFlexSettings.scenario] - Key representing the current scenario
+	 * @param {string} [mFlexSettings.generator] - Generator of the change. Will be saved in the change
 	 * @returns {Promise} A promise which will return the created command
 	 */
 	CommandFactory.getCommandFor = function (vElement, sCommand, mSettings, oDesignTimeMetadata, mFlexSettings) {

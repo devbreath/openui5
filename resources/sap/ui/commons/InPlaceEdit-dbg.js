@@ -50,14 +50,13 @@ sap.ui.define([
 	 * @class
 	 * The InPlaceEdit is a functionality to have text in display mode that can be changed in place.
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.8.0
 	 * @deprecated as of version 1.38, replaced by {@link sap.m.Input}
 	 * @alias sap.ui.commons.InPlaceEdit
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var InPlaceEdit = Control.extend("sap.ui.commons.InPlaceEdit", /** @lends sap.ui.commons.InPlaceEdit.prototype */ { metadata : {
 
@@ -291,7 +290,6 @@ sap.ui.define([
 		 * Clear the old text after a change to disable the undo functionality. If undoEnabled is false this has no effect.
 		 *
 		 * @public
-		 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		InPlaceEdit.prototype.clearOldText = function(){
 

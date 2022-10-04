@@ -6,7 +6,6 @@
 sap.ui.define([
 	"sap/ui/core/Core",
 	"sap/base/util/extend",
-	"sap/base/util/isEmptyObject",
 	"sap/f/cards/NumericHeader",
 	"sap/f/cards/NumericHeaderRenderer",
 	"sap/f/cards/NumericSideIndicator",
@@ -16,7 +15,6 @@ sap.ui.define([
 ], function (
 	Core,
 	extend,
-	isEmptyObject,
 	FNumericHeader,
 	FNumericHeaderRenderer,
 	NumericSideIndicator,
@@ -37,13 +35,12 @@ sap.ui.define([
 	 * @extends sap.f.cards.NumericHeader
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
 	 * @since 1.77
 	 * @alias sap.ui.integration.cards.NumericHeader
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var NumericHeader = FNumericHeader.extend("sap.ui.integration.cards.NumericHeader", {
 
@@ -51,14 +48,13 @@ sap.ui.define([
 
 			mConfiguration = mConfiguration || {};
 
-			this._bIsEmpty = isEmptyObject(mConfiguration);
-
 			var mSettings = {
 				title: mConfiguration.title,
 				titleMaxLines: mConfiguration.titleMaxLines,
 				subtitle: mConfiguration.subTitle,
 				subtitleMaxLines: mConfiguration.subTitleMaxLines,
-				dataTimestamp: mConfiguration.dataTimestamp
+				dataTimestamp: mConfiguration.dataTimestamp,
+				visible: mConfiguration.visible
 			};
 
 			if (mConfiguration.status && mConfiguration.status.text && !mConfiguration.status.text.format) {
@@ -88,10 +84,6 @@ sap.ui.define([
 			mSettings.toolbar = oActionsToolbar;
 
 			FNumericHeader.call(this, mSettings);
-
-			if (oActionsToolbar && oActionsToolbar.isA("sap.ui.integration.controls.ActionsToolbar")) {
-				oActionsToolbar.attachVisibilityChange(this._handleToolbarVisibilityChange.bind(this));
-			}
 		},
 		metadata: {
 			library: "sap.ui.integration",
@@ -257,14 +249,6 @@ sap.ui.define([
 
 	NumericHeader.prototype._handleError = function (sLogMessage) {
 		this.fireEvent("_error", { logMessage: sLogMessage });
-	};
-
-	NumericHeader.prototype._handleToolbarVisibilityChange = function (oEvent) {
-		var bToolbarVisible = oEvent.getParameter("visible");
-
-		if (this._bIsEmpty && this.getVisible() !== bToolbarVisible) {
-			this.setVisible(bToolbarVisible);
-		}
 	};
 
 	NumericHeader.prototype.refreshData = function () {

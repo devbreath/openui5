@@ -32,6 +32,7 @@ sap.ui.define([
 	 * @since 1.74.0
 	 * @extends module:sap/ui/mdc/field/FieldBaseDelegate
 	 * @alias module:sap/ui/mdc/odata/v4/FieldBaseDelegate
+	 * @deprecated This module should not be used and will be removed in future versions!
 	 */
 	var ODataFieldBaseDelegate = Object.assign({}, FieldBaseDelegate);
 

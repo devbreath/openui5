@@ -31,7 +31,7 @@ sap.ui.define([
 	 *
 	 * @namespace
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @private
 	 * @since 1.30
@@ -388,6 +388,7 @@ sap.ui.define([
 				|| typeof oElement.getLabel === "function" && oElement.getLabel()
 				|| typeof oElement.getTitle === "function" && oElement.getTitle()
 				|| typeof oElement.getHeading === "function" && oElement.getHeading()
+				|| typeof oElement.getDataSourceLabel === "function" && oElement.getDataSourceLabel()
 			);
 
 			if (ElementUtil.isElementValid(vFieldLabel)) {

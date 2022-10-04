@@ -42,7 +42,7 @@ sap.ui.define([
 	 * Helper class for working with bindings.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @private
 	 * @alias sap.ui.integration.util.BindingHelper

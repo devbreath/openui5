@@ -2838,12 +2838,6 @@ html.sap-desktop {
 	background-color: @sapField_Hover_Background;
 }
 
-.sapMInputBaseReadonly:not(.sapMTextArea) .sapMInputBaseInner,
-.sapMInputBaseReadonly.sapMInputBase:not(.sapMTextArea):not(.sapMInputBaseHasEndIcons):not(.sapMInputBaseHasBeginIcons) .sapMInputBaseInner,
-.sapMInputBaseReadonly.sapMInputBaseNoWidth:not(.sapMTextArea) .sapMInputBaseInner {
-	width: ~"calc(100% - 1.625rem)";
-}
-
 .sapUiSizeCondensed {
 	.sapUiTableDataCell .sapMInputBase .sapMInputBaseIcon {
 		min-width: 1.375rem;
@@ -3344,6 +3338,7 @@ html.sap-desktop .sapMLnk:focus:hover:not(.sapMLnkDsbl) {
 .sapMMsgView .sapMMsgViewDescriptionLink,
 .sapMMsgView .sapMMsgViewItem .sapMSLITitle {
 	width: fit-content;
+	max-width: 100%;
 }
 
 /* Compact size */
@@ -4193,16 +4188,6 @@ html[data-sap-ui-animation='on'] .sapMPageWithFloatingFooter {
 	/* Subheader only 2 rem */
 	.sapMPageWithSubHeader > section {
 		top: 2rem;
-	}
-
-	.sapMPageWithHeader.sapMPageWithSubHeader {
-		> section {
-			top: 4.5rem;
-		}
-
-		.sapMPageSubHeader.sapMPageSubHeaderInfoBar + section {
-			top: 4.5rem;
-		}
 	}
 
 	.sapMPageWithHeader {
@@ -5206,6 +5191,10 @@ html.sap-desktop .sapUiSizeCompact .sapMSliderProgress:focus:before {
 /* ====================================== */
 
 .sapMRI {
+	& {
+		margin: 0.75rem 0;
+	}
+
 	&:not(.sapMRIDisabled):not(.sapMRIDisplayOnly):not(.sapMRIReadOnly):hover {
 		opacity: 0.9;
 	}
@@ -5666,6 +5655,13 @@ html.sap-desktop .sapMSegBBtnFocusable.sapMBtnActive:hover .sapMSegBBtnInner {
 	&.sapMSltWithIcon {
         box-shadow: inset 0px 0px 0px @sapUiContentFocusWidth @sapUiFieldActiveBorderColor;
 	}
+}
+
+/* ------------------------------------------------ */
+/* IconOnly Select in a Bar                                 */
+/* ------------------------------------------------ */
+.sapMIBar .sapMSltIconOnly:not(.sapMSltDisabled) .sapMSltIcon {
+	color: @sapUiButtonLiteTextColor;
 }
 
 /*IconOnly Pressed */
@@ -6427,7 +6423,7 @@ html.sap-desktop .sapMSPCMonthDay.sapMSPCMonthDayToday:focus .sapMSPCMonthNowMar
 
 .sapMSliderInner .sapMSliderHandle:not(.sapMSliderHandlePressed):not(.sapMRangeSlider.sapMSlider .sapMSliderInner:not(.sapMSliderInnerDisabled) .sapMSliderHandle:focus):after {
 	font-family: SAP-icons;
-	content: "\e244";
+	content: "\e29c";
 	position: absolute;
 	top: 4px;
 	right: 0.5rem;

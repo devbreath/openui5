@@ -18,7 +18,8 @@ sap.ui.define([
 	"./MonthsRowRenderer",
 	"sap/ui/dom/containsOrEquals",
 	"sap/ui/thirdparty/jquery",
-	"sap/ui/unified/DateRange"
+	"sap/ui/unified/DateRange",
+	"sap/ui/core/Configuration"
 ], function(
 	Control,
 	LocaleData,
@@ -32,7 +33,8 @@ sap.ui.define([
 	MonthsRowRenderer,
 	containsOrEquals,
 	jQuery,
-	DateRange
+	DateRange,
+	Configuration
 ) {
 	"use strict";
 
@@ -61,13 +63,12 @@ sap.ui.define([
 	 * The MontsRow works with JavaScript Date objects, but only the month and the year are used to display and interact.
 	 * As representation for a month, the 1st of the month will always be returned in the API.
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.32.0
 	 * @alias sap.ui.unified.calendar.MonthsRow
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var MonthsRow = Control.extend("sap.ui.unified.calendar.MonthsRow", /** @lends sap.ui.unified.calendar.MonthsRow.prototype */ { metadata : {
 
@@ -335,7 +336,6 @@ sap.ui.define([
 	 * @param {object} oDate JavaScript Date object for focused date.
 	 * @returns {this} <code>this</code> to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	MonthsRow.prototype.displayDate = function(oDate){
 
@@ -356,7 +356,7 @@ sap.ui.define([
 		if (oParent && oParent.getLocale) {
 			return oParent.getLocale();
 		} else if (!this._sLocale) {
-			this._sLocale = sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale().toString();
+			this._sLocale = Configuration.getFormatSettings().getFormatLocale().toString();
 		}
 
 		return this._sLocale;
@@ -847,7 +847,6 @@ sap.ui.define([
 	 * @param {object} oDateTime JavaScript Date object for focused date.
 	 * @returns {boolean} flag if focusable
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	MonthsRow.prototype.checkDateFocusable = function(oDateTime){
 

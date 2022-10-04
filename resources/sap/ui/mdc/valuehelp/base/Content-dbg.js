@@ -32,7 +32,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new element
 	 * @class Content for the {@link sap.ui.mdc.valuehelp.base.Container Container} element.
 	 * @extends sap.ui.core.Element
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -40,7 +40,6 @@ sap.ui.define([
 	 * @since 1.95.0
 	 * @experimental As of version 1.95
 	 * @alias sap.ui.mdc.valuehelp.base.Content
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Content = Element.extend("sap.ui.mdc.valuehelp.base.Content", /** @lends sap.ui.mdc.valuehelp.base.Content.prototype */
 	{
@@ -258,21 +257,22 @@ sap.ui.define([
 
 	/**
 	 * Finalize content before it is shown
-	 *
+	 * @param {boolean} bInitial Indicates, if the content is to be shown for the first time since it's container opened.
 	 * @private
 	 * @ui5-restricted sap.ui.mdc.valuehelp.base.Container
 	 */
-	Content.prototype.onBeforeShow = function () {
+	Content.prototype.onBeforeShow = function (bInitial) {
 
 	};
 
 	/**
 	 * Called if the content will be shown.
 	 *
+	 * @param {boolean} bInitial Indicates, if the content is shown for the first time since it's container opened.
 	 * @private
 	 * @ui5-restricted sap.ui.mdc.valuehelp.base.Container
 	 */
-	Content.prototype.onShow = function () {
+	Content.prototype.onShow = function (bInitial) {
 		this._bVisible = true;
 		this._handleConditionsUpdate();
 		//this._handleFilterValueUpdate();
@@ -494,9 +494,9 @@ sap.ui.define([
 		return oContainer && oContainer.isValueHelpDelegateInitialized();
 	};
 
-	Content.prototype._getControl = function () {
+	Content.prototype.getControl = function () {
 		var oContainer = this.getParent();
-		return oContainer && oContainer._getControl();
+		return oContainer && oContainer.getControl();
 	};
 
 	Content.prototype.getCount = function (aConditions) {
@@ -700,7 +700,6 @@ sap.ui.define([
 	Content.prototype.onContainerOpen = function() {
 
 	};
-
 
 	PromiseMixin.call(Content.prototype);
 

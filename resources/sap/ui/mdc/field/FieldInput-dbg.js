@@ -23,14 +23,13 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class The <code>FieldInput</code> control is used to render an input field inside a control based on {@link sap.ui.mdc.field.FieldBase FieldBase}.
 	 * @extends sap.m.Input
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @abstract
 	 * @private
 	 * @ui5-restricted sap.ui.mdc.field.FieldBase
 	 * @since 1.81.0
 	 * @alias sap.ui.mdc.field.FieldInput
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var FieldInput = Input.extend("sap.ui.mdc.field.FieldInput", /** @lends sap.ui.mdc.field.FieldInput.prototype */
 	{

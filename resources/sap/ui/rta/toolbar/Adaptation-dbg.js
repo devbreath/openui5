@@ -7,6 +7,7 @@
 sap.ui.define([
 	"sap/ui/core/Fragment",
 	"sap/ui/fl/write/api/Version",
+	"sap/ui/rta/toolbar/contextBased/SaveAsContextBasedAdaptation",
 	"sap/ui/rta/toolbar/translation/Translation",
 	"sap/ui/rta/toolbar/versioning/Versioning",
 	"sap/ui/rta/appVariant/Feature",
@@ -16,6 +17,7 @@ sap.ui.define([
 ], function(
 	Fragment,
 	Version,
+	SaveAsContextBasedAdaptation,
 	Translation,
 	Versioning,
 	AppVariantFeature,
@@ -33,7 +35,7 @@ sap.ui.define([
 	 * @extends sap.ui.rta.toolbar.Base
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
@@ -61,6 +63,7 @@ sap.ui.define([
 				activate: {},
 				discardDraft: {},
 				switchVersion: {},
+				saveAsContextBasedAdaptation: {},
 				openChangeCategorySelectionPopover: {}
 			}
 		}
@@ -207,6 +210,7 @@ sap.ui.define([
 				manageApps: onManageAppsPressed.bind(this),
 				appVariantOverview: onOverviewPressed.bind(this),
 				saveAs: onSaveAsPressed.bind(this),
+				saveAsContextBasedAdaptation: onSaveAsContextBasedAdaptation.bind(this),
 				formatSaveAsEnabled: formatSaveAsEnabled,
 				restore: this.eventHandler.bind(this, "Restore"),
 				publish: this.eventHandler.bind(this, "Transport"),
@@ -237,6 +241,10 @@ sap.ui.define([
 
 	function onSaveAsPressed() {
 		AppVariantFeature.onSaveAs(true, true, this.getRtaInformation().flexSettings.layer, null);
+	}
+
+	function onSaveAsContextBasedAdaptation() {
+		this.getExtension("adaptation", SaveAsContextBasedAdaptation).openAddAdaptationDialog(this.getRtaInformation().flexSettings.layer);
 	}
 
 	function onOverviewPressed(oEvent) {

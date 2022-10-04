@@ -60,7 +60,7 @@ sap.ui.define([
 	 * @hideconstructor
 	 * @public
 	 * @since 1.93.0
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 */
 	var Context = BaseContext.extend("sap.ui.model.odata.v2.Context", {
 			constructor : function (oModel, sPath, sDeepPath, oCreatePromise, bInactive) {
@@ -129,7 +129,7 @@ sap.ui.define([
 	 * the entity for this context has been stored in the back end, {@link #created} returns
 	 * <code>undefined</code>.
 	 *
-	 * @returns {Promise}
+	 * @returns {Promise<any|undefined>|undefined}
 	 *   A promise for a context which has been created via
 	 *   {@link sap.ui.model.odata.v2.ODataModel#createEntry} or
 	 *   {@link sap.ui.model.odata.v2.ODataListBinding#create}, otherwise <code>undefined</code>.
@@ -176,8 +176,8 @@ sap.ui.define([
 	 *   Defines whether to update all bindings after submitting this change operation,
 	 *   see {@link #setRefreshAfterChange}. If given, this overrules the model-wide
 	 *   <code>refreshAfterChange</code> flag for this operation only.
-	 * @returns {Promise} A promise resolving with <code>undefined</code> in case of successful
-	 *   deletion or rejecting with an error in case the deletion failed
+	 * @returns {Promise<undefined>} A promise resolving with <code>undefined</code> in case of
+	 *   successful deletion or rejecting with an error in case the deletion failed
 	 * @throws {Error}
 	 *   If the given parameter map contains any other parameter than those documented above in case
 	 *   of a persistent context
@@ -308,7 +308,7 @@ sap.ui.define([
 	 * "@$ui5.context.isTransient" instance annotation at the entity, see
 	 * {@link sap.ui.model.odata.v2.ODataModel#getProperty} for details.
 	 *
-	 * @returns {boolean}
+	 * @returns {boolean|undefined}
 	 *   <ul>
 	 *   <li><code>true</code>: if the context has been created via
 	 *     {@link sap.ui.model.odata.v2.ODataModel#createEntry} or

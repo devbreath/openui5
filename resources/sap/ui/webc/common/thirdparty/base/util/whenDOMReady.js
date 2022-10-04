@@ -1,1 +1,2 @@
-sap.ui.define(function(){"use strict";const e=()=>new Promise(e=>{if(document.body){e()}else{document.addEventListener("DOMContentLoaded",()=>{e()})}});return e});
+sap.ui.define(["exports"],function(e){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;const t=()=>new Promise(e=>{if(document.body){e()}else{document.addEventListener("DOMContentLoaded",()=>{e()})}});var d=t;e.default=d});
+//# sourceMappingURL=whenDOMReady.js.map

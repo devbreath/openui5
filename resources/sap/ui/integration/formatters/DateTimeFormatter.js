@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["sap/ui/core/format/DateFormat","sap/ui/core/date/UniversalDate","sap/ui/integration/util/Utils"],function(D,U,a){"use strict";var d={dateTime:function(v,f,l){var A=a.processFormatArguments(f,l),o=D.getDateTimeInstance(A.formatOptions,A.locale),p=a.parseJsonDateTime(v);var u=new U(p);var F=o.format(u);return F;},date:function(v,f,l){return d.dateTime.apply(this,arguments);}};return d;});
+sap.ui.define(["sap/ui/core/format/DateFormat","sap/ui/core/date/UniversalDate","sap/ui/integration/util/Utils"],function(t,e,a){"use strict";var r={dateTime:function(r,i,n){var s=a.processFormatArguments(i,n),o=t.getDateTimeInstance(s.formatOptions,s.locale),u=a.parseJsonDateTime(r);var m=new e(u);var c=o.format(m);return c},date:function(t,e,a){return r.dateTime.apply(this,arguments)}};return r});
+//# sourceMappingURL=DateTimeFormatter.js.map

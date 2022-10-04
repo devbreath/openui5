@@ -32,12 +32,11 @@ sap.ui.define([
 	 * @class TODO (don't forget to document fixed row count restrictions because fixed rows are set by this plugin)
 	 * @extends sap.ui.table.plugins.PluginBase
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @since 1.76
 	 * @experimental
 	 * @alias sap.ui.table.plugins.V4Aggregation
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var V4Aggregation = PluginBase.extend("sap.ui.table.plugins.V4Aggregation", /** @lends sap.ui.table.plugins.V4Aggregation.prototype */ {
 		metadata: {
@@ -249,16 +248,6 @@ sap.ui.define([
 	};
 
 	/**
-	 * Checks if a propertyInfo corresponds to an aggregatable property.
-	 *
-	 * @param {object} oPropertyInfo the property info
-	 * @returns {boolean} true if the propertyInfo corresponds to an aggregatable property, false otherwise
-	 */
-	V4Aggregation.prototype.isPropertyAggregatable = function(oPropertyInfo) {
-		return (oPropertyInfo.extension && oPropertyInfo.extension.defaultAggregate) ? true : false;
-	};
-
-	/**
 	 * Sets aggregation info and derives the query options to be passed to the table list binding.
 	 *
 	 * @param {object} oAggregateInfo An object holding the information needed for data aggregation
@@ -315,7 +304,12 @@ sap.ui.define([
 			}
 			aVisible.forEach(function(sVisiblePropertyName) {
 				var oPropertyInfo = this.findPropertyInfo(sVisiblePropertyName);
-				if (oPropertyInfo && oPropertyInfo.groupable) {
+
+				if (!oPropertyInfo) {
+					return;
+				}
+
+				if (oPropertyInfo.groupable) {
 					this._mGroup[oPropertyInfo.path] = {};
 					aAdditionalProperties = getAdditionalPropertyPaths(this, oPropertyInfo);
 					if (aAdditionalProperties) {
@@ -324,7 +318,7 @@ sap.ui.define([
 					}
 				}
 
-				if (oPropertyInfo && this.isPropertyAggregatable(oPropertyInfo)) {
+				if (oPropertyInfo.aggregatable) {
 					this._mAggregate[oPropertyInfo.path] = {};
 
 					if (oAggregateInfo.grandTotal && (oAggregateInfo.grandTotal.indexOf(sVisiblePropertyName) >= 0)) {
@@ -343,8 +337,11 @@ sap.ui.define([
 						}
 					}
 
-					if (oPropertyInfo.extension.defaultAggregate.contextDefiningProperties) {
-						oPropertyInfo.extension.defaultAggregate.contextDefiningProperties.forEach(function(sContextDefiningPropertyName) {
+					if (oPropertyInfo.aggregationDetails &&
+						oPropertyInfo.aggregationDetails.customAggregate &&
+						oPropertyInfo.aggregationDetails.customAggregate.contextDefiningProperties) {
+
+						oPropertyInfo.aggregationDetails.customAggregate.contextDefiningProperties.forEach(function(sContextDefiningPropertyName) {
 							var oDefiningPropertyInfo = this.findPropertyInfo(sContextDefiningPropertyName);
 							if (oDefiningPropertyInfo) {
 								this._mGroup[oDefiningPropertyInfo.path] = {};

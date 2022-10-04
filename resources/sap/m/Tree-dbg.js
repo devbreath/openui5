@@ -39,44 +39,47 @@ function(
 	 * @extends sap.m.ListBase
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.42
 	 * @alias sap.m.Tree
 	 * @see {@link fiori:/tree/ Tree}
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
-	var Tree = ListBase.extend("sap.m.Tree", { metadata : {
-		library : "sap.m",
-		events : {
+	var Tree = ListBase.extend("sap.m.Tree", {
+		metadata : {
+			library : "sap.m",
+			events : {
 
-			/**
-			 * Fired when an item has been expanded or collapsed by user interaction.
-			 * @since 1.50
-			 */
-			toggleOpenState : {
-				parameters : {
+				/**
+				 * Fired when an item has been expanded or collapsed by user interaction.
+				 * @since 1.50
+				 */
+				toggleOpenState : {
+					parameters : {
 
-					/**
-					 * Index of the expanded/collapsed item
-					 */
-					itemIndex : {type : "int"},
+						/**
+						 * Index of the expanded/collapsed item
+						 */
+						itemIndex : {type : "int"},
 
-					/**
-					 * Binding context of the item
-					 */
-					itemContext : {type : "object"},
+						/**
+						 * Binding context of the item
+						 */
+						itemContext : {type : "object"},
 
-					/**
-					 * Flag that indicates whether the item has been expanded or collapsed
-					 */
-					expanded : {type : "boolean"}
+						/**
+						 * Flag that indicates whether the item has been expanded or collapsed
+						 */
+						expanded : {type : "boolean"}
+					}
 				}
 			}
-		}
-	}});
+		},
+
+		renderer: TreeRenderer
+	});
 
 	Tree.prototype.isTreeBinding = function(sName) {
 		return (sName == "items");

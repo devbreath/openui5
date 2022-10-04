@@ -1,6 +1,0 @@
-/*!
- * OpenUI5
- * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
- * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
- */
-sap.ui.define(["sap/ui/core/Core","sap/ui/core/util/reflection/JsControlTreeModifier","sap/ui/dt/ElementUtil","sap/ui/rta/util/changeVisualization/ChangeVisualizationUtils"],function(C,J,E,a){"use strict";var r=C.getLibraryResourceBundle("sap.ui.rta");var b={};b.getDescription=function(p,l,P){var o=(p.originalSelectors||[]).length;if(o<2){return{descriptionText:r.getText("TXT_CHANGEVISUALIZATION_CHANGE_COMBINE",[a.shortenString(l)]),descriptionTooltip:r.getText("TXT_CHANGEVISUALIZATION_CHANGE_COMBINE",[l])};}var A=P.appComponent;var O=p.originalSelectors;var L=O.map(function(S){var i=J.getControlIdBySelector(S,A);var c=C.byId(i);return c?E.getLabelForElement(c):i;});var s=L.map(a.shortenString);if(o===2){return{descriptionText:r.getText("TXT_CHANGEVISUALIZATION_CHANGE_COMBINE_TWO",s),descriptionTooltip:r.getText("TXT_CHANGEVISUALIZATION_CHANGE_COMBINE_TWO",L)};}return{descriptionText:r.getText("TXT_CHANGEVISUALIZATION_CHANGE_COMBINE_MANY",[L.length]),descriptionTooltip:L.map(function(l){return"\""+l+"\"";}).join(",\n")};};return b;});

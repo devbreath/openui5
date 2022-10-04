@@ -9,14 +9,18 @@ sap.ui.define([
 	"sap/ui/fl/Utils",
 	"sap/ui/rta/command/Settings",
 	"sap/ui/rta/command/CompositeCommand",
-	"sap/ui/core/util/reflection/JsControlTreeModifier"
+	"sap/ui/core/util/reflection/JsControlTreeModifier",
+	"sap/ui/rta/util/showMessageBox",
+	"sap/ui/core/Core"
 ], function(
 	ManagedObject,
 	PersistenceWriteAPI,
 	FlUtils,
 	Settings,
 	CompositeCommand,
-	JsControlTreeModifier
+	JsControlTreeModifier,
+	showMessageBox,
+	Core
 ) {
 	"use strict";
 
@@ -32,12 +36,12 @@ sap.ui.define([
 		var oSelector = oChange.getSelector && oChange.getSelector();
 		var oCommand = new Settings({
 			selector: oSelector,
-			changeType: oChange.getDefinition().changeType,
+			changeType: oChange.getChangeType(),
 			element: JsControlTreeModifier.bySelector(oSelector, oComponent)
 		});
 		oCommand._oPreparedChange = oChange;
 		// check if change belongs to a composite command
-		var sCompositeId = oChange.getDefinition().support.compositeCommand;
+		var sCompositeId = oChange.getSupportInformation().compositeCommand;
 		if (sCompositeId) {
 			if (!mComposite[sCompositeId]) {
 				mComposite[sCompositeId] = new CompositeCommand();
@@ -55,7 +59,7 @@ sap.ui.define([
 	 * @class
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.34
@@ -74,7 +78,15 @@ sap.ui.define([
 				}
 			},
 			events: {
+				/**
+				 * Fired if the Stack changes because of a change execution or if all commands get removed.
+				 * In case of change execution the modified event will be fired after the commandExecuted event.
+				 */
 				modified: {},
+
+				/**
+				 * Fired after a successful execution of a command (also includes undo).
+				 */
 				commandExecuted: {
 					parameters: {
 						command: {type: "object"},
@@ -126,12 +138,14 @@ sap.ui.define([
 	Stack.prototype.addCommandExecutionHandler = function(fnHandler) {
 		this._aCommandExecutionHandler.push(fnHandler);
 	};
+
 	Stack.prototype.removeCommandExecutionHandler = function(fnHandler) {
 		var i = this._aCommandExecutionHandler.indexOf(fnHandler);
 		if (i > -1) {
 			this._aCommandExecutionHandler.splice(i, 1);
 		}
 	};
+
 	Stack.prototype.init = function() {
 		this._aCommandExecutionHandler = [];
 		this._toBeExecuted = -1;
@@ -156,6 +170,7 @@ sap.ui.define([
 	 */
 	Stack.prototype.pushExecutedCommand = function(oCommand) {
 		this.push(oCommand, true);
+		this.fireModified();
 	};
 
 	Stack.prototype.push = function(oCommand, bExecuted) {
@@ -170,7 +185,6 @@ sap.ui.define([
 		if (!bExecuted) {
 			this._toBeExecuted++;
 		}
-		this.fireModified();
 	};
 
 	Stack.prototype.top = function() {
@@ -186,7 +200,6 @@ sap.ui.define([
 
 	Stack.prototype.removeCommand = function(vObject, bSuppressInvalidate) {
 		var oRemovedCommand = this.removeAggregation("commands", vObject, bSuppressInvalidate);
-		this.fireModified();
 		return oRemovedCommand;
 	};
 
@@ -226,6 +239,12 @@ sap.ui.define([
 					oError.index = this._toBeExecuted;
 					oError.command = this.removeCommand(this._toBeExecuted); // remove failing command
 					this._toBeExecuted--;
+					var oRtaResourceBundle = Core.getLibraryResourceBundle("sap.ui.rta");
+					showMessageBox(
+						oRtaResourceBundle.getText("MSG_GENERIC_ERROR_MESSAGE", oError.message),
+						{title: oRtaResourceBundle.getText("HEADER_ERROR")},
+						"error"
+					);
 					return Promise.reject(oError);
 				}.bind(this));
 			}

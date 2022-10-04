@@ -34,7 +34,6 @@ sap.ui.define([
 	 * @public
 	 * @since 1.26
 	 * @alias sap.uxap.HierarchicalSelect
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var HierarchicalSelect = Select.extend("sap.uxap.HierarchicalSelect", /** @lends sap.uxap.HierarchicalSelect.prototype */ {
 		metadata: {
@@ -47,7 +46,9 @@ sap.ui.define([
 				 */
 				upperCase: {type: "boolean", group: "Appearance", defaultValue: false}
 			}
-		}
+		},
+
+		renderer: HierarchicalSelectRenderer
 	});
 
 	HierarchicalSelect.POPOVER_MIN_WIDTH_REM = 11;

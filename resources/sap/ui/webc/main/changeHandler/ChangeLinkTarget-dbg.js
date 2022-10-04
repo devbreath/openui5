@@ -12,7 +12,7 @@ sap.ui.define(function () {
 	 *
 	 * @alias sap.ui.webc.main.changeHandler.ChangeLinkTarget
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 */
 	var ChangeLinkTarget = {};
 

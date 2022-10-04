@@ -25,7 +25,7 @@ sap.ui.define([
 	 * @constructor
 	 * @alias sap.uxap.changeHandler.AddIFrameObjectPageLayout
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.75
 	 * @experimental Since 1.75
 	 */
@@ -43,8 +43,8 @@ sap.ui.define([
 	 */
 	AddIFrameObjectPageLayout.applyChange = function(oChange, oControl, mPropertyBag) {
 		var oModifier = mPropertyBag.modifier;
-		var oChangeDefinition = oChange.getDefinition();
-		var sAggregationName = oChangeDefinition.content.targetAggregation;
+		var oContent = oChange.getContent();
+		var sAggregationName = oContent.targetAggregation;
 		if (sAggregationName !== "sections") {
 			return Promise.resolve()
 				.then(BaseAddIFrame.applyChange.bind(BaseAddIFrame, oChange, oControl, mPropertyBag));
@@ -52,7 +52,7 @@ sap.ui.define([
 		// Create a section, sub section and insert the IFrame
 		var oView = mPropertyBag.view;
 		var oComponent = mPropertyBag.appComponent;
-		var oBaseSelector = oChangeDefinition.content.selector;
+		var oBaseSelector = oContent.selector;
 		var sDefaultTitle = sap.ui.getCore().getLibraryResourceBundle("sap.uxap").getText("SECTION_TITLE_FOR_IFRAME");
 
 		var oOPSection;
@@ -89,6 +89,19 @@ sap.ui.define([
 			.then(function () {
 				oChange.setRevertData([oModifier.getId(oOPSection)]);
 			});
+	};
+
+	AddIFrameObjectPageLayout.getCondenserInfo = function(oChange) {
+		var oCondenserInfo = Object.assign({}, BaseAddIFrame.getCondenserInfo(oChange));
+		var oChangeContent = oChange.getContent();
+		var sAggregationName = oChangeContent.targetAggregation;
+		// The update of iFrames is done on the iFrame itself - which has a different selector
+		// that needs to be passed to the condenser so it can collect all changes under the same group
+		if (sAggregationName === "sections") {
+			oCondenserInfo.updateControl = Object.assign({}, oCondenserInfo.affectedControl);
+			oCondenserInfo.updateControl.id = oCondenserInfo.affectedControl.id + '-iframe';
+		}
+		return oCondenserInfo;
 	};
 
 	return AddIFrameObjectPageLayout;

@@ -66,7 +66,7 @@ sap.ui.define([
 	 *
 	 * @constructor
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @experimental Since 1.25.0
 	 * @param {object} mComponent - Component data to initiate <code>ChangePersistence</code> instance
 	 * @param {string} mComponent.name - Name of the component this instance is responsible for
@@ -137,7 +137,7 @@ sap.ui.define([
 	/**
 	 * Verifies whether a change fulfils the preconditions.
 	 *
-	 * All changes need to have a fileName;
+	 * All changes need to have a fileType;
 	 * only changes whose <code>fileType</code> is 'change' and whose <code>changeType</code> is different from 'defaultVariant' are valid;
 	 *
 	 * @param {object} oChangeOrChangeContent Change instance or content of the change
@@ -145,14 +145,30 @@ sap.ui.define([
 	 * @returns {boolean} <code>true</code> if all the preconditions are fulfilled
 	 */
 	function preconditionsFulfilled(oChangeOrChangeContent) {
-		var oChangeContent = oChangeOrChangeContent instanceof Change ? oChangeOrChangeContent.getDefinition() : oChangeOrChangeContent;
+		var sFileType;
+		var sVariantManagementReference;
+		var sVariantReference;
+		var sSelectorId;
 
-		var bControlVariantChange = false;
-		if ((oChangeContent.fileType === "ctrl_variant") || (oChangeContent.fileType === "ctrl_variant_change") || (oChangeContent.fileType === "ctrl_variant_management_change")) {
-			bControlVariantChange = oChangeContent.variantManagementReference || oChangeContent.variantReference || (oChangeContent.selector && oChangeContent.selector.id);
+		if (oChangeOrChangeContent instanceof Change) {
+			var oChange = oChangeOrChangeContent;
+			sFileType = oChange.getFileType();
+			sVariantReference = oChange.getVariantReference();
+			sSelectorId = oChange.getSelector() && oChange.getSelector().id;
+		} else {
+			var oChangeContent = oChangeOrChangeContent;
+			sFileType = oChangeContent.fileType;
+			sVariantManagementReference = oChangeContent.variantManagementReference;
+			sVariantReference = oChangeContent.variantReference;
+			sSelectorId = oChangeContent.selector && oChangeContent.selector.id;
 		}
 
-		return oChangeContent.fileType === "change" || bControlVariantChange;
+		var bControlVariantChange = false;
+		if ((sFileType === "ctrl_variant") || (sFileType === "ctrl_variant_change") || (sFileType === "ctrl_variant_management_change")) {
+			bControlVariantChange = sVariantManagementReference || sVariantReference || sSelectorId;
+		}
+
+		return sFileType === "change" || bControlVariantChange;
 	}
 
 	/**
@@ -298,15 +314,15 @@ sap.ui.define([
 	};
 
 	/**
-	 * Checks the current dependencies map for any unresolved dependencies belonging to the given control
-	 * Returns true as soon as the first dependency is found, otherwise false
+	 * Checks the current dependencies map for any open (unresolved) dependencies belonging to the given control
+	 * and returns the IDs of the open dependent changes.
 	 *
 	 * @param {object} oSelector selector of the control
 	 * @param {sap.ui.core.Component} oAppComponent - Application component instance that is currently loading
-	 * @returns {boolean} Returns true if there are open dependencies
+	 * @returns {sap.ui.fl.Change[]} Array of all open dependent changes for the control
 	 */
-	ChangePersistence.prototype.checkForOpenDependenciesForControl = function(oSelector, oAppComponent) {
-		return DependencyHandler.checkForOpenDependenciesForControl(this._mChanges, JsControlTreeModifier.getControlIdBySelector(oSelector, oAppComponent), oAppComponent);
+	ChangePersistence.prototype.getOpenDependentChangesForControl = function(oSelector, oAppComponent) {
+		return DependencyHandler.getOpenDependentChangesForControl(this._mChanges, JsControlTreeModifier.getControlIdBySelector(oSelector, oAppComponent), oAppComponent);
 	};
 
 	function getInitalDependencyClone(oChange) {
@@ -561,7 +577,7 @@ sap.ui.define([
 			if (bAlreadyDeletedViaCondense) {
 				this.removeChange(oChange);
 				// Remove also from Cache if the persisted change is still there (e.g. navigate away and back to the app)
-				Cache.deleteChange(this._mComponent, oChange.getDefinition());
+				Cache.deleteChange(this._mComponent, oChange.convertToFileContent());
 			} else {
 				this.deleteChange(oChange);
 			}
@@ -579,16 +595,20 @@ sap.ui.define([
 		return aUniqueProperties.length === 1;
 	}
 
-	function shouldCondensingBeEnabled(oAppComponent, aChanges) {
+	function canGivenChangesBeCondensed(oAppComponent, aChanges, bCondenseAnyLayer) {
 		var bCondenserEnabled = false;
 
 		if (!oAppComponent || aChanges.length < 2 || !checkIfOnlyOne(aChanges, "getLayer")) {
 			return false;
 		}
 
-		var sLayer = aChanges[0].getLayer();
-		if ([Layer.CUSTOMER, Layer.USER].includes(sLayer)) {
+		if (bCondenseAnyLayer) {
 			bCondenserEnabled = true;
+		} else {
+			var sLayer = aChanges[0].getLayer();
+			if ([Layer.CUSTOMER, Layer.USER].includes(sLayer)) {
+				bCondenserEnabled = true;
+			}
 		}
 
 		var oUriParameters = UriParameters.fromURL(window.location.href);
@@ -613,11 +633,10 @@ sap.ui.define([
 		this._deleteNotSavedChanges(aAllChanges, aCondensedChanges, bAlreadyDeletedViaCondense);
 	}
 
-	function getAllRelevantChangesForCondensing(aDirtyChanges, aDraftFilenames) {
-		if (!aDirtyChanges.length) {
+	function getAllRelevantChangesForCondensing(aDirtyChanges, aDraftFilenames, bCondenseAnyLayer, sLayer) {
+		if (!aDirtyChanges.length && !bCondenseAnyLayer) {
 			return [];
 		}
-		var sLayer = aDirtyChanges[0].getLayer();
 		var aPersistedAndSameLayerChanges = this._mChanges.aChanges.filter(function(oChange) {
 			if (sLayer === Layer.CUSTOMER && aDraftFilenames) {
 				return oChange.getState() === Change.states.PERSISTED && aDraftFilenames.includes(oChange.getId());
@@ -625,6 +644,15 @@ sap.ui.define([
 			return oChange.getState() === Change.states.PERSISTED && LayerUtils.compareAgainstCurrentLayer(oChange.getLayer(), sLayer) === 0;
 		});
 		return aPersistedAndSameLayerChanges.concat(aDirtyChanges);
+	}
+
+	function canSingleRequestBeUsed(aDirtyChanges) {
+		if (aDirtyChanges.length) {
+			var aRequests = getRequests(aDirtyChanges);
+			var aStates = getStates(aDirtyChanges);
+			return aStates.length === 1 && aRequests.length === 1 && aStates[0] === Change.states.NEW;
+		}
+		return true;
 	}
 
 	/**
@@ -639,35 +667,35 @@ sap.ui.define([
 	 * therefore, the cache update of the current app is skipped because the dirty change is not saved for the running app.
 	 * @param {sap.ui.fl.Change} [aChanges] - If passed only those changes are saved
 	 * @param {string} sParentVersion - Parent version
-	 * @param {string[]} [aDraftFilenames] - Filesnames from persisted changes draft version
+	 * @param {string[]} [aDraftFilenames] - Filenames from persisted changes draft version
+	 * @param {boolean} [bCondenseAnyLayer] - This will enable condensing regardless of the current layer
+	 * @param {string} [sLayer] - Layer for which the changes should be saved
 	 * @returns {Promise} Resolving after all changes have been saved
 	 */
-	ChangePersistence.prototype.saveDirtyChanges = function(oAppComponent, bSkipUpdateCache, aChanges, sParentVersion, aDraftFilenames) {
+	ChangePersistence.prototype.saveDirtyChanges = function(oAppComponent, bSkipUpdateCache, aChanges, sParentVersion, aDraftFilenames, bCondenseAnyLayer, sLayer) {
 		var aDirtyChanges = aChanges || this._aDirtyChanges;
-		var aRelevantChangesForCondensing = getAllRelevantChangesForCondensing.call(this, aDirtyChanges, aDraftFilenames);
+		var sCurrentLayer = aDirtyChanges.length && aDirtyChanges[0].getLayer() || sLayer;
+		var aRelevantChangesForCondensing = getAllRelevantChangesForCondensing.call(this, aDirtyChanges, aDraftFilenames, bCondenseAnyLayer, sCurrentLayer);
 		var bIsCondensingEnabled = (
 			isBackendCondensingEnabled(aRelevantChangesForCondensing)
-			&& shouldCondensingBeEnabled(oAppComponent, aRelevantChangesForCondensing)
+			&& canGivenChangesBeCondensed(oAppComponent, aRelevantChangesForCondensing, bCondenseAnyLayer)
 		);
 		var aAllChanges = bIsCondensingEnabled ? aRelevantChangesForCondensing : aDirtyChanges;
 		var aChangesClone = aAllChanges.slice(0);
-		var aDirtyChangesClone = aDirtyChanges.slice(0);
 		var aRequests = getRequests(aDirtyChanges);
-		var aStates = getStates(aDirtyChanges);
 
-		if (aStates.length === 1 && aRequests.length === 1 && aStates[0] === Change.states.NEW) {
+		if (canSingleRequestBeUsed(aDirtyChanges)) {
 			var oCondensedChangesPromise = Promise.resolve(aChangesClone);
-			if (shouldCondensingBeEnabled(oAppComponent, aChangesClone)) {
+			if (canGivenChangesBeCondensed(oAppComponent, aChangesClone, bCondenseAnyLayer)) {
 				oCondensedChangesPromise = Condenser.condense(oAppComponent, aChangesClone);
 			}
 			return oCondensedChangesPromise.then(function(aCondensedChanges) {
 				var sRequest = aRequests[0];
-				var sLayer = aDirtyChanges[0].getLayer();
 				if (bIsCondensingEnabled) {
 					return Storage.condense({
 						allChanges: aAllChanges,
 						condensedChanges: aCondensedChanges,
-						layer: sLayer,
+						layer: sCurrentLayer,
 						transport: sRequest,
 						isLegacyVariant: false,
 						parentVersion: sParentVersion
@@ -678,7 +706,7 @@ sap.ui.define([
 				}
 				if (aCondensedChanges.length) {
 					return Storage.write({
-						layer: sLayer,
+						layer: sCurrentLayer,
 						flexObjects: prepareDirtyChanges(aCondensedChanges),
 						transport: sRequest,
 						isLegacyVariant: false,
@@ -692,7 +720,7 @@ sap.ui.define([
 			}.bind(this));
 		}
 
-		return this.saveSequenceOfDirtyChanges(aDirtyChangesClone, bSkipUpdateCache, sParentVersion);
+		return this.saveSequenceOfDirtyChanges(aDirtyChanges, bSkipUpdateCache, sParentVersion);
 	};
 
 	/**
@@ -732,13 +760,13 @@ sap.ui.define([
 				}
 				return Storage.write({
 					layer: oDirtyChange.getLayer(),
-					flexObjects: [oDirtyChange.getDefinition()],
+					flexObjects: [oDirtyChange.convertToFileContent()],
 					transport: oDirtyChange.getRequest(),
 					parentVersion: sParentVersion
 				});
 			case Change.states.DELETED:
 				return Storage.remove({
-					flexObject: oDirtyChange.getDefinition(),
+					flexObject: oDirtyChange.convertToFileContent(),
 					layer: oDirtyChange.getLayer(),
 					transport: oDirtyChange.getRequest(),
 					parentVersion: sParentVersion
@@ -967,7 +995,7 @@ sap.ui.define([
 				return false;
 			}
 
-			if (sGenerator && oChange.getDefinition().support.generator !== sGenerator) {
+			if (sGenerator && oChange.getSupportInformation().generator !== sGenerator) {
 				return false;
 			}
 

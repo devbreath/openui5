@@ -23,7 +23,7 @@ sap.ui.define(['sap/ui/commons/library', 'sap/ui/layout/form/GridContainerData']
 	 * @extends sap.ui.layout.form.GridContainerData
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -31,7 +31,6 @@ sap.ui.define(['sap/ui/commons/library', 'sap/ui/layout/form/GridContainerData']
 	 * @deprecated Since version 1.16.0.
 	 * moved to sap.ui.layout library. Please use this one.
 	 * @alias sap.ui.commons.form.GridContainerData
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var GridContainerData = LayoutGridContainerData.extend("sap.ui.commons.form.GridContainerData", /** @lends sap.ui.commons.form.GridContainerData.prototype */ { metadata : {
 

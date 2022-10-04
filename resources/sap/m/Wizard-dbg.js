@@ -82,16 +82,24 @@ sap.ui.define([
 		 * Also, in order to achieve the target Fiori design, the <code>sapUiNoContentPadding</code> class needs to be added to the {@link sap.f.DynamicPage} as well as
 		 * <code>sapUiResponsivePadding--header</code>, <code>sapUiResponsivePadding--content</code> to the <code>sap.m.Wizard</code>.
 		 *
+		 * <strong>Note:</strong> The <code>sap.m.Wizard</code> control does not support runtime (dynamic) changes to the available paths (when branching is used) or additional steps being added after the last step.
+		 * What is meant by runtime (dynamic) changes to the available paths:
+		 * If the <code>sap.m.Wizard</code> is set as branching, and the available paths are:
+		 * <ul>
+		 * <li>A -> B -> C</li>
+		 * <li>A -> B -> D</li>
+		 * </ul>
+		 * Changing the <code>subsequentSteps</code> association of step C to point to step D (creating A -> B -> C -> D path) is not supported.
+		 *
 		 * @extends sap.ui.core.Control
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
 		 * @since 1.30
 		 * @alias sap.m.Wizard
 		 * @see {@link fiori:https://experience.sap.com/fiori-design-web/wizard/ Wizard}
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var Wizard = Control.extend("sap.m.Wizard", /** @lends sap.m.Wizard.prototype */ {
 			metadata: {
@@ -207,7 +215,9 @@ sap.ui.define([
 					}
 				},
 				dnd: { draggable: false, droppable: true }
-			}
+			},
+
+			renderer: WizardRenderer
 		});
 
 		Wizard.CONSTANTS = {

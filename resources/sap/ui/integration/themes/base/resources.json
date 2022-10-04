@@ -8,7 +8,7 @@
 		},
 		{
 			"name": "ActionsStrip.less",
-			"size": 363,
+			"size": 428,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -26,7 +26,7 @@
 		},
 		{
 			"name": "Card.less",
-			"size": 839,
+			"size": 632,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -56,13 +56,13 @@
 		},
 		{
 			"name": "ListContentItem.less",
-			"size": 3387,
+			"size": 3359,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "Microchart.less",
-			"size": 606,
+			"size": 744,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -74,7 +74,7 @@
 		},
 		{
 			"name": "ObjectContent.less",
-			"size": 2233,
+			"size": 2481,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -109,22 +109,23 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 21020,
+			"size": 22640,
 			"theme": "base"
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/integration/themes/base/library-parameters.json",
 			"size": 571,
 			"theme": "base"
 		},
 		{
 			"name": "library.css",
-			"size": 21014,
+			"size": 22632,
 			"theme": "base"
 		},
 		{
 			"name": "library.less",
-			"size": 22344,
+			"size": 22560,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -136,13 +137,17 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 21807,
+			"size": 23427,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 21801,
+			"size": 23419,
 			"theme": "base"
+		},
+		{
+			"name": "resources.json",
+			"size": 2519
 		}
 	]
 }

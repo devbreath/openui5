@@ -71,10 +71,7 @@ sap.ui.define([
 			this._iTriggerTimer = 0;
 			this._aChunk = [];
 			this._oRM = null;
-
-			if (document.location.href.search("sap-ui-xx-enableItemsPool") > 0) {
-				this._aItemsPool = [];
-			}
+			this._aItemsPool = [];
 		},
 
 		/**
@@ -94,10 +91,8 @@ sap.ui.define([
 				this._oRM.destroy();
 				this._oRM = null;
 			}
-			this._aItemsPool && this._aItemsPool.forEach(function(oItem) {
-				oItem.destroy();
-			});
 
+			this.clearItemsPool();
 			this._oControl.$("triggerList").remove();
 			this._oControl.bUseExtendedChangeDetection = false;
 			this._oControl.removeDelegate(this);
@@ -169,9 +164,19 @@ sap.ui.define([
 				return;
 			}
 
+			// if the template invalidates, then also clear the itemsPool
+			this.clearItemsPool();
+
 			// if factory function is used we do not activate the replace option of the extended change detection
 			var oBindingInfo = this._oControl.getBindingInfo("items");
 			this._oControl.oExtendedChangeDetectionConfig = (!oBindingInfo || !oBindingInfo.template) ? null : {replace: true};
+		},
+
+		clearItemsPool: function() {
+			this._aItemsPool.forEach(function(oItem) {
+				oItem.destroy();
+			});
+			this._aItemsPool = [];
 		},
 
 		// determines growing reset with binding change reason
@@ -219,12 +224,8 @@ sap.ui.define([
 			// if max item count not reached or if we do not know the count
 			var oBinding = this._oControl.getBinding("items");
 			if (oBinding && !oBinding.isLengthFinal() || this._iLimit < this._oControl.getMaxItemsCount()) {
-				// The GrowingEnablement has its own busy indicator. Do not show the busy indicator, if existing, of the parent control.
-				if (this._oControl.getMetadata().hasProperty("enableBusyIndicator")) {
-					this._bParentEnableBusyIndicator = this._oControl.getEnableBusyIndicator();
-					this._oControl.setEnableBusyIndicator(false);
-				}
-
+				// block busy indicator animation from the ListBase
+				this._oControl._bBusy = true;
 				this._iLimit += this._oControl.getGrowingThreshold();
 				this._updateTriggerDelayed(true);
 				this.updateItems("Growing");
@@ -246,11 +247,6 @@ sap.ui.define([
 			this._bLoading = false;
 			this._updateTriggerDelayed(false);
 			this._oControl.onAfterPageLoaded(this.getInfo(), sChangeReason);
-
-			// After the data has been loaded, restore the busy indicator handling of the parent control.
-			if (this._oControl.setEnableBusyIndicator) {
-				this._oControl.setEnableBusyIndicator(this._bParentEnableBusyIndicator);
-			}
 		},
 
 		// created and returns load more trigger
@@ -436,13 +432,15 @@ sap.ui.define([
 		},
 
 		fillItemsPool: function() {
-			if (!this._iLimit || this._iRenderedDataItems || this._aItemsPool.length) {
+			if (!this._oControl || !this._iLimit || this._iRenderedDataItems || this._aItemsPool.length) {
 				return;
 			}
 
-			var oBindingInfo = this._oControl.getBindingInfo("items");
+			var oBindingInfo = this._oControl.getBindingInfo("items"),
+				// limit the number of items in the pool to 100, since have too many items in the pool is also not performant
+				iLimit = this._iLimit <= 100 ? this._iLimit : 100;
 			if (oBindingInfo && oBindingInfo.template) {
-				for (var i = 0; i < this._iLimit; i++) {
+				for (var i = 0; i < iLimit; i++) {
 					this._aItemsPool.push(oBindingInfo.factory());
 				}
 			}
@@ -452,8 +450,8 @@ sap.ui.define([
 		createListItem : function(oContext, oBindingInfo) {
 			this._iRenderedDataItems++;
 
-			if (this._aItemsPool && this._aItemsPool.length) {
-				return this._aItemsPool.pop().setBindingContext(oContext, oBindingInfo.model);
+			if (this._aItemsPool.length) {
+				return this._aItemsPool.shift().setBindingContext(oContext, oBindingInfo.model);
 			}
 
 			return GrowingEnablement.createItem(oContext, oBindingInfo);
@@ -588,8 +586,8 @@ sap.ui.define([
 				this._iLimit = oControl.getGrowingThreshold();
 			}
 
-			// pre-initialize items during the request is ongoing
-			if (this._aItemsPool) {
+			// pre-initialize items during the request is ongoing (but not for v1 ODataModel, since it is synchronous)
+			if (!oBinding.isA("sap.ui.model.odata.ODataListBinding")) {
 				if (oControl._bBusy) {
 					setTimeout(this.fillItemsPool.bind(this));
 				} else {

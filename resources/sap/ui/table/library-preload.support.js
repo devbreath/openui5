@@ -7,7 +7,7 @@
 /**
  * Adds support rules of the sap.ui.table library to the support infrastructure.
  */
-sap.ui.predefine('sap/ui/table/library.support',[
+sap.ui.predefine("sap/ui/table/library.support", [
 	"./rules/Accessibility.support",
 	"./rules/Binding.support",
 	"./rules/ColumnTemplate.support",
@@ -34,7 +34,7 @@ sap.ui.predefine('sap/ui/table/library.support',[
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.predefine('sap/ui/table/rules/Accessibility.support',[
+sap.ui.predefine("sap/ui/table/rules/Accessibility.support", [
 	"./TableHelper.support",
 	"sap/ui/support/library",
 	"sap/ui/core/library"
@@ -112,7 +112,7 @@ sap.ui.predefine('sap/ui/table/rules/Accessibility.support',[
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.predefine('sap/ui/table/rules/Binding.support',[
+sap.ui.predefine("sap/ui/table/rules/Binding.support", [
 	"./TableHelper.support",
 	"sap/ui/support/library",
 	"sap/base/Log"
@@ -172,7 +172,7 @@ sap.ui.predefine('sap/ui/table/rules/Binding.support',[
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.predefine('sap/ui/table/rules/ColumnTemplate.support',[
+sap.ui.predefine("sap/ui/table/rules/ColumnTemplate.support", [
 	"./TableHelper.support",
 	"sap/ui/support/library"
 ], function(SupportHelper, SupportLibrary) {
@@ -263,7 +263,7 @@ sap.ui.predefine('sap/ui/table/rules/ColumnTemplate.support',[
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.predefine('sap/ui/table/rules/Plugins.support',[
+sap.ui.predefine("sap/ui/table/rules/Plugins.support", [
 	"./TableHelper.support",
 	"sap/ui/support/library"
 ], function(SupportHelper, SupportLibrary) {
@@ -313,7 +313,7 @@ sap.ui.predefine('sap/ui/table/rules/Plugins.support',[
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.predefine('sap/ui/table/rules/Rows.support',[
+sap.ui.predefine("sap/ui/table/rules/Rows.support", [
 	"./TableHelper.support",
 	"sap/ui/support/library",
 	"sap/ui/Device",
@@ -504,7 +504,7 @@ sap.ui.predefine('sap/ui/table/rules/Rows.support',[
 /**
  * Helper functionality for table, list and tree controls for the Support Tool infrastructure.
  */
-sap.ui.predefine('sap/ui/table/rules/TableHelper.support',[
+sap.ui.predefine("sap/ui/table/rules/TableHelper.support", [
 	"sap/ui/support/library", "sap/base/Log"
 ], function(SupportLib, Log) {
 	"use strict";

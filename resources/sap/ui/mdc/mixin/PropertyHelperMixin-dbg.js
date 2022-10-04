@@ -29,7 +29,7 @@ sap.ui.define(["sap/base/util/Deferred", "sap/ui/mdc/util/loadModules", "sap/bas
 	 * </ul>
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @alias sap.ui.mdc.mixin.PropertyHelperMixin
 	 * @namespace
 	 * @since 1.100.0
@@ -251,7 +251,7 @@ sap.ui.define(["sap/base/util/Deferred", "sap/ui/mdc/util/loadModules", "sap/bas
 
 		var oDelegate;
 
-		// we need to initialize the delegate for extensions or ph overrides first
+		// we need to initialize the delegate for PropertyHelper overrides first
 		return this._oApplySettingsDeferred.promise.then(function () {
 			return this.initControlDelegate();
 		}.bind(this)).then(function (oControlDelegate) {
@@ -261,19 +261,83 @@ sap.ui.define(["sap/base/util/Deferred", "sap/ui/mdc/util/loadModules", "sap/bas
 			if (this.bIsDestroyed) {
 				return [];
 			}
-			var aResult = [aProperties];
 			if (oDelegate && typeof oDelegate.fetchPropertyExtensions === "function") {
-				return oDelegate.fetchPropertyExtensions(this, aProperties).then(function(mExtensions) {
-					return aResult.concat(mExtensions);
+				return Promise.all([
+					oDelegate.fetchPropertyExtensions(this, aProperties),
+					oDelegate.fetchPropertiesForBinding ? oDelegate.fetchPropertiesForBinding(this) : aProperties
+				]).then(function(aResult) {
+					return oDelegate.fetchPropertyExtensionsForBinding
+						? oDelegate.fetchPropertyExtensionsForBinding(this, aResult[1]).then(function(mExtensionsForBinding) {
+							return aResult.concat(mExtensionsForBinding);
+						})
+						: aResult.concat(aResult[0]);
+				}).then(function(aResult) {
+					var mExtensions = aResult[0];
+					var aPropertiesForBinding = aResult[1];
+					var mExtensionsForBinding = aResult[2];
+
+					aProperties.forEach(function(oProperty) {
+						if (oProperty.name.startsWith("$ui5.")) {
+							return;
+						}
+
+						var oExtension = mExtensions && mExtensions[oProperty.name];
+						var oPropertyForBinding = aPropertiesForBinding.find(function(oPropertyForBinding) {
+							return oPropertyForBinding.name === oProperty.name;
+						});
+						var oExtensionForBinding = mExtensionsForBinding && mExtensionsForBinding[oProperty.name];
+
+						oProperty.aggregatable = !!(oExtension && oExtension.defaultAggregate);
+						oProperty.extension = {};
+
+						if (oPropertyForBinding) {
+							oProperty.extension.technicallyGroupable = oPropertyForBinding.groupable;
+
+							if (oPropertyForBinding.propertyInfos) {
+								oPropertyForBinding.propertyInfos.forEach(function(sReferencedPropertyName) {
+									if (!oProperty.propertyInfos.includes(sReferencedPropertyName)) {
+										var oReferencedPropertyForBinding = aPropertiesForBinding.find(function(oPropertyForBinding) {
+											return oPropertyForBinding.name === sReferencedPropertyName;
+										});
+										var oReferencedExtensionForBinding = mExtensionsForBinding && mExtensionsForBinding[sReferencedPropertyName];
+										if (!aProperties.some(function(oProperty) {
+											return "$ui5." + sReferencedPropertyName === oProperty.name;
+										})) {
+											aProperties.push(Object.assign({}, oReferencedPropertyForBinding, {
+												name: "$ui5." + sReferencedPropertyName,
+												visible: false,
+												sortable: false,
+												filterable: false,
+												aggregatable: false,
+												groupable: false,
+												exportSettings: null,
+												extension: {
+													technicallyGroupable: oReferencedPropertyForBinding.groupable,
+													technicallyAggregatable: !!(oReferencedExtensionForBinding && oReferencedExtensionForBinding.defaultAggregate)
+												}
+											}));
+											oProperty.propertyInfos.push("$ui5." + sReferencedPropertyName);
+										}
+									}
+								});
+							}
+						}
+
+						if (oExtensionForBinding) {
+							oProperty.extension.technicallyAggregatable = !!(oExtensionForBinding && oExtensionForBinding.defaultAggregate);
+							oProperty.extension.customAggregate = oExtensionForBinding && oExtensionForBinding.defaultAggregate;
+						}
+					});
+					return aProperties;
 				});
 			}
-			return aResult.concat(undefined);
-		}.bind(this)).then(function(aResult) {
+			return aProperties;
+		}.bind(this)).then(function(aProperties) {
 			if (this.bIsDestroyed) {
 				return [];
 			}
-			return fetchPropertyHelperClass(this, oDelegate, aResult[0], aResult[1]).then(function(PropertyHelper) {
-				return aResult.concat(PropertyHelper);
+			return fetchPropertyHelperClass(this, oDelegate).then(function(PropertyHelper) {
+				return [aProperties, PropertyHelper];
 			});
 		}.bind(this)).then(function(aResult) {
 			if (this.bIsDestroyed) {
@@ -281,9 +345,8 @@ sap.ui.define(["sap/base/util/Deferred", "sap/ui/mdc/util/loadModules", "sap/bas
 			}
 
 			var aProperties = aResult[0];
-			var mExtensions = aResult[1];
-			var PropertyHelper = aResult[2];
-			this._oPropertyHelper = new PropertyHelper(aProperties, mExtensions, this, undefined, undefined);
+			var PropertyHelper = aResult[1];
+			this._oPropertyHelper = new PropertyHelper(aProperties, this);
 			this._bPropertyHelperInitializing = false;
 			if (bFinal) {
 				this._bPropertyHelperFinal = true;
@@ -312,7 +375,7 @@ sap.ui.define(["sap/base/util/Deferred", "sap/ui/mdc/util/loadModules", "sap/bas
 		});
 	}
 
-	function fetchPropertyHelperClass(oControl, oDelegate, aProperties) {
+	function fetchPropertyHelperClass(oControl, oDelegate) {
 		if (oDelegate && typeof oDelegate.getPropertyHelperClass === "function") {
 			var oDelegatePropertyHelperClass = oDelegate.getPropertyHelperClass();
 			var sBaseClass = oControl._oPropertyHelperClass ? oControl._oPropertyHelperClass.getMetadata().getName() : "sap.ui.mdc.util.PropertyHelper";

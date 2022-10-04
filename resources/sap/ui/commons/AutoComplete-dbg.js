@@ -32,14 +32,13 @@ sap.ui.define([
 	 * @implements sap.ui.commons.ToolbarItem
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.10.0
 	 * @deprecated Since version 1.38.
 	 * @alias sap.ui.commons.AutoComplete
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var AutoComplete = ComboBox.extend("sap.ui.commons.AutoComplete", /** @lends sap.ui.commons.AutoComplete.prototype */ { metadata : {
 
@@ -106,7 +105,6 @@ sap.ui.define([
 	 *
 	 * @param {function} [fFilter] The filter function. If not set the default filter function will be used.
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	AutoComplete.prototype.setFilterFunction = function(fFilter) {
 		if (typeof (fFilter) == "function") {

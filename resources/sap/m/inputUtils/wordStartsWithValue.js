@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define([],function(){"use strict";var w=function(t,v){var i;if(typeof t!=="string"||typeof v!=="string"){return false;}if(v===""){return true;}while(t){if(t.toLowerCase().indexOf(v.toLowerCase())===0){return true;}i=t.indexOf(' ');if(i===-1){break;}t=t.substring(i+1);}return false;};return w;});
+sap.ui.define([],function(){"use strict";var e=function(e,r){var t;if(typeof e!=="string"||typeof r!=="string"){return false}if(r===""){return true}while(e){if(e.toLowerCase().indexOf(r.toLowerCase())===0){return true}t=e.indexOf(" ");if(t===-1){break}e=e.substring(t+1)}return false};return e});
+//# sourceMappingURL=wordStartsWithValue.js.map

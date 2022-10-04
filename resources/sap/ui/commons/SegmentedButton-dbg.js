@@ -26,13 +26,12 @@ sap.ui.define([
 	 * The SegmentedButton provides a group of multiple buttons. Only one button can be active. The behaviour is more ore less like a radio button group.
 	 * @extends sap.ui.core.Control
 	 * @implements sap.ui.commons.ToolbarItem, sap.ui.core.IFormContent
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.38, replaced by {@link sap.m.SegmentedButton}
 	 * @alias sap.ui.commons.SegmentedButton
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var SegmentedButton = Control.extend("sap.ui.commons.SegmentedButton", /** @lends sap.ui.commons.SegmentedButton.prototype */ { metadata : {
 

@@ -33,12 +33,11 @@ sap.ui.define([
 		 * @extends sap.m.StandardListItem
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @private
 		 * @alias sap.m.MessageListItem
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var MessageListItem = StandardListItem.extend("sap.m.MessageListItem", /** @lends sap.m.MessageListItem.prototype */ {
 			metadata: {
@@ -54,7 +53,9 @@ sap.ui.define([
 				events: {
 					activeTitlePress: {}
 				}
-			}
+			},
+
+			renderer: MessageListItemRenderer
 		});
 
 		MessageListItem.prototype.onBeforeRendering = function () {

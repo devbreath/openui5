@@ -143,7 +143,6 @@ sap.ui.define([
 	 * @public
 	 * @alias sap.uxap.ObjectPageLayout
 	 * @since 1.26
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ObjectPageLayout = Control.extend("sap.uxap.ObjectPageLayout", /** @lends sap.uxap.ObjectPageLayout.prototype */ {
 		metadata: {
@@ -497,7 +496,9 @@ sap.ui.define([
 			},
 			dnd: { draggable: false, droppable: true },
 			designtime: "sap/uxap/designtime/ObjectPageLayout.designtime"
-		}
+		},
+
+		renderer: ObjectPageLayoutRenderer
 	});
 
 	/**
@@ -1643,7 +1644,7 @@ sap.ui.define([
 					}
 
 					if (this._shouldApplySectionTitleLevel(oSubSection)) {
-						oSubSection._setInternalTitleLevel(this._determineSectionBaseInternalTitleLevel(oSubSection), bInvalidate);
+						oSubSection._setInternalTitleLevel(this._determineSectionBaseInternalTitleLevel(oSubSection, !oFirstVisibleSection), bInvalidate);
 					}
 				}
 
@@ -1927,8 +1928,6 @@ sap.ui.define([
 
 		this._applyUxRules(true);
 
-		this._requestAdjustLayout(true);
-
 		/* reset the selected section,
 		 as the previously selected section may not be available anymore,
 		 as it might have been deleted, or emptied, or set to hidden in the previous step */
@@ -1942,6 +1941,7 @@ sap.ui.define([
 				this._setCurrentTabSection(oSelectedSection);
 				this._bAllContentFitsContainer = this._hasSingleVisibleFullscreenSubSection(oSelectedSection);
 			}
+			this._requestAdjustLayout(true);
 			if (this.getEnableLazyLoading() && this._oLazyLoading) {
 				this._oLazyLoading.doLazyLoading();
 			}
@@ -2040,13 +2040,12 @@ sap.ui.define([
 	 * @param {int} [iDuration=0] Scroll duration (in ms)
 	 * @param {int} [iOffset=0] Additional pixels to scroll
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	ObjectPageLayout.prototype.scrollToSection = function (sId, iDuration, iOffset, bIsTabClicked, bRedirectScroll) {
 		var oSection = this.oCore.byId(sId),
 			iSnapPosition,
 			oTargetSubSection,
-			bAnimationsEnabled = (sap.ui.getCore().getConfiguration().getAnimationMode()
+			bAnimationsEnabled = (Configuration.getAnimationMode()
 				!== Configuration.AnimationMode.none),
 			bSuppressLazyLoadingDuringScroll;
 
@@ -2277,7 +2276,6 @@ sap.ui.define([
 	 *
 	 * @type string
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	ObjectPageLayout.prototype.getScrollingSectionId = function () {
 		return this._sScrolledSectionId;
@@ -2710,16 +2708,23 @@ sap.ui.define([
 	 * <code>sap.ui.core.TitleLevel.H3</code> is returned for <code>ObjectPageSection</code> and
 	 * <code>sap.ui.core.TitleLevel.H4</code> for <code>ObjectPageSubSection</code>.
 	 * @param {sap.uxap.ObjectPageSectionBase} oSectionBase <code>ObjectPageSectionBase</code> instance
+	 * @param {boolean} bFirstVisibleSection if the section is the first visible section (only used when determining subsection title level)
 	 * @returns {string} <code>sap.ui.core.TitleLevel</code>
 	 * @since 1.44
 	 * @private
 	 */
-	ObjectPageLayout.prototype._determineSectionBaseInternalTitleLevel = function(oSectionBase) {
+	ObjectPageLayout.prototype._determineSectionBaseInternalTitleLevel = function(oSectionBase, bFirstVisibleSection) {
 		var sSectionBaseTitleLevel = this.getSectionTitleLevel(),
 			bIsSection = oSectionBase instanceof ObjectPageSection;
 
 		if (sSectionBaseTitleLevel === TitleLevel.Auto) {
-			return bIsSection ? TitleLevel.H3 : TitleLevel.H4;
+			// if this is a subsection contained inside the first visible section - meaning that the section's title is hidden
+			// then we need to return H3 to prevent heading levels increasing by more than one
+			if (bIsSection || (bFirstVisibleSection && !bIsSection)) {
+				// section or subsections inside the first visible section
+				return TitleLevel.H3;
+			}
+			return TitleLevel.H4;
 		}
 
 		return bIsSection ? sSectionBaseTitleLevel : ObjectPageLayout._getNextTitleLevelEntry(sSectionBaseTitleLevel);
@@ -3669,6 +3674,8 @@ sap.ui.define([
 				this.getId() + "-OPHeaderContent"
 			);
 
+			oNewHeaderContent.getContent().forEach(this._replaceHeaderContentParent, this);
+
 			sHeaderTitleBackgroundDesign && oNewHeaderContent.setBackgroundDesign(sHeaderTitleBackgroundDesign);
 			this.setAggregation("_headerContent", oNewHeaderContent, true);
 		}
@@ -3967,11 +3974,55 @@ sap.ui.define([
 		oRm.destroy();
 	};
 
+	/**
+	* Replaces the parent information for the given control,
+	* so the control would return the <code>ObjectPageLayout</code> as its parent, rather than its real parent.
+	* @param {sap.ui.core.Control} oControl
+	* @private
+	*/
+	ObjectPageLayout.prototype._replaceHeaderContentParent = function (oControl) {
+		if (oControl.getParent().isA(["sap.uxap.ObjectPageHeaderContent", "sap.uxap.ObjectPageDynamicHeaderContent"])) {
+
+			if (oControl.isA(["sap.uxap.ObjectPageHeaderContent", "sap.uxap.ObjectPageDynamicHeaderContent"])) {
+				return; // exclude nested hederContent
+			}
+
+			if (oControl._sOriginalParentAggregationName) {
+				return; // already replaced
+			}
+			oControl._sOriginalParentAggregationName = oControl.sParentAggregationName;
+			oControl.sParentAggregationName = "headerContent";
+			oControl.getParent = function () {
+				return this;
+			}.bind(this);
+			oControl.destroy = function() {
+				this._restoreParent(oControl);
+				oControl.getMetadata().getClass().prototype.destroy.apply(oControl, arguments);
+			}.bind(this);
+		}
+	};
+
+	/**
+	 * Restores the original parent information for the given control.
+	 * @param oControl
+	 * @private
+	 */
+	 ObjectPageLayout.prototype._restoreParent = function (oControl) {
+		if (oControl && oControl._sOriginalParentAggregationName) {
+			oControl.sParentAggregationName = oControl._sOriginalParentAggregationName;
+			oControl.getParent = oControl.getMetadata().getClass().prototype.getParent;
+			oControl.destroy = oControl.getMetadata().getClass().prototype.destroy;
+			oControl._sOriginalParentAggregationName = null;
+		}
+	};
+
 
 	/* Maintain ObjectPageHeaderContent aggregation */
 
 	ObjectPageLayout.prototype.getHeaderContent = function () {
-		// If header content not resolved yet - use local aggregation until it is
+		// If header content not resolved yet - use local aggregation until it is,
+		// as the header content type (ObjectPageHeaderContent vs ObjectPageDynamicHeaderContent)
+		// will be automatically resolved only after the header title is set)
 		if (!this._getHeaderContent()) {
 			return this.getAggregation("headerContent", []);
 		}
@@ -3980,43 +4031,65 @@ sap.ui.define([
 	};
 
 	ObjectPageLayout.prototype.insertHeaderContent = function (oObject, iIndex, bSuppressInvalidate) {
-		// If header content not resolved yet - use local aggregation until it is
+		// If header content not resolved yet - use local aggregation until it is,
+		// as the header content type (ObjectPageHeaderContent vs ObjectPageDynamicHeaderContent)
+		// will be automatically resolved only after the header title is set)
 		if (!this._getHeaderContent()) {
 			return this.insertAggregation("headerContent", oObject, iIndex, bSuppressInvalidate);
 		}
 
-		return this._getHeaderContent().insertAggregation("content", oObject, iIndex, bSuppressInvalidate);
+		this._getHeaderContent().insertAggregation("content", oObject, iIndex, bSuppressInvalidate);
+		this._replaceHeaderContentParent(oObject);
+		return this;
 	};
 
 	ObjectPageLayout.prototype.addHeaderContent = function (oObject, bSuppressInvalidate) {
-		// If header content not resolved yet - use local aggregation until it is
+		// If header content not resolved yet - use local aggregation until it is,
+		// as the header content type (ObjectPageHeaderContent vs ObjectPageDynamicHeaderContent)
+		// will be automatically resolved only after the header title is set)
 		if (!this._getHeaderContent()) {
 			return this.addAggregation("headerContent", oObject, bSuppressInvalidate);
 		}
 
-		return this._getHeaderContent().addAggregation("content", oObject, bSuppressInvalidate);
+		this._getHeaderContent().addAggregation("content", oObject, bSuppressInvalidate);
+		this._replaceHeaderContentParent(oObject);
+		return this;
 	};
 
 	ObjectPageLayout.prototype.removeAllHeaderContent = function (bSuppressInvalidate) {
-		// If header content not resolved yet - use local aggregation until it is
+		var aResult;
+		// If header content not resolved yet - use local aggregation until it is,
+		// as the header content type (ObjectPageHeaderContent vs ObjectPageDynamicHeaderContent)
+		// will be automatically resolved only after the header title is set)
 		if (!this._getHeaderContent()) {
 			return this.removeAllAggregation("headerContent", bSuppressInvalidate);
 		}
 
-		return this._getHeaderContent().removeAllAggregation("content", bSuppressInvalidate);
+		aResult = this._getHeaderContent().removeAllAggregation("content", bSuppressInvalidate);
+		aResult.forEach(function(oItem) {
+			this._restoreParent(oItem);
+		}, this);
+
+		return aResult;
 	};
 
 	ObjectPageLayout.prototype.removeHeaderContent = function (oObject, bSuppressInvalidate) {
-		// If header content not resolved yet - use local aggregation until it is
+		// If header content not resolved yet - use local aggregation until it is,
+		// as the header content type (ObjectPageHeaderContent vs ObjectPageDynamicHeaderContent)
+		// will be automatically resolved only after the header title is set)
 		if (!this._getHeaderContent()) {
 			return this.removeAggregation("headerContent", oObject, bSuppressInvalidate);
 		}
 
-		return this._getHeaderContent().removeAggregation("content", oObject, bSuppressInvalidate);
+		this._getHeaderContent().removeAggregation("content", oObject, bSuppressInvalidate);
+		this._restoreParent(oObject);
+		return this;
 	};
 
 	ObjectPageLayout.prototype.destroyHeaderContent = function (bSuppressInvalidate) {
-		// If header content not resolved yet - use local aggregation until it is
+		// If header content not resolved yet - use local aggregation until it is,
+		// as the header content type (ObjectPageHeaderContent vs ObjectPageDynamicHeaderContent)
+		// will be automatically resolved only after the header title is set)
 		if (!this._getHeaderContent()) {
 			return this.destroyAggregation("headerContent", bSuppressInvalidate);
 		}
@@ -4025,7 +4098,9 @@ sap.ui.define([
 	};
 
 	ObjectPageLayout.prototype.indexOfHeaderContent = function (oObject) {
-		// If header content not resolved yet - use local aggregation until it is
+		// If header content not resolved yet - use local aggregation until it is,
+		// as the header content type (ObjectPageHeaderContent vs ObjectPageDynamicHeaderContent)
+		// will be automatically resolved only after the header title is set)
 		if (!this._getHeaderContent()) {
 			return this.indexOfAggregation("headerContent", oObject);
 		}

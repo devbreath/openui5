@@ -96,7 +96,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.designtime.baseEditor.propertyEditor.mapEditor.MapEditor
 	 * @author SAP SE
 	 * @since 1.74
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @private
 	 * @experimental 1.74

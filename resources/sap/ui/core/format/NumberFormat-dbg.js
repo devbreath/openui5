@@ -11,10 +11,11 @@ sap.ui.define([
 	'sap/ui/core/LocaleData',
 	'sap/base/Log',
 	'sap/base/assert',
-	'sap/base/util/extend'
+	'sap/base/util/extend',
+	'sap/ui/core/Configuration'
 
 ],
-	function(BaseObject, Locale, LocaleData, Log, assert, extend) {
+	function(BaseObject, Locale, LocaleData, Log, assert, extend, Configuration) {
 	"use strict";
 
 
@@ -880,7 +881,7 @@ sap.ui.define([
 			oFormatOptions = undefined;
 		}
 		if (!oLocale) {
-			oLocale = sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale();
+			oLocale = Configuration.getFormatSettings().getFormatLocale();
 		}
 		oFormat.oLocale = oLocale;
 		oFormat.oLocaleData = LocaleData.getInstance(oLocale);
@@ -1631,7 +1632,7 @@ sap.ui.define([
 	};
 
 	NumberFormat.prototype._addOriginInfo = function(sResult) {
-		if (sap.ui.getCore().getConfiguration().getOriginInfo()) {
+		if (Configuration.getOriginInfo()) {
 			// String object is created on purpose and must not be a string literal
 			// eslint-disable-next-line no-new-wrappers
 			sResult = new String(sResult);
@@ -1709,7 +1710,7 @@ sap.ui.define([
 	 * Parse a string which is formatted according to the given format options.
 	 *
 	 * @param {string} sValue the string containing a formatted numeric value
-	 * @return {number|array|string} the parsed value as:
+	 * @return {number|array|string|null} the parsed value as:
 	 * <ul>
 	 *  <li>number</li>
 	 *  <li>array which contains the parsed value and the currency code (symbol) or unit for currency and unit instances</li>
@@ -2310,7 +2311,7 @@ sap.ui.define([
 	 * @returns {boolean}
 	 */
 	function showTrailingCurrencyCode(oFormatOptions) {
-		var bShowTrailingCurrencyCodes = sap.ui.getCore().getConfiguration().getFormatSettings().getTrailingCurrencyCode();
+		var bShowTrailingCurrencyCodes = Configuration.getFormatSettings().getTrailingCurrencyCode();
 		if (oFormatOptions) {
 
 			// overwritten by instance configuration

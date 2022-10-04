@@ -52,7 +52,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor
 	 * @author SAP SE
 	 * @since 1.70
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @private
 	 * @experimental 1.70
@@ -277,20 +277,23 @@ sap.ui.define([
 			}
 		},
 
-		renderer: function (oRm, oPropertyEditor) {
-			oRm.openStart("div", oPropertyEditor);
-			oRm.addStyle("display", "inline-block");
-			oRm.addStyle("width", "100%");
-			oRm.openEnd();
-
-			if (oPropertyEditor.getRenderLabel() && oPropertyEditor.getLabel()) {
-				oRm.openStart("div");
+		renderer: {
+			apiVersion: 2,
+			render: function (oRm, oPropertyEditor) {
+				oRm.openStart("div", oPropertyEditor);
+				oRm.style("display", "inline-block");
+				oRm.style("width", "100%");
 				oRm.openEnd();
-				oRm.renderControl(oPropertyEditor.getLabel());
+
+				if (oPropertyEditor.getRenderLabel() && oPropertyEditor.getLabel()) {
+					oRm.openStart("div");
+					oRm.openEnd();
+					oRm.renderControl(oPropertyEditor.getLabel());
+					oRm.close("div");
+				}
+				oRm.renderControl(oPropertyEditor.getContent());
 				oRm.close("div");
 			}
-			oRm.renderControl(oPropertyEditor.getContent());
-			oRm.close("div");
 		}
 	});
 

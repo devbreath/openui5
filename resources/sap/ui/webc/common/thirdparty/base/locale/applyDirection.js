@@ -1,1 +1,2 @@
-sap.ui.define(["../Render","./directionChange"],function(e,n){"use strict";const r=async()=>{const r=n.fireDirectionChange();await Promise.all(r);await e.reRenderAllUI5Elements({rtlAware:true})};return r});
+sap.ui.define(["exports","../Render","./directionChange"],function(e,t,r){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;const a=async()=>{const e=(0,r.fireDirectionChange)();await Promise.all(e);await(0,t.reRenderAllUI5Elements)({rtlAware:true})};var i=a;e.default=i});
+//# sourceMappingURL=applyDirection.js.map

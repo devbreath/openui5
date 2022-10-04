@@ -37,13 +37,12 @@ sap.ui.define([
 	 * DataSetSimpleView provides a simple view example for DataSet usage.
 	 * @extends sap.ui.core.Control
 	 * @implements sap.ui.ux3.DataSetView
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. Use a layout by choice from the {@link sap.m} library, instead.
 	 * @alias sap.ui.ux3.DataSetSimpleView
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var DataSetSimpleView = Control.extend("sap.ui.ux3.DataSetSimpleView", /** @lends sap.ui.ux3.DataSetSimpleView.prototype */ { metadata : {
 

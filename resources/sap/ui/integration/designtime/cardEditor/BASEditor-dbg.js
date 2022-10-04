@@ -40,6 +40,55 @@ sap.ui.define([
 		failOnError: false,
 		async: false
 	});
+	function json2str(o, nLevel) {
+		nLevel = nLevel || 0;
+		var sSuf = "\n";
+		var sPre = "\n\t";
+		for (var i = 0; i < nLevel; i++) {
+			sPre += "\t";
+			sSuf += "\t";
+		}
+
+		if (!o) {
+			return "";
+		}
+		var bIsArray = Array.isArray(o);
+		var arr = [];
+		var fmt = function(s) {
+			if (deepEqual(s, {})) {
+				return "{}";
+			}
+			if (typeof s === "object" && s !== null) {
+				return json2str(s, nLevel + 1);
+			}
+			if (typeof s === "function") {
+				return s.toString();
+			}
+			if (typeof s === "string") {
+				return "\"" + s + "\"";
+			}
+			if (typeof s === "undefined") {
+				return undefined;
+			}
+			return s;
+		};
+		for (var i in o) {
+			var m = fmt(o[i]);
+			if (typeof m !== "undefined") {
+				if (!bIsArray) {
+					m = "\"" + i + "\": " + m;
+				}
+				arr.push(m);
+			}
+		}
+		var sResult = arr.join(',' + sPre);
+		if (bIsArray) {
+			sResult = "[" + sPre + sResult + sSuf + "]";
+		} else {
+			sResult = "{" + sPre + sResult + sSuf + "}";
+		}
+		return sResult;
+	}
 
 	/**
 	 * @constructor
@@ -124,7 +173,7 @@ sap.ui.define([
 					oItem = merge({}, oCopyConfig.form.items[n]);
 					if (!mParameters[n]) {
 						if (mParametersInDesigntime[n]) {
-							if (oItem.type === "group" || oItem.type === "separater") {
+							if (oItem.type === "group" || oItem.type === "separator") {
 								mParameters[n] = {};
 							} else if (oItem.manifestpath && !oItem.manifestpath.startsWith("/sap.card/configuration/parameters")) {
 								var sPath = oItem.manifestpath;
@@ -377,9 +426,9 @@ sap.ui.define([
 	};
 
 	BASEditor.prototype._cleanConfig = function (oConfig, bString) {
-		var oConfig = merge({}, oConfig);
-		for (var n in oConfig.form.items) {
-			var oItem = oConfig.form.items[n];
+		var oNewConfig = merge({}, oConfig);
+		for (var n in oNewConfig.form.items) {
+			var oItem = oNewConfig.form.items[n];
 			//If is icon
 			if (oItem.type === "simpleicon") {
 				if (!oItem.visualization) {
@@ -406,13 +455,13 @@ sap.ui.define([
 			delete oItem.value;
 		}
 		if (bString) {
-			var sConfig = JSON.stringify(oConfig, null, "\t");
+			var sConfig = json2str(oNewConfig);
 			sConfig = sConfig.replace(/\"\$\$([a-zA-Z]*)\$\$\"/g, function (s) {
 				return s.substring(3, s.length - 3);
 			});
 			return sConfig;
 		}
-		return oConfig;
+		return oNewConfig;
 	};
 
 	BASEditor.prototype._generateMetadataFromJSConfig = function (oDesigntimeJSConfig) {

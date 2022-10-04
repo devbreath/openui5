@@ -19,6 +19,7 @@ sap.ui.define([
 	'sap/ui/util/ActivityDetection',
 	'sap/ui/Device',
 	'sap/base/assert',
+	'sap/ui/core/Configuration',
 	// jQuery Plugin 'scrollRightRTL'
 	'sap/ui/dom/jquery/scrollRightRTL',
 	// jQuery Plugin 'scrollLeftRTL'
@@ -37,7 +38,8 @@ sap.ui.define([
 		denormalizeScrollLeftRTL,
 		ActivityDetection,
 		Device,
-		assert
+		assert,
+		Configuration
 	) {
 	"use strict";
 
@@ -62,13 +64,12 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.38. Instead, use the <code>sap.m.IconTabBar</code>, <code>sap.m.TabContainer</code> or <code>sap.uxap.ObjectPageLayout</code> control.
 	 * @alias sap.ui.ux3.NavigationBar
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var NavigationBar = Control.extend("sap.ui.ux3.NavigationBar", /** @lends sap.ui.ux3.NavigationBar.prototype */ { metadata : {
 
@@ -144,7 +145,7 @@ sap.ui.define([
 		this._bPreviousScrollForward = false; // remember the item overflow state
 		this._bPreviousScrollBack = false;
 		this._iLastArrowPos = -100; // this property is always read and applied as "left"/"right" depending on RTL configuration
-		this._bRtl = sap.ui.getCore().getConfiguration().getRTL();
+		this._bRtl = Configuration.getRTL();
 
 		this.allowTextSelection(false);
 
@@ -548,7 +549,7 @@ sap.ui.define([
 		var li = jQuery(item.parentNode);
 		var ul = li.parent();
 		var targetPos;
-		var bRtl = sap.ui.getCore().getConfiguration().getRTL();
+		var bRtl = Configuration.getRTL();
 
 		// special handling for first and last item to not only scroll them into view but to scroll to the very start/end
 		var index = li.index() - 1; // -1 because of leading dummy item
@@ -802,7 +803,6 @@ sap.ui.define([
 	 *         The items to associate
 	 * @type this
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	NavigationBar.prototype.setAssociatedItems = function(aItems /* bResetArrowPosition */) { // second parameter is currently not in the public API
 		assert(Array.isArray(aItems), "aItems must be an array");
@@ -859,7 +859,6 @@ sap.ui.define([
 	 *
 	 * @type boolean
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	NavigationBar.prototype.isSelectedItemValid = function() {
 		var selId = this.getSelectedItem();

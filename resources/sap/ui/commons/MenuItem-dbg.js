@@ -22,14 +22,13 @@ sap.ui.define(['./MenuItemBase', './library', 'sap/ui/unified/MenuItem'],
 	 * @extends sap.ui.unified.MenuItem
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.0.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.21.0, replaced by {@link sap.ui.unified.MenuItem}
 	 * @alias sap.ui.commons.MenuItem
-	 * @ui5-metamodel This control/element will also be described in the UI5 (legacy) design time meta model
 	 */
 	var MenuItem = UnifiedMenuItem.extend("sap.ui.commons.MenuItem", /** @lends sap.ui.commons.MenuItem.prototype */ { metadata : {
 

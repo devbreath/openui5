@@ -39,7 +39,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class Container for the {@link sap.ui.mdc.ValueHelp ValueHelp} element showing a dialog.
 	 * @extends sap.ui.mdc.valuehelp.base.Container
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -47,14 +47,14 @@ sap.ui.define([
 	 * @since 1.95.0
 	 * @experimental As of version 1.95
 	 * @alias sap.ui.mdc.valuehelp.Dialog
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Dialog = Container.extend("sap.ui.mdc.valuehelp.Dialog", /** @lends sap.ui.mdc.valuehelp.Dialog.prototype */
 	{
 		metadata: {
 			library: "sap.ui.mdc",
 			interfaces: [
-				"sap.ui.mdc.valuehelp.IDialogContainer"
+				"sap.ui.mdc.valuehelp.IDialogContainer",
+				"sap.ui.core.PopupInterface"
 			],
 			properties: {
 				_selectedContentKey: {
@@ -396,7 +396,7 @@ sap.ui.define([
 		return this._retrievePromise("collectiveSearchSelect", function (){
 			return loadModules([
 				"sap/ui/mdc/filterbar/vh/CollectiveSearchSelect",
-				"sap/ui/core/Item",
+				"sap/m/VariantItem",
 				"sap/ui/model/json/JSONModel"
 			]).then(
 				function (aModules) {
@@ -412,9 +412,7 @@ sap.ui.define([
 							this.getId() + "-collSearchItem",
 							{
 								key: "{$select>key}",
-								text: "{$select>text}",
-								enabled: true
-								/*textDirection: "{$contenthelp>textDirection}" */
+								text: "{$select>text}"
 							}
 						);
 						this._oGroupSelect = new CollectiveSearchSelect(this.getId() + "--Select",
@@ -630,7 +628,7 @@ sap.ui.define([
 		var oValueHelpModel = this.getModel("$valueHelp");
 		var oConfig = oValueHelpModel ? oValueHelpModel.getProperty("/_config") : {};
 		var oParent = this.getParent();
-		var oControl = this._getControl();
+		var oControl = this.getControl();
 		return { // TODO: is more needed?
 			maxConditions: -1, // as for tokens there should not be a limit on type side
 			valueType: oConfig.dataType,
@@ -653,6 +651,7 @@ sap.ui.define([
 			if (bBind) {
 				if (!oBindingInfo) { // not bound -> create binding
 					var oFilter = new Filter({path:'isEmpty', operator:'NE', value1:true});
+					this._oConditionType.setFormatOptions(_getConditionFormatOptions.call(this)); // as config might be changed
 					var oTokenTemplate = new Token(this.getId() + "-Token", {text: {path: '$valueHelp>', type: this._oConditionType}});
 					this.oTokenizer.bindAggregation("tokens", {path: '/conditions', model: "$valueHelp", templateShareable: false, template: oTokenTemplate, filters: oFilter});
 				}
@@ -664,6 +663,9 @@ sap.ui.define([
 	}
 
 	Dialog.prototype._open = function (oDialog) {
+
+		this._mAlreadyShownContents = {};
+
 		if (oDialog) {
 			this._updateInitialContentKey(); // Update initial key as visibilities might change during content retrieval
 
@@ -702,16 +704,21 @@ sap.ui.define([
 			throw new Error("sap.ui.mdc.ValueHelp: No content found.");
 		}
 
-		var aNecessaryPromises = [oNextContent.getContent(), oNextContent.onBeforeShow()];
+		var aNecessaryPromises = [oNextContent.getContent()];
 		var sSelectedContentGroup = oNextContent.getGroup && oNextContent.getGroup();
 		var oGroupSelectPromise;
 		if (sSelectedContentGroup && _isValidContentGroup.call(this, sSelectedContentGroup)) {
 			oGroupSelectPromise = this._retrieveGroupSelect();
 			aNecessaryPromises.push(oGroupSelectPromise);
 		}
-		return Promise.all(aNecessaryPromises).then(function (aPromiseResults) {
+		var bAlreadyShown = !this._mAlreadyShownContents[sNextContentId];
 
+		return Promise.all(aNecessaryPromises).then(function () {
 			this._bindContent(oNextContent);
+		}.bind(this)).then(function () {
+			return Promise.resolve(oNextContent.onBeforeShow(bAlreadyShown));
+		}).then(function () {
+			this._mAlreadyShownContents[sNextContentId] = true;
 			this.setProperty("_selectedContentKey", sNextContentId);
 			this.setProperty("_selectableContents", this._getSelectableContents());
 			this._oManagedObjectModel.checkUpdate(true, false, function (oBinding) { // force update as bindings to $help>displayContent are not updated automatically in some cases
@@ -732,7 +739,7 @@ sap.ui.define([
 			}
 
 			return this._retrievePromise("open").then(function () {
-				oNextContent.onShow();
+				oNextContent.onShow(bAlreadyShown);
 				return oNextContent;
 			});
 		}.bind(this));
@@ -783,7 +790,8 @@ sap.ui.define([
 			"_oIconTabBar",
 			"_oGroupSelect",
 			"_oGroupSelectModel",
-			"_sInitialContentKey"
+			"_sInitialContentKey",
+			"_mAlreadyShownContents"
 		]);
 
 		Container.prototype.exit.apply(this, arguments);

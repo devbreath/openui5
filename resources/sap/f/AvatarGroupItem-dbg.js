@@ -32,14 +32,13 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @experimental Since 1.73. This class is experimental and provides only limited functionality. Also the API might be changed in future.
 	 * @since 1.73
 	 * @alias sap.f.AvatarGroupItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var AvatarGroupItem = Control.extend("sap.f.AvatarGroupItem", {
 		metadata: {
@@ -65,7 +64,9 @@ sap.ui.define([
 				 */
 				fallbackIcon: {type: "string", group: "Data", defaultValue: null}
 			}
-		}
+		},
+
+		renderer: AvatarGroupItemRenderer
 	});
 
 	AvatarGroupItem.prototype.onBeforeRendering = function () {

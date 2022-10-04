@@ -29,7 +29,7 @@ sap.ui.define([
 	 * <h3>Usage</h3> <code>sap.ui.webc.main.TreeItem</code> is an abstract element, representing a node in a <code>sap.ui.webc.main.Tree</code>. The tree itself is rendered as a list, and each <code>sap.ui.webc.main.TreeItem</code> is represented by a list item(<code>sap.ui.webc.main.TreeListItem</code>) in that list. Therefore, you should only use <code>sap.ui.webc.main.TreeItem</code> directly in your apps. The <code>sap.ui.webc.main.TreeListItem</code> list item is internal for the list, and not intended for public use.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -37,7 +37,6 @@ sap.ui.define([
 	 * @experimental Since 1.92.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.TreeItem
 	 * @implements sap.ui.webc.main.ITreeItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var TreeItem = WebComponent.extend("sap.ui.webc.main.TreeItem", {
 		metadata: {

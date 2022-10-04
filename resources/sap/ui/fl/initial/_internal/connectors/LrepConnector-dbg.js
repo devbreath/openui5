@@ -93,7 +93,7 @@ sap.ui.define([
 
 			var mParameters = _pick(mPropertyBag, ["version", "allContexts"]);
 			this._addClientInfo(mParameters);
-			Utils.addLanguageInfo(mParameters);
+			Utils.addSAPLogonLanguageInfo(mParameters);
 			var sAppDescriptorId;
 			if (mPropertyBag.appDescriptor && mPropertyBag.appDescriptor["sap.app"]) {
 				sAppDescriptorId = mPropertyBag.appDescriptor["sap.app"].id;
@@ -108,14 +108,12 @@ sap.ui.define([
 
 			var sDataUrl = Utils.getUrl(ROUTES.DATA, mPropertyBag, mParameters);
 			return Utils.sendRequest(sDataUrl, "GET", {
+				initialConnector: this,
 				xsrfToken: this.xsrfToken,
 				siteId: mPropertyBag.siteId,
 				sAppDescriptorId: sAppDescriptorId
 			}).then(function (oResult) {
 				var oResponse = oResult.response;
-				if (oResult.xsrfToken) {
-					this.xsrfToken = oResult.xsrfToken;
-				}
 				if (oResult.etag) {
 					oResponse.cacheKey = oResult.etag;
 				} else if (mPropertyBag.cacheKey) {

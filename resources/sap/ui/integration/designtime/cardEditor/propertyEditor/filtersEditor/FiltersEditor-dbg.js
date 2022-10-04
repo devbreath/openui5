@@ -43,7 +43,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.designtime.cardEditor.propertyEditor.filtersEditor.FiltersEditor
 	 * @author SAP SE
 	 * @since 1.98
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @private
 	 * @experimental 1.97
@@ -176,7 +176,7 @@ sap.ui.define([
 					dateRangeValues: {
 						label: this.getI18nProperty("CARD_EDITOR.FILTER.VALUE.VALUES"),
 						path: "dValue/values",
-						type: "textArea",
+						type: "code",
 						visible: "{= ${type} === 'DateRange'}"
 					}
 				}

@@ -93,7 +93,7 @@ sap.ui.define([
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout MDN web docs: CSS Grid Layout}
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @extends sap.m.ListBase
 	 * @implements sap.ui.layout.cssgrid.IGridConfigurable
@@ -102,51 +102,54 @@ sap.ui.define([
 	 * @constructor
 	 * @public
 	 * @alias sap.f.GridList
-	 * @ui5-metamodel This control/element will also be described in the UI5 (legacy) designtime metamodel
 	 */
-	var GridList = ListBase.extend("sap.f.GridList", { metadata : {
-		library: "sap.f",
-		interfaces: [
-			"sap.ui.layout.cssgrid.IGridConfigurable",
-			"sap.f.dnd.IGridDroppable"
-		],
-		aggregations: {
+	var GridList = ListBase.extend("sap.f.GridList", {
+		metadata : {
+			library: "sap.f",
+			interfaces: [
+				"sap.ui.layout.cssgrid.IGridConfigurable",
+				"sap.f.dnd.IGridDroppable"
+			],
+			aggregations: {
 
-			/**
-			 * Defines a custom grid layout
-			 */
-			customLayout: { type: "sap.ui.layout.cssgrid.GridLayoutBase", multiple: false }
-		},
-		events: {
-			/**
-			 * Fires if the border of the visualizations is reached
-			 * so that an application can react on this.
-			 */
-			borderReached: {
-				parameters: {
+				/**
+				 * Defines a custom grid layout
+				 */
+				customLayout: { type: "sap.ui.layout.cssgrid.GridLayoutBase", multiple: false }
+			},
+			events: {
+				/**
+				 * Fires if the border of the visualizations is reached
+				 * so that an application can react on this.
+				 */
+				borderReached: {
+					parameters: {
 
-					/**
-					 * Event that leads to the focus change.
-					 */
-					event: { type: "jQuery.Event" },
-					/**
-					 * The navigation direction that is used to reach the border.
-					 */
-					direction: {type: "sap.f.NavigationDirection"},
+						/**
+						 * Event that leads to the focus change.
+						 */
+						event: { type: "jQuery.Event" },
+						/**
+						 * The navigation direction that is used to reach the border.
+						 */
+						direction: {type: "sap.f.NavigationDirection"},
 
-					/**
-					 * The row index, from which the border is reached.
-					 */
-					row: {type: "int"},
+						/**
+						 * The row index, from which the border is reached.
+						 */
+						row: {type: "int"},
 
-					/**
-					 * The the column index, from which the border is reached.
-					 */
-					column: {type: "int"}
+						/**
+						 * The the column index, from which the border is reached.
+						 */
+						column: {type: "int"}
+					}
 				}
 			}
-		}
-	}});
+		},
+
+		renderer: GridListRenderer
+	});
 
 	/**
 	 * =================== START of lifecycle methods & delegate handling ===================

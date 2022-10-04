@@ -11,13 +11,13 @@ sap.ui.define([
 	'sap/ui/core/Control',
 	'sap/ui/core/ListItem',
 	'sap/ui/core/library',
-	"sap/ui/core/Renderer",
+	'sap/ui/core/Renderer',
 	'sap/ui/core/message/MessageMixin',
 	'sap/m/DynamicDateFormat',
 	'sap/m/DynamicDateUtil',
 	'sap/ui/core/IconPool',
 	'sap/ui/core/Icon',
-	"sap/ui/core/LabelEnablement",
+	'sap/ui/core/LabelEnablement',
 	'sap/ui/core/format/DateFormat',
 	'sap/ui/core/format/TimezoneUtil',
 	'sap/ui/base/ManagedObjectObserver',
@@ -38,8 +38,9 @@ sap.ui.define([
 	'./StandardDynamicDateOption',
 	'./library',
 	'sap/ui/thirdparty/jquery',
-	'sap/ui/dom/jquery/Focusable'], // provides jQuery.fn.firstFocusableDomRef
-	function(
+	'sap/ui/core/Configuration',
+	'sap/ui/dom/jquery/Focusable' // provides jQuery.fn.firstFocusableDomRef
+], function(
 		InvisibleText,
 		Element,
 		Control,
@@ -71,7 +72,8 @@ sap.ui.define([
 		DynamicDateRangeRenderer,
 		StandardDynamicDateOption,
 		library,
-		jQuery
+		jQuery,
+		Configuration
 	) {
 		"use strict";
 
@@ -121,13 +123,12 @@ sap.ui.define([
 		 * is opened. The dialog is closed via a date time period value selection or by pressing the "Cancel" button.
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
 		 * @since 1.92.0
 		 * @alias sap.m.DynamicDateRange
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 * @extends sap.ui.core.Control
 		 * @experimental Since 1.92. This class is experimental and provides only limited functionality. Also the API might be changed in future.
 		 */
@@ -734,7 +735,7 @@ sap.ui.define([
 
 		DynamicDateRange.prototype._convertDate = function(oDate, bUTCTimezone) {
 			var sFormattedDate = this._getPickerParser().format(oDate, TimezoneUtil.getLocalTimezone());
-			var sFormatTimezone = bUTCTimezone ? "UTC" : sap.ui.getCore().getConfiguration().getTimezone();
+			var sFormatTimezone = bUTCTimezone ? "UTC" : Configuration.getTimezone();
 			var oParts = this._getPickerParser().parse(
 				sFormattedDate,
 				sFormatTimezone
@@ -747,7 +748,7 @@ sap.ui.define([
 		DynamicDateRange.prototype._reverseConvertDate = function(oDate) {
 			var sFormattedDate = this._getPickerParser().format(
 				oDate,
-				sap.ui.getCore().getConfiguration().getTimezone()
+				Configuration.getTimezone()
 			);
 			var oParts = this._getPickerParser().parse(
 				sFormattedDate,
@@ -1471,7 +1472,7 @@ sap.ui.define([
 		DynamicDateRangeInput.prototype.onfocusin = function (oEvent) {
 			var oPopup = this._getControlOrigin()._oPopup;
 			Input.prototype.onfocusin.apply(this, arguments);
-			if (oPopup && oPopup.isOpen() && (Device.system.desktop || Device.system.combi)) {
+			if (oPopup && oPopup.isOpen() && !Device.system.tablet && !Device.system.mobile) {
 				this._getControlOrigin()._closePopup();
 			}
 		};

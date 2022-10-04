@@ -23,7 +23,7 @@ sap.ui.define([
 	 * @extends sap.m.table.columnmenu.QuickActionBase
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @private
 	 * @experimental
@@ -63,9 +63,11 @@ sap.ui.define([
 		var aItems = this.getItems();
 		var aEffectiveQuickActions = [];
 
-		aItems.forEach(function(oItem) {
-			aEffectiveQuickActions.push(oItem._getAction());
-		}, this);
+		if (this.getVisible()) {
+			aItems.forEach(function(oItem) {
+				aEffectiveQuickActions.push(oItem._getAction());
+			}, this);
+		}
 
 		return aEffectiveQuickActions;
 	};

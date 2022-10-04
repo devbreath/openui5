@@ -31,6 +31,12 @@
 			"theme": "base"
 		},
 		{
+			"name": "ActionTile.less",
+			"size": 6472,
+			"designtime": true,
+			"theme": "base"
+		},
+		{
 			"name": "App.less",
 			"size": 174,
 			"designtime": true,
@@ -44,7 +50,7 @@
 		},
 		{
 			"name": "Bar.less",
-			"size": 4212,
+			"size": 4364,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -80,13 +86,13 @@
 		},
 		{
 			"name": "Carousel.less",
-			"size": 12883,
+			"size": 12987,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "CellSelector.less",
-			"size": 232,
+			"size": 3799,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -176,7 +182,7 @@
 		},
 		{
 			"name": "DisplayListItem.less",
-			"size": 1329,
+			"size": 1342,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -254,7 +260,7 @@
 		},
 		{
 			"name": "GenericTile.less",
-			"size": 43618,
+			"size": 43726,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -272,7 +278,7 @@
 		},
 		{
 			"name": "IconTabBar.less",
-			"size": 38899,
+			"size": 38993,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -338,7 +344,7 @@
 		},
 		{
 			"name": "Link.less",
-			"size": 2786,
+			"size": 2853,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -554,7 +560,7 @@
 		},
 		{
 			"name": "Page.less",
-			"size": 8449,
+			"size": 8512,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -1022,7 +1028,7 @@
 		},
 		{
 			"name": "css_variables.css",
-			"size": 46045,
+			"size": 47293,
 			"theme": "base"
 		},
 		{
@@ -1033,7 +1039,7 @@
 		},
 		{
 			"name": "css_variables.source.less",
-			"size": 171680,
+			"size": 173747,
 			"designtime": true,
 			"theme": "base"
 		},
@@ -1839,39 +1845,40 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 637834,
+			"size": 645056,
 			"theme": "base"
 		},
 		{
 			"name": "library-parameters.json",
-			"size": 19324,
+			"module": "sap/m/themes/base/library-parameters.json",
+			"size": 19930,
 			"theme": "base"
 		},
 		{
 			"name": "library.css",
-			"size": 637843,
+			"size": 645065,
 			"theme": "base"
 		},
 		{
 			"name": "library.less",
-			"size": 713534,
+			"size": 724234,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "library.source.less",
-			"size": 5558,
+			"size": 5585,
 			"designtime": true,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 674859,
+			"size": 681931,
 			"theme": "base"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 674868,
+			"size": 681940,
 			"theme": "base"
 		},
 		{
@@ -1891,6 +1898,10 @@
 			"size": 923,
 			"designtime": true,
 			"theme": "base"
+		},
+		{
+			"name": "resources.json",
+			"size": 35481
 		},
 		{
 			"name": "shared.less",

@@ -32,11 +32,10 @@ sap.ui.define([
 	* @class
 	* Defines the visual properties and placement for each supported semantic type.
 	*
-	* @version 1.105.1
+	* @version 1.107.0
 	* @private
 	* @since 1.46.0
 	* @alias sap.f.semantic.SemanticConfiguration
-	* @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	*/
 	var SemanticConfiguration = BaseObject.extend("sap.f.semantic.SemanticConfiguration", {
 		getInterface: function() {

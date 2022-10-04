@@ -11,8 +11,9 @@ sap.ui.define([
     "sap/base/util/merge",
     "sap/m/MessageBox",
     "sap/ui/Device",
-    "sap/ui/fl/write/api/FieldExtensibility"
-], function(P13nPropertyHelper, Button, Bar, Title, merge, MessageBox, Device, FieldExtensibility) {
+    "sap/ui/fl/write/api/FieldExtensibility",
+    "sap/ui/core/Configuration"
+], function(P13nPropertyHelper, Button, Bar, Title, merge, MessageBox, Device, FieldExtensibility, Configuration) {
     "use strict";
 
     var oRB = sap.ui.getCore().getLibraryResourceBundle("sap.ui.mdc");
@@ -251,7 +252,7 @@ sap.ui.define([
             var sPositionAttribute = mP13nTypeSorting.position;
             var sSelectedAttribute = mP13nTypeSorting.visible;
 
-            var sLocale = sap.ui.getCore().getConfiguration().getLocale().toString();
+            var sLocale = Configuration.getLocale().toString();
 
             var oCollator = window.Intl.Collator(sLocale, {});
 
@@ -316,13 +317,19 @@ sap.ui.define([
         /**
          *
          * @param {object} oDialog AdaptFiltersDialog
+         * @param {object} [oParent] An optional parent object to chain if necessary
          *
          * @returns {Promise} Promise resolving in the Dialog instance
          */
-        addRTACustomFieldButton: function (oDialog) {
+        addRTACustomFieldButton: function (oDialog, oParent) {
 
             var bExtensibilityEnabled = false,
                 oDialogParent = oDialog.getParent();
+
+            // cover SmartTable scenario
+            if (oParent && oParent.isA('sap.ui.comp.smarttable.SmartTable')) {
+                oDialogParent = oParent;
+            }
 
             return sap.ui.getCore().loadLibrary('sap.ui.rta', {
                 async: true
@@ -365,6 +372,11 @@ sap.ui.define([
                                             var sRtaStyleClassName = rtaUtils.getRtaStyleClassName(),
                                                 oAdaptDialog =  oEvt.getSource().getParent().getParent(),
                                                 oControl = oAdaptDialog.getParent();
+
+                                            // cover SmartTable scenario
+                                            if (oParent && oParent.isA('sap.ui.comp.smarttable.SmartTable')) {
+                                                oControl = oParent;
+                                            }
 
                                             FieldExtensibility.onControlSelected(oControl).then(function (oRetVal) {
                                                 FieldExtensibility.getExtensionData().then(function (oExtensibilityInfo) {

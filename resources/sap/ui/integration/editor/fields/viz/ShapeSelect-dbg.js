@@ -19,7 +19,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.editor.fields.viz.ShapeSelect
 	 * @author SAP SE
 	 * @since 1.84.0
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @experimental since 1.84.0
 	 * @ui5-restricted
@@ -34,7 +34,9 @@ sap.ui.define([
 				}
 			}
 		},
-		renderer: VizBase.getMetadata().getRenderer()
+		renderer: {
+			apiVersion: 2
+		}
 	});
 
 	// create this._oControl and set up it
@@ -55,7 +57,7 @@ sap.ui.define([
 
 	// add style class to the render manager
 	ShapeSelect.prototype.applyStyle = function (oRm) {
-		oRm.addClass("sapUiIntegrationShapeSelect");
+		oRm.class("sapUiIntegrationShapeSelect");
 	};
 
 	// bind propeties to this._oControl

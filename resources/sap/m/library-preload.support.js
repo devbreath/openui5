@@ -7,7 +7,7 @@
 /**
  * Adds support rules of the sap.m library to the support infrastructure.
  */
-sap.ui.predefine('sap/m/library.support',[
+sap.ui.predefine("sap/m/library.support", [
 	"sap/ui/support/library",
 	"./rules/Breadcrumbs.support",
 	"./rules/Button.support",
@@ -106,7 +106,7 @@ sap.ui.predefine('sap/m/library.support',[
 /**
  * Defines support rules of the Select control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/Breadcrumbs.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/Breadcrumbs.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 	"use strict";
 
@@ -166,7 +166,7 @@ sap.ui.predefine('sap/m/rules/Breadcrumbs.support',["sap/ui/support/library"],
 /**
  * Defines support rules of the Button control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/Button.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/Button.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 	"use strict";
 
@@ -264,7 +264,7 @@ sap.ui.predefine('sap/m/rules/Button.support',["sap/ui/support/library"],
 /**
  * Defines support rules of the CheckBox control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/CheckBox.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/CheckBox.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 		"use strict";
 
@@ -290,7 +290,7 @@ sap.ui.predefine('sap/m/rules/CheckBox.support',["sap/ui/support/library"],
 			resolution: "Either set enabled to true ot set editable to false",
 			resolutionurls: [{
 				text: "API Reference: sap.m.CheckBox",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.CheckBox"
+				href: "https://sdk.openui5.org/api/sap.m.CheckBox"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.CheckBox")
@@ -325,7 +325,7 @@ sap.ui.predefine('sap/m/rules/CheckBox.support',["sap/ui/support/library"],
 /**
  * Defines support rules of the DatePicker control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/DatePicker.support',["sap/ui/support/library"], function(SupportLib) {
+sap.ui.predefine("sap/m/rules/DatePicker.support", ["sap/ui/support/library"], function(SupportLib) {
 	"use strict";
 
 	// shortcuts
@@ -507,7 +507,7 @@ sap.ui.predefine('sap/m/rules/DatePicker.support',["sap/ui/support/library"], fu
 /**
  * Defines support rules of the DateRangeSelection control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/DateRangeSelection.support',["sap/ui/support/library"], function(SupportLib) {
+sap.ui.predefine("sap/m/rules/DateRangeSelection.support", ["sap/ui/support/library"], function(SupportLib) {
 	"use strict";
 
 	// shortcuts
@@ -603,7 +603,7 @@ sap.ui.predefine('sap/m/rules/DateRangeSelection.support',["sap/ui/support/libra
 /**
  * Defines support rules of the Dialog control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/Dialog.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/Dialog.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 	"use strict";
 
@@ -659,7 +659,7 @@ sap.ui.predefine('sap/m/rules/Dialog.support',["sap/ui/support/library"],
 /**
  * Defines support rules of the FacetFilter control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/FacetFilter.support',["sap/ui/support/library", "sap/ui/model/BindingMode"], function(SupportLib, BindingMode) {
+sap.ui.predefine("sap/m/rules/FacetFilter.support", ["sap/ui/support/library", "sap/ui/model/BindingMode"], function(SupportLib, BindingMode) {
 	"use strict";
 
 	// shortcuts
@@ -723,7 +723,7 @@ sap.ui.predefine('sap/m/rules/FacetFilter.support',["sap/ui/support/library", "s
 /**
  * Defines support rules of the IconTabBar control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/IconTabBar.support',["sap/ui/support/library", "sap/m/library"],
+sap.ui.predefine("sap/m/rules/IconTabBar.support", ["sap/ui/support/library", "sap/m/library"],
 	function(SupportLib, mobileLibrary) {
 	"use strict";
 
@@ -873,7 +873,7 @@ sap.ui.predefine('sap/m/rules/IconTabBar.support',["sap/ui/support/library", "sa
 /**
  * Defines support rules of the Image control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/Image.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/Image.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 	"use strict";
 
@@ -958,7 +958,7 @@ sap.ui.predefine('sap/m/rules/Image.support',["sap/ui/support/library"],
 		resolution: "Enable the \"densityAware\" property of this image control",
 		resolutionurls: [{
 			text: "API Refrence for sap.m.Image",
-			href: "https://openui5.hana.ondemand.com/api/sap.m.Image"
+			href: "https://sdk.openui5.org/api/sap.m.Image"
 		}],
 		check: function (oIssueManager, oCoreFacade, oScope, fnResolve) {
 
@@ -1023,7 +1023,7 @@ sap.ui.predefine('sap/m/rules/Image.support',["sap/ui/support/library"],
 /**
  * Defines support rules of the List, Table and Tree controls of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/Input.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/Input.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 	"use strict";
 
@@ -1093,7 +1093,7 @@ sap.ui.predefine('sap/m/rules/Input.support',["sap/ui/support/library"],
 /**
  * Defines support rules of the Link control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/Link.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/Link.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 	"use strict";
 
@@ -1120,7 +1120,7 @@ sap.ui.predefine('sap/m/rules/Link.support',["sap/ui/support/library"],
 		resolution: "Remove the href property of the link",
 		resolutionurls: [{
 			text: "API Reference: sap.m.Link",
-			href: "https://openui5.hana.ondemand.com/api/sap.m.Link"
+			href: "https://sdk.openui5.org/api/sap.m.Link"
 		}],
 		check: function (oIssueManager, oCoreFacade, oScope) {
 			oScope.getElementsByClassName("sap.m.Link")
@@ -1154,7 +1154,7 @@ sap.ui.predefine('sap/m/rules/Link.support',["sap/ui/support/library"],
 /**
  * Defines support rules of the MaskInput control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/MaskInput.support',["sap/ui/support/library"], function(SupportLib) {
+sap.ui.predefine("sap/m/rules/MaskInput.support", ["sap/ui/support/library"], function(SupportLib) {
 	"use strict";
 
 	// shortcuts
@@ -1217,7 +1217,7 @@ sap.ui.predefine('sap/m/rules/MaskInput.support',["sap/ui/support/library"], fun
 /**
  * Defines support rules of the MessagePage control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/MessagePage.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/MessagePage.support", ["sap/ui/support/library"],
 function(SupportLib) {
 	"use strict";
 
@@ -1253,7 +1253,7 @@ function(SupportLib) {
 		resolution: "Use Message Page in a container with set height, such as sap.m.App",
 		resolutionurls: [{
 			text: "sap.m.MessagePage API Reference",
-			href: "https://openui5.hana.ondemand.com/api/sap.m.MessagePage"
+			href: "https://sdk.openui5.org/api/sap.m.MessagePage"
 		}],
 		check: function (oIssueManager, oCoreFacade, oScope) {
 			oScope.getElementsByClassName("sap.m.MessagePage").forEach(function(oMPage) {
@@ -1321,7 +1321,7 @@ function(SupportLib) {
 /**
  * Defines support rules of the ObjectHeader control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/ObjectHeader.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/ObjectHeader.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 		"use strict";
 
@@ -1348,7 +1348,7 @@ sap.ui.predefine('sap/m/rules/ObjectHeader.support',["sap/ui/support/library"],
 			resolution: "Use markers aggregation",
 			resolutionurls: [{
 				text: "API Reference: sap.m.ObjectHeader",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.ObjectHeader"
+				href: "https://sdk.openui5.org/api/sap.m.ObjectHeader"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.ObjectHeader")
@@ -1385,7 +1385,7 @@ sap.ui.predefine('sap/m/rules/ObjectHeader.support',["sap/ui/support/library"],
 			resolution: "Use statuses aggregation",
 			resolutionurls: [{
 				text: "API Reference: sap.m.ObjectHeader",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.ObjectHeader"
+				href: "https://sdk.openui5.org/api/sap.m.ObjectHeader"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.ObjectHeader")
@@ -1421,7 +1421,7 @@ sap.ui.predefine('sap/m/rules/ObjectHeader.support',["sap/ui/support/library"],
 			resolution: "Change the responsive property to false",
 			resolutionurls: [{
 				text: "API Reference: sap.m.ObjectHeader",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.ObjectHeader"
+				href: "https://sdk.openui5.org/api/sap.m.ObjectHeader"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.ObjectHeader")
@@ -1457,7 +1457,7 @@ sap.ui.predefine('sap/m/rules/ObjectHeader.support',["sap/ui/support/library"],
 			resolution: "Change the responsive property to true",
 			resolutionurls: [{
 				text: "API Reference: sap.m.ObjectHeader",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.ObjectHeader"
+				href: "https://sdk.openui5.org/api/sap.m.ObjectHeader"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.ObjectHeader")
@@ -1493,7 +1493,7 @@ sap.ui.predefine('sap/m/rules/ObjectHeader.support',["sap/ui/support/library"],
 			resolution: "Change the responsive property to false",
 			resolutionurls: [{
 				text: "API Reference: sap.m.ObjectHeader",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.ObjectHeader"
+				href: "https://sdk.openui5.org/api/sap.m.ObjectHeader"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.ObjectHeader")
@@ -1529,7 +1529,7 @@ sap.ui.predefine('sap/m/rules/ObjectHeader.support',["sap/ui/support/library"],
 			resolution: "Change the responsive property to true",
 			resolutionurls: [{
 				text: "API Reference: sap.m.ObjectHeader",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.ObjectHeader"
+				href: "https://sdk.openui5.org/api/sap.m.ObjectHeader"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.ObjectHeader")
@@ -1570,7 +1570,7 @@ sap.ui.predefine('sap/m/rules/ObjectHeader.support',["sap/ui/support/library"],
 /**
  * Defines support rules of the ObjectListItem control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/ObjectListItem.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/ObjectListItem.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 		"use strict";
 
@@ -1597,7 +1597,7 @@ sap.ui.predefine('sap/m/rules/ObjectListItem.support',["sap/ui/support/library"]
 			resolution: "Use markers aggregation",
 			resolutionurls: [{
 				text: "API Reference: sap.m.ObjectListItem",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.ObjectListItem"
+				href: "https://sdk.openui5.org/api/sap.m.ObjectListItem"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.ObjectListItem")
@@ -1633,7 +1633,7 @@ sap.ui.predefine('sap/m/rules/ObjectListItem.support',["sap/ui/support/library"]
 /**
  * Defines support rules of the ObjectMarker control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/ObjectMarker.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/ObjectMarker.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 		"use strict";
 
@@ -1660,7 +1660,7 @@ sap.ui.predefine('sap/m/rules/ObjectMarker.support',["sap/ui/support/library"],
 			resolution: "Set type of the ObjectMarker",
 			resolutionurls: [{
 				text: "API Reference: sap.m.ObjectMarker",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.ObjectMarker"
+				href: "https://sdk.openui5.org/api/sap.m.ObjectMarker"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.ObjectMarker")
@@ -1695,7 +1695,7 @@ sap.ui.predefine('sap/m/rules/ObjectMarker.support',["sap/ui/support/library"],
 /**
  * Defines support rules of the ObjectStatus control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/ObjectStatus.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/ObjectStatus.support", ["sap/ui/support/library"],
 	function(SupportLib) {
 		"use strict";
 
@@ -1722,7 +1722,7 @@ sap.ui.predefine('sap/m/rules/ObjectStatus.support',["sap/ui/support/library"],
 			resolution: "Set text or icon when active property is true",
 			resolutionurls: [{
 				text: "API Reference: sap.m.ObjectStatus",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.ObjectStatus"
+				href: "https://sdk.openui5.org/api/sap.m.ObjectStatus"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.ObjectStatus")
@@ -1758,7 +1758,7 @@ sap.ui.predefine('sap/m/rules/ObjectStatus.support',["sap/ui/support/library"],
 /**
  * Defines support rules of the Panel control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/Panel.support',[
+sap.ui.predefine("sap/m/rules/Panel.support", [
 	"sap/ui/support/library",
 	"sap/base/util/isEmptyObject"
 ],
@@ -1789,7 +1789,7 @@ sap.ui.predefine('sap/m/rules/Panel.support',[
 				text: "SAP Fiori Design Guidelines: Panel",
 				href: "https://experience.sap.com/fiori-design-web/panel/#components",
 				text2: "Explored Sample",
-				href2: "https://openui5beta.hana.ondemand.com/#/sample/sap.m.sample.Panel/preview"
+				href2: "https://sdk.openui5.org/entity/sap.m.Panel/sample/sap.m.sample.Panel"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.Panel")
@@ -1823,7 +1823,7 @@ sap.ui.predefine('sap/m/rules/Panel.support',[
 /**
  * Defines support rules of the Select control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/Select.support',["sap/ui/support/library", "sap/ui/model/BindingMode"],
+sap.ui.predefine("sap/m/rules/Select.support", ["sap/ui/support/library", "sap/ui/model/BindingMode"],
 	function(SupportLib, BindingMode) {
 	"use strict";
 
@@ -1853,7 +1853,7 @@ sap.ui.predefine('sap/m/rules/Select.support',["sap/ui/support/library", "sap/ui
 		resolution: "Use the sap.ui.model.Model.prototype.setSizeLimit to adjust the size limit of the 'items' model if you expect more than 100 items",
 		resolutionurls: [{
 			text: "API Reference for sap.ui.model.Model",
-			href: "https://openui5.hana.ondemand.com/api/sap.ui.model.Model"
+			href: "https://sdk.openui5.org/api/sap.ui.model.Model"
 		}],
 		check: function (oIssueManager, oCoreFacade, oScope) {
 			oScope.getElementsByClassName("sap.m.Select")
@@ -1968,7 +1968,7 @@ sap.ui.predefine('sap/m/rules/Select.support',["sap/ui/support/library", "sap/ui
 /**
  * Defines support rules of the SelectDialog control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/SelectDialog.support',["sap/ui/support/library", "sap/m/library"],
+sap.ui.predefine("sap/m/rules/SelectDialog.support", ["sap/ui/support/library", "sap/m/library"],
 	function(SupportLib, mobileLibrary) {
 		"use strict";
 
@@ -2041,7 +2041,7 @@ sap.ui.predefine('sap/m/rules/SelectDialog.support',["sap/ui/support/library", "
 /**
  * Defines support rules of the StepInput control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/StepInput.support',["sap/ui/support/library"], function(SupportLib) {
+sap.ui.predefine("sap/m/rules/StepInput.support", ["sap/ui/support/library"], function(SupportLib) {
 	"use strict";
 
 	// shortcuts
@@ -2138,7 +2138,7 @@ sap.ui.predefine('sap/m/rules/StepInput.support',["sap/ui/support/library"], fun
 /**
  * Defines support rules of the Link control of sap.m Table.
  */
-sap.ui.predefine('sap/m/rules/Table.support',["sap/ui/support/library", "sap/m/ListBase", "sap/ui/core/library"],
+sap.ui.predefine("sap/m/rules/Table.support", ["sap/ui/support/library", "sap/m/ListBase", "sap/ui/core/library"],
 	function(SupportLib, ListBase, coreLibrary) {
 		"use strict";
 
@@ -2166,7 +2166,7 @@ sap.ui.predefine('sap/m/rules/Table.support',["sap/ui/support/library", "sap/m/L
 			resolution: "Configure at least 1 column with width=auto or use fixedLayout=Strict",
 			resolutionurls: [{
 				text: "Documentation: Defining Column Widths",
-				href: "https://openui5.hana.ondemand.com/topic/6f778a805bc3453dbb66e246d8271839"
+				href: "https://sdk.openui5.org/topic/6f778a805bc3453dbb66e246d8271839"
 			}],
 			check: function (oIssueManager, oCoreFacade, oScope) {
 				oScope.getElementsByClassName("sap.m.Table").filter(function(oTable) {
@@ -2208,10 +2208,10 @@ sap.ui.predefine('sap/m/rules/Table.support',["sap/ui/support/library", "sap/m/L
 			resolution: "Use the 'highlightText' property of the item to define the semantics of the 'highlight'.",
 			resolutionurls: [{
 				text: "API Reference: sap.m.ListItemBase#getHighlight",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.ListItemBase/methods/getHighlight"
+				href: "https://sdk.openui5.org/api/sap.m.ListItemBase/methods/getHighlight"
 			}, {
 				text: "API Reference: sap.m.ListItemBase#getHighlightText",
-				href: "https://openui5.hana.ondemand.com/api/sap.m.ListItemBase/methods/getHighlightText"
+				href: "https://sdk.openui5.org/api/sap.m.ListItemBase/methods/getHighlightText"
 			}],
 			check: function(oIssueManager, oCoreFacade, oScope) {
 				function checkItemHighlight(oListItemBase) {
@@ -2247,7 +2247,7 @@ sap.ui.predefine('sap/m/rules/Table.support',["sap/ui/support/library", "sap/m/L
 /**
  * Defines support rules of the Title control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/Title.support',["sap/ui/support/library", "sap/ui/core/library"],
+sap.ui.predefine("sap/m/rules/Title.support", ["sap/ui/support/library", "sap/ui/core/library"],
 	function(SupportLib, coreLibrary) {
 	"use strict";
 
@@ -2311,7 +2311,7 @@ sap.ui.predefine('sap/m/rules/Title.support',["sap/ui/support/library", "sap/ui/
 /**
  * Defines support rules of the Tokenizer control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/Tokenizer.support',["sap/ui/support/library"],
+sap.ui.predefine("sap/m/rules/Tokenizer.support", ["sap/ui/support/library"],
 function(SupportLib) {
 	"use strict";
 
@@ -2362,7 +2362,7 @@ function(SupportLib) {
 /**
  * Defines support rules of the ViewSettingsDialog control of sap.m library.
  */
-sap.ui.predefine('sap/m/rules/ViewSettingsDialog.support',["sap/ui/support/library"], function(SupportLib) {
+sap.ui.predefine("sap/m/rules/ViewSettingsDialog.support", ["sap/ui/support/library"], function(SupportLib) {
 	"use strict";
 
 	// shortcuts

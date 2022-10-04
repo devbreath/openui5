@@ -24,7 +24,8 @@ sap.ui.define([
 	'sap/base/util/isPlainObject',
 	'sap/base/util/LoaderExtensions',
 	'sap/ui/VersionInfo',
-	'sap/ui/core/mvc/ViewType'
+	'sap/ui/core/mvc/ViewType',
+	'sap/ui/core/Configuration'
 ], function(
 	Manifest,
 	ComponentMetadata,
@@ -44,7 +45,8 @@ sap.ui.define([
 	isPlainObject,
 	LoaderExtensions,
 	VersionInfo,
-	ViewType
+	ViewType,
+	Configuration
 ) {
 	"use strict";
 
@@ -65,7 +67,7 @@ sap.ui.define([
 	function addSapParams(oUri) {
 		['sap-client', 'sap-server'].forEach(function(sName) {
 			if (!oUri.hasSearch(sName)) {
-				var sValue = sap.ui.getCore().getConfiguration().getSAPParam(sName);
+				var sValue = Configuration.getSAPParam(sName);
 				if (sValue) {
 					oUri.addSearch(sName, sValue);
 				}
@@ -244,7 +246,7 @@ sap.ui.define([
 	 * @extends sap.ui.base.ManagedObject
 	 * @abstract
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @alias sap.ui.core.Component
 	 * @since 1.9.2
 	 */
@@ -423,7 +425,7 @@ sap.ui.define([
 	function getCustomizingComponent(vObject) {
 		var oComponent, sComponentId;
 
-		if (!sap.ui.getCore().getConfiguration().getDisableCustomizing()) {
+		if (!Configuration.getDisableCustomizing()) {
 			if (typeof vObject === "string") {
 				sComponentId = vObject;
 			} else if (vObject && typeof vObject.isA === "function" && !vObject.isA("sap.ui.core.Component")) {
@@ -661,7 +663,7 @@ sap.ui.define([
 	 * not a guarantee for the existence of the corresponding owner.
 	 *
 	 * @param {sap.ui.base.ManagedObject} oObject Object to retrieve the owner ID for
-	 * @return {string} ID of the owner or <code>undefined</code>
+	 * @return {string|undefined} ID of the owner or <code>undefined</code>
 	 * @static
 	 * @public
 	 * @since 1.15.1
@@ -682,7 +684,7 @@ sap.ui.define([
 	 * will be returned.
 	 *
 	 * @param {sap.ui.base.ManagedObject} oObject Object to retrieve the owner Component for
-	 * @return {sap.ui.core.Component} the owner Component or <code>undefined</code>.
+	 * @return {sap.ui.core.Component|undefined} the owner Component or <code>undefined</code>.
 	 * @static
 	 * @public
 	 * @since 1.25.1
@@ -1440,7 +1442,7 @@ sap.ui.define([
 	};
 
 	Component._applyCacheToken = function(oUri, oLogInfo, mMetadataUrlParams) {
-		var oConfig = sap.ui.getCore().getConfiguration();
+		var oConfig = Configuration;
 		var sSource = mMetadataUrlParams ? "Model" : "DataSource";
 		var sManifestPath = mMetadataUrlParams ? "[\"sap.ui5\"][\"models\"]" : "[\"sap.app\"][\"dataSources\"]";
 		var sLanguage = mMetadataUrlParams && mMetadataUrlParams["sap-language"] || oUri.search(true)["sap-language"];
@@ -1608,7 +1610,7 @@ sap.ui.define([
 		var bMergeParent = mOptions.mergeParent;
 		var mCacheTokens = mOptions.cacheTokens || {};
 		var sLogComponentName = oComponent ? oComponent.getMetadata().getComponentName() : oManifest.getComponentName();
-		var oConfig = sap.ui.getCore().getConfiguration();
+		var oConfig = Configuration;
 		var aActiveTerminologies = mOptions.activeTerminologies;
 
 		if (!mOptions.models) {
@@ -2459,7 +2461,7 @@ sap.ui.define([
 	function componentFactory(vConfig, bLegacy) {
 		var oOwnerComponent = Component.get(ManagedObject._sOwnerId);
 		// get terminologies information: API -> Owner Component -> Configuration
-		var aActiveTerminologies = vConfig.activeTerminologies || (oOwnerComponent && oOwnerComponent.getActiveTerminologies()) || sap.ui.getCore().getConfiguration().getActiveTerminologies();
+		var aActiveTerminologies = vConfig.activeTerminologies || (oOwnerComponent && oOwnerComponent.getActiveTerminologies()) || Configuration.getActiveTerminologies();
 
 		// Inherit cacheTokens from owner component if not defined in asyncHints
 		if (!vConfig.asyncHints || !vConfig.asyncHints.cacheTokens) {
@@ -2668,7 +2670,7 @@ sap.ui.define([
 	 * Returns an existing component instance, identified by its ID.
 	 *
 	 * @param {string} sId ID of the component.
-	 * @returns {sap.ui.core.Component} Component instance or <code>undefined</code> when no component
+	 * @returns {sap.ui.core.Component|undefined} Component instance or <code>undefined</code> when no component
 	 *     with the given ID exists.
 	 * @since 1.56.0
 	 * @static
@@ -2753,7 +2755,7 @@ sap.ui.define([
 	 *                                        component preload (should only be set via <code>sap.ui.component</code>)
 	 * @param {boolean} mOptions.preloadOnly see <code>sap.ui.component.load</code> (<code>vConfig.asyncHints.preloadOnly</code>)
 	 * @param {Promise|Promise[]} mOptions.waitFor see <code>sap.ui.component</code> (<code>vConfig.asyncHints.waitFor</code>)
-	 * @return {function|Promise} the constructor of the Component class or a Promise that will be fulfilled with the same
+	 * @return {function|Promise<function>} the constructor of the Component class or a Promise that will be fulfilled with the same
 	 *
 	 * @private
 	*/
@@ -2761,7 +2763,7 @@ sap.ui.define([
 		var aActiveTerminologies = mOptions.activeTerminologies,
 			sName = oConfig.name,
 			sUrl = oConfig.url,
-			oConfiguration = sap.ui.getCore().getConfiguration(),
+			oConfiguration = Configuration,
 			bComponentPreload = /^(sync|async)$/.test(oConfiguration.getComponentPreload()),
 			vManifest = oConfig.manifest,
 			bManifestFirst,
@@ -2974,7 +2976,7 @@ sap.ui.define([
 		function preload(sComponentName, bAsync) {
 
 			var sController = sComponentName + '.Component',
-				http2 = sap.ui.getCore().getConfiguration().getDepCache(),
+				http2 = Configuration.getDepCache(),
 				sPreloadName,
 				oTransitiveDependencies,
 				aLibs,

@@ -31,6 +31,8 @@ sap.ui.define([
 	) {
 	"use strict";
 
+	var GroupEventType = library.GroupEventType;
+
 	function isInstanceOfAnalyticalTable(oControl) {
 		return TableUtils.isA(oControl, "sap.ui.table.AnalyticalTable");
 	}
@@ -46,13 +48,12 @@ sap.ui.define([
 	 * @extends sap.ui.table.Column
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @experimental Since version 1.21.
 	 * @alias sap.ui.table.AnalyticalColumn
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var AnalyticalColumn = Column.extend("sap.ui.table.AnalyticalColumn", /** @lends sap.ui.table.AnalyticalColumn.prototype */ { metadata : {
 
@@ -82,7 +83,7 @@ sap.ui.define([
 			/**
 			 * If the column is grouped, this formatter is used to format the value in the group header
 			 */
-			groupHeaderFormatter : {type : "any", group : "Behavior", defaultValue : null}
+			groupHeaderFormatter : {type : "function", group : "Behavior", defaultValue : null}
 		}
 	}});
 
@@ -105,6 +106,22 @@ sap.ui.define([
 	 */
 	AnalyticalColumn.prototype._createMenu = function() {
 		return new AnalyticalColumnMenu(this.getId() + "-menu");
+	};
+
+	AnalyticalColumn.prototype._setGrouped = function(bGrouped) {
+		var oTable = this._getTable();
+		var sGroupEventType = bGrouped ? GroupEventType.group : GroupEventType.ungroup;
+
+		this.setGrouped(bGrouped);
+		oTable.fireGroup({column: this, groupedColumns: oTable._aGroupedColumns, type: sGroupEventType});
+	};
+
+	AnalyticalColumn.prototype._isAggregatableByMenu = function() {
+		var oTable = this._getTable(),
+			oBinding = oTable.getBinding(),
+			oResultSet = oBinding && oBinding.getAnalyticalQueryResult();
+
+		return oTable && oResultSet && oResultSet.findMeasureByPropertyName(this.getLeadingProperty());
 	};
 
 	AnalyticalColumn.prototype.setGrouped = function(bGrouped) {

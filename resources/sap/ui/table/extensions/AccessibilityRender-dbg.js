@@ -42,7 +42,7 @@ sap.ui.define([
 	 * @class Extension for sap.ui.table.TableRenderer which handles ACC related things.
 	 * @extends sap.ui.table.extensions.ExtensionBase
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @alias sap.ui.table.extensions.AccessibilityRender
@@ -126,6 +126,8 @@ sap.ui.define([
 			_writeAccText(oRm, sTableId, "rowexpandtext", TableUtils.getResourceText("TBL_ROW_EXPAND_KEY"));
 			// aria description for row collapse via keyboard
 			_writeAccText(oRm, sTableId, "rowcollapsetext", TableUtils.getResourceText("TBL_ROW_COLLAPSE_KEY"));
+			// aria description for column with required content
+			_writeAccText(oRm, sTableId, "ariarequired", TableUtils.getResourceText("TBL_COL_REQUIRED"));
 
 			var oSelectionMode = oTable.getSelectionMode();
 			if (oSelectionMode !== SelectionMode.None) {

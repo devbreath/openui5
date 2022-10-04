@@ -25,13 +25,12 @@ sap.ui.define(['sap/m/semantic/SemanticButton'], function(SemanticButton) {
 	 * @implements sap.m.semantic.IGroup
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.30.0
 	 * @alias sap.m.semantic.GroupAction
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 
 	var GroupAction = SemanticButton.extend("sap.m.semantic.GroupAction", /** @lends sap.m.semantic.GroupAction.prototype */ {

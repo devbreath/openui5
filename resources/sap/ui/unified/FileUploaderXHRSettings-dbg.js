@@ -20,13 +20,12 @@ sap.ui.define(['sap/ui/core/Element', './library'],
 		 * @extends sap.ui.core.Element
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @since 1.52
 		 * @public
 		 * @alias sap.ui.unified.FileUploaderXHRSettings
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var FileUploaderXHRSettings = Element.extend("sap.ui.unified.FileUploaderXHRSettings", /** @lends sap.ui.unified.FileUploaderXHRSettings.prototype */ {
 			metadata: {

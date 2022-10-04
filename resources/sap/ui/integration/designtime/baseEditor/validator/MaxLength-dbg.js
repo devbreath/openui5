@@ -17,7 +17,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.integration.designtime.baseEditor.validator.MaxLength
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @static
 	 * @since 1.81

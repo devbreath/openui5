@@ -5,8 +5,8 @@
  */
 
 //Provides the locale object sap.ui.core.LocaleData
-sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', './Locale', 'sap/base/assert', 'sap/base/util/LoaderExtensions'],
-	function(extend, BaseObject, CalendarType, Locale, assert, LoaderExtensions) {
+sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', './Locale', 'sap/base/assert', 'sap/base/util/LoaderExtensions', "sap/ui/core/Configuration"],
+	function(extend, BaseObject, CalendarType, Locale, assert, LoaderExtensions, Configuration) {
 	"use strict";
 
 	/**
@@ -18,7 +18,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 	 *
 	 * @extends sap.ui.base.Object
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @public
 	 * @alias sap.ui.core.LocaleData
 	 */
@@ -116,7 +116,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		/**
 		 * Get locale specific language names.
 		 *
-		 * @returns {object} map of locale specific language names
+		 * @returns {Object<string, string>} map of locale specific language names
 		 * @public
 		 */
 		getLanguages: function() {
@@ -126,7 +126,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		/**
 		 * Get locale specific script names.
 		 *
-		 * @returns {object} map of locale specific script names
+		 * @returns {Object.<string, string>} map of locale specific script names
 		 * @public
 		 */
 		getScripts: function() {
@@ -136,7 +136,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		/**
 		 * Get locale specific territory names.
 		 *
-		 * @returns {object} map of locale specific territory names
+		 * @returns {Object.<string, string>} map of locale specific territory names
 		 * @public
 		 */
 		getTerritories: function() {
@@ -157,7 +157,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		},
 
 		/**
-		 * Get stand alone month names in width "narrow", "abbreviated" or "wide".
+		 * Get standalone month names in width "narrow", "abbreviated" or "wide".
 		 *
 		 * @param {string} sWidth the required width for the month names
 		 * @param {sap.ui.core.CalendarType} [sCalendarType] the type of calendar. If it's not set, it falls back to the calendar type either set in configuration or calculated from locale.
@@ -183,7 +183,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		},
 
 		/**
-		 * Get stand alone day names in width "narrow", "abbreviated" or "wide".
+		 * Get standalone day names in width "narrow", "abbreviated" or "wide".
 		 *
 		 * @param {string} sWidth the required width for the day names
 		 * @param {sap.ui.core.CalendarType} [sCalendarType] the type of calendar. If it's not set, it falls back to the calendar type either set in configuration or calculated from locale.
@@ -209,7 +209,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		},
 
 		/**
-		 * Get stand alone quarter names in width "narrow", "abbreviated" or "wide".
+		 * Get standalone quarter names in width "narrow", "abbreviated" or "wide".
 		 *
 		 * @param {string} sWidth the required width for the quarter names
 		 * @param {sap.ui.core.CalendarType} [sCalendarType] the type of calendar. If it's not set, it falls back to the calendar type either set in configuration or calculated from locale.
@@ -746,7 +746,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 							}
 						}
 					}
-					// if neither symbol or group matched, add it to the missing tokens and add distance
+					// if neither symbol nor group matched, add it to the missing tokens and add distance
 					aMissingTokens.push(oToken);
 					iDistance += 50 - i;
 				}
@@ -1161,7 +1161,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		 * Returns the currency symbols available for this locale.
 		 * Currency symbols get accumulated by custom currency symbols.
 		 *
-		 * @returns {object} the map of all currency symbols available in this locale, e.g.
+		 * @returns {Object.<string, string>} the map of all currency symbols available in this locale, e.g.
 		 * {
 		 *     "AUD": "A$",
 		 *     "BRL": "R$",
@@ -1590,6 +1590,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 		 *
 		 * Call:
 		 * <code>getUnitFromMapping("my")</code> would result in <code>"my-custom-unit"</code>
+		 * @param {string} sMapping mapping identifier
 		 * @return {string} unit from the mapping
 		 * @public
 		 * @since 1.54
@@ -2074,11 +2075,12 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 	 * from the configuration, in case sCalendarType is undefined.
 	 *
 	 * @param {sap.ui.core.CalendarType} sCalendarType the type defined in {@link sap.ui.core.CalendarType}.
+	 * @returns {string} calendar name
 	 * @private
 	 */
 	function getCLDRCalendarName(sCalendarType) {
 		if (!sCalendarType) {
-			sCalendarType = sap.ui.getCore().getConfiguration().getCalendarType();
+			sCalendarType = Configuration.getCalendarType();
 		}
 		return "ca-" + sCalendarType.toLowerCase();
 	}
@@ -2214,7 +2216,7 @@ sap.ui.define(['sap/base/util/extend', 'sap/ui/base/Object', './CalendarType', '
 	var CustomLocaleData = LocaleData.extend("sap.ui.core.CustomLocaleData", {
 		constructor: function(oLocale) {
 			LocaleData.apply(this, arguments);
-			this.mCustomData = sap.ui.getCore().getConfiguration().getFormatSettings().getCustomLocaleData();
+			this.mCustomData = Configuration.getFormatSettings().getCustomLocaleData();
 		},
 
 		/**

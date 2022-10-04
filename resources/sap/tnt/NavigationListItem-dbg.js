@@ -32,13 +32,12 @@ sap.ui.define(["sap/ui/thirdparty/jquery", "./library", 'sap/ui/core/Core', "sap
 		 * @extends sap.ui.core.Item
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
 		 * @since 1.34
 		 * @alias sap.tnt.NavigationListItem
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var NavigationListItem = Item.extend("sap.tnt.NavigationListItem", /** @lends sap.tnt.NavigationListItem.prototype */ {
 			metadata: {
@@ -932,7 +931,6 @@ sap.ui.define(["sap/ui/thirdparty/jquery", "./library", 'sap/ui/core/Core', "sap
 		};
 
 		NavigationListItem.prototype.onfocusin = function(event) {
-
 			if (event.srcControl !== this) {
 				return;
 			}
@@ -941,23 +939,23 @@ sap.ui.define(["sap/ui/thirdparty/jquery", "./library", 'sap/ui/core/Core', "sap
 		};
 
 		NavigationListItem.prototype._updateAccessibilityText = function() {
-			var invisibleText = NavigationListItem._getInvisibleText(),
-				navList = this.getNavigationList(),
-				bundle = this._resourceBundleMLib,
-				$focusedItem = this._getAccessibilityItem(),
-				selected = navList._selectedItem === this ? bundle.getText("LIST_ITEM_SELECTED") : '',
-				text = selected;
+			var navList = this.getNavigationList(),
+				invisibleText = NavigationListItem._getInvisibleText();
+
+			if (!navList.getExpanded()) {
+				invisibleText.setText("");
+				return;
+			}
 
 			// for role "treeitem" we have to manually describe the role and position
-			if (navList.getExpanded()) {
-				var accType = bundle.getText("ACC_CTR_TYPE_TREEITEM"),
-					mPosition = this._getAccessibilityPosition(),
-					itemPosition = bundle.getText("LIST_ITEM_POSITION", [mPosition.index, mPosition.size]),
-					itemText = this.getText();
-
-				itemPosition = bundle.getText("LIST_ITEM_POSITION", [mPosition.index, mPosition.size]);
+			var bundle = this._resourceBundleMLib,
+				$focusedItem = this._getAccessibilityItem(),
+				selected = navList._selectedItem === this ? bundle.getText("LIST_ITEM_SELECTED") : '',
+				accType = bundle.getText("ACC_CTR_TYPE_TREEITEM"),
+				mPosition = this._getAccessibilityPosition(),
+				itemPosition = bundle.getText("LIST_ITEM_POSITION", [mPosition.index, mPosition.size]),
+				itemText = this.getText(),
 				text = accType + " " + selected + " " + itemText + " " + itemPosition;
-			}
 
 			invisibleText.setText(text);
 			$focusedItem.addAriaLabelledBy(invisibleText.getId());

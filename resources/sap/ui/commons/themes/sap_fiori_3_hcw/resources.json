@@ -822,6 +822,7 @@
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/commons/themes/sap_fiori_3_hcw/library-parameters.json",
 			"size": 568,
 			"theme": "sap_fiori_3_hcw"
 		},
@@ -851,6 +852,10 @@
 			"name": "library_skeleton.css",
 			"size": 128253,
 			"theme": "sap_fiori_3_hcw"
+		},
+		{
+			"name": "resources.json",
+			"size": 16472
 		},
 		{
 			"name": "shared.less",

@@ -8,9 +8,10 @@
 sap.ui.define([
     "sap/ui/thirdparty/jquery",
     "sap/base/assert",
-    "sap/base/security/encodeXML"
+    "sap/base/security/encodeXML",
+    "sap/ui/core/Configuration"
 ],
-	function(jQuery, assert, encodeXML) {
+	function(jQuery, assert, encodeXML, Configuration) {
 	"use strict";
 
 
@@ -46,7 +47,7 @@ sap.ui.define([
 				end : sizeOf(mAreas.end),
 				bottom : sizeOf(mAreas.bottom)
 			};
-			var bRTL = sap.ui.getCore().getConfiguration().getRTL();
+			var bRTL = Configuration.getRTL();
 
 			// open the outer HTML tag
 			oRm.write("<div");
@@ -84,7 +85,7 @@ sap.ui.define([
 
 		BorderLayoutRenderer.animate = function(oArea, bVisible) {
 			// var sBorderLayoutId = oBorderLayout.getId();
-			var bRTL = sap.ui.getCore().getConfiguration().getRTL();
+			var bRTL = Configuration.getRTL();
 			var end = bVisible ? oArea.getSize() : "0";
 
 			switch (oArea.getAreaId()) {

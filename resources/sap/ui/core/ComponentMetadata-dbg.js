@@ -8,24 +8,17 @@
 sap.ui.define([
 	'sap/ui/base/ManagedObjectMetadata',
 	'sap/ui/core/Manifest',
+	'sap/ui/core/Configuration',
 	'sap/base/Log',
 	'sap/base/util/extend',
 	'sap/base/util/deepExtend',
 	'sap/base/util/isPlainObject',
 	'sap/base/util/LoaderExtensions'
 ],
-	function(ManagedObjectMetadata, Manifest, Log, extend, deepExtend, isPlainObject, LoaderExtensions) {
+	function(ManagedObjectMetadata, Manifest, Configuration, Log, extend, deepExtend, isPlainObject, LoaderExtensions) {
 	"use strict";
 
-	var oCfgData = window["sap-ui-config"] || {};
-
-	var syncCallBehavior = 0; // ignore
-	if (oCfgData['xx-nosync'] === 'warn' || /(?:\?|&)sap-ui-xx-nosync=(?:warn)/.exec(window.location.search)) {
-		syncCallBehavior = 1;
-	}
-	if (oCfgData['xx-nosync'] === true || oCfgData['xx-nosync'] === 'true' || /(?:\?|&)sap-ui-xx-nosync=(?:x|X|true)/.exec(window.location.search)) {
-		syncCallBehavior = 2;
-	}
+	var syncCallBehavior = Configuration.getSyncCallBehavior();
 
 	/**
 	 * Creates a new metadata object for a Component subclass.
@@ -36,7 +29,7 @@ sap.ui.define([
 	 * @public
 	 * @class
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.9.2
 	 * @alias sap.ui.core.ComponentMetadata
 	 * @extends sap.ui.base.ManagedObjectMetadata
@@ -601,7 +594,7 @@ sap.ui.define([
 	 * manifest file! It returns only the entries which have been defined in
 	 * the Component metadata or in the proper Component manifest.
 	 *
-	 * @return {string} Required version of UI5 or if not specified then null.
+	 * @returns {string|null} Required version of UI5 or if not specified then <code>null</code>.
 	 * @public
 	 * @deprecated Since 1.27.1. Please use {@link sap.ui.core.Component#getManifestEntry}("/sap.ui5/dependencies/minUI5Version")
 	 */

@@ -11,7 +11,6 @@ sap.ui.define([
 	"sap/ui/fl/initial/_internal/connectors/Utils",
 	"sap/ui/fl/write/_internal/connectors/Utils",
 	"sap/base/util/restricted/_pick",
-	"sap/base/util/UriParameters",
 	"sap/ui/fl/write/_internal/FlexInfoSession"
 ], function (
 	merge,
@@ -20,7 +19,6 @@ sap.ui.define([
 	InitialUtils,
 	WriteUtils,
 	_pick,
-	UriParameters,
 	FlexInfoSession
 ) {
 	"use strict";
@@ -36,7 +34,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.write._internal.connectors.KeyUserConnector
 	 * @since 1.70
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @ui5-restricted sap.ui.fl.write._internal.Storage
 	 */
@@ -73,7 +71,7 @@ sap.ui.define([
 			var mParameters = _pick(mPropertyBag, aParameters);
 
 			var sContextsUrl = InitialUtils.getUrl(KeyUserConnector.ROUTES.CONTEXTS, mPropertyBag, mParameters);
-			return InitialUtils.sendRequest(sContextsUrl).then(function (oResult) {
+			return InitialUtils.sendRequest(sContextsUrl, "GET", {initialConnector: InitialConnector}).then(function (oResult) {
 				return oResult.response;
 			});
 		},
@@ -90,9 +88,7 @@ sap.ui.define([
 		},
 
 		isContextSharingEnabled: function () {
-			var oUriParameters = new UriParameters(window.location.href);
-			var sAppContextsEnabled = oUriParameters.get("sap-ui-fl-cf-contextsharing");
-			return Promise.resolve(sAppContextsEnabled === "true");
+			return Promise.resolve(true);
 		},
 
 		getFlexInfo: function (mPropertyBag) {
@@ -102,7 +98,6 @@ sap.ui.define([
 
 	function _enhancePropertyBagWithTokenInfo(mPropertyBag) {
 		mPropertyBag.initialConnector = InitialConnector;
-		mPropertyBag.xsrfToken = InitialConnector.xsrfToken;
 		mPropertyBag.tokenUrl = KeyUserConnector.ROUTES.TOKEN;
 	}
 
@@ -154,6 +149,7 @@ sap.ui.define([
 
 	KeyUserConnector.translation = {
 		getTexts: function (mPropertyBag) {
+			_enhancePropertyBagWithTokenInfo(mPropertyBag);
 			var mParameters = _pick(mPropertyBag, ["sourceLanguage", "targetLanguage"]);
 			var sTranslationUrl = InitialUtils.getUrl(KeyUserConnector.ROUTES.TRANSLATION.DOWNLOAD, mPropertyBag, mParameters);
 			return InitialUtils.sendRequest(sTranslationUrl, "GET", mPropertyBag).then(function(oResult) {
@@ -162,6 +158,7 @@ sap.ui.define([
 		},
 
 		getSourceLanguages: function (mPropertyBag) {
+			_enhancePropertyBagWithTokenInfo(mPropertyBag);
 			var mParameters = {};
 			var sTranslationUrl = InitialUtils.getUrl(KeyUserConnector.ROUTES.TRANSLATION.GET_SOURCELANGUAGE, mPropertyBag, mParameters);
 			return InitialUtils.sendRequest(sTranslationUrl, "GET", mPropertyBag).then(function(oResult) {

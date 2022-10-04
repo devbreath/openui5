@@ -16,7 +16,8 @@ sap.ui.define([
 	'sap/base/util/uid',
 	'sap/base/util/merge',
 	'sap/base/util/isPlainObject',
-	'sap/base/util/LoaderExtensions'
+	'sap/base/util/LoaderExtensions',
+	'sap/ui/core/Configuration'
 ],
 	function(
 		BaseObject,
@@ -29,7 +30,8 @@ sap.ui.define([
 		uid,
 		merge,
 		isPlainObject,
-		LoaderExtensions
+		LoaderExtensions,
+		Configuration
 	) {
 	"use strict";
 
@@ -137,7 +139,7 @@ sap.ui.define([
 	 * @class The Manifest class.
 	 * @extends sap.ui.base.Object
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @alias sap.ui.core.Manifest
 	 * @since 1.33.0
 	 */
@@ -377,7 +379,7 @@ sap.ui.define([
 			var sMinUI5Version = this.getEntry("/sap.ui5/dependencies/minUI5Version");
 			if (sMinUI5Version &&
 				Log.isLoggable(Log.Level.WARNING) &&
-				sap.ui.getCore().getConfiguration().getDebug()) {
+				Configuration.getDebug()) {
 				VersionInfo.load().then(function(oVersionInfo) {
 					var oMinVersion = getVersionWithoutSuffix(sMinUI5Version);
 					var oVersion = getVersionWithoutSuffix(oVersionInfo && oVersionInfo.version);
@@ -852,7 +854,7 @@ sap.ui.define([
 		var oManifestUrl = new URI(sManifestUrl);
 		["sap-language", "sap-client"].forEach(function(sName) {
 			if (!oManifestUrl.hasQuery(sName)) {
-				var sValue = sap.ui.getCore().getConfiguration().getSAPParam(sName);
+				var sValue = Configuration.getSAPParam(sName);
 				if (sValue) {
 					oManifestUrl.addQuery(sName, sValue);
 				}
@@ -874,7 +876,7 @@ sap.ui.define([
 			dataType: "json",
 			async: typeof bAsync !== "undefined" ? bAsync : false,
 			headers: {
-				"Accept-Language": sap.ui.getCore().getConfiguration().getLanguageTag()
+				"Accept-Language": Configuration.getLanguageTag()
 			},
 			failOnError: typeof bFailOnError !== "undefined" ? bFailOnError : true
 		});

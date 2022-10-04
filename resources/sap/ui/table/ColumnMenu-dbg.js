@@ -39,12 +39,11 @@ sap.ui.define([
 	 * @class
 	 * The column menu provides all common actions that can be performed on a column.
 	 * @extends sap.ui.unified.Menu
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @alias sap.ui.table.ColumnMenu
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) design time metamodel
 	 */
 	var ColumnMenu = Menu.extend("sap.ui.table.ColumnMenu", /** @lends sap.ui.table.ColumnMenu.prototype */ {
 		metadata : {
@@ -265,7 +264,18 @@ sap.ui.define([
 				"TBL_GROUP",
 				null,
 				function() {
+					var oDomRef;
 					oTable.setGroupBy(oColumn);
+
+					if (TableUtils.isNoDataVisible(oTable)) {
+						oDomRef = oTable.getDomRef("noDataCnt");
+					} else {
+						oDomRef = oTable.getDomRef("rowsel0");
+					}
+
+					if (oDomRef) {
+						oDomRef.focus();
+					}
 				}
 			));
 		}
@@ -338,7 +348,7 @@ sap.ui.define([
 	 */
 	ColumnMenu.prototype._createColumnVisibilityMenuItem = function(oColumn) {
 		var oTable = this._oTable;
-		var sText = TableUtils.Column.getHeaderText(oTable, oColumn.getIndex());
+		var sText = TableUtils.Column.getHeaderText(oColumn);
 
 		return new MenuItem({
 			text: sText,
@@ -356,6 +366,10 @@ sap.ui.define([
 						});
 					}
 					if (bExecuteDefault) {
+						if (oTable.getFocusDomRef().getAttribute("id") === oColumn.getId()) {
+							var aVisibleColumns = oTable._getVisibleColumns();
+							aVisibleColumns[Math.min(aVisibleColumns.indexOf(oColumn) + 1, TableUtils.getVisibleColumnCount(oTable) - 2)].focus();
+						}
 						oColumn.setVisible(bVisible);
 					}
 				}
@@ -404,7 +418,7 @@ sap.ui.define([
 
 
 	/**
-	 * sets a new filter value into the filter field
+	 * Sets a new filter value into the filter field
 	 * @param {string} sValue value of the filter input field to be set
 	 * @returns {this} this reference for chaining
 	 * @private
@@ -421,7 +435,7 @@ sap.ui.define([
 	};
 
 	/**
-	 * sets a new filter value into the filter field
+	 * Sets the value state of the filter field
 	 * @param {sap.ui.core.ValueState} sFilterState value state for filter text field item
 	 * @returns {this} this reference for chaining
 	 * @private

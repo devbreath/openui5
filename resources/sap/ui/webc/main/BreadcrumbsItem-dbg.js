@@ -26,7 +26,7 @@ sap.ui.define([
 	 * The <code>sap.ui.webc.main.BreadcrumbsItem</code> component defines the content of an item in <code>ui5-breadcumbs</code>.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -34,7 +34,6 @@ sap.ui.define([
 	 * @experimental Since 1.95.0 This control is experimental and its API might change significantly.
 	 * @alias sap.ui.webc.main.BreadcrumbsItem
 	 * @implements sap.ui.webc.main.IBreadcrumbsItem
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var BreadcrumbsItem = WebComponent.extend("sap.ui.webc.main.BreadcrumbsItem", {
 		metadata: {

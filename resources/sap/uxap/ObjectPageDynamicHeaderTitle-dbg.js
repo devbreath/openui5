@@ -42,22 +42,25 @@ sap.ui.define([
 		 * @implements sap.uxap.IHeaderTitle
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
 		 * @alias sap.uxap.ObjectPageDynamicHeaderTitle
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 * @since 1.52
 		 * @see {@link topic:6e340c119ddd4c778b315f65a0432420 Object Page Dynamic Header}
 		 * @see {@link topic:d2ef0099542d44dc868719d908e576d0 Object Page Headers}
 		 * @see {@link topic:9c9d94fd28284539a9a5a57e9caf82a8 Object Page Headers Comparison}
 		 */
-		var ObjectPageDynamicHeaderTitle = DynamicPageTitle.extend("sap.uxap.ObjectPageDynamicHeaderTitle", /** @lends sap.uxap.ObjectPageDynamicHeaderTitle.prototype */ { metadata : {
+		var ObjectPageDynamicHeaderTitle = DynamicPageTitle.extend("sap.uxap.ObjectPageDynamicHeaderTitle", /** @lends sap.uxap.ObjectPageDynamicHeaderTitle.prototype */ {
+			metadata : {
 
-			interfaces : ["sap.uxap.IHeaderTitle"],
-			library : "sap.uxap"
-		}});
+				interfaces : ["sap.uxap.IHeaderTitle"],
+				library : "sap.uxap"
+			},
+
+			renderer: ObjectPageDynamicHeaderTitleRenderer
+		});
 
 		/**
 		 * Required by the {@link sap.uxap.IHeaderTitle} interface.

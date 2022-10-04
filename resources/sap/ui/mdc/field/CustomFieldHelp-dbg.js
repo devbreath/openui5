@@ -16,7 +16,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class A field help used in the <code>FieldHelp</code> association in <code>FieldBase</code> controls that allows you to add custom content.
 	 * @extends sap.ui.mdc.field.FieldHelpBase
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @ui5-restricted sap.fe
@@ -24,7 +24,6 @@ sap.ui.define([
 	 * @experimental As of version 1.54
 	 * @since 1.54.0
 	 * @alias sap.ui.mdc.field.CustomFieldHelp
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var CustomFieldHelp = FieldHelpBase.extend("sap.ui.mdc.field.CustomFieldHelp", /** @lends sap.ui.mdc.field.CustomFieldHelp.prototype */
 	{

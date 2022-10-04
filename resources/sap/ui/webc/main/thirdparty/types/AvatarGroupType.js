@@ -1,1 +1,2 @@
-sap.ui.define(["sap/ui/webc/common/thirdparty/base/types/DataType"],function(e){"use strict";function t(e){return e&&typeof e==="object"&&"default"in e?e["default"]:e}var a=t(e);const i={Group:"Group",Individual:"Individual"};class n extends a{static isValid(e){return!!i[e]}}n.generateTypeAccessors(i);return n});
+sap.ui.define(["exports","sap/ui/webc/common/thirdparty/base/types/DataType"],function(e,t){"use strict";Object.defineProperty(e,"__esModule",{value:true});e.default=void 0;t=u(t);function u(e){return e&&e.__esModule?e:{default:e}}const a={Group:"Group",Individual:"Individual"};class s extends t.default{static isValid(e){return!!a[e]}}s.generateTypeAccessors(a);var d=s;e.default=d});
+//# sourceMappingURL=AvatarGroupType.js.map

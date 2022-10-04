@@ -14,7 +14,9 @@ sap.ui.define([
   './MessageToast',
   './MessageList',
   './MessageBarRenderer',
-  'sap/ui/dom/jquery/rect' // jQuery Plugin "rect"
+  'sap/ui/core/Configuration',
+  // jQuery Plugin "rect"
+  'sap/ui/dom/jquery/rect'
 ],
 	function(
 	  jQuery,
@@ -24,7 +26,8 @@ sap.ui.define([
 	  Popup,
 	  MessageToast,
 	  MessageList,
-	  MessageBarRenderer
+	  MessageBarRenderer,
+	  Configuration
 	) {
 	"use strict";
 
@@ -44,13 +47,12 @@ sap.ui.define([
 	 * @class
 	 * Creates an instance of a MessageBar Control, for displaying messages.
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated Since version 1.4.0. Instead, use the <code>sap.m.MessagePopover</code> control.
 	 * @alias sap.ui.commons.MessageBar
-	 * @ui5-metamodel This control/element also will be described in the UI5 design-time metamodel
 	 */
 	var MessageBar = Control.extend("sap.ui.commons.MessageBar", /** @lends sap.ui.commons.MessageBar.prototype */ { metadata : {
 
@@ -462,7 +464,7 @@ sap.ui.define([
 	MessageBar.prototype.getSnapPoint = function() {
 	  if (!this.snapPoint) {
 		  this.snapPoint = this.getAnchorSnapPoint();
-		  if (sap.ui.getCore().getConfiguration().getRTL()) {
+		  if (Configuration.getRTL()) {
 			this.snapPoint = this.snapPoint.replace("begin", "right").replace("end", "left");
 		  } else {
 			this.snapPoint = this.snapPoint.replace("begin", "left").replace("end", "right");
@@ -717,7 +719,6 @@ sap.ui.define([
 	 * @param {sap.ui.commons.Message[]} aAMessages Array of messages.
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 design-time metamodel
 	 */
 	MessageBar.prototype.addMessages = function(aMessages) {
 	  if (!aMessages) {
@@ -772,7 +773,6 @@ sap.ui.define([
 	 * @param {string[]} aIds Messages IDs to be deleted.
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	MessageBar.prototype.deleteMessages = function(aIds) {
 	  if (!aIds) {
@@ -797,7 +797,6 @@ sap.ui.define([
 	 * @returns {this} <code>this</code> to allow method chaining
 	 *
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	MessageBar.prototype.deleteAllMessages = function() {
 	  // Closing the corresponding Details if any:

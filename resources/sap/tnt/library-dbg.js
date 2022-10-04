@@ -17,13 +17,13 @@ sap.ui.define(["sap/ui/core/library", "sap/m/library"],
 	 * @namespace
 	 * @alias sap.tnt
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @since 1.36
 	 * @public
 	 */
 	var thisLib = sap.ui.getCore().initLibrary({
 		name : "sap.tnt",
-		version: "1.105.1",
+		version: "1.107.0",
 		dependencies : ["sap.ui.core", "sap.m"],
 		designtime: "sap/tnt/designtime/library.designtime",
 		types: [
@@ -55,7 +55,6 @@ sap.ui.define(["sap/ui/core/library", "sap/m/library"],
 	 *
 	 * @enum {string}
 	 * @public
-	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	thisLib.RenderMode = {
 		/**
@@ -78,7 +77,6 @@ sap.ui.define(["sap/ui/core/library", "sap/m/library"],
 	 * @name sap.tnt.IToolHeader
 	 * @public
 	 * @interface
-	 * @ui5-metamodel This interface also will be described in the UI5 (legacy) designtime metamodel
 	 */
 
 	return thisLib;

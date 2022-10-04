@@ -38,12 +38,11 @@ sap.ui.define([
 	 * supposed that the properties of the item structure is not changed.
 	 * @extends sap.ui.core.Control
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.54.0
 	 * @alias sap.ui.mdc.link.Panel
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Panel = Control.extend("sap.ui.mdc.link.Panel", /** @lends sap.ui.mdc.link.Panel.prototype */ {
 		metadata: {

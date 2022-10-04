@@ -4,8 +4,8 @@
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 sap.ui.define([
-	"sap/m/OverflowToolbarButton", "sap/m/ButtonRenderer", "sap/ui/base/ManagedObjectObserver", "sap/ui/core/library", "sap/m/library"
-], function(OverflowToolbarButton, ButtonRenderer, ManagedObjectObserver, CoreLibrary, mobileLibrary) {
+	"sap/m/OverflowToolbarButton", "sap/m/ButtonRenderer", "sap/ui/base/ManagedObjectObserver", "sap/ui/core/library", "sap/m/library", "sap/m/IllustratedMessage"
+], function(OverflowToolbarButton, ButtonRenderer, ManagedObjectObserver, CoreLibrary, mobileLibrary, IllustratedMessage) {
 	"use strict";
 
 	// shortcut for sap.m.PlacementType
@@ -166,6 +166,7 @@ sap.ui.define([
 
 		var oList = new List({
 			mode: "SingleSelectMaster",
+			noData: new IllustratedMessage({title: oRb.getText("chart.NO_CHART_TYPES_AVAILABLE"), description: oRb.getText("chart.NO_CHART_TYPES_AVAILABLE_ACTION")}),
 			items: {
 				path: "$chart>/getAvailableChartTypes",
 				template: oItemTemplate

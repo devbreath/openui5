@@ -16,12 +16,13 @@ sap.ui.define([
     './CarouselRenderer',
     'sap/ui/Device',
     'sap/ui/events/KeyCodes',
+    "sap/ui/core/Configuration",
     // jQuery custom selectors ":sapFocusable"
     "sap/ui/dom/jquery/Selectors",
     // jQuery Plugin "firstFocusableDomRef"
     "sap/ui/dom/jquery/Focusable"
 ],
-	function(jQuery, Log, capitalize, containsOrEquals, library, Control, ResizeHandler, ItemNavigation, CarouselRenderer, Device, KeyCodes) {
+	function(jQuery, Log, capitalize, containsOrEquals, library, Control, ResizeHandler, ItemNavigation, CarouselRenderer, Device, KeyCodes, Configuration) {
 	"use strict";
 
 
@@ -42,14 +43,13 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.8.0
 	 * @deprecated Since version 1.38. Instead, use the <code>sap.m.Carousel</code> control.
 	 * @alias sap.ui.commons.Carousel
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Carousel = Control.extend("sap.ui.commons.Carousel", /** @lends sap.ui.commons.Carousel.prototype */ { metadata : {
 
@@ -176,7 +176,7 @@ sap.ui.define([
 		if (this.getOrientation() == "vertical") {
 			this._sAnimationAttribute = 'margin-top';
 		} else {
-			if (sap.ui.getCore().getConfiguration().getRTL()) {
+			if (Configuration.getRTL()) {
 				this._sAnimationAttribute = 'margin-right';
 			} else {
 				this._sAnimationAttribute = 'margin-left';
@@ -226,7 +226,7 @@ sap.ui.define([
 					}
 				}
 
-				if (sap.ui.getCore().getConfiguration().getRTL()) {
+				if (Configuration.getRTL()) {
 					$ContentArea.scrollLeft($ScrollList.width()  - $ContentArea.width());
 				} else {
 					$ContentArea.scrollLeft(0);
@@ -515,7 +515,6 @@ sap.ui.define([
 	/**
 	 * Shows the previous item in carousel. This can be only used after the component is rendered.
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Carousel.prototype.showPrevious = function() {
 		var that = this,
@@ -549,7 +548,6 @@ sap.ui.define([
 	/**
 	 * Shows the next item in carousel. This can be only used after the component is rendered.
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Carousel.prototype.showNext = function() {
 		var that = this,
@@ -583,7 +581,6 @@ sap.ui.define([
 	 * Shows the element with the specified Id. This can be only used after the component is rendered.
 	 * @param {string} sElementId Id of the element to slide to.
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Carousel.prototype.showElementWithId = function(sElementId) {
 		this._showAllItems();

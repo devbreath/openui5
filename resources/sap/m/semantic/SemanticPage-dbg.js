@@ -109,13 +109,12 @@ function(
 	 * @abstract
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.30.0
 	 * @alias sap.m.semantic.SemanticPage
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var SemanticPage = Control.extend("sap.m.semantic.SemanticPage", /** @lends sap.m.semantic.SemanticPage.prototype */ {
 		metadata: {
@@ -277,7 +276,9 @@ function(
 			},
 			dnd: { draggable: false, droppable: true },
 			designtime: "sap/m/designtime/semantic/SemanticPage.designtime"
-		}
+		},
+
+		renderer: SemanticPageRenderer
 	});
 
 	SemanticPage.prototype.init = function () {

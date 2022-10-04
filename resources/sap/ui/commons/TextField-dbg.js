@@ -14,10 +14,13 @@ sap.ui.define([
 	'sap/ui/core/library',
 	'sap/ui/Device',
 	'sap/ui/events/KeyCodes',
-	'sap/ui/dom/jquery/cursorPos', // jQuery.fn.cursorPos
-	'sap/ui/dom/jquery/selectText' // jQuery.fn.selectText
+	'sap/ui/core/Configuration',
+	// jQuery.fn.cursorPos
+	'sap/ui/dom/jquery/cursorPos',
+	// jQuery.fn.selectText
+	'sap/ui/dom/jquery/selectText'
 ],
-	function(jQuery, library, Control, ValueStateSupport, TextFieldRenderer, coreLibrary, Device, KeyCodes) {
+	function(jQuery, library, Control, ValueStateSupport, TextFieldRenderer, coreLibrary, Device, KeyCodes, Configuration) {
 	"use strict";
 
 	// shortcut for sap.ui.core.AccessibleRole
@@ -50,13 +53,12 @@ sap.ui.define([
 	 * @implements sap.ui.commons.ToolbarItem, sap.ui.core.IFormContent
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.38, replaced by {@link sap.m.Input}
 	 * @alias sap.ui.commons.TextField
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var TextField = Control.extend("sap.ui.commons.TextField", /** @lends sap.ui.commons.TextField.prototype */ { metadata : {
 
@@ -284,7 +286,7 @@ sap.ui.define([
 	//Special handling for TextFields in ItemNavigation
 
 	TextField.prototype._checkCursorPosForNav = function(oEvent, bForward) {
-		var bRtl = sap.ui.getCore().getConfiguration().getRTL();
+		var bRtl = Configuration.getRTL();
 		var bBack = bForward ? bRtl : !bRtl;
 		var $input = jQuery(this.getInputDomRef());
 		var iPos = $input.cursorPos();
@@ -682,7 +684,7 @@ sap.ui.define([
 
 	/**
 	 * Method for accessing the DOM Ref of the input element.
-	 * @return {object} DOM reference or null
+	 * @returns {HTMLElement|null} DOM reference or <code>null</code>
 	 * @protected
 	 */
 	TextField.prototype.getInputDomRef = function(){
@@ -728,7 +730,6 @@ sap.ui.define([
 	 *
 	 * @return {string} live value
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	TextField.prototype.getLiveValue = function() {
 		var oIDomRef = this.getInputDomRef();

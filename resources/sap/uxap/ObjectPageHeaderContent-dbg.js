@@ -58,7 +58,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.30
 		 * @alias sap.uxap.ObjectPageHeaderContent
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var ObjectPageHeaderContent = Control.extend("sap.uxap.ObjectPageHeaderContent", /** @lends sap.uxap.ObjectPageHeaderContent.prototype */ {
 			metadata: {
@@ -97,7 +96,9 @@ sap.ui.define([
 
 					_placeholder: {type: "sap.m.Avatar", multiple: false, visibility: "hidden"}
 				}
-			}
+			},
+
+			renderer: ObjectPageHeaderContentRenderer
 		});
 
 

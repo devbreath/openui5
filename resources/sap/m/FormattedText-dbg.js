@@ -46,13 +46,12 @@ function(
 		 * @class
 		 * The FormattedText control allows the usage of a limited set of tags for inline display of formatted text in HTML format.
 		 * @extends sap.ui.core.Control
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
 		 * @since 1.38.0
 		 * @alias sap.m.FormattedText
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		var FormattedText = Control.extend("sap.m.FormattedText", /** @lends sap.m.FormattedText.prototype */ {
 			metadata: {
@@ -155,7 +154,9 @@ function(
 					*/
 					controls: {type: "sap.m.Link", multiple: true, singularName: "control"}
 				}
-			}
+			},
+
+			renderer: FormattedTextRenderer
 		});
 
 		/*

@@ -29,13 +29,12 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.38. There's not replacement because of the archaic design pattern.
 	 * @alias sap.ui.commons.ImageMap
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ImageMap = Control.extend("sap.ui.commons.ImageMap", /** @lends sap.ui.commons.ImageMap.prototype */ { metadata : {
 
@@ -81,7 +80,6 @@ sap.ui.define([
 	 * @param {any} content Area content to add
 	 * @return {this} <code>this</code> to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	ImageMap.prototype.createArea = function() {
 		var oArea = new Area();

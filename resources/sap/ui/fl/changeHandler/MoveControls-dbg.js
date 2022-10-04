@@ -21,7 +21,7 @@ function(
 	 *
 	 * @alias sap.ui.fl.changeHandler.MoveControls
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @experimental Since 1.46
 	 */
 	var MoveControls = { };
@@ -297,7 +297,7 @@ function(
 			.then(function(oRetrievedTargetParent) {
 				oTargetParent = oRetrievedTargetParent;
 				var aRevertData = oChange.getRevertData();
-				oChange.getContent().movedElements.reverse();
+				oChangeContent.movedElements.reverse();
 				var aPromises = [];
 				oChangeContent.movedElements.forEach(function(mMovedElement, iElementIndex) {
 					var fnPromise = function() {
@@ -412,7 +412,9 @@ function(
 			sourceAggregation: oRevertData.aggregation,
 			targetAggregation: oChangeContent.target.selector.aggregation,
 			setTargetIndex: function(oChange, iNewTargetIndex) {
-				oChange.getContent().movedElements[0].targetIndex = iNewTargetIndex;
+				var oChangeContent = oChange.getContent();
+				oChangeContent.movedElements[0].targetIndex = iNewTargetIndex;
+				oChange.setContent(oChangeContent);
 			},
 			getTargetIndex: function(oChange) {
 				return oChange.getContent().movedElements[0].targetIndex;
@@ -426,9 +428,9 @@ function(
 		return {
 			affectedControls: [oChangeContent.movedElements[0].selector],
 			dependentControls: [oChangeContent.source.selector],
-			payload: {
-				sourceParentContainer: oRevertData.sourceParent,
-				targetParentContainer: oChangeContent.target.selector
+			descriptionPayload: {
+				sourceContainer: oRevertData.sourceParent,
+				targetContainer: oChangeContent.target.selector
 			}
 		};
 	};

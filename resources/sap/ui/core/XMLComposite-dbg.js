@@ -146,7 +146,7 @@ sap.ui.define([
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 * @since 1.56.0
 		 * @alias sap.ui.core.XMLComposite
 		 * @see {@link topic:b83a4dcb7d0e46969027345b8d32fd44 XML Composite Controls}
@@ -231,7 +231,7 @@ sap.ui.define([
 		 * May only be used by the implementation of a specific XMLComposite, not by an application using a XMLComposite.
 		 *
 		 * @param {string} sId XMLComposite-local ID of the inner element
-		 * @returns {sap.ui.core.Element} element by its ID or <code>undefined</code>
+		 * @returns {sap.ui.core.Element|undefined} element by its ID or <code>undefined</code>
 		 * @protected
 		 */
 		XMLComposite.prototype.byId = function (sId) {

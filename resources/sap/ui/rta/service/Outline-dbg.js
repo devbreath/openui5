@@ -16,7 +16,8 @@ sap.ui.define([
 	"sap/base/util/merge",
 	"sap/base/util/restricted/_omit",
 	"sap/ui/core/mvc/View",
-	"sap/base/Log"
+	"sap/base/Log",
+	"sap/ui/core/Configuration"
 ], function(
 	OverlayRegistry,
 	ElementOverlay,
@@ -29,7 +30,8 @@ sap.ui.define([
 	merge,
 	_omit,
 	View,
-	Log
+	Log,
+	Configuration
 ) {
 	"use strict";
 
@@ -42,7 +44,7 @@ sap.ui.define([
 	 * @author SAP SE
 	 * @experimental Since 1.56
 	 * @since 1.56
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @ui5-restricted
 	 */
@@ -182,7 +184,7 @@ sap.ui.define([
 		};
 
 		oOutline._enrichExtensionPointData = function (oData, oOverlay) {
-			var bIsDesignMode = sap.ui.getCore().getConfiguration().getDesignMode();
+			var bIsDesignMode = Configuration.getDesignMode();
 			if (!bIsDesignMode) {
 				return undefined;
 			}

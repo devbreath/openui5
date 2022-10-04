@@ -20,7 +20,8 @@ sap.ui.define([
 	"sap/base/util/extend",
 	"./InvisibleRenderer",
 	"./Patcher",
-	"./FocusHandler"
+	"./FocusHandler",
+	"sap/ui/core/Configuration"
 ], function(
 	LabelEnablement,
 	BaseObject,
@@ -36,7 +37,8 @@ sap.ui.define([
 	extend,
 	InvisibleRenderer,
 	Patcher,
-	FocusHandler
+	FocusHandler,
+	Configuration
 ) {
 
 	"use strict";
@@ -184,7 +186,7 @@ sap.ui.define([
 	 *
 	 * @extends Object
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @alias sap.ui.core.RenderManager
 	 * @public
 	 */
@@ -1621,7 +1623,7 @@ sap.ui.define([
 	 * @deprecated Since 1.92. Instead, use the {@link sap.ui.core.Core#getConfiguration} API.
 	 */
 	RenderManager.prototype.getConfiguration = function() {
-		return sap.ui.getCore().getConfiguration();
+		return Configuration;
 	};
 
 	/**
@@ -1756,7 +1758,7 @@ sap.ui.define([
 	 * @deprecated Since 1.92. Instead use {@link sap.ui.core.RenderManager#accessibilityState} of the {@link sap.ui.core.RenderManager Semantic Rendering API}.
 	 */
 	RenderManager.prototype.writeAccessibilityState = function(oElement, mProps) {
-		if (!sap.ui.getCore().getConfiguration().getAccessibility()) {
+		if (!Configuration.getAccessibility()) {
 			return this;
 		}
 
@@ -2254,8 +2256,14 @@ sap.ui.define([
 				if ( candidate === oRootNode || needsPlaceholder(candidate) ) {
 					makePlaceholder(candidate);
 				}
+
+				FocusHandler.trackFocusForPreservedElement(candidate);
+
 				$preserve.append(candidate);
 			} else if ( bPreserveNodesWithId && candidate.id ) {
+
+				FocusHandler.trackFocusForPreservedElement(candidate);
+
 				RenderManager.markPreservableContent(jQuery(candidate), candidate.id);
 				$preserve.append(candidate);
 				return;

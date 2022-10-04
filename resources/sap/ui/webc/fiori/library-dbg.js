@@ -9,11 +9,10 @@
  */
 sap.ui.define([
 		"sap/ui/webc/common/library",
-		"sap/ui/webc/common/thirdparty/base/CSP",
 		"./thirdparty/Assets",
 		"./library.config"
 	], // library dependency
-	function(commonLibrary, CSP) {
+	function(commonLibrary) {
 
 		"use strict";
 
@@ -23,14 +22,14 @@ sap.ui.define([
 		 * @namespace
 		 * @alias sap.ui.webc.fiori
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
 		 */
 		var thisLib = sap.ui.getCore().initLibrary({
 			name: "sap.ui.webc.fiori",
-			version: "1.105.1",
+			version: "1.107.0",
 			dependencies: ["sap.ui.core", "sap.ui.webc.common"],
 			noLibraryCSS: true,
 			designtime: "sap/ui/webc/main/designtime/library.designtime",
@@ -131,7 +130,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.99.0
 		 * @experimental Since 1.99.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -142,7 +140,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.97.0
 		 * @experimental Since 1.97.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -153,7 +150,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.97.0
 		 * @experimental Since 1.97.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -164,7 +160,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.99.0
 		 * @experimental Since 1.99.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -175,7 +170,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -186,7 +180,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -197,7 +190,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -208,7 +200,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -219,7 +210,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -230,7 +220,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -241,7 +230,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.97.0
 		 * @experimental Since 1.97.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -252,7 +240,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -263,7 +250,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -274,7 +260,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 
 		/**
@@ -284,7 +269,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.BarDesign = {
 
@@ -321,7 +305,6 @@ sap.ui.define([
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.FCLLayout = {
 
@@ -404,7 +387,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.106.0
 		 * @experimental Since 1.106.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.IllustrationMessageSize = {
 
@@ -451,7 +433,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.95.0
 		 * @experimental Since 1.95.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.IllustrationMessageType = {
 
@@ -992,7 +973,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.99.0
 		 * @experimental Since 1.99.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.MediaGalleryItemLayout = {
 
@@ -1017,7 +997,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.99.0
 		 * @experimental Since 1.99.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.MediaGalleryLayout = {
 
@@ -1048,7 +1027,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.99.0
 		 * @experimental Since 1.99.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.MediaGalleryMenuHorizontalAlign = {
 
@@ -1073,7 +1051,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.99.0
 		 * @experimental Since 1.99.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.MediaGalleryMenuVerticalAlign = {
 
@@ -1098,7 +1075,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.PageBackgroundDesign = {
 
@@ -1129,7 +1105,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.99.0
 		 * @experimental Since 1.99.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.SideContentFallDown = {
 
@@ -1166,7 +1141,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.99.0
 		 * @experimental Since 1.99.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.SideContentPosition = {
 
@@ -1191,7 +1165,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.99.0
 		 * @experimental Since 1.99.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.SideContentVisibility = {
 
@@ -1234,7 +1207,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.TimelineLayout = {
 
@@ -1259,7 +1231,6 @@ Use to display both a list and a detail page when the user should focus on the l
 		 * @public
 		 * @since 1.92.0
 		 * @experimental Since 1.92.0 This API is experimental and might change significantly.
-		 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 		 */
 		thisLib.UploadState = {
 
@@ -1287,8 +1258,6 @@ Use to display both a list and a detail page when the user should focus on the l
 			 */
 			Uploading: "Uploading"
 		};
-
-		CSP.setPackageCSSRoot("@ui5/webcomponents-fiori", sap.ui.require.toUrl("sap/ui/webc/fiori/thirdparty/css/"));
 
 		return thisLib;
 

@@ -24,7 +24,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new element
 	 * @class Container for the {@link sap.ui.mdc.ValueHelp ValueHelp} element.
 	 * @extends sap.ui.core.Element
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @abstract
 	 * @private
@@ -32,7 +32,6 @@ sap.ui.define([
 	 * @since 1.95.0
 	 * @experimental As of version 1.95
 	 * @alias sap.ui.mdc.valuehelp.base.Container
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Container = Element.extend("sap.ui.mdc.valuehelp.base.Container", /** @lends sap.ui.mdc.valuehelp.base.Container.prototype */
 	{
@@ -46,6 +45,12 @@ sap.ui.define([
 					type: "string",
 					group: "Appearance",
 					defaultValue: ""
+				},
+				/**
+				 * This property may be used by FilterableListContents to share basic search state in collective search scenarios
+				 */
+				localFilterValue: {
+					type: "string"
 				}
 			},
 			aggregations: {
@@ -172,8 +177,8 @@ sap.ui.define([
 		if (oContent._formatConditions) {
 			oBindingOptions.formatter = oContent._formatConditions.bind(oContent);
 		}
+		oContent.bindProperty("config", { path: "/_config", model: "$valueHelp", mode: BindingMode.OneWay}); // inherit from ValueHelp; Update Config first to have right type before condition update
 		oContent.bindProperty("conditions", oBindingOptions); // inherit from ValueHelp
-		oContent.bindProperty("config", { path: "/_config", model: "$valueHelp", mode: BindingMode.OneWay}); // inherit from ValueHelp
 
 		oContent.attachConfirm(this._handleConfirmed, this);
 		oContent.attachCancel(this._handleCanceled, this);
@@ -189,9 +194,9 @@ sap.ui.define([
 	};
 
 	Container.prototype._unbindContent = function (oContent) {
-		oContent.unbindProperty("filterValue");
-		oContent.unbindProperty("conditions");
-		oContent.unbindProperty("config");
+		oContent.unbindProperty("filterValue", true); // don't update values in Content to prevent unneeded updates
+		oContent.unbindProperty("config", true);
+		oContent.unbindProperty("conditions", true);
 		oContent.detachConfirm(this._handleConfirmed, this);
 		oContent.detachCancel(this._handleCanceled, this);
 		oContent.detachSelect(this._handleSelect, this);
@@ -216,7 +221,7 @@ sap.ui.define([
 	Container.prototype._getContainer = function () {
 	};
 
-	Container.prototype._getControl = function () {
+	Container.prototype.getControl = function () {
 		var oValueHelp = this.getParent();
 		return oValueHelp && oValueHelp.getControl();
 	};

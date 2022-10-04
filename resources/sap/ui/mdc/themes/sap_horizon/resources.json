@@ -7,12 +7,6 @@
 			"theme": "sap_horizon"
 		},
 		{
-			"name": "CollectiveSearchSelect.less",
-			"size": 385,
-			"designtime": true,
-			"theme": "sap_horizon"
-		},
-		{
 			"name": "FieldBase.less",
 			"size": 94,
 			"designtime": true,
@@ -26,7 +20,7 @@
 		},
 		{
 			"name": "TokenDisplay.less",
-			"size": 863,
+			"size": 1046,
 			"designtime": true,
 			"theme": "sap_horizon"
 		},
@@ -61,40 +55,45 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 17539,
+			"size": 16699,
 			"theme": "sap_horizon"
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/mdc/themes/sap_horizon/library-parameters.json",
 			"size": 385,
 			"theme": "sap_horizon"
 		},
 		{
 			"name": "library.css",
-			"size": 17536,
+			"size": 16695,
 			"theme": "sap_horizon"
 		},
 		{
 			"name": "library.less",
-			"size": 3469,
+			"size": 3183,
 			"designtime": true,
 			"theme": "sap_horizon"
 		},
 		{
 			"name": "library.source.less",
-			"size": 509,
+			"size": 470,
 			"designtime": true,
 			"theme": "sap_horizon"
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 18464,
+			"size": 17519,
 			"theme": "sap_horizon"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 18461,
+			"size": 17515,
 			"theme": "sap_horizon"
+		},
+		{
+			"name": "resources.json",
+			"size": 1719
 		}
 	]
 }

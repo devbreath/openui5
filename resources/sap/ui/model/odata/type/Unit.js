@@ -3,4 +3,5 @@
  * (c) Copyright 2009-2022 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["./UnitMixin","sap/ui/core/format/NumberFormat","sap/ui/model/type/Unit"],function(a,N,B){"use strict";var U=B.extend("sap.ui.model.odata.type.Unit",{constructor:function(f,c,d){this._applyUnitMixin.apply(this,arguments);}});a(U.prototype,B,"customUnits","Unit");U.prototype.getCustomUnitForKey=function(c,k){return{decimals:c[k].UnitSpecificScale,displayName:c[k].Text,"unitPattern-count-other":N.getDefaultUnitPattern(k)};};U.prototype.getName=function(){return"sap.ui.model.odata.type.Unit";};return U;});
+sap.ui.define(["./UnitMixin","sap/ui/core/format/NumberFormat","sap/ui/model/type/Unit"],function(t,e,i){"use strict";var n=i.extend("sap.ui.model.odata.type.Unit",{constructor:function(t,e,i){this._applyUnitMixin.apply(this,arguments)}});t(n.prototype,i,"customUnits","Unit");n.prototype.getCustomUnitForKey=function(t,i){return{decimals:t[i].UnitSpecificScale,displayName:t[i].Text,"unitPattern-count-other":e.getDefaultUnitPattern(i)}};n.prototype.getName=function(){return"sap.ui.model.odata.type.Unit"};return n});
+//# sourceMappingURL=Unit.js.map

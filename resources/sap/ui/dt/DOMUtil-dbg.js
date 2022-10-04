@@ -8,11 +8,13 @@
 sap.ui.define([
 	"sap/ui/thirdparty/jquery",
 	"sap/ui/Device",
+	"sap/ui/core/Configuration",
 	"sap/ui/dom/jquery/zIndex",
 	"sap/ui/dom/jquery/scrollLeftRTL"
 ], function(
 	jQuery,
-	Device
+	Device,
+	Configuration
 ) {
 	"use strict";
 
@@ -21,7 +23,7 @@ sap.ui.define([
 	 *
 	 * @namespace
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @private
 	 * @since 1.30
@@ -71,7 +73,7 @@ sap.ui.define([
 			mOffset.top -= (mParentOffset.top - (iScrollTop || 0));
 		}
 
-		if (sap.ui.getCore().getConfiguration().getRTL()) {
+		if (Configuration.getRTL()) {
 			var iParentWidth = $Parent ? $Parent.outerWidth() : jQuery(window).outerWidth();
 			//TODO: Workaround - remove when bug in Safari (issue 336512063) is solved
 			if (Device.browser.safari && !Device.browser.mobile && DOMUtil.hasVerticalScrollBar($Parent)) {
@@ -94,7 +96,7 @@ sap.ui.define([
 	 */
 	DOMUtil.getScrollLeft = function(oElement) {
 		if (
-			!sap.ui.getCore().getConfiguration().getRTL()
+			!Configuration.getRTL()
 			|| !DOMUtil.hasHorizontalScrollBar(oElement)
 		) {
 			return jQuery(oElement).scrollLeft();
@@ -419,18 +421,6 @@ sap.ui.define([
 		this.copyComputedStyles(oNode, oCopy);
 
 		jQuery(oTarget).append(oCopy);
-	};
-
-	/**
-	 * Inserts a &lt;style> tag with specified styles into #overlay-container
-	 * @param {string} sStyles - Plain CSS as a string to be added into the page
-	 * @param {HTMLElement} oTarget - Target DOM Node where to add &lt;style> tag with CSS
-	 */
-	DOMUtil.insertStyles = function (sStyles, oTarget) {
-		var oStyle = document.createElement('style');
-		oStyle.type = 'text/css';
-		oStyle.appendChild(document.createTextNode(sStyles));
-		oTarget.appendChild(oStyle);
 	};
 
 	/**

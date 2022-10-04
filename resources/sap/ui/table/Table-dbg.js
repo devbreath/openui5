@@ -28,7 +28,8 @@ sap.ui.define([
 	"./rowmodes/AutoRowMode",
 	"./plugins/SelectionModelSelection",
 	"sap/ui/thirdparty/jquery",
-	"sap/base/Log"
+	"sap/base/Log",
+	"sap/ui/core/Configuration"
 ], function(
 	Device,
 	Control,
@@ -53,7 +54,8 @@ sap.ui.define([
 	AutoRowMode,
 	SelectionModelSelectionPlugin,
 	jQuery,
-	Log
+	Log,
+	Configuration
 ) {
 	"use strict";
 
@@ -90,7 +92,7 @@ sap.ui.define([
 	 *     the data model and binding being used.
 	 * </p>
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -98,7 +100,6 @@ sap.ui.define([
 	 * @see {@link topic:08197fa68e4f479cbe30f639cc1cd22c sap.ui.table}
 	 * @see {@link topic:148892ff9aea4a18b912829791e38f3e Tables: Which One Should I Choose?}
 	 * @see {@link fiori:/grid-table/ Grid Table}
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Table = Control.extend("sap.ui.table.Table", /** @lends sap.ui.table.Table.prototype */ { metadata : {
 		library : "sap.ui.table",
@@ -569,7 +570,8 @@ sap.ui.define([
 			/**
 			 * fired when a column of the table has been selected
 			 */
-			columnSelect : {allowPreventDefault : true,
+			columnSelect : {
+				allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -582,7 +584,8 @@ sap.ui.define([
 			/**
 			 * fired when a table column is resized.
 			 */
-			columnResize : {allowPreventDefault : true,
+			columnResize : {
+				allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -600,7 +603,8 @@ sap.ui.define([
 			/**
 			 * fired when a table column is moved.
 			 */
-			columnMove : {allowPreventDefault : true,
+			columnMove : {
+				allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -616,9 +620,16 @@ sap.ui.define([
 			},
 
 			/**
-			 * fired when the table is sorted.
+			 * This event is fired before a sort order is
+			 * applied to a column, if the table is sorted
+			 * via {@link sap.ui.table.Table#sort} call or
+			 * user interaction with the column header.
+			 *
+			 * Sorters that are directly applied to the table
+			 * binding will not fire this event.
 			 */
-			sort : {allowPreventDefault : true,
+			sort : {
+				allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -639,9 +650,16 @@ sap.ui.define([
 			},
 
 			/**
-			 * fired when the table is filtered.
+			 * This event is fired before a filter is applied
+			 * to a column, if the table is filtered via
+			 * {@link sap.ui.table.Table#filter} call or user
+			 * interaction with the column header.
+			 *
+			 * Filters that are directly applied to the table
+			 * binding will not fire this event.
 			 */
-			filter : {allowPreventDefault : true,
+			filter : {
+				allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -659,7 +677,8 @@ sap.ui.define([
 			/**
 			 * fired when the table is grouped (experimental!).
 			 */
-			group : {allowPreventDefault : true,
+			group : {
+				allowPreventDefault : true,
 				parameters : {
 					/**
 					 * grouped column.
@@ -671,7 +690,8 @@ sap.ui.define([
 			/**
 			 * fired when the visibility of a table column is changed.
 			 */
-			columnVisibility : {allowPreventDefault : true,
+			columnVisibility : {
+				allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -690,7 +710,8 @@ sap.ui.define([
 			 * fired when the user clicks a cell of the table (experimental!).
 			 * @since 1.21.0
 			 */
-			cellClick : {allowPreventDefault : true,
+			cellClick : {
+				allowPreventDefault : true,
 				parameters : {
 					/**
 					 * The control of the cell.
@@ -730,7 +751,8 @@ sap.ui.define([
 			 * @since 1.21.0
 			 * @deprecated As of 1.54, replaced by <code>beforeOpenContextMenu</code>.
 			 */
-			cellContextmenu : {allowPreventDefault : true,
+			cellContextmenu : {
+				allowPreventDefault : true,
 				parameters : {
 					/**
 					 * The control of the cell.
@@ -795,7 +817,8 @@ sap.ui.define([
 			 * fired when a column of the table should be freezed
 			 * @since 1.21.0
 			 */
-			columnFreeze : {allowPreventDefault : true,
+			columnFreeze : {
+				allowPreventDefault : true,
 				parameters : {
 
 					/**
@@ -939,7 +962,7 @@ sap.ui.define([
 		/*
 		 * Flag indicating whether the text direction is RTL. If <code>false</code>, the text direction is LTR.
 		 */
-		this._bRtlMode = sap.ui.getCore().getConfiguration().getRTL();
+		this._bRtlMode = Configuration.getRTL();
 
 		/*
 		 * Flag indicating whether the rows are currently being bound. This is the time between #bindRows and the actual instantiation of the
@@ -1131,7 +1154,7 @@ sap.ui.define([
 		var pUpdateLocalizationInfo = Promise.resolve();
 
 		if (bRtlChanged) {
-			this._bRtlMode = sap.ui.getCore().getConfiguration().getRTL();
+			this._bRtlMode = Configuration.getRTL();
 		}
 
 		if (bLangChanged) {
@@ -2594,7 +2617,7 @@ sap.ui.define([
 		var $this = this.$();
 		var sTableId = this.getId();
 
-		if (sap.ui.getCore().getConfiguration().getAnimation()) {
+		if (Configuration.getAnimation()) {
 			jQuery(document.body).on("webkitTransitionEnd." + sTableId + " transitionend." + sTableId,
 				function(oEvent) {
 					if (jQuery(oEvent.target).has($this).length > 0) {
@@ -3026,7 +3049,6 @@ sap.ui.define([
 	 * @param {sap.ui.table.Column} oColumn Column to be sorted
 	 * @param {boolean} bAdd Set to true to add the new sort criterion to the existing sort criteria
 	 * @private
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.pushSortedColumn = function(oColumn, bAdd) {
 		if (!bAdd) {
@@ -3034,6 +3056,14 @@ sap.ui.define([
 		}
 		if (this._aSortedColumns.indexOf(oColumn) === -1) {
 			this._aSortedColumns.push(oColumn);
+		}
+	};
+
+	Table.prototype._removeSortedColumn = function(oColumn) {
+		var iIndex = this._aSortedColumns.indexOf(oColumn);
+
+		if (iIndex > -1) {
+			this._aSortedColumns.splice(iIndex, 1);
 		}
 	};
 
@@ -3045,7 +3075,6 @@ sap.ui.define([
 	 * @see sap.ui.table.Table#sort
 	 * @returns {sap.ui.table.Column[]} Array of sorted columns
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.getSortedColumns = function() {
 		// ensure that _aSortedColumns can't be altered by accident
@@ -3059,7 +3088,6 @@ sap.ui.define([
 	 * @param {sap.ui.table.SortOrder} oSortOrder Sort order of the column (if undefined the default will be ascending)
 	 * @param {boolean} bAdd Set to true to add the new sort criterion to the existing sort criteria
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.sort = function(oColumn, oSortOrder, bAdd) {
 		if (!oColumn) {
@@ -3091,7 +3119,6 @@ sap.ui.define([
 	 * @param {string} [sValue] Filter value as string (will be converted)
 	 * @throws {Error} If the filter value is not a string
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.filter = function(oColumn, sValue) {
 		if (this.getColumns().indexOf(oColumn) >= 0) {
@@ -3212,7 +3239,6 @@ sap.ui.define([
 	 * @param {int} iIndex Index of the row to return the context from.
 	 * @returns {sap.ui.model.Context | null} The context at this index or <code>null</code>
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.getContextByIndex = function(iIndex) {
 		var oBinding = this.getBinding();
@@ -3262,7 +3288,6 @@ sap.ui.define([
 	 * @returns {this} Reference to <code>this</code> in order to allow method chaining
 	 * @throws {Error} If a selection plugin is applied
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.clearSelection = function() {
 		if (this._hasSelectionPlugin()) {
@@ -3282,7 +3307,6 @@ sap.ui.define([
 	 * @returns {this} Reference to <code>this</code> in order to allow method chaining
 	 * @throws {Error} If a selection plugin is applied
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.selectAll = function() {
 		if (this._hasSelectionPlugin()) {
@@ -3302,7 +3326,6 @@ sap.ui.define([
 	 * @returns {int[]} Selected indices
 	 * @throws {Error} If a selection plugin is applied
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.getSelectedIndices = function() {
 		if (this._hasSelectionPlugin()) {
@@ -3320,7 +3343,6 @@ sap.ui.define([
 	 * @returns {this} Reference to <code>this</code> in order to allow method chaining
 	 * @throws {Error} If a selection plugin is applied
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.addSelectionInterval = function(iIndexFrom, iIndexTo) {
 		if (this._hasSelectionPlugin()) {
@@ -3339,7 +3361,6 @@ sap.ui.define([
 	 * @returns {this} Reference to <code>this</code> in order to allow method chaining
 	 * @throws {Error} If a selection plugin is applied
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.setSelectionInterval = function(iIndexFrom, iIndexTo) {
 		if (this._hasSelectionPlugin()) {
@@ -3358,7 +3379,6 @@ sap.ui.define([
 	 * @returns {this} Reference to <code>this</code> in order to allow method chaining
 	 * @throws {Error} If a selection plugin is applied
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.removeSelectionInterval = function(iIndexFrom, iIndexTo) {
 		if (this._hasSelectionPlugin()) {
@@ -3376,7 +3396,6 @@ sap.ui.define([
 	 * @returns {boolean} Whether the index is selected
 	 * @throws {Error} If a selection plugin is applied
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Table.prototype.isIndexSelected = function(iIndex) {
 		if (this._hasSelectionPlugin()) {
@@ -3760,25 +3779,20 @@ sap.ui.define([
 	 * @see JSDoc generated by SAPUI5 control API generator
 	 */
 	Table.prototype.setNoData = function(vNoData) {
-		var sOldNoDataText = TableUtils.getNoDataText(this);
+		var vOldNoContentMessage = TableUtils.getNoContentMessage(this);
 		this.setAggregation("noData", vNoData, true);
-		var sNewNoDataText = TableUtils.getNoDataText(this);
+		var vNewNoContentMessage = TableUtils.getNoContentMessage(this);
 
 		if (TableUtils.isA(vNoData, "sap.m.IllustratedMessage")) {
-			var oNoColumnsMessage = this.getAggregation("_noColumnsMessage");
-			if (!oNoColumnsMessage) {
-				sap.ui.require(["sap/m/table/Util"], function(MTableUtil) {
-					oNoColumnsMessage = MTableUtil.getNoColumnsIllustratedMessage();
-					this.setAggregation("_noColumnsMessage", oNoColumnsMessage);
-				}.bind(this));
-			}
+			insertNoColumnsIllustratedMessage(this);
+		} else {
+			this.destroyAggregation("_noColumnsMessage", true);
 		}
 
-		// Avoid table re-rendering if only the text is changed. If the NoData text was, or will be a control, the table must be re-rendered.
-		if (sOldNoDataText != null && sNewNoDataText != null) {
+		if (typeof vOldNoContentMessage === "string" && typeof vNewNoContentMessage === "string") {
 			// Old and new NoData texts are plain strings, therefore we are able to directly update the DOM in case of a text change.
-			if (sOldNoDataText !== sNewNoDataText) {
-				this.$("noDataMsg").text(sNewNoDataText);
+			if (vOldNoContentMessage !== vNewNoContentMessage) {
+				this.$("noDataMsg").text(vNewNoContentMessage);
 			}
 		} else {
 			this.invalidate();
@@ -3786,6 +3800,25 @@ sap.ui.define([
 
 		return this;
 	};
+
+	function insertNoColumnsIllustratedMessage(oTable) {
+		if (oTable.getAggregation("_noColumnsMessage") || _private(oTable).bIsLoadingNoColumnsMessage) {
+			return;
+		}
+
+		_private(oTable).bIsLoadingNoColumnsMessage = true;
+
+		sap.ui.require(["sap/m/table/Util"], function(MTableUtil) {
+			if (!TableUtils.isA(oTable.getNoData(), "sap.m.IllustratedMessage")) {
+				return;
+			}
+
+			var oNoColumnsMessage = MTableUtil.getNoColumnsIllustratedMessage();
+			oNoColumnsMessage.setEnableVerticalResponsiveness(true);
+			oTable.setAggregation("_noColumnsMessage", oNoColumnsMessage, TableUtils.getVisibleColumnCount(oTable) > 0);
+			delete _private(oTable).bIsLoadingNoColumnsMessage;
+		});
+	}
 
 	/**
 	 * Creates a new {@link sap.ui.core.util.Export} object and fills row/column information from the table if not provided. For the cell content,

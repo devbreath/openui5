@@ -198,7 +198,7 @@ sap.ui.define([
 	 * indexes (since 1.29.1). Each index can be replaced by a query in square brackets. You can,
 	 * for example, address the schema using the path
 	 * <code>/dataServices/schema/[${namespace}==='MySchema']</code> or the entity using
-	 * <code>/dataServices/schema/[${namespace}==='MySchema']/entityType/[sap.ui.core==='Order']</code>.
+	 * <code>/dataServices/schema/[${namespace}==='MySchema']/entityType/[${name}==='Order']</code>.
 	 *
 	 * The syntax inside the square brackets is the same as in expression binding. The query is
 	 * executed for each object in the array until the result is true (truthy) for the first time.
@@ -208,7 +208,7 @@ sap.ui.define([
 	 * {@link #loaded loaded} has been resolved!
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @alias sap.ui.model.odata.ODataMetaModel
 	 * @extends sap.ui.model.MetaModel
 	 * @public
@@ -686,7 +686,7 @@ sap.ui.define([
 	 *   "/ProductSet(1)/ToSupplier/BusinessPartnerID"; this equals the
 	 *   <a href="http://www.odata.org/documentation/odata-version-2-0/uri-conventions#ResourcePath">
 	 *   resource path</a> component of a URI according to OData V2 URI conventions
-	 * @returns {sap.ui.model.Context}
+	 * @returns {sap.ui.model.Context|null}
 	 *   the context for the corresponding metadata object, i.e. an entity type or its property,
 	 *   or <code>null</code> in case no path is given
 	 * @throws {Error} in case no context can be determined
@@ -787,7 +787,7 @@ sap.ui.define([
 	 *   an entity type as returned by {@link #getODataEntityType getODataEntityType}
 	 * @param {string} sName
 	 *   the name of a navigation property within this entity type
-	 * @returns {object}
+	 * @returns {object|null}
 	 *   the OData association end or <code>null</code> if no such association end is found
 	 * @public
 	 */
@@ -813,7 +813,7 @@ sap.ui.define([
 	 *   an entity type as returned by {@link #getODataEntityType getODataEntityType}
 	 * @param {string} sName
 	 *   the name of a navigation property within this entity type
-	 * @returns {object}
+	 * @returns {object|null}
 	 *   the OData association set end or <code>null</code> if no such association set end is found
 	 * @public
 	 */
@@ -844,7 +844,7 @@ sap.ui.define([
 	 *   a qualified name, e.g. "ACME.Address"
 	 * @param {boolean} [bAsPath=false]
 	 *   determines whether the complex type is returned as a path or as an object
-	 * @returns {object|string}
+	 * @returns {object|string|undefined|null}
 	 *   (the path to) the complex type with the given qualified name; <code>undefined</code> (for
 	 *   a path) or <code>null</code> (for an object) if no such type is found
 	 * @public
@@ -859,7 +859,7 @@ sap.ui.define([
 	 *
 	 * @param {boolean} [bAsPath=false]
 	 *   determines whether the entity container is returned as a path or as an object
-	 * @returns {object|string}
+	 * @returns {object|string|undefined|null}
 	 *   (the path to) the default entity container; <code>undefined</code> (for a path) or
 	 *   <code>null</code> (for an object) if no such container is found
 	 * @public
@@ -898,7 +898,7 @@ sap.ui.define([
 	 *   a simple name, e.g. "ProductSet"
 	 * @param {boolean} [bAsPath=false]
 	 *   determines whether the entity set is returned as a path or as an object
-	 * @returns {object|string}
+	 * @returns {object|string|undefined|null}
 	 *   (the path to) the entity set with the given simple name; <code>undefined</code> (for a
 	 *   path) or <code>null</code> (for an object) if no such set is found
 	 * @public
@@ -915,7 +915,7 @@ sap.ui.define([
 	 *   a qualified name, e.g. "ACME.Product"
 	 * @param {boolean} [bAsPath=false]
 	 *   determines whether the entity type is returned as a path or as an object
-	 * @returns {object|string}
+	 * @returns {object|string|undefined|null}
 	 *   (the path to) the entity type with the given qualified name; <code>undefined</code> (for a
 	 *   path) or <code>null</code> (for an object) if no such type is found
 	 * @public
@@ -932,7 +932,7 @@ sap.ui.define([
 	 *   a simple or qualified name, e.g. "Save" or "MyService.Entities/Save"
 	 * @param {boolean} [bAsPath=false]
 	 *   determines whether the function import is returned as a path or as an object
-	 * @returns {object|string}
+	 * @returns {object|string|undefined|null}
 	 *   (the path to) the function import with the given simple name; <code>undefined</code> (for
 	 *   a path) or <code>null</code> (for an object) if no such function import is found
 	 * @public
@@ -1003,7 +1003,7 @@ sap.ui.define([
 	 *   <b>BEWARE</b> that this array is modified by removing each part which is understood!
 	 * @param {boolean} [bAsPath=false]
 	 *   determines whether the property is returned as a path or as an object
-	 * @returns {object|string}
+	 * @returns {object|string|undefined|null}
 	 *   (the path to) the last OData property found; <code>undefined</code> (for a path) or
 	 *   <code>null</code> (for an object) if no property was found at all
 	 * @public

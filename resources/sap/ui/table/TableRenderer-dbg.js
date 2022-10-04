@@ -5,9 +5,9 @@
  */
 
 //Provides default renderer for control sap.ui.table.Table
-sap.ui.define(['sap/ui/core/Control', 'sap/ui/Device', './library', "./Column", './utils/TableUtils', "./extensions/ExtensionBase",
+sap.ui.define(['sap/ui/Device', './library', "./Column", './utils/TableUtils', "./extensions/ExtensionBase",
 			   'sap/ui/core/Renderer', 'sap/ui/core/IconPool', "sap/base/Log"],
-	function(Control, Device, library, Column, TableUtils, ExtensionBase, Renderer, IconPool, Log) {
+	function(Device, library, Column, TableUtils, ExtensionBase, Renderer, IconPool, Log) {
 	"use strict";
 
 
@@ -300,17 +300,18 @@ sap.ui.define(['sap/ui/core/Control', 'sap/ui/Device', './library', "./Column", 
 		oTable._getAccRenderExtension().writeAriaAttributesFor(rm, oTable, "NODATA");
 		rm.openEnd();
 
-		var oNoContentMessage = TableUtils.getNoContentMessage(oTable);
+		var vNoContentMessage = TableUtils.getNoContentMessage(oTable);
 
-		if (oNoContentMessage instanceof Control) {
-			rm.renderControl(oNoContentMessage);
+		if (TableUtils.isA(vNoContentMessage, "sap.ui.core.Control")) {
+			rm.renderControl(vNoContentMessage);
 		} else {
 			rm.openStart("span", oTable.getId() + "-noDataMsg");
 			rm.class("sapUiTableCtrlEmptyMsg");
 			rm.openEnd();
-			rm.text(TableUtils.getNoDataText(oTable));
+			rm.text(vNoContentMessage);
 			rm.close("span");
 		}
+
 		rm.close("div");
 	};
 

@@ -33,7 +33,7 @@ sap.ui.define([
 	 * @class The CutPaste enables Cut & Paste functionality for the overlays based on aggregation types
 	 * @extends sap.ui.dt.Plugin
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.34
@@ -84,7 +84,7 @@ sap.ui.define([
 			.catch(function(oError) {
 				throw DtUtil.createError(
 					"CutPaste#registerElementOverlay",
-					"An error occured during checkMovable: " + oError
+					"An error occurred during checkMovable: " + oError
 				);
 			});
 	};

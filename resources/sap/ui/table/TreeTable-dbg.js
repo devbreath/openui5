@@ -40,7 +40,7 @@ sap.ui.define([
 	 * @class
 	 * The TreeTable control provides a comprehensive set of features to display hierarchical data.
 	 * @extends sap.ui.table.Table
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
@@ -48,7 +48,6 @@ sap.ui.define([
 	 * @see {@link topic:08197fa68e4f479cbe30f639cc1cd22c sap.ui.table}
 	 * @see {@link topic:148892ff9aea4a18b912829791e38f3e Tables: Which One Should I Choose?}
 	 * @see {@link fiori:/tree-table/ Tree Table}
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var TreeTable = Table.extend("sap.ui.table.TreeTable", /** @lends sap.ui.table.TreeTable.prototype */ { metadata : {
 
@@ -89,7 +88,7 @@ sap.ui.define([
 			/**
 			 * Setting collapseRecursive to true means, that when collapsing a node all subsequent child nodes will also be collapsed.
 			 * This property is only supported with sap.ui.model.odata.v2.ODataModel.
-			 * <b>Note:</b> collapseRecursive is currently <b>not</b> supported if your OData service exposes the hierarchy annotation <code>hierarchy-descendant-count-for</code>.
+			 * <b>Note:</b> collapseRecursive is currently <b>not</b> supported if your OData service exposes the hierarchy annotation <code>hierarchy-node-descendant-count-for</code>.
 			 * In this case the value of the collapseRecursive property is ignored.
 			 * For more information about the OData hierarchy annotations, please see the <b>SAP Annotations for OData Version 2.0</b> specification.
 			 *
@@ -418,7 +417,6 @@ sap.ui.define([
 	 * @param {int|int[]} vRowIndex A single index or an array of indices of the rows to be expanded
 	 * @returns {this} <code>this</code> to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	TreeTable.prototype.expand = function(vRowIndex) {
 		toggleGroupHeader(this, vRowIndex, true);
@@ -431,7 +429,6 @@ sap.ui.define([
 	 * @param {int|int[]} vRowIndex A single index or an array of indices of the rows to be collapsed
 	 * @returns {this} <code>this</code> to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	TreeTable.prototype.collapse = function(vRowIndex) {
 		toggleGroupHeader(this, vRowIndex, false);
@@ -443,7 +440,6 @@ sap.ui.define([
 	 *
 	 * @returns {this} <code>this</code> to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	TreeTable.prototype.collapseAll = function() {
 		var oBinding = this.getBinding();
@@ -466,7 +462,6 @@ sap.ui.define([
 	 * @param {int} iLevel the level to which the trees shall be expanded
 	 * @returns {this} a reference on the TreeTable control, can be used for chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	TreeTable.prototype.expandToLevel = function(iLevel) {
 		var oBinding = this.getBinding();
@@ -486,7 +481,6 @@ sap.ui.define([
 	 * @param {int} iRowIndex The index of the row to be checked
 	 * @returns {boolean} <code>true</code> if the row is expanded, <code>false</code> if it is collapsed
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	TreeTable.prototype.isExpanded = function(iRowIndex) {
 		var oBinding = this.getBinding();
@@ -506,7 +500,6 @@ sap.ui.define([
 	 *
 	 * @returns {int[]} an array containing all selected indices
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 * @name sap.ui.table.TreeTable#getSelectedIndices
 	 */
@@ -521,7 +514,6 @@ sap.ui.define([
 	 * @param {int} iToIndex the end index of the selection range
 	 * @returns {this} a reference on the TreeTable control, can be used for chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 * @function
 	 * @name sap.ui.table.TreeTable#setSelectionInterval
 	 */

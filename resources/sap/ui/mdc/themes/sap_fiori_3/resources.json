@@ -7,12 +7,6 @@
 			"theme": "sap_fiori_3"
 		},
 		{
-			"name": "CollectiveSearchSelect.less",
-			"size": 391,
-			"designtime": true,
-			"theme": "sap_fiori_3"
-		},
-		{
 			"name": "ValueHelpDialog.less",
 			"size": 111,
 			"designtime": true,
@@ -37,40 +31,45 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 16541,
+			"size": 15515,
 			"theme": "sap_fiori_3"
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/mdc/themes/sap_fiori_3/library-parameters.json",
 			"size": 382,
 			"theme": "sap_fiori_3"
 		},
 		{
 			"name": "library.css",
-			"size": 16539,
+			"size": 15512,
 			"theme": "sap_fiori_3"
 		},
 		{
 			"name": "library.less",
-			"size": 1171,
+			"size": 696,
 			"designtime": true,
 			"theme": "sap_fiori_3"
 		},
 		{
 			"name": "library.source.less",
-			"size": 399,
+			"size": 360,
 			"designtime": true,
 			"theme": "sap_fiori_3"
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 17401,
+			"size": 16276,
 			"theme": "sap_fiori_3"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 17399,
+			"size": 16273,
 			"theme": "sap_fiori_3"
+		},
+		{
+			"name": "resources.json",
+			"size": 1300
 		}
 	]
 }

@@ -19,10 +19,13 @@ sap.ui.define([
 	'sap/ui/dom/containsOrEquals',
 	'sap/ui/events/jquery/EventExtension',
 	'sap/ui/events/KeyCodes',
-	'sap/ui/dom/jquery/cursorPos', // jQuery.fn.cursorPos
-	'sap/ui/dom/jquery/selectText' // jQuery.fn.selectText
+	"sap/ui/core/Configuration",
+	// jQuery.fn.cursorPos
+	'sap/ui/dom/jquery/cursorPos',
+	// jQuery.fn.selectText
+	'sap/ui/dom/jquery/selectText'
 ],
-	function(jQuery, Log, ComboBox, library, History, SeparatorItem, DropdownBoxRenderer, Device, TextField, ListItem, containsOrEquals, EventExtension, KeyCodes) {
+	function(jQuery, Log, ComboBox, library, History, SeparatorItem, DropdownBoxRenderer, Device, TextField, ListItem, containsOrEquals, EventExtension, KeyCodes, Configuration) {
 	"use strict";
 
 
@@ -36,13 +39,12 @@ sap.ui.define([
 	 * The control provides a field that allows end users to an entry out of a list of pre-defined items.
 	 * The choosable items can be provided in the form of a complete <code>ListBox</code>, single <code>ListItems</code>.
 	 * @extends sap.ui.commons.ComboBox
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.38, replaced by {@link sap.m.ComboBox}
 	 * @alias sap.ui.commons.DropdownBox
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var DropdownBox = ComboBox.extend("sap.ui.commons.DropdownBox", /** @lends sap.ui.commons.DropdownBox.prototype */ { metadata : {
 
@@ -774,7 +776,7 @@ sap.ui.define([
 			return;
 		}
 
-		var bRtl = sap.ui.getCore().getConfiguration().getRTL();
+		var bRtl = Configuration.getRTL();
 		if (!bRtl) {
 			this._updateSelection(1);
 		} else {
@@ -799,7 +801,7 @@ sap.ui.define([
 			return;
 		}
 
-		var bRtl = sap.ui.getCore().getConfiguration().getRTL();
+		var bRtl = Configuration.getRTL();
 		if (!bRtl) {
 			this._updateSelection( -1);
 		} else {
@@ -1367,9 +1369,9 @@ sap.ui.define([
 	};
 
 	/**
-	 * Extends the method inherited from sap.ui.core.Element by providing information on Search Help access (if needed)
+	 * Overrides the method inherited from {@link sap.ui.core.Element} by providing information on Search Help access (if needed)
 	 *
-	 * @return {string} string tooltip or undefined
+	 * @returns {string|undefined} string tooltip or <code>undefined</code>
 	 * @public
 	 */
 	DropdownBox.prototype.getTooltip_AsString = function() {
@@ -1680,7 +1682,6 @@ sap.ui.define([
 	 * This might be necessary if the items of the DropdownBox have changed. Otherwise invalid items may appear in the history.
 	 *
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	DropdownBox.prototype.clearHistory = function() {
 

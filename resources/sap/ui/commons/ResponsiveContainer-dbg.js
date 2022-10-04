@@ -27,13 +27,12 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @deprecated as of version 1.38. Use a container by choice from the {@link sap.m} library, instead.
 	 * @alias sap.ui.commons.ResponsiveContainer
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ResponsiveContainer = Control.extend("sap.ui.commons.ResponsiveContainer", /** @lends sap.ui.commons.ResponsiveContainer.prototype */ { metadata : {
 

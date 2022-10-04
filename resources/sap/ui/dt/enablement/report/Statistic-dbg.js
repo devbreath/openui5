@@ -17,7 +17,8 @@ sap.ui.define([
 	JSONModel,
 	SimpleForm,
 	Label,
-	Text
+	Text,
+	StatisticRenderer
 ) {
 	"use strict";
 
@@ -32,14 +33,13 @@ sap.ui.define([
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @private
 	 * @since 1.38
 	 * @alias sap.ui.dt.enablement.report.Statistic
 	 * @experimental Since 1.38. This class is experimental and provides only limited functionality. Also the API might be changed in future.
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var oStatistic = Control.extend("sap.ui.dt.enablement.report.Statistic", /** @lends sap.ui.dt.enablement.report.Statistic.prototype */ {
 		metadata: {
@@ -109,7 +109,9 @@ sap.ui.define([
 
 		_getForm: function() {
 			return this.getAggregation("_form");
-		}
+		},
+
+		renderer: StatisticRenderer
 	});
 
 	return oStatistic;

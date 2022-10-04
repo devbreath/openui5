@@ -33,6 +33,7 @@ sap.ui.define([
 	"sap/base/util/uid",
 	"sap/base/util/UriParameters",
 	"sap/ui/base/SyncPromise",
+	"sap/ui/core/Configuration",
 	"sap/ui/core/library",
 	"sap/ui/core/message/Message",
 	"sap/ui/core/message/MessageParser",
@@ -55,10 +56,10 @@ sap.ui.define([
 	"sap/ui/util/isCrossOriginURL"
 ], function(_CreatedContextsCache, Context, ODataAnnotations, ODataContextBinding, ODataListBinding,
 		ODataTreeBinding, assert, Log, encodeURL, deepEqual, deepExtend, each, extend,
-		isEmptyObject, isPlainObject, merge, uid, UriParameters, SyncPromise, coreLibrary, Message,
-		MessageParser, _Helper, BindingMode, BaseContext, FilterProcessor, Model, CountMode,
-		MessageScope, ODataMetadata, ODataMetaModel, ODataMessageParser, ODataPropertyBinding,
-		ODataUtils, OperationMode, UpdateMethod, OData, URI, isCrossOriginURL
+		isEmptyObject, isPlainObject, merge, uid, UriParameters, SyncPromise, Configuration,
+		coreLibrary, Message, MessageParser, _Helper, BindingMode, BaseContext, FilterProcessor,
+		Model, CountMode, MessageScope, ODataMetadata, ODataMetaModel, ODataMessageParser,
+		ODataPropertyBinding, ODataUtils, OperationMode, UpdateMethod, OData, URI, isCrossOriginURL
 ) {
 
 	"use strict";
@@ -203,7 +204,7 @@ sap.ui.define([
 	 * This model is not prepared to be inherited from.
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @public
 	 * @alias sap.ui.model.odata.v2.ODataModel
@@ -386,7 +387,7 @@ sap.ui.define([
 			this.sUser = sUser;
 			this.sPassword = sPassword;
 
-			if (sap.ui.getCore().getConfiguration().getStatistics()) {
+			if (Configuration.getStatisticsEnabled()) {
 				// add statistics parameter to every request (supported only on Gateway servers)
 				this.aUrlParams.push("sap-statistics=true");
 			}
@@ -486,7 +487,7 @@ sap.ui.define([
 					this.securityTokenAvailable();
 				}
 			}
-			this.oHeaders["Accept-Language"] = sap.ui.getCore().getConfiguration().getLanguageTag();
+			this.oHeaders["Accept-Language"] = Configuration.getLanguageTag();
 
 			// set version to 2.0 because 1.0 does not support e.g. skip/top, inlinecount...
 			// states the version of the Open Data Protocol used by the client to generate the request.
@@ -1997,31 +1998,59 @@ sap.ui.define([
 	/**
 	 * Creates a new list binding for this model.
 	 *
-	 * @param {string} sPath Binding path, either absolute or relative to a given <code>oContext</code>
-	 * @param {sap.ui.model.Context} [oContext] Binding context referring to this model
-	 * @param {sap.ui.model.Sorter|sap.ui.model.Sorter[]} [aSorters] Initial sort order, can be either a sorter or an array of sorters
-	 * @param {sap.ui.model.Filter|sap.ui.model.Filter[]} [aFilters] Predefined filters, can be either a filter or an array of filters
-	 * @param {object} [mParameters] Map which contains additional parameters for the binding
-	 * @param {string} [mParameters.expand] Value for the OData <code>$expand</code> query parameter which should be included in the request
-	 * @param {string} [mParameters.select] Value for the OData <code>$select</code> query parameter which should be included in the request
-	 * @param {Object<string,string>} [mParameters.custom] Optional map of custom query parameters (name/value pairs); names of custom parameters must not start with <code>$</code>
-	 * @param {sap.ui.model.odata.CountMode} [mParameters.countMode] Count mode for this binding;
-	 *           if not specified, the default count mode for this model is used
+	 * @param {string} sPath The binding path in the model
+	 * @param {sap.ui.model.Context} [oContext]
+	 *   The context which is required as base for a relative path.
+	 * @param {sap.ui.model.Sorter|sap.ui.model.Sorter[]} [aSorters]
+	 *   Initial sort order, can be either a sorter or an array of sorters.
+	 * @param {sap.ui.model.Filter|sap.ui.model.Filter[]} [aFilters]
+	 *   Predefined filters, can be either a filter or an array of filters.
+	 * @param {object} [mParameters] A map which contains additional parameters for the binding.
+	 * @param {sap.ui.model.odata.CountMode} [mParameters.countMode]
+	 *   Defines the count mode of the binding; if not specified, the default count mode of the
+	 *   <code>oModel</code> is applied.
 	 * @param {string} [mParameters.createdEntitiesKey=""]
 	 *   A key used in combination with the resolved path of the binding to identify the entities
-	 *   created via the binding's {@link #create} method.
+	 *   created by the binding's {@link #create} method.
 	 *
 	 *   <b>Note:</b> Different controls or control aggregation bindings to the same collection must
 	 *   have different <code>createdEntitiesKey</code> values.
-	 * @param {sap.ui.model.odata.OperationMode} [mParameters.operationMode] Operation mode for this binding;
-	 *           if not specified, the default operation mode of this model is used
-	 * @param {boolean} [mParameters.faultTolerant] Turns on the fault tolerance mode, data is not reset if a backend request returns an error
-	 * @param {string} [mParameters.batchGroupId] Sets the batch group ID to be used for requests originating from this binding
+	 * @param {Object<string,string>} [mParameters.custom]
+	 *   An optional map of custom query parameters. Custom parameters must not start with
+	 *   <code>$</code>.
+	 * @param {string} [mParameters.expand]
+	 *   Value for the OData <code>$expand</code> query option parameter which is included in the
+	 *   data request after URL encoding of the given value.
+	 * @param {boolean} [mParameters.faultTolerant]
+	 *   Turns on the fault tolerance mode, data is not reset if a back-end request returns an
+	 *   error.
+	 * @param {string} [mParameters.groupId]
+	 *   The group id to be used for requests originating from the binding
+	 * @param {sap.ui.model.odata.OperationMode} [mParameters.operationMode]
+	 *   The operation mode of the binding
+	 * @param {string} [mParameters.select]
+	 *   Value for the OData <code>$select</code> query option parameter which is included in the
+	 *   data request after URL encoding of the given value.
+	 * @param {boolean} [mParameters.transitionMessagesOnly]
+	 *   Whether the list binding only requests transition messages from the back end. If messages
+	 *   for entities of this collection need to be updated, use
+	 *   {@link sap.ui.model.odata.v2.ODataModel#read} on the parent entity corresponding to the
+	 *   list binding's context, with the parameter <code>updateAggregatedMessages</code> set to
+	 *   <code>true</code>.
+	 * @param {boolean} [mParameters.usePreliminaryContext]
+	 *   Whether a preliminary context is used. When set to <code>true</code>, the model can
+	 *   bundle the OData calls for dependent bindings into fewer $batch requests. For more
+	 *   information, see
+	 *   {@link topic:6c47b2b39db9404582994070ec3d57a2#loio62149734b5c24507868e722fe87a75db
+	 *   Optimizing Dependent Bindings}.
+	 * @param {string} [mParameters.batchGroupId]
+	 *   <b>Deprecated</b>, use <code>groupId</code> instead. Sets the batch group id to be used for
+	 *   requests originating from the binding.
 	 * @param {int} [mParameters.threshold]
 	 *   Deprecated since 1.102.0, as {@link sap.ui.model.odata.OperationMode.Auto} is deprecated;
 	 *   the threshold that defines how many entries should be fetched at least by the binding if
-	 *   <code>operationMode</code> is set to <code>Auto</code>
-	 * @returns {sap.ui.model.ListBinding} The new list binding
+	 *   <code>operationMode</code> is set to <code>Auto</code>.
+	 * @returns {sap.ui.model.odata.v2.ODataListBinding} The new list binding
 	 * @see sap.ui.model.Model.prototype.bindList
 	 * @public
 	 */
@@ -2169,7 +2198,7 @@ sap.ui.define([
 	 * @returns {sap.ui.model.odata.v2.ODataTreeBinding}
 	 *   The new tree binding
 	 * @public
-	 * @see {@link https://wiki.scn.sap.com/wiki/display/EmTech/SAP+Annotations+for+OData+Version+2.0
+	 * @see {@link http://www.sap.com/protocols/SAPData
 	 *   "SAP Annotations for OData Version 2.0" Specification}
 	 */
 	ODataModel.prototype.bindTree = function(sPath, oContext, vFilters, mParameters, vSorters) {
@@ -2650,13 +2679,35 @@ sap.ui.define([
 	};
 
 	/**
-	 * Creates new context binding for this model.
+	 * Creates a context binding for this model.
 	 *
+	 * @param {string} sPath The binding path in the model
+	 * @param {sap.ui.model.Context} [oContext]
+	 *   The context which is required as base for a relative path.
+	 * @param {object} [mParameters] A map which contains additional parameters for the binding.
+	 * @param {boolean} [mParameters.createPreliminaryContext]
+	 *   Whether a preliminary context is created
+	 * @param {Object<string,string>} [mParameters.custom]
+	 *   An optional map of custom query parameters. Custom parameters must not start with
+	 *   <code>$</code>.
+	 * @param {string} [mParameters.expand]
+	 *   Value for the OData <code>$expand</code> query option parameter which is included in the
+	 *   request after URL encoding of the given value.
+	 * @param {string} [mParameters.groupId]
+	 *   The group id to be used for requests originating from the binding
+	 * @param {string} [mParameters.select]
+	 *   Value for the OData <code>$select</code> query option parameter which is included in the
+	 *   request after URL encoding of the given value.
+	 * @param {boolean} [mParameters.usePreliminaryContext]
+	 *   Whether a preliminary context is used. When set to <code>true</code>, the model can bundle
+	 *   the OData calls for dependent bindings into fewer $batch requests. For more information,
+	 *   see {@link topic:6c47b2b39db9404582994070ec3d57a2#loio62149734b5c24507868e722fe87a75db
+	 *   Optimizing Dependent Bindings}.
+	 * @param {string} [mParameters.batchGroupId]
+	 *   <b>Deprecated</b>, use <code>groupId</code> instead. Sets the batch group id to be used for
+	 *   requests originating from the binding.
+	 * @returns {sap.ui.model.odata.v2.ODataContextBinding} The new context binding
 	 * @see sap.ui.model.Model.prototype.bindContext
-	 * @param {string} sPath Resolved path
-	 * @param {sap.ui.model.Context} oContext Context object
-	 * @param {Object<string,any>} [mParameters] Map of parameters
-	 * @returns {sap.ui.model.ContextBinding} The new context binding
 	 * @public
 	 */
 	ODataModel.prototype.bindContext = function(sPath, oContext, mParameters) {
@@ -2771,7 +2822,7 @@ sap.ui.define([
 	 * <code>undefined</code> when the <code>vValue</code> can't be interpreted.
 	 *
 	 * @param {string|object|sap.ui.model.Context} vValue The canonical entry URI, the context or entry object
-	 * @returns {string} Key of the entry or <code>undefined</code>
+	 * @returns {string|undefined} Key of the entry or <code>undefined</code>
 	 * @public
 	 */
 	ODataModel.prototype.getKey = function(vValue) {
@@ -2916,7 +2967,7 @@ sap.ui.define([
 	 *   Comma-separated list of properties or paths to properties to select
 	 * @param {string} [mParameters.expand]
 	 *   Comma-separated list of navigation properties or paths to navigation properties to expand
-	 * @returns {any}
+	 * @returns {any|undefined}
 	 *   The value for the given path and context or <code>undefined</code> if data or entity type
 	 *   cannot be found or if not all selected properties are available
 	 *
@@ -4767,7 +4818,7 @@ sap.ui.define([
 	 * @param {sap.ui.model.Context} [oContext] The binding context
 	 * @param {object} [oEntity] The entity data
 	 *
-	 * @returns {string} The found ETag (or <code>null</code> if none could be found)
+	 * @returns {string|null} The found ETag (or <code>null</code> if none could be found)
 	 * @public
 	 */
 	ODataModel.prototype.getETag = function(sPath, oContext, oEntity) {
@@ -7220,16 +7271,21 @@ sap.ui.define([
 	};
 
 	/**
-	 * @returns {boolean} bRefreshAfterChange Whether to automatically refresh after changes
+	 * Whether all affected bindings are refreshed after a change operation.
+	 *
+	 * This flag can be overruled on request level by providing the <code>refreshAfterChange</code>
+	 * parameter to the corresponding function (for example {@link #update}).
+	 *
+	 * @returns {boolean} Whether to automatically refresh after changes
 	 * @public
 	 * @since 1.46.0
 	 */
-	ODataModel.prototype.getRefreshAfterChange = function() {
+	ODataModel.prototype.getRefreshAfterChange = function () {
 		return this.bRefreshAfterChange;
 	};
 
 	/**
-	 * Defines whether all bindings are updated after a change operation.
+	 * Defines whether all affected bindings are refreshed after a change operation.
 	 *
 	 * This flag can be overruled on request level by providing the <code>refreshAfterChange</code>
 	 * parameter to the corresponding function (for example {@link #update}).
@@ -7238,7 +7294,7 @@ sap.ui.define([
 	 * @public
 	 * @since 1.16.3
 	 */
-	ODataModel.prototype.setRefreshAfterChange = function(bRefreshAfterChange) {
+	ODataModel.prototype.setRefreshAfterChange = function (bRefreshAfterChange) {
 		this.bRefreshAfterChange = bRefreshAfterChange;
 	};
 
@@ -7407,9 +7463,11 @@ sap.ui.define([
 	};
 
 	/**
-	 * Setting request groups as deferred.
+	 * Setting request groups as deferred. <b>Note:</b> This will overwrite existing deferred
+	 * groups, including the default group "changes".
 	 *
-	 * Requests that belong to a deferred group will be sent by explicitly calling {@link #submitChanges}.
+	 * Requests that belong to a deferred group will be sent by explicitly calling
+	 * {@link #submitChanges}.
 	 *
 	 * @param {array} aGroupIds Array of group IDs that should be set as deferred
 	 * @public

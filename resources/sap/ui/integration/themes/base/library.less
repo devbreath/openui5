@@ -24,6 +24,11 @@
 
 	.sapMIBar {
 		flex: 1;
+		padding: 0;
+	}
+
+	.sapMBarChild:first-child {
+		margin-left: 0;
 	}
 }
 /* END "ActionsStrip.less" */
@@ -386,7 +391,7 @@ html.sapUiMedia-StdExt-Tablet {
 	min-height: 5rem;
 }
 
-.sapUiIntCardDialog{
+.sapUiIntCardDialog {
 	.sapUiIntCard {
 		border-radius: @sapUiElementBorderCornerRadius;
 	}
@@ -397,17 +402,9 @@ html.sapUiMedia-StdExt-Tablet {
 	}
 }
 
-.sapFCard .sapFCardHeader .sapFCardHeaderToolbarCont .sapUiIntCardCloseButton.sapFCardHeaderToolbar {
-	margin: -1.25rem -0.75rem 0.25rem 0.25rem;
-}
-
 .sapFCard.sapUiIntCardWithFooter:not(.sapFCardNoHeader) .sapFCardContent {
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
-}
-
-.sapUiIntCardObjectButtonGroup {
-	margin-left: -0.5rem;
 }
 /* END "Card.less" */
 
@@ -629,7 +626,9 @@ ui-integration-card {
 		height: auto;
 		padding: 0.8125rem 1rem ~"calc(0.8125rem - 1px)" 1rem;
 
-		&.sapMSLIWithDescription {
+		&.sapMSLIWithDescription,
+		&.sapUiIntLCIWithAttributes,
+		&.sapUiIntLCIWithChart {
 			&:not(.sapMSLIThumbnail):not(.sapUiIntLCIIconSizeXS):not(.sapUiIntLCIIconSizeS):not(.sapUiIntLCIIconSizeM) {
 				.sapMLIBContent .sapMSLIDiv {
 					padding: 0.1875rem 0; // increase the height of the inner div
@@ -661,10 +660,6 @@ ui-integration-card {
 			.sapFCardIcon {
 				flex-shrink: 0;
 			}
-		}
-
-		.sapUiIntLCIAttrs {
-			padding-top: 0.25rem;
 		}
 
 		.sapUiIntActionsStrip {
@@ -722,10 +717,6 @@ ui-integration-card {
 			display: flex;
 			align-items: center;
 		}
-
-		.sapUiIntActionsStrip {
-			margin: 0 -0.5rem 0 -0.5rem;
-		}
 	}
 
 	&:not(.sapUiIntCardWithFooter) {
@@ -748,7 +739,9 @@ ui-integration-card {
 	.sapMLIB.sapUiIntLCI {
 		padding: 0.5rem 1rem ~"calc(0.5rem - 1px)" 1rem;
 
-		&.sapMSLIWithDescription {
+		&.sapMSLIWithDescription,
+		&.sapUiIntLCIWithAttributes,
+		&.sapUiIntLCIWithChart {
 			&:not(.sapMSLIThumbnail):not(.sapUiIntLCIIconSizeXS):not(.sapUiIntLCIIconSizeS):not(.sapUiIntLCIIconSizeM) {
 				.sapMLIBContent .sapMSLIDiv {
 					padding: 0.25rem 0; // increase the height of the inner div
@@ -779,12 +772,10 @@ ui-integration-card {
 			}
 		}
 
-		&.sapMSLIWithDescription {
+		&.sapMSLIWithDescription,
+		&.sapUiIntLCIWithAttributes,
+		&.sapUiIntLCIWithChart {
 			padding: 1rem 1rem ~"calc(1rem - 1px)" 1rem;
-		}
-
-		&.sapUiIntLCIWithAttributes {
-			padding: 1rem 1rem ~"calc(1rem - 1px)" 1rem
 		}
 
 		&.sapUiIntLCIWithActionsStrip {
@@ -824,10 +815,17 @@ ui-integration-card {
 	height: 1rem;
 	display: flex;
 	align-items: center;
+	padding-top: 0.25rem;
+	padding-bottom: 0.25rem;
+	justify-content: space-between;
 
 	.sapUiIntMicrochartChart {
 		flex-grow: 1;
 		height: 0.675rem;
+
+		.sapUiIntMicrochartChartInner {
+			height: 100%;
+		}
 	}
 }
 /* END "Microchart.less" */
@@ -934,8 +932,13 @@ ui-integration-card {
 		margin-top: 0.25rem;
 	}
 
+	.sapFCardObjectItemPairContainer {
+		min-width: 0; // prevent overflow of the flex container
+	}
+
 	.sapFCardObjectItemAvatar {
 		margin-right: 0.5rem;
+		flex-shrink: 0;
 	}
 }
 
@@ -959,7 +962,7 @@ ui-integration-card {
 			height: 2.5rem;
 			line-height: 2rem;
 		}
-	
+
 		// trend and unit
 		.sapMNCValue :nth-child(2) {
 			padding-top: 0;
@@ -979,8 +982,10 @@ ui-integration-card {
 		}
 
 		// trend and unit
-		.sapMNCValue :nth-child(2) {
-			padding-top: 0;
+		.sapMNCValue .sapMNCIndScale {
+			padding-top: 0px;
+
+			.sapMNCScale,
 			.sapMNCIndIcon {
 				padding-top: 0;
 			}
@@ -1006,6 +1011,14 @@ ui-integration-card {
 	.sapFAvatarGroupMoreButton.sapMBtnDisabled {
 		cursor: default;
 		opacity: 1;
+	}
+
+	.sapUiIntCardObjectButtonGroup {
+		padding-left: 0;
+
+		.sapMBarChild:first-child {
+			margin-left: 0;
+		}
 	}
 }
 /* END "ObjectContent.less" */

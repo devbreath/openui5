@@ -20,12 +20,11 @@ sap.ui.define(['sap/ui/core/Element', "sap/base/Log"], function(Element, Log) {
 	 *
 	 * @author SAP SE
 	 * @extends sap.ui.core.Element
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @public
 	 * @constructor
 	 * @since 1.34.0
 	 * @alias sap.m.MaskInputRule
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var MaskInputRule = Element.extend("sap.m.MaskInputRule", /** @lends sap.m.MaskInputRule.prototype */ {
 		metadata : {

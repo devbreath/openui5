@@ -25,7 +25,7 @@ sap.ui.define([
 		 * @extends sap.ui.core.Element
 		 *
 		 * @author SAP SE
-		 * @version 1.105.1
+		 * @version 1.107.0
 		 *
 		 * @constructor
 		 * @public
@@ -143,6 +143,20 @@ sap.ui.define([
 							changes: {
 								type: "object"
 							}
+						}
+					},
+
+					/**
+					 * Fired when the state of a card is changed.
+					 * For example - the card is ready, new page is selected inside the card, a filter is changed or data is refreshed.
+					 * @experimental since 1.107
+					 */
+					cardStateChanged: {
+						parameters: {
+							/**
+							 * The card the changes are fired from.
+							 */
+							card: { type: "sap.ui.core.Control" }
 						}
 					},
 

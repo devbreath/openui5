@@ -84,7 +84,7 @@ sap.ui.define([
 	 * @implements sap.ui.core.IFormContent, sap.ui.core.ISemanticFormContent
 	 *
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @alias sap.ui.mdc.field.FieldBase
@@ -442,12 +442,12 @@ sap.ui.define([
 				 * This is an association that allows the usage of one <code>FieldHelp</code> instance for multiple fields.
 				 *
 				 * <b>Note:</b> If the field is inside of a table, do not set the <code>FieldHelp</code> instance as <code>dependent</code>
-				 * to the field. If you do every field instance in every table row gets a clone of it.
+				 * to the field. If you do, every field instance in every table row gets a clone of it.
 				 * Put the <code>FieldHelp</code> instance e.g. as dependent on the table or page.
 				 * The <code>FieldHelp</code> instance must be somewhere in the control tree, otherwise there might
 				 * be rendering or update issues.
 				 *
-				 * <b>Note:</b> For Boolean fields, no <code>FieldHelp</code> should be added, but a default <code>FieldHelp</code> used instead.
+				 * <b>Note:</b> For <code>Boolean</code> fields, no <code>FieldHelp</code> should be added, but a default <code>FieldHelp</code> used instead.
 				 */
 				fieldHelp: {
 					type: "sap.ui.mdc.ValueHelp",
@@ -1628,15 +1628,20 @@ sap.ui.define([
 	};
 
 	function _createInternalContent() {
+
+		if (this._bIsBeingDestroyed || this.bIsDestroyed) {
+			return; // for destroyed field do nothing on internal control
+		}
+
 		var sEditMode = this.getEditMode();
 		var oContent = this.getContent();
 
 		this._oContentFactory._setUsedConditionType(oContent, sEditMode); // if external content use it's conditionType
-		_checkFieldHelpExist.call(this, this.getFieldHelp()); // as FieldHelp might be greated after ID is assigned to Field
+		_checkFieldHelpExist.call(this, this.getFieldHelp()); // as FieldHelp might be created after ID is assigned to Field
 		_setAriaAttributes.call(this, false);
 
 
-		if (oContent || this._bIsBeingDestroyed ||
+		if (oContent ||
 			(sEditMode === EditMode.Display && this.getContentDisplay()) ||
 			(sEditMode !== EditMode.Display && this.getContentEdit())) {
 			this._destroyInternalContent();
@@ -2301,7 +2306,11 @@ sap.ui.define([
 							var sDisplay = this.getDisplay();
 							// remove "(", ")" from serach string
 							// TODO: better solution to search in this case?
-							this._sFilterValue = "";
+
+							if (typeof this._vLiveChangeValue !== "undefined") {
+								this._sFilterValue = "";
+							}
+
 							if (this._vLiveChangeValue) {
 								// use EQ operator
 								var oOperator = FilterOperatorUtil.getEQOperator();
@@ -2387,6 +2396,7 @@ sap.ui.define([
 			var aRemovedTokens = oEvent.getParameter("removedTokens");
 			var aConditions = this.getConditions();
 			var sUnit;
+			var oPayload;
 			var i;
 
 			for (i = 0; i < aRemovedTokens.length; i++) {
@@ -2399,7 +2409,9 @@ sap.ui.define([
 			for (i = aConditions.length - 1; i >= 0; i--) {
 				if (aConditions[i].delete) {
 					if (this._oContentFactory.isMeasure()) {
+						// store for dummy condition if all conditions are removed
 						sUnit = aConditions[i].values[0][1];
+						oPayload = aConditions[i].payload;
 					}
 					aConditions.splice(i, 1);
 				}
@@ -2407,7 +2419,7 @@ sap.ui.define([
 
 			if (this._oContentFactory.isMeasure() && sUnit && aConditions.length === 0) {
 				// create dummy condition for unit
-				aConditions = [Condition.createItemCondition([undefined, sUnit], undefined)];
+				aConditions = [Condition.createItemCondition([undefined, sUnit], undefined, undefined, undefined, oPayload)];
 			}
 
 			this.setProperty("conditions", aConditions, true); // do not invalidate whole field
@@ -2489,7 +2501,7 @@ sap.ui.define([
 			for (var i = 0; i < aConditions.length; i++) {
 				var oCondition = aConditions[i];
 				if (oCondition.values[0] && oCondition.values[0][1]) {
-					var oHelpCondition = Condition.createItemCondition(oCondition.values[0][1], undefined, oCondition.inParameters, oCondition.outParameters);
+					var oHelpCondition = Condition.createItemCondition(oCondition.values[0][1], undefined, oCondition.inParameters, oCondition.outParameters, oCondition.payload);
 					aHelpConditions.push(oHelpCondition);
 				}
 			}
@@ -2562,7 +2574,7 @@ sap.ui.define([
 			} else {
 				var oOperator = FilterOperatorUtil.getEQOperator(this._getOperators());
 				var aValue = this.getControlDelegate().enhanceValueForUnit(this.getPayload(), [null, aNewConditions[0].values[0]], this._oTypeInitialization); // Delegate must be initialized right now
-				oCondition = Condition.createCondition(oOperator.name, [aValue], aNewConditions[0].inParameters, aNewConditions[0].outParameters, ConditionValidated.NotValidated);
+				oCondition = Condition.createCondition(oOperator.name, [aValue], aNewConditions[0].inParameters, aNewConditions[0].outParameters, ConditionValidated.NotValidated, aNewConditions[0].payload);
 				aConditions.push(oCondition);
 				var oConditionType = this._oContentFactory.getConditionType(true);
 				var oConditionsType = this._oContentFactory.getUnitConditionsType(true);
@@ -2614,15 +2626,21 @@ sap.ui.define([
 					sDOMValue = this._oContentFactory.getConditionsType().formatValue(aConditions);
 				}
 
+				var fnUpdateDOMValue = function(sText) {
+					var sOldDOMValue = oContent.getDOMValue();
+					oContent.setDOMValue(""); // to overwrite it even if the text is the same -> otherwise cursor position could be wrong
+					oContent.setDOMValue(sText);
+					if (sOldDOMValue !== sText && iMaxConditions === 1) {
+						this.fireLiveChange({value: aConditions[0].values[0]}); // use the key as value, like for navigation
+					}
+				}.bind(this);
 				if (sDOMValue instanceof Promise) {
-					// text is determined async
+					// text is determined async (normally description should be delivered directly from field help)
 					sDOMValue.then(function(sText) {
-						oContent.setDOMValue(""); // to overwrite it even if the text is the same -> otherwise cursor position could be wrong
-						oContent.setDOMValue(sText);
+						fnUpdateDOMValue(sText);
 					});
 				} else {
-					oContent.setDOMValue(""); // to overwrite it even if the text is the same -> otherwise cursor position could be wrong
-					oContent.setDOMValue(sDOMValue);
+					fnUpdateDOMValue(sDOMValue);
 				}
 				this._sFilterValue = "";
 			} else if (bClose) {
@@ -2672,7 +2690,7 @@ sap.ui.define([
 		var bLeaveFocus = oEvent.getParameter("leaveFocus");
 
 		if (!oCondition && vKey) {
-			oCondition = Condition.createItemCondition(vKey, sValue);
+			oCondition = Condition.createItemCondition(vKey, sValue); // TODO: delete if outdated?
 		}
 
 		var sNewValue;
@@ -2835,7 +2853,7 @@ sap.ui.define([
 	function _connectFieldhelp() {
 
 		var oFieldHelp = _getFieldHelp.call(this);
-		if (oFieldHelp && !this._bConnected) {
+		if (oFieldHelp) { // as Config or BindingContext might change, update connection on every focus
 			var oConditionModelInfo = _getConditionModelInfo.call(this);
 			var oType;
 			var bIsMeasure = this._oContentFactory.isMeasure();
@@ -2862,21 +2880,24 @@ sap.ui.define([
 					defaultOperatorName: this.getDefaultOperator ? this.getDefaultOperator() : null
 			};
 			oFieldHelp.connect(this, oConfig);
-			this._bConnected = true;
-			oFieldHelp.attachEvent("select", _handleFieldHelpSelect, this);
-			oFieldHelp.attachEvent("navigated", _handleFieldHelpNavigated, this);
-			oFieldHelp.attachEvent("disconnect", _handleDisconnect, this);
-			oFieldHelp.attachEvent("afterClose", _handleFieldHelpAfterClose, this); // TODO: remove
-			oFieldHelp.attachEvent("switchToValueHelp", _handleFieldSwitchToValueHelp, this);
-			oFieldHelp.attachEvent("closed", _handleFieldHelpAfterClose, this);
-			var aConditions = this.getConditions();
-			_setConditionsOnFieldHelp.call(this, aConditions, oFieldHelp);
 
-			var oContent = this.getControlForSuggestion();
-			_setFocusHandlingForFieldHelp.call(this, oContent);
-			if (oFieldHelp._bIsDefaultHelp) {
-				// use label as default title for FilterField
-				mDefaultHelps[oFieldHelp._sDefaultHelpType].updateTitle(oFieldHelp, this.getLabel());
+			if (!this._bConnected) { // do not attach events again if already attached
+				this._bConnected = true;
+				oFieldHelp.attachEvent("select", _handleFieldHelpSelect, this);
+				oFieldHelp.attachEvent("navigated", _handleFieldHelpNavigated, this);
+				oFieldHelp.attachEvent("disconnect", _handleDisconnect, this);
+				oFieldHelp.attachEvent("afterClose", _handleFieldHelpAfterClose, this); // TODO: remove
+				oFieldHelp.attachEvent("switchToValueHelp", _handleFieldSwitchToValueHelp, this);
+				oFieldHelp.attachEvent("closed", _handleFieldHelpAfterClose, this);
+				var aConditions = this.getConditions();
+				_setConditionsOnFieldHelp.call(this, aConditions, oFieldHelp);
+
+				var oContent = this.getControlForSuggestion();
+				_setFocusHandlingForFieldHelp.call(this, oContent);
+				if (oFieldHelp._bIsDefaultHelp) {
+					// use label as default title for FilterField
+					mDefaultHelps[oFieldHelp._sDefaultHelpType].updateTitle(oFieldHelp, this.getLabel());
+				}
 			}
 		}
 
@@ -2894,8 +2915,11 @@ sap.ui.define([
 					var oFocusedControl = sap.ui.getCore().byId(oEvent.relatedControlId);
 					if (oFocusedControl) {
 						if (containsOrEquals(oFieldHelp.getDomRef(), oFocusedControl.getFocusDomRef())) {
-							oEvent.stopPropagation();
-							return;
+							oEvent.stopPropagation(); // to prevent focusleave on Field itself
+							if (this.bValueHelpRequested) {
+								this.bValueHelpRequested = false; // to enable change-event after closing value help
+							}
+							return; // do not execute Inputs logic to prevent to run in Inputs own suggest-popup logic
 						} else {
 							oFieldHelp.skipOpening();
 						}

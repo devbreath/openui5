@@ -30,7 +30,7 @@ sap.ui.define([
 	 * @class The ElementMover enables movement of UI5 elements based on aggregation types, which can be used by drag and
 	 *        drop or cut and paste behavior.
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @constructor
 	 * @private
 	 * @since 1.34
@@ -140,7 +140,7 @@ sap.ui.define([
 			.catch(function(oError) {
 				throw DtUtil.createError(
 					"ElementMover#_activateValidTargetZone",
-					"An error occured during activation of valid target zones: " + oError
+					"An error occurred during activation of valid target zones: " + oError
 				);
 			});
 	};

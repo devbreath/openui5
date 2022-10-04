@@ -27,7 +27,8 @@ sap.ui.define([
 	"./CalendarRenderer",
 	"sap/ui/dom/containsOrEquals",
 	"sap/base/util/deepEqual",
-	"sap/base/Log"
+	"sap/base/Log",
+	"sap/ui/core/Configuration"
 ], function(
 	CalendarType,
 	Control,
@@ -51,7 +52,8 @@ sap.ui.define([
 	CalendarRenderer,
 	containsOrEquals,
 	deepEqual,
-	Log
+	Log,
+	Configuration
 ) {
 	"use strict";
 
@@ -70,13 +72,12 @@ sap.ui.define([
 	 * Basic Calendar.
 	 * This calendar is used for DatePickers
 	 * @extends sap.ui.core.Control
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 *
 	 * @constructor
 	 * @public
 	 * @since 1.22.0
 	 * @alias sap.ui.unified.Calendar
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Calendar = Control.extend("sap.ui.unified.Calendar", /** @lends sap.ui.unified.Calendar.prototype */ { metadata : {
 
@@ -329,7 +330,7 @@ sap.ui.define([
 		this._iBreakPointLargeDesktop = Device.media._predefinedRangeSets[Device.media.RANGESETS.SAP_STANDARD_EXTENDED].points[2];
 
 		// set default calendar type from configuration
-		var sCalendarType = sap.ui.getCore().getConfiguration().getCalendarType();
+		var sCalendarType = Configuration.getCalendarType();
 		this.setProperty("primaryCalendarType", sCalendarType);
 		this.setProperty("secondaryCalendarType", sCalendarType);
 
@@ -677,7 +678,7 @@ sap.ui.define([
 	Calendar.prototype.getLocale = function(){
 
 		if (!this._sLocale) {
-			this._sLocale = sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale().toString();
+			this._sLocale = Configuration.getFormatSettings().getFormatLocale().toString();
 		}
 
 		return this._sLocale;
@@ -713,7 +714,6 @@ sap.ui.define([
 	 * @param {Object} oDate A JavaScript date object for focused date
 	 * @returns {this} <code>this</code> to allow method chaining
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Calendar.prototype.focusDate = function(oDate) {
 
@@ -732,7 +732,6 @@ sap.ui.define([
 	 * @returns {this} <code>this</code> to allow method chaining
 	 * @since 1.28.0
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Calendar.prototype.displayDate = function (oDate) {
 
@@ -750,7 +749,6 @@ sap.ui.define([
 	 * @returns {Object} JavaScript date object for start date.
 	 * @since 1.34.1
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	Calendar.prototype.getStartDate = function(){
 
@@ -790,6 +788,7 @@ sap.ui.define([
 				oMonth.attachEvent("_bindMousemove", _handleBindMousemove, this);
 				oMonth.attachEvent("_unbindMousemove", _handleUnbindMousemove, this);
 				oMonth._bNoThemeChange = true;
+				oMonth._bNotInTabChain = true;
 				oMonth.setSecondaryCalendarType(this._getSecondaryCalendarType());
 				this.addAggregation("month",oMonth);
 			}

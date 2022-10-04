@@ -70,7 +70,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.editor.Settings
 	 * @author SAP SE
 	 * @since 1.83.0
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @private
 	 * @experimental since 1.83.0
 	 * @ui5-restricted
@@ -135,11 +135,13 @@ sap.ui.define([
 			var iOffsetHeight = (!oPreview || oPreview.getDomRef() === null || oPreview.getDomRef().offsetHeight === 0) ? 350 : oPreview.getDomRef().offsetHeight;
 			oPopover.setContentWidth(iOffsetWidth + "px");
 			oPopover.setContentHeight((iOffsetHeight - 50) + "px");
-			if (oParent.getPreviewPosition() === "right") {
-				oPopover.setPlacement("Right");
-			} else {
-				oPopover.setPlacement("Left");
+			var sPlacement = "Right";
+			var iX = oField.getDomRef().getBoundingClientRect().x;
+			var iWidth = document.body.offsetWidth;
+			if ( 2 * iX > iWidth) {
+				sPlacement = "Left";
 			}
+			oPopover.setPlacement(sPlacement);
 			oDynamicValueField.setValue(oField._label);
 			oPopover.openBy(oField);
 		} else {

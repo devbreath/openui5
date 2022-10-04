@@ -18,13 +18,12 @@ sap.ui.define(['sap/f/semantic/SemanticButton'], function(SemanticButton) {
 	* @extends sap.f.semantic.SemanticButton
 	*
 	* @author SAP SE
-	* @version 1.105.1
+	* @version 1.107.0
 	*
 	* @constructor
 	* @public
 	* @since 1.46.0
 	* @alias sap.f.semantic.AddAction
-	* @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	*/
 	var AddAction = SemanticButton.extend("sap.f.semantic.AddAction", /** @lends sap.f.semantic.AddAction.prototype */ {
 		metadata: {

@@ -192,7 +192,8 @@ sap.ui.define([
 			"group": "sap/ui/integration/designtime/baseEditor/propertyEditor/groupEditor/GroupEditor",
 			"separator": "sap/ui/integration/designtime/baseEditor/propertyEditor/separatorEditor/SeparatorEditor",
 			"textArea": "sap/ui/integration/designtime/baseEditor/propertyEditor/textAreaEditor/TextAreaEditor",
-			"object": "sap/ui/integration/designtime/baseEditor/propertyEditor/textAreaEditor/TextAreaEditor",
+			"code": "sap/ui/integration/designtime/baseEditor/propertyEditor/codeEditor/CodeEditor",
+			"object": "sap/ui/integration/designtime/baseEditor/propertyEditor/codeEditor/CodeEditor",
 			"objectArray": "sap/ui/integration/designtime/baseEditor/propertyEditor/objectArrayEditor/ObjectArrayEditor",
 			// card editors
 			"icon": "sap/ui/integration/designtime/cardEditor/propertyEditor/iconEditor/IconEditor",

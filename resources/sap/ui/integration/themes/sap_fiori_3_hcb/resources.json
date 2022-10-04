@@ -37,17 +37,18 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 21144,
+			"size": 22764,
 			"theme": "sap_fiori_3_hcb"
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/integration/themes/sap_fiori_3_hcb/library-parameters.json",
 			"size": 562,
 			"theme": "sap_fiori_3_hcb"
 		},
 		{
 			"name": "library.css",
-			"size": 21138,
+			"size": 22756,
 			"theme": "sap_fiori_3_hcb"
 		},
 		{
@@ -64,13 +65,17 @@
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 21957,
+			"size": 23577,
 			"theme": "sap_fiori_3_hcb"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 21951,
+			"size": 23569,
 			"theme": "sap_fiori_3_hcb"
+		},
+		{
+			"name": "resources.json",
+			"size": 1474
 		}
 	]
 }

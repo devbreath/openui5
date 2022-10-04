@@ -42,7 +42,7 @@ sap.ui.define([
          * @class The ChartToolbar control is a sap.m.OverflowToolbar based on metadata and the configuration specified.
          * @extends sap.ui.mdc.ActionToolbar
          * @author SAP SE
-         * @version 1.105.1
+         * @version 1.107.0
          * @constructor
          * @experimental As of version 1.88
          * @private
@@ -169,8 +169,7 @@ sap.ui.define([
             if (aP13nMode.indexOf("Sort") > -1 || aP13nMode.indexOf("Item") > -1) {
                 this._oSettingsBtn = new OverflowButton(oMDCChart.getId() + "-chart_settings", {
                     icon: "sap-icon://action-settings",//TODO the right icon for P13n chart dialog
-                    tooltip: MDCRb.getText('chart.PERSONALIZATION_DIALOG_TITLE'),
-					text: MDCRb.getText('chart.PERSONALIZATION_DIALOG_TITLE'),
+                    tooltip: MDCRb.getText('chart.SETTINGS'),
                     enabled: false,
                     press: function (oEvent) {
                         var aP13nMode = oMDCChart.getP13nMode();

@@ -7,12 +7,6 @@
 			"theme": "sap_horizon_hcw"
 		},
 		{
-			"name": "CollectiveSearchSelect.less",
-			"size": 333,
-			"designtime": true,
-			"theme": "sap_horizon_hcw"
-		},
-		{
 			"name": "TokenDisplay.less",
 			"size": 540,
 			"designtime": true,
@@ -49,40 +43,45 @@
 		},
 		{
 			"name": "library-RTL.css",
-			"size": 17050,
+			"size": 16030,
 			"theme": "sap_horizon_hcw"
 		},
 		{
 			"name": "library-parameters.json",
+			"module": "sap/ui/mdc/themes/sap_horizon_hcw/library-parameters.json",
 			"size": 382,
 			"theme": "sap_horizon_hcw"
 		},
 		{
 			"name": "library.css",
-			"size": 17048,
+			"size": 16027,
 			"theme": "sap_horizon_hcw"
 		},
 		{
 			"name": "library.less",
-			"size": 2457,
+			"size": 2040,
 			"designtime": true,
 			"theme": "sap_horizon_hcw"
 		},
 		{
 			"name": "library.source.less",
-			"size": 465,
+			"size": 426,
 			"designtime": true,
 			"theme": "sap_horizon_hcw"
 		},
 		{
 			"name": "library_skeleton-RTL.css",
-			"size": 17963,
+			"size": 16838,
 			"theme": "sap_horizon_hcw"
 		},
 		{
 			"name": "library_skeleton.css",
-			"size": 17961,
+			"size": 16835,
 			"theme": "sap_horizon_hcw"
+		},
+		{
+			"name": "resources.json",
+			"size": 1577
 		}
 	]
 }

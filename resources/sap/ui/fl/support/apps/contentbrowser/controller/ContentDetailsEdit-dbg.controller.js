@@ -13,7 +13,9 @@ sap.ui.define([
 	"sap/m/Text",
 	"sap/m/Button",
 	"sap/m/Input",
-	"sap/m/library"
+	"sap/m/library",
+	"sap/ui/model/json/JSONModel",
+	"sap/ui/core/UIComponent"
 ], function (
 	Controller,
 	LRepConnector,
@@ -23,7 +25,9 @@ sap.ui.define([
 	Text,
 	Button,
 	Input,
-	mobileLibrary
+	mobileLibrary,
+	JSONModel,
+	UIComponent
 ) {
 	"use strict";
 
@@ -36,7 +40,7 @@ sap.ui.define([
 	 * @constructor
 	 * @alias sap.ui.fl.support.apps.contentbrowser.controller.ContentDetailsEdit
 	 * @author SAP SE
-	 * @version 1.105.1
+	 * @version 1.107.0
 	 * @experimental Since 1.45
 	 */
 	return Controller.extend("sap.ui.fl.support.apps.contentbrowser.controller.ContentDetailsEdit", {
@@ -51,7 +55,7 @@ sap.ui.define([
 		 */
 		onInit: function () {
 			this._initAndBindSelectedContentModel();
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			var oRouter = UIComponent.getRouterFor(this);
 			oRouter.getRoute("ContentDetailsEdit").attachMatched(this._onRouteMatched, this);
 		},
 
@@ -60,7 +64,7 @@ sap.ui.define([
 		 * @private
 		 */
 		_initAndBindSelectedContentModel: function () {
-			this.oSelectedContentModel = new sap.ui.model.json.JSONModel();
+			this.oSelectedContentModel = new JSONModel();
 			this.getView().setModel(this.oSelectedContentModel, "selectedContent");
 		},
 
@@ -236,7 +240,7 @@ sap.ui.define([
 		_navToDisplayMode: function () {
 			var oSelectedContentModel = this.getView().getModel("selectedContent");
 			var oContentData = oSelectedContentModel.getData();
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			var oRouter = UIComponent.getRouterFor(this);
 
 			oRouter.navTo("ContentDetailsFlip", {
 				layer: oContentData.layer,
