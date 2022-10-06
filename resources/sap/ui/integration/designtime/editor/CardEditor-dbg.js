@@ -44,7 +44,7 @@ sap.ui.define([
 	 * @extends sap.ui.integration.editor.Editor
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @see {@link topic:5b46b03f024542ba802d99d67bc1a3f4 Cards}
 	 * @since 1.83

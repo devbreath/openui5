@@ -37,7 +37,7 @@ sap.ui.define([
 	 * @alias sap.ui.rta.util.changeVisualization.ChangeIndicatorRegistry
 	 * @author SAP SE
 	 * @since 1.86.0
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 */
 	var ChangeIndicatorRegistry = ManagedObject.extend("sap.ui.rta.util.changeVisualization.ChangeIndicatorRegistry", {

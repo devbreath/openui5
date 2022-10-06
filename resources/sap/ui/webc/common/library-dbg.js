@@ -28,7 +28,7 @@ sap.ui.define([
 	 * @namespace
 	 * @name sap.ui.webc
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @public
 	 * @since 1.92.0
 	 * @experimental Since 1.92.0
@@ -40,14 +40,14 @@ sap.ui.define([
 	 * @namespace
 	 * @alias sap.ui.webc.common
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @public
 	 * @since 1.92.0
 	 * @experimental Since 1.92.0
 	 */
 	var thisLib = sap.ui.getCore().initLibrary({
 		name : "sap.ui.webc.common",
-		version: "1.107.0",
+		version: "1.107.1",
 		dependencies : ["sap.ui.core"],
 		noLibraryCSS: true,
 		designtime: "sap/ui/webc/common/designtime/library.designtime",

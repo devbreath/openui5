@@ -33,7 +33,7 @@ sap.ui.define([
 		 * Resolves a binding syntax based on a provided model and path.
 		 *
 		 * @author SAP SE
-		 * @version 1.107.0
+		 * @version 1.107.1
 		 *
 		 * @private
 		 * @alias sap.ui.integration.util.BindingResolver

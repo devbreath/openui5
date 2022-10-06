@@ -1433,7 +1433,7 @@
 		{
 			"name": "messagebundle_ca.properties",
 			"module": "sap/ui/table/messagebundle_ca.properties",
-			"size": 3515,
+			"size": 3514,
 			"locale": "ca",
 			"raw": "messagebundle.properties"
 		},
@@ -1461,7 +1461,7 @@
 		{
 			"name": "messagebundle_de.properties",
 			"module": "sap/ui/table/messagebundle_de.properties",
-			"size": 3551,
+			"size": 3550,
 			"locale": "de",
 			"raw": "messagebundle.properties"
 		},
@@ -1531,7 +1531,7 @@
 		{
 			"name": "messagebundle_fi.properties",
 			"module": "sap/ui/table/messagebundle_fi.properties",
-			"size": 3651,
+			"size": 3656,
 			"locale": "fi",
 			"raw": "messagebundle.properties"
 		},
@@ -1566,7 +1566,7 @@
 		{
 			"name": "messagebundle_hu.properties",
 			"module": "sap/ui/table/messagebundle_hu.properties",
-			"size": 4290,
+			"size": 4294,
 			"locale": "hu",
 			"raw": "messagebundle.properties"
 		},
@@ -1615,7 +1615,7 @@
 		{
 			"name": "messagebundle_lt.properties",
 			"module": "sap/ui/table/messagebundle_lt.properties",
-			"size": 4007,
+			"size": 4018,
 			"locale": "lt",
 			"raw": "messagebundle.properties"
 		},
@@ -1678,7 +1678,7 @@
 		{
 			"name": "messagebundle_ru.properties",
 			"module": "sap/ui/table/messagebundle_ru.properties",
-			"size": 10502,
+			"size": 10527,
 			"locale": "ru",
 			"raw": "messagebundle.properties"
 		},
@@ -1699,7 +1699,7 @@
 		{
 			"name": "messagebundle_sl.properties",
 			"module": "sap/ui/table/messagebundle_sl.properties",
-			"size": 3439,
+			"size": 3440,
 			"locale": "sl",
 			"raw": "messagebundle.properties"
 		},

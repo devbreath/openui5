@@ -20,7 +20,7 @@ sap.ui.define(['sap/ui/core/Element', './library'],
 	 * @class
 	 * Thing Action for Swatch, QuickView, Thinginspector
 	 * @extends sap.ui.core.Element
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

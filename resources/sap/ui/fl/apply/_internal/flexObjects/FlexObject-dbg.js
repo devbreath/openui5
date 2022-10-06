@@ -69,7 +69,7 @@ sap.ui.define([
 	 * @extends sap.ui.base.ManagedObject
 	 * @alias sap.ui.fl.apply._internal.flexObjects.FlexObject
 	 * @since 1.100
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 * @ui5-restricted sap.ui.fl
 	 */

@@ -31,7 +31,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class Container for the {@link sap.ui.mdc.ValueHelp ValueHelp} element showing a popover.
 	 * @extends sap.ui.mdc.valuehelp.base.Container
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @abstract
 	 * @private

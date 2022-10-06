@@ -43,7 +43,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.write._internal.fieldExtensibility.SingleTenantABAPExtensibilityVariant
 	 * @since 1.87
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @public
 	 */
 

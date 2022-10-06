@@ -31,7 +31,7 @@ sap.ui.define([
 	 * @class The column for the metadata driven table, that hold the template to be shown when the rows has data.
 	 * @extends sap.m.OverflowToolbar
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @private
 	 * @since 1.58

@@ -15,7 +15,7 @@ sap.ui.define([
 	 * Helper object containing methods for the AdditionalElements plugin
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 * @since 1.94
 	 * @experimental Since 1.94. This class is experimental and provides only limited functionality. Also the API might be changed in future.

@@ -44,7 +44,7 @@ sap.ui.define([
 	// Singleton instance for configuration
 	var oConfiguration;
 	var M_SETTINGS;
-	var VERSION = "1.107.0";
+	var VERSION = "1.107.1";
 
 	// Helper Functions
 	function detectLanguage() {

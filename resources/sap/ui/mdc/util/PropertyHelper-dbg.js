@@ -536,7 +536,7 @@ sap.ui.define([
 	 * @extends sap.ui.base.Object
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @private
 	 * @experimental

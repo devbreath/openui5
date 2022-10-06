@@ -39,7 +39,7 @@ sap.ui.define([
 	 * @constructor
 	 * @alias sap.ui.fl.changeHandler.BaseAddViaDelegate
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 */
 	var BaseAddViaDelegate = {

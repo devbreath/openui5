@@ -54,7 +54,7 @@ sap.ui.define([
 	 * @extends sap.ui.core.Component
 	 * @abstract
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @alias sap.ui.core.UIComponent
 	 * @since 1.9.2
 	 */

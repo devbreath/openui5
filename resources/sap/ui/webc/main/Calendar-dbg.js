@@ -94,7 +94,7 @@ sap.ui.define([
 	 * <code> &lt;script data-id="sap-ui-config" type="application/json"&gt; { "calendarType": "Japanese" } &lt;/script&gt; </code>
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

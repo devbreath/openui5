@@ -61,7 +61,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.designtime.baseEditor.propertyEditor.stringEditor.StringEditor
 	 * @author SAP SE
 	 * @since 1.70
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @private
 	 * @experimental 1.70

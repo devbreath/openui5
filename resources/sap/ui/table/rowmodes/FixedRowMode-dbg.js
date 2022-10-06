@@ -29,7 +29,7 @@ sap.ui.define([
 	 * @ui5-restricted sap.ui.mdc
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 */
 	var FixedRowMode = RowMode.extend("sap.ui.table.rowmodes.FixedRowMode", /** @lends sap.ui.table.rowmodes.FixedRowMode.prototype */ {

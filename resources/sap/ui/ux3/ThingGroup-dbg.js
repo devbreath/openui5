@@ -20,7 +20,7 @@ sap.ui.define(['sap/ui/core/Element', './library'],
 	 * @class
 	 * Thing Group Area
 	 * @extends sap.ui.core.Element
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

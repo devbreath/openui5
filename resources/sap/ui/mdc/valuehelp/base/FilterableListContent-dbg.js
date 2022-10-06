@@ -34,7 +34,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new element
 	 * @class Content for the {@link sap.ui.mdc.valuehelp.base.Container Container} element.
 	 * @extends sap.ui.mdc.valuehelp.base.ListContent
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @abstract
 	 * @private

@@ -3313,7 +3313,7 @@
 		{
 			"name": "messagebundle_pt.properties",
 			"module": "sap/ui/layout/messagebundle_pt.properties",
-			"size": 452,
+			"size": 436,
 			"locale": "pt",
 			"raw": "messagebundle.properties"
 		},

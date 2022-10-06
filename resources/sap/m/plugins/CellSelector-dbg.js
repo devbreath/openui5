@@ -53,7 +53,7 @@ sap.ui.define([
 	 *
 	 * @extends sap.m.plugins.PluginBase
 	 * @class
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @author SAP SE
 	 *
 	 * @private

@@ -27,7 +27,7 @@ sap.ui.define([
 	 * @extends sap.ui.mdc.util.PropertyHelper
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @private
 	 * @experimental

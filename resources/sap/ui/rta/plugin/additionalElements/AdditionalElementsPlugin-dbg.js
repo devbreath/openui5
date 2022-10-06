@@ -75,7 +75,7 @@ sap.ui.define([
 	 * @class The plugin allows to add additional elements that exist either hidden in the UI or in the OData service
 	 * @extends sap.ui.rta.plugin.Plugin
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @private
 	 * @since 1.44

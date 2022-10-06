@@ -26,7 +26,7 @@ sap.ui.define([
 	 * Tokens are small items of information (similar to tags) that mainly serve to visualize previously selected items.
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

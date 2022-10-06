@@ -26,7 +26,7 @@ sap.ui.define([
 	 * The <code>sap.ui.webc.fiori.SideNavigationItem</code> is used within <code>sap.ui.webc.fiori.SideNavigation</code> only. Via the <code>sap.ui.webc.fiori.SideNavigationItem</code> you control the content of the <code>SideNavigation</code>.
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

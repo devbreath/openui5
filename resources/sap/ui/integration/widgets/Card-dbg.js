@@ -188,7 +188,7 @@ sap.ui.define([
 	 * @extends sap.f.CardBase
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @public
 	 * @constructor
 	 * @see {@link topic:5b46b03f024542ba802d99d67bc1a3f4 Cards}
@@ -499,7 +499,7 @@ sap.ui.define([
 		 * @experimental since 1.79
 		 * @public
 		 * @author SAP SE
-		 * @version 1.107.0
+		 * @version 1.107.1
 		 * @borrows sap.ui.integration.widgets.Card#getDomRef as getDomRef
 		 * @borrows sap.ui.integration.widgets.Card#setVisible as setVisible
 		 * @borrows sap.ui.integration.widgets.Card#getParameters as getParameters

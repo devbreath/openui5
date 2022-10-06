@@ -80,7 +80,7 @@ sap.ui.define([
 	 * @extends sap.ui.base.ManagedObject
 	 * @alias sap.ui.fl.write._internal.fieldExtensibility.cap.dialog.CustomFieldCAPDialog
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @since 1.93
 	 * @experimental Since 1.93
 	 * @private

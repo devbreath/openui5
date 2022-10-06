@@ -22,7 +22,7 @@ sap.ui.define([
 	 * @alias sap.ui.integration.designtime.baseEditor.propertyEditor.dateEditor.DateEditor
 	 * @author SAP SE
 	 * @since 1.76
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @private
 	 * @experimental 1.76

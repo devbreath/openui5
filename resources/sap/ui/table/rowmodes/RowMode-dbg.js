@@ -34,7 +34,7 @@ sap.ui.define([
 	 * @ui5-restricted sap.ui.mdc
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 */
 	var RowMode = Element.extend("sap.ui.table.rowmodes.RowMode", /** @lends sap.ui.table.rowmodes.RowMode.prototype */ {
 		metadata: {

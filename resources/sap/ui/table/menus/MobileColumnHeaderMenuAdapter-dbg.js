@@ -59,7 +59,7 @@ sap.ui.define([
 	 *
 	 * @extends sap.ui.table.menus.ColumnHeaderMenuAdapter
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 * @alias sap.ui.table.menus.MobileColumnHeaderMenuAdapter
 	 */

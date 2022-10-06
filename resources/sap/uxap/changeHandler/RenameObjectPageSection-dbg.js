@@ -21,7 +21,7 @@ sap.ui.define([
 	 * @constructor
 	 * @alias sap.uxap.changeHandler.RenameObjectPageSection
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @experimental Since 1.50
 	 */
 

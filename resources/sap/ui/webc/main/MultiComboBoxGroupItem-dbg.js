@@ -24,7 +24,7 @@ sap.ui.define([
 	 * The <code>sap.ui.webc.main.MultiComboBoxGroupItem</code> is type of suggestion item, that can be used to split the <code>sap.ui.webc.main.MultiComboBox</code> suggestions into groups.
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

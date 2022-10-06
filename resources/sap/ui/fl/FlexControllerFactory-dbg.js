@@ -32,7 +32,7 @@ sap.ui.define([
 	 * @alias sap.ui.fl.FlexControllerFactory
 	 * @experimental Since 1.27.0
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @private
 	 * @ui5-restricted sap.ui.fl

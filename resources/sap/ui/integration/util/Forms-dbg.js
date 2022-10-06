@@ -72,7 +72,7 @@ sap.ui.define([
 		 * Utility class helping with form validation.
 		 *
 		 * @author SAP SE
-		 * @version 1.107.0
+		 * @version 1.107.1
 		 *
 		 * @private
 		 * @alias sap.ui.integration.util.Forms

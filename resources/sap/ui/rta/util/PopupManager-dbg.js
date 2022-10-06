@@ -42,7 +42,7 @@ sap.ui.define([
 	 * Constructor for a new sap.ui.rta.util.PopupManager
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @private
 	 * @since 1.48

@@ -27,7 +27,7 @@ sap.ui.define([
 	 * <h3>Overview</h3> This component allows you to represent files before uploading them to a server, with the help of <code>sap.ui.webc.fiori.UploadCollectionItem</code>. It also allows you to show already uploaded files.
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

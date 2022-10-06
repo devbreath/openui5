@@ -22,7 +22,7 @@ function (Control, Renderer, Core, jQuery
      * @class The Chart control creates a chart based on metadata and the configuration specified.
      * @extends sap.ui.core.Control
      * @author SAP SE
-     * @version 1.107.0
+     * @version 1.107.1
      * @constructor
      * @experimental As of version 1.105
      * @private

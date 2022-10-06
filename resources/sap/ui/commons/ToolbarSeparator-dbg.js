@@ -23,7 +23,7 @@ sap.ui.define(['./library', 'sap/ui/core/Element'],
 	 * @implements sap.ui.commons.ToolbarItem
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

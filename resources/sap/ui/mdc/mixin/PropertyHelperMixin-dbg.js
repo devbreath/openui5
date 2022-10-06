@@ -29,7 +29,7 @@ sap.ui.define(["sap/base/util/Deferred", "sap/ui/mdc/util/loadModules", "sap/bas
 	 * </ul>
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @alias sap.ui.mdc.mixin.PropertyHelperMixin
 	 * @namespace
 	 * @since 1.100.0

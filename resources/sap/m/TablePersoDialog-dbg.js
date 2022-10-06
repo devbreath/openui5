@@ -85,7 +85,7 @@ sap.ui.define([
 	 * @class Table Personalization Dialog
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @alias sap.m.TablePersoDialog
 	 */
 	var TablePersoDialog = ManagedObject.extend("sap.m.TablePersoDialog", /** @lends sap.m.TablePersoDialog.prototype */

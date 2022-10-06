@@ -23,7 +23,7 @@ sap.ui.define([
 	 * @class The BaseCreate allows trigger BaseCreate operations on the overlay.
 	 * @extends sap.ui.rta.plugin.Plugin
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @private
 	 * @since 1.75

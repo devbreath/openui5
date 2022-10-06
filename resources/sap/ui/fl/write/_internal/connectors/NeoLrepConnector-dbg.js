@@ -21,7 +21,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.write._internal.connectors.NeoLrepConnector
 	 * @since 1.81
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 * @ui5-restricted sap.ui.fl.write._internal.Storage
 	 */

@@ -27,7 +27,7 @@ sap.ui.define([
 	 * Helper class for working with bindings for json objects.
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @private
 	 * @ui5-restricted sap.ui.integration, shell-toolkit

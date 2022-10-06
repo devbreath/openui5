@@ -33,7 +33,7 @@ sap.ui.define([
          * @class The ChartSelectionDetails control creates a sap.m.SelectionDetails popover based on metadata and the configuration specified.
          * @extends sap.m.SelectionDetails
          * @author SAP SE
-         * @version 1.107.0
+         * @version 1.107.1
          * @constructor
          * @experimental As of version ...
          * @private

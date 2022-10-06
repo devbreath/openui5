@@ -22,7 +22,7 @@ sap.ui.define(['./Slider', './library', './RangeSliderRenderer'],
 	 * @extends sap.ui.commons.Slider
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

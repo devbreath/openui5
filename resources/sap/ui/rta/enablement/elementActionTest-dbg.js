@@ -53,7 +53,7 @@ sap.ui.define([
 	 * E.g. <code>elementActionTest.only("Remove");</code>
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @static
 	 * @since 1.42

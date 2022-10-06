@@ -24,13 +24,13 @@ sap.ui.define([
 	 * @namespace
 	 * @alias sap.ui.integration
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @since 1.62
 	 * @public
 	 */
 	var thisLib = sap.ui.getCore().initLibrary({
 		name: "sap.ui.integration",
-		version: "1.107.0",
+		version: "1.107.1",
 		dependencies: [
 			"sap.ui.core",
 			"sap.f",

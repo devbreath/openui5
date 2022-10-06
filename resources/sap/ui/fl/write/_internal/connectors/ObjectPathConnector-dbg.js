@@ -24,7 +24,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.write._internal.connectors.ObjectPathConnector
 	 * @since 1.73
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 * @ui5-restricted sap.ui.fl.write._internal.Storage
 	 */

@@ -22,7 +22,7 @@ sap.ui.define([
 	 *
 	 * @alias sap.ui.fl.changeHandler.BaseAddXml
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @since 1.75
 	 * @private
 	 * @experimental Since 1.75. This class is experimental and provides only limited functionality. Also the API might be changed in future.

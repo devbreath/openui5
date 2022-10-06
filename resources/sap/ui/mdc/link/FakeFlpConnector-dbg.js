@@ -13,7 +13,7 @@ sap.ui.define([
 	 * @namespace FakeFlpConnector.
 	 * @name sap.ui.mdc.link.FakeFlpConnector
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 * @since 1.54.0
 	 */

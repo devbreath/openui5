@@ -23,7 +23,7 @@ sap.ui.define([
 	 *
 	 * @class Implements the selection methods for a Table
 	 * @extends sap.ui.table.plugins.SelectionPlugin
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @private
 	 * @alias sap.ui.table.plugins.SelectionModelSelection

@@ -28,7 +28,7 @@ sap.ui.define([
 	 * <b>Note:</b> There can be just one selected <code>item</code> at a time.
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

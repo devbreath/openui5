@@ -37,7 +37,7 @@ sap.ui.define([
 	 * <h3>Usage</h3> The <code>sap.ui.webc.fiori.WizardStep</code> component should be used only as slot of the <code>sap.ui.webc.fiori.Wizard</code> component and should not be used standalone.
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

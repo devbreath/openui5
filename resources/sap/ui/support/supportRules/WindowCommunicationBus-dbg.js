@@ -26,7 +26,7 @@ sap.ui.define([
 	 * @name sap.ui.support.WindowCommunicationBus
 	 * @memberof sap.ui.support
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 */
 	var WindowCommunicationBus = BaseObject.extend("sap.ui.support.supportRules.WindowCommunicationBus", {

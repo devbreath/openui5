@@ -34,7 +34,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.fl.write._internal.connectors.KeyUserConnector
 	 * @since 1.70
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 * @ui5-restricted sap.ui.fl.write._internal.Storage
 	 */

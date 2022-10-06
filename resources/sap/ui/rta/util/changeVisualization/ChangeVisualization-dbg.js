@@ -57,7 +57,7 @@ sap.ui.define([
 	 * @alias sap.ui.rta.util.changeVisualization.ChangeVisualization
 	 * @author SAP SE
 	 * @since 1.84.0
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 */
 	var ChangeVisualization = Control.extend("sap.ui.rta.util.changeVisualization.ChangeVisualization", {

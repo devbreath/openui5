@@ -40,7 +40,7 @@ sap.ui.define([
 	 * @class Base type for the <code>FieldHelp</code> association in the <code>FieldBase</code> controls.
 	 * @extends sap.ui.mdc.Element
 	 * @implements sap.ui.core.PopupInterface
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @abstract
 	 * @private

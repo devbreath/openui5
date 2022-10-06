@@ -103,7 +103,7 @@ function(
 		 * @implements sap.ui.core.IFormContent, sap.ui.core.ISemanticFormContent
 		 *
 		 * @author SAP SE
-		 * @version 1.107.0
+		 * @version 1.107.1
 		 *
 		 * @constructor
 		 * @public

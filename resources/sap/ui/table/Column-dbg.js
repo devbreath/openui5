@@ -72,7 +72,7 @@ sap.ui.define([
 	 * @class
 	 * The column allows you to define column specific properties that will be applied when rendering the table.
 	 * @extends sap.ui.core.Element
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

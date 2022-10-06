@@ -29,7 +29,7 @@ sap.ui.define([
 	 * @name sap.ui.fl.apply.api.ControlVariantApplyAPI
 	 * @experimental Since 1.67
 	 * @since 1.67
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @public
 	 */
 	var ControlVariantApplyAPI = /** @lends sap.ui.fl.apply.api.ControlVariantApplyAPI */{

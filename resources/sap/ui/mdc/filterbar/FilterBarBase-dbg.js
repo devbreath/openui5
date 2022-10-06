@@ -58,7 +58,7 @@ sap.ui.define([
 	 * @class The <code>FilterBarBase</code> control is used as a faceless base class for common functionality of any MDC FilterBar derivation.
 	 * @extends sap.ui.mdc.Control
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @private
 	 * @ui5-restricted sap.ui.mdc

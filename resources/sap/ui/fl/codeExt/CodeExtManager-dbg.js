@@ -20,7 +20,7 @@ sap.ui.define([
 	 * @alias sap.ui.fl.codeExt.CodeExtManager
 	 * @since 1.40.0
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 */
 	var CodeExtManager;
 

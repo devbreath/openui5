@@ -26,7 +26,7 @@ sap.ui.define([
 	 * The <code>sap.ui.webc.main.ColorPaletteItem</code> component represents a color in the the <code>sap.ui.webc.main.ColorPalette</code>.
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

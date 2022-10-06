@@ -34,7 +34,7 @@ sap.ui.define([
 	 * @namespace
 	 * @alias sap.ui.fl.write._internal.appVariant.AppVariantFactory
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @private
 	 * @ui5-restricted sap.ui.rta, smart business
 	 */

@@ -40,7 +40,7 @@ sap.ui.define([
 	 * @extends sap.ui.integration.util.BaseFactory
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @private

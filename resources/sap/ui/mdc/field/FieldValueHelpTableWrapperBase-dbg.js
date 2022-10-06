@@ -47,7 +47,7 @@ sap.ui.define([
 	 * @param {object} [mSettings] Initial settings for the new control
 	 * @class Wrapper to use a table control as content of a <code>FieldValueHelp</code> element
 	 * @extends sap.ui.mdc.field.FieldValueHelpContentWrapperBase
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @private
 	 * @experimental As of version 1.88

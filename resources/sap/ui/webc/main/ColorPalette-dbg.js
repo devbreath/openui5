@@ -29,7 +29,7 @@ sap.ui.define([
 	 * The <code>sap.ui.webc.main.ColorPalette</code> is meant for users that need to select a color from a predefined set. To define the colors, use the <code>sap.ui.webc.main.ColorPaletteItem</code> component inside the default slot of the <code>sap.ui.webc.main.ColorPalette</code>.
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public

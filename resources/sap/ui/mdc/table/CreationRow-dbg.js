@@ -21,7 +21,7 @@ sap.ui.define([
 	 * {@link sap.ui.mdc.table.Column#getCreationTemplate creationTemplate} aggregation of the {@link sap.ui.mdc.table.Column}.
 	 * @extends sap.ui.core.Element
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 * @constructor
 	 * @experimental
 	 * @private

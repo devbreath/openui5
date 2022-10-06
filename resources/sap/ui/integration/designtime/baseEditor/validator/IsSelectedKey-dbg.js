@@ -15,7 +15,7 @@ sap.ui.define([
 	 *
 	 * @namespace sap.ui.integration.designtime.baseEditor.validator.IsSelectedKey
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @static
 	 * @since 1.81

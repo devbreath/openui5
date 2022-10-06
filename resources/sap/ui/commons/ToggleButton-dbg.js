@@ -22,7 +22,7 @@ sap.ui.define(['./Button', './ToggleButtonRenderer'],
 	 * @extends sap.ui.commons.Button
 	 *
 	 * @author SAP SE
-	 * @version 1.107.0
+	 * @version 1.107.1
 	 *
 	 * @constructor
 	 * @public
